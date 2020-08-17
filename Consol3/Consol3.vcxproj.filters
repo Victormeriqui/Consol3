@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Engine\Math">
       <UniqueIdentifier>{35df6183-5f1c-45bd-8b9f-05f7582061af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Math\Util">
+      <UniqueIdentifier>{dc77e97c-6795-4a97-8824-e8ce04f85e21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IFrameBuffer.hpp">
@@ -49,6 +52,21 @@
   <ItemGroup>
     <ClCompile Include="Consol3.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2D.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3D.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Angle.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="MathUtil.hpp">
+      <Filter>Source Files\Engine\Math\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,81 +12,41 @@ namespace Engine
 			float y;
 			float z;
 
-			Vector3D() : x(0), y(0), z(0) {}
-			Vector3D(float x, float y, float z) : x(x), y(y), z(z) {};
-			~Vector3D() {};
+			constexpr Vector3D();
+			constexpr Vector3D(float x, float y, float z);
 
 			Vector3D& Normalize();
 
-			float GetLenght();
-			Vector3D& GetNormalized();
+			[[nodiscard]] float GetLength() const;
+			[[nodiscard]] Vector3D GetNormalized() const;
 
-			float GetDistanceTo(const Vector3D& other);
-			float GetDotProduct(const Vector3D& other);
-			float GetCrossProduct(const Vector3D& other);
-			Vector3D& GetDirectionalTo(const Vector3D& other);
-			Vector3D& GetMiddleFrom(const Vector3D& other);
+			[[nodiscard]] float GetDistanceTo(const Vector3D& other) const;
+			[[nodiscard]] float GetDotProduct(const Vector3D& other) const;
+			[[nodiscard]] Vector3D GetCrossProduct(const Vector3D& other) const;
+			[[nodiscard]] Vector3D GetDirectionalTo(const Vector3D& other) const;
+			[[nodiscard]] Vector3D GetMiddleFrom(const Vector3D& other) const;
 
-			Vector3D& operator+= (const Vector3D& other)
-			{
-				x += other.x;
-				y += other.y;
-				z += other.z;
+			constexpr Vector3D& operator+=(const Vector3D& other) noexcept;
+			constexpr Vector3D& operator-=(const Vector3D& other) noexcept;
+			constexpr Vector3D& operator/=(const Vector3D& other) noexcept;
+			constexpr Vector3D& operator*=(const Vector3D& other) noexcept;
 
-				return *this;
-			}
+			constexpr Vector3D& operator+=(float scalar) noexcept;
+			constexpr Vector3D& operator-=(float scalar) noexcept;
+			constexpr Vector3D& operator/=(float scalar) noexcept;
+			constexpr Vector3D& operator*=(float scalar) noexcept;
 
-			Vector3D& operator-= (const Vector3D& other)
-			{
-				x -= other.x;
-				y -= other.y;
-				z -= other.z;
+			[[nodiscard]] constexpr Vector3D operator+(const Vector3D& other) const noexcept;
+			[[nodiscard]] constexpr Vector3D operator-(const Vector3D& other) const noexcept;
+			[[nodiscard]] constexpr Vector3D operator/(const Vector3D& other) const noexcept;
+			[[nodiscard]] constexpr Vector3D operator*(const Vector3D& other) const noexcept;
 
-				return *this;
-			}
+			[[nodiscard]] constexpr Vector3D operator+(float scalar) const noexcept;
+			[[nodiscard]] constexpr Vector3D operator-(float scalar) const noexcept;
+			[[nodiscard]] constexpr Vector3D operator/(float scalar) const noexcept;
+			[[nodiscard]] constexpr Vector3D operator*(float scalar) const noexcept;
 
-			Vector3D& operator/= (const Vector3D& other)
-			{
-				x /= other.x;
-				y /= other.y;
-				z /= other.z;
-
-				return *this;
-			}
-
-			Vector3D& operator*= (const Vector3D& other)
-			{
-				x *= other.x;
-				y *= other.y;
-				z *= other.z;
-
-				return *this;
-			}
-
-			Vector3D& operator+ (const Vector3D& other) const
-			{
-				return Vector3D(*this) += other;
-			}
-
-			Vector3D& operator- (const Vector3D& other) const
-			{
-				return Vector3D(*this) -= other;
-			}
-
-			Vector3D& operator/ (const Vector3D& other) const
-			{
-				return Vector3D(*this) /= other;
-			}
-
-			Vector3D& operator* (const Vector3D& other) const
-			{
-				return Vector3D(*this) *= other;
-			}
-
-			bool operator==(const Vector3D& other) const
-			{
-				return (x == other.x && y == other.y && z == other.z);
-			}
+			[[nodiscard]] constexpr bool operator==(const Vector3D& other) const noexcept;
 		};
 	}
 }
