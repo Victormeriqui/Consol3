@@ -147,18 +147,20 @@
     <ClCompile Include="Angle.cpp" />
     <ClCompile Include="Consol3.cpp" />
     <ClCompile Include="MathUtil.hpp" />
+    <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Quaternion.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
-    <ClCompile Include="Vector3D.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFrameBufferRenderer.hpp" />
     <ClInclude Include="Angle.hpp" />
     <ClInclude Include="IFrameBuffer.hpp" />
     <ClInclude Include="IFrameBufferRenderer.hpp" />
+    <ClInclude Include="Matrix4.hpp" />
     <ClInclude Include="Quaternion.hpp" />
-    <ClInclude Include="Vector2D.hpp" />
-    <ClInclude Include="Vector3D.hpp" />
+    <ClInclude Include="Vector2.hpp" />
+    <ClInclude Include="Vector3.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
