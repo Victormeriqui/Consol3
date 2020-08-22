@@ -15,7 +15,7 @@ namespace Engine
 		{
 		}
 
-		constexpr Quaternion::Quaternion(const Vector3D& axis, float w) : x(axis.x), y(axis.y), z(axis.z), w(w)
+		constexpr Quaternion::Quaternion(const Vector3& axis, float w) : x(axis.x), y(axis.y), z(axis.z), w(w)
 		{
 		}
 
@@ -66,7 +66,7 @@ namespace Engine
 			return *this;
 		}
 
-		constexpr Quaternion& Quaternion::operator*=(const Vector3D& vec) noexcept
+		constexpr Quaternion& Quaternion::operator*=(const Vector3& vec) noexcept
 		{
 			x = w * vec.x + y * vec.z - z * vec.y;
 			y = w * vec.y + z * vec.x - x * vec.z;
@@ -81,7 +81,7 @@ namespace Engine
 			return Quaternion(*this) *= other;
 		}
 
-		[[nodiscard]] constexpr Quaternion Quaternion::operator*(const Vector3D& vec) const noexcept
+		[[nodiscard]] constexpr Quaternion Quaternion::operator*(const Vector3& vec) const noexcept
 		{
 			return Quaternion(*this) *= vec;
 		}
