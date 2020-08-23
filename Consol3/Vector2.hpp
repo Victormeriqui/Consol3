@@ -11,8 +11,13 @@ namespace Engine
 			float x;
 			float y;
 
-			constexpr Vector2();
-			constexpr Vector2(float x, float y);
+			constexpr Vector2() : x(0), y(0)
+			{
+			}
+
+			constexpr Vector2(float x, float y) : x(x), y(y)
+			{
+			}
 
 			Vector2& Normalize();
 
@@ -24,27 +29,114 @@ namespace Engine
 			[[nodiscard]] Vector2 GetDirectionalTo(const Vector2& other) const;
 			[[nodiscard]] Vector2 GetMiddleFrom(const Vector2& other) const;
 
-			constexpr Vector2& operator+=(const Vector2& other) noexcept;
-			constexpr Vector2& operator-=(const Vector2& other) noexcept;
-			constexpr Vector2& operator/=(const Vector2& other) noexcept;
-			constexpr Vector2& operator*=(const Vector2& other) noexcept;
+			constexpr Vector2& operator+=(const Vector2& other) noexcept
+			{
+				x += other.x;
+				y += other.y;
 
-			constexpr Vector2& operator+=(float scalar) noexcept;
-			constexpr Vector2& operator-=(float scalar) noexcept;
-			constexpr Vector2& operator/=(float scalar) noexcept;
-			constexpr Vector2& operator*=(float scalar) noexcept;
+				return *this;
+			}
 
-			[[nodiscard]] constexpr Vector2 operator+(const Vector2& other) const noexcept;
-			[[nodiscard]] constexpr Vector2 operator-(const Vector2& other) const noexcept;
-			[[nodiscard]] constexpr Vector2 operator/(const Vector2& other) const noexcept;
-			[[nodiscard]] constexpr Vector2 operator*(const Vector2& other) const noexcept;
+			constexpr Vector2& operator-=(const Vector2& other) noexcept
+			{
+				x -= other.x;
+				y -= other.y;
 
-			[[nodiscard]] constexpr Vector2 operator+(float scalar) const noexcept;
-			[[nodiscard]] constexpr Vector2 operator-(float scalar) const noexcept;
-			[[nodiscard]] constexpr Vector2 operator/(float scalar) const noexcept;
-			[[nodiscard]] constexpr Vector2 operator*(float scalar) const noexcept;
+				return *this;
+			}
 
-			[[nodiscard]] constexpr bool operator==(const Vector2& other) const noexcept;
+			constexpr Vector2& operator/=(const Vector2& other) noexcept
+			{
+				x /= other.x;
+				y /= other.y;
+
+				return *this;
+			}
+
+			constexpr Vector2& operator*=(const Vector2& other) noexcept
+			{
+				x *= other.x;
+				y *= other.y;
+
+				return *this;
+			}
+
+			constexpr Vector2& operator+=(float scalar) noexcept
+			{
+				x += scalar;
+				y += scalar;
+
+				return *this;
+			}
+
+			constexpr Vector2& operator-=(float scalar) noexcept
+			{
+				x -= scalar;
+				y -= scalar;
+
+				return *this;
+			}
+
+			constexpr Vector2& operator/=(float scalar) noexcept
+			{
+				x /= scalar;
+				y /= scalar;
+
+				return *this;
+			}
+
+			constexpr Vector2& operator*=(float scalar) noexcept
+			{
+				x *= scalar;
+				y *= scalar;
+
+				return *this;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator+(const Vector2& other) const noexcept
+			{
+				return  Vector2(*this) += other;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator-(const Vector2& other) const noexcept
+			{
+				return Vector2(*this) -= other;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator/(const Vector2& other) const noexcept
+			{
+				return Vector2(*this) /= other;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator*(const Vector2& other) const noexcept
+			{
+				return Vector2(*this) *= other;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator+(float scalar) const noexcept
+			{
+				return Vector2(*this) += scalar;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator-(float scalar) const noexcept
+			{
+				return Vector2(*this) -= scalar;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator/(float scalar) const noexcept
+			{
+				return Vector2(*this) /= scalar;
+			}
+
+			[[nodiscard]] constexpr Vector2 operator*(float scalar) const noexcept
+			{
+				return Vector2(*this) *= scalar;
+			}
+
+			[[nodiscard]] constexpr bool operator==(const Vector2& other) const noexcept
+			{
+				return (x == other.x && y == other.y);
+			}
 		};
 	}
 }

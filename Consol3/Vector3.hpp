@@ -5,6 +5,8 @@ namespace Engine
 {
 	namespace Math
 	{
+		class Quaternion;
+
 		class Vector3
 		{
 		public:
@@ -13,9 +15,17 @@ namespace Engine
 			float z;
 			float w;
 
-			constexpr Vector3();
-			constexpr Vector3(float x, float y, float z);
-			constexpr Vector3(float x, float y, float z, float w);
+			constexpr Vector3() : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+			{
+			}
+
+			constexpr Vector3(float x, float y, float z) : x(x), y(y), z(z), w(1.0f)
+			{
+			}
+
+			constexpr Vector3(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
+			{
+			}
 
 			Vector3& Normalize();
 			Vector3& PerspectiveDivide();
@@ -34,27 +44,123 @@ namespace Engine
 			[[nodiscard]] Vector3 GetDirectionalTo(const Vector3& other) const;
 			[[nodiscard]] Vector3 GetMiddleFrom(const Vector3& other) const;
 
-			constexpr Vector3& operator+=(const Vector3& other) noexcept;
-			constexpr Vector3& operator-=(const Vector3& other) noexcept;
-			constexpr Vector3& operator/=(const Vector3& other) noexcept;
-			constexpr Vector3& operator*=(const Vector3& other) noexcept;
+			constexpr Vector3& operator+=(const Vector3& other) noexcept
+			{
+				x += other.x;
+				y += other.y;
+				z += other.z;
 
-			constexpr Vector3& operator+=(float scalar) noexcept;
-			constexpr Vector3& operator-=(float scalar) noexcept;
-			constexpr Vector3& operator/=(float scalar) noexcept;
-			constexpr Vector3& operator*=(float scalar) noexcept;
+				return *this;
+			}
 
-			[[nodiscard]] constexpr Vector3 operator+(const Vector3& other) const noexcept;
-			[[nodiscard]] constexpr Vector3 operator-(const Vector3& other) const noexcept;
-			[[nodiscard]] constexpr Vector3 operator/(const Vector3& other) const noexcept;
-			[[nodiscard]] constexpr Vector3 operator*(const Vector3& other) const noexcept;
+			constexpr Vector3& operator-=(const Vector3& other) noexcept
+			{
+				x -= other.x;
+				y -= other.y;
+				z -= other.z;
 
-			[[nodiscard]] constexpr Vector3 operator+(float scalar) const noexcept;
-			[[nodiscard]] constexpr Vector3 operator-(float scalar) const noexcept;
-			[[nodiscard]] constexpr Vector3 operator/(float scalar) const noexcept;
-			[[nodiscard]] constexpr Vector3 operator*(float scalar) const noexcept;
+				return *this;
+			}
 
-			[[nodiscard]] constexpr bool operator==(const Vector3& other) const noexcept;
+			constexpr Vector3& operator/=(const Vector3& other) noexcept
+			{
+				x /= other.x;
+				y /= other.y;
+				z /= other.z;
+
+				return *this;
+			}
+
+			constexpr Vector3& operator*=(const Vector3& other) noexcept
+			{
+				x *= other.x;
+				y *= other.y;
+				z *= other.z;
+
+				return *this;
+			}
+
+			constexpr Vector3& operator+=(float scalar) noexcept
+			{
+				x += scalar;
+				y += scalar;
+				z += scalar;
+
+				return *this;
+			}
+
+			constexpr Vector3& operator-=(float scalar) noexcept
+			{
+				x -= scalar;
+				y -= scalar;
+				z -= scalar;
+
+				return *this;
+			}
+
+			constexpr Vector3& operator/=(float scalar) noexcept
+			{
+				x /= scalar;
+				y /= scalar;
+				z /= scalar;
+
+				return *this;
+			}
+
+			constexpr Vector3& operator*=(float scalar) noexcept
+			{
+				x *= scalar;
+				y *= scalar;
+				z *= scalar;
+
+				return *this;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator+(const Vector3& other) const noexcept
+			{
+				return Vector3(*this) += other;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator-(const Vector3& other) const noexcept
+			{
+				return Vector3(*this) -= other;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator/(const Vector3& other) const noexcept
+			{
+				return Vector3(*this) /= other;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator*(const Vector3& other) const noexcept
+			{
+				return Vector3(*this) *= other;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator+(float scalar) const noexcept
+			{
+				return Vector3(*this) += scalar;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator-(float scalar) const noexcept
+			{
+				return Vector3(*this) -= scalar;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator/(float scalar) const noexcept
+			{
+				return Vector3(*this) /= scalar;
+			}
+
+			[[nodiscard]] constexpr Vector3 operator*(float scalar) const noexcept
+			{
+				return Vector3(*this) *= scalar;
+			}
+
+			[[nodiscard]] constexpr bool operator==(const Vector3& other) const noexcept
+			{
+				return (x == other.x && y == other.y && z == other.z);
+			}
+
 		};
 	}
 }
