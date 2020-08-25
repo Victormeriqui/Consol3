@@ -25,17 +25,11 @@
     <Filter Include="Source Files\Engine\Math\Util">
       <UniqueIdentifier>{dc77e97c-6795-4a97-8824-e8ce04f85e21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Display">
+      <UniqueIdentifier>{d977153a-44b0-4372-ad68-2a1af9bd47a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IFrameBuffer.hpp">
-      <Filter>Source Files\Engine\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="IFrameBufferRenderer.hpp">
-      <Filter>Source Files\Engine\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractFrameBufferRenderer.hpp">
-      <Filter>Source Files\Engine\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Quaternion.hpp">
       <Filter>Source Files\Engine\Math</Filter>
     </ClInclude>
@@ -50,6 +44,27 @@
     </ClInclude>
     <ClInclude Include="Matrix4.hpp">
       <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.hpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBuffer.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleBuffer.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractFrameBufferRenderer.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultConsoleFrameBufferRenderer.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.hpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +88,24 @@
     </ClCompile>
     <ClCompile Include="Matrix4.cpp">
       <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBuffer.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleBuffer.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Win10ConsoleFrameBufferRenderer.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Win10ConsoleFrameBufferRenderer.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultConsoleFrameBufferRenderer.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
