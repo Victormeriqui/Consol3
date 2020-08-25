@@ -1,20 +1,23 @@
 #ifndef ABSTRACTFRAMEBUFFERRENDERER_HPP
 #define ABSTRACTFRAMEBUFFERRENDERER_HPP
 
-#include "IFrameBuffer.hpp"
-#include "IFrameBufferRenderer.hpp"
+#include "FrameBuffer.hpp"
+#include "ConsoleBuffer.hpp"
 
-namespace Engine
+namespace Display
 {
-	namespace Rendering
+	class AbstractFrameBufferRenderer 
 	{
-		class AbstractFrameBufferRenderer : public IFrameBufferRenderer 
-		{
-		protected:
-			IFrameBuffer& framebuffer;
-		};
+	protected:
+		const FrameBuffer& framebuffer;
+		const ConsoleBuffer consolebuffer;
 
-	}
+		AbstractFrameBufferRenderer(const FrameBuffer& framebuffer) : framebuffer(framebuffer), consolebuffer(ConsoleBuffer()) {}
+
+		virtual void TranslateToConsoleBuffer() = 0;
+		virtual void DrawConsoleFrame() = 0;
+	};
+
 }
 
 #endif
