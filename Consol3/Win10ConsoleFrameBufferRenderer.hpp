@@ -3,10 +3,15 @@
 
 #include "AbstractFrameBufferRenderer.hpp"
 
+#include "FrameBuffer.hpp"
+
 namespace Display
 {
 	class Win10ConsoleFrameBufferRenderer : public AbstractFrameBufferRenderer
 	{
+	public:
+		Win10ConsoleFrameBufferRenderer(const FrameBuffer& framebuffer);
+
 		void TranslateToConsoleBuffer();
 		void DrawConsoleFrame();
 	};
