@@ -6,14 +6,6 @@ namespace Engine
 {
 	namespace Math
 	{
-		constexpr Angle::Angle() : pitch(0), yaw(0), roll(0)
-		{
-		}
-		
-		constexpr Angle::Angle(float pitch, float yaw, float roll) : pitch(pitch), yaw(yaw), roll(roll)
-		{
-		}
-
 		Angle& Angle::ToDegrees()
 		{
 			pitch = Util::ToDegrees(pitch);
