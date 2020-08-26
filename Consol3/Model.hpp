@@ -22,8 +22,8 @@ namespace Engine
 
 			void CalculateNormals() const;
 
-			[[nodiscard]] const std::vector<Vertex>& GetVertices() const;
-			[[nodiscard]] const std::vector<unsigned int>& GetIndices() const;
+			[[nodiscard]] std::vector<Vertex> GetVertices() const;
+			[[nodiscard]] std::vector<unsigned int> GetIndices() const;
 
 			void DrawModel(/*const Transform& transform*/) const;
 		};

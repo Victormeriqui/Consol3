@@ -21,15 +21,13 @@ namespace Engine
 			constexpr Vertex(Vector3 position) : position(position), normal(Vector3(0, 0, 0)) {}
 			constexpr Vertex(Vector3 position, Vector3 normal) : position(position), normal(normal) {};
 
-			[[nodiscard]] const Vector3& GetPosition() const;
+			[[nodiscard]] Vector3 GetPosition() const;
 			Vertex& SetPosition(const Vector3& position);
 
-			[[nodiscard]] const Vector3& GetNormal() const;
+			[[nodiscard]] Vector3 GetNormal() const;
 			Vertex& SetNormal(const Vector3& normal);
 
-
 			Vertex& PerspectiveDivide();
-
 
 			constexpr Vertex& operator*= (const Matrix4& mat) noexcept
 			{
