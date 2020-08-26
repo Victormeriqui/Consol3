@@ -23,7 +23,7 @@ namespace Display
 
 		inline void SetPixel(uint16_t x, uint16_t y, const Color& color);
 		inline void SetPixel(uint16_t x, uint16_t y, uint32_t color);
-		[[nodiscard]] const Color& GetPixel(uint16_t x, uint16_t y) const;
+		[[nodiscard]] Color GetPixel(uint16_t x, uint16_t y) const;
 
 		void ClearBuffer();
 		void FillBuffer(const Color& color);
