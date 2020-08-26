@@ -23,12 +23,12 @@ namespace Engine
 			//TODO: do this
 		}
 
-		const std::vector<Vertex>& Model::GetVertices() const
+		std::vector<Vertex> Model::GetVertices() const
 		{
 			return vertices;
 		}
 
-		const std::vector<unsigned int>& Model::GetIndices() const
+		std::vector<unsigned int> Model::GetIndices() const
 		{
 			return indices;
 		}

@@ -28,11 +28,11 @@ namespace Engine
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const Color& color);
 			
-			[[nodiscard]] const Model& GetModel() const;
-			[[nodiscard]] const Color& GetColor() const;
-			[[nodiscard]] const Vector3& GetPosition() const;
-			[[nodiscard]] const Angle& GetRotation() const;
-			[[nodiscard]] const Vector3& GetScale() const;
+			[[nodiscard]] Model GetModel() const;
+			[[nodiscard]] Color GetColor() const;
+			[[nodiscard]] Vector3 GetPosition() const;
+			[[nodiscard]] Angle GetRotation() const;
+			[[nodiscard]] Vector3 GetScale() const;
 
 			AbstractMesh& SetModel(const Model& model);
 			AbstractMesh& SetColor(const Color& color);

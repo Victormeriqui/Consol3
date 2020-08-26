@@ -4,7 +4,7 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		const Vector3& Vertex::GetPosition() const
+		Vector3 Vertex::GetPosition() const
 		{
 			return position;
 		}
@@ -16,7 +16,7 @@ namespace Engine
 			return *this;
 		}
 
-		const Vector3& Vertex::GetNormal() const
+		Vector3 Vertex::GetNormal() const
 		{
 			return normal;
 		}

@@ -44,27 +44,27 @@ namespace Engine
 		{
 		}
 
-		const Model& AbstractMesh::GetModel() const
+		Model AbstractMesh::GetModel() const
 		{
 			return model;
 		}
 
-		const Color& AbstractMesh::GetColor() const
+		Color AbstractMesh::GetColor() const
 		{
 			return color;
 		}
 
-		const Vector3& AbstractMesh::GetPosition() const
+		Vector3 AbstractMesh::GetPosition() const
 		{
 			return position;
 		}
 
-		const Angle& AbstractMesh::GetRotation() const
+		Angle AbstractMesh::GetRotation() const
 		{
 			return rotation;
 		}
 
-		const Vector3& AbstractMesh::GetScale() const
+		Vector3 AbstractMesh::GetScale() const
 		{
 			return scale;
 		}
