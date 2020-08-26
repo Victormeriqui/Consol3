@@ -72,26 +72,36 @@ namespace Engine
 		AbstractMesh& AbstractMesh::SetModel(const Model& model)
 		{
 			this->model = Model(model);
+
+			return *this;
 		}
 
 		AbstractMesh& AbstractMesh::SetColor(const Color& color)
 		{
 			this->color = Color(color);
+
+			return *this;
 		}
 
 		AbstractMesh& AbstractMesh::SetPosition(const Vector3& position)
 		{
 			this->position = Vector3(position);
+
+			return *this;
 		}
 
 		AbstractMesh& AbstractMesh::SetRotation(const Angle& rotation)
 		{
 			this->rotation = Angle(rotation);
+
+			return *this;
 		}
 
 		AbstractMesh& AbstractMesh::SetScale(const Vector3& scale)
 		{
 			this->scale = Vector3(scale);
+
+			return *this;
 		}
 
 	}
