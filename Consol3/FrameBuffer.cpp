@@ -24,9 +24,9 @@ namespace Display
 		buffer[x + width * y] = color;
 	}
 
-	const Color& FrameBuffer::GetPixel(uint16_t x, uint16_t y) const
+	Color FrameBuffer::GetPixel(uint16_t x, uint16_t y) const
 	{
-		return buffer[x + width * y];
+		return Color(buffer[x + width * y]);
 	}
 
 	void FrameBuffer::ClearBuffer()

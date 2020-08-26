@@ -26,6 +26,8 @@ namespace Display
 			r = (uint8_t)(color >> 16);
 			g = (uint8_t)(color >> 8 & 0xFF);
 			b = (uint8_t)(color & 0xFF);
+
+			return *this;
 		}
 	};
 }
