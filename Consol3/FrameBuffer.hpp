@@ -21,8 +21,8 @@ namespace Display
 		FrameBuffer(uint16_t width, uint16_t height);
 		~FrameBuffer();
 
-		inline void SetPixel(uint16_t x, uint16_t y, const Color& color);
-		inline void SetPixel(uint16_t x, uint16_t y, uint32_t color);
+		void SetPixel(uint16_t x, uint16_t y, const Color& color);
+		void SetPixel(uint16_t x, uint16_t y, uint32_t color);
 		[[nodiscard]] Color GetPixel(uint16_t x, uint16_t y) const;
 
 		void ClearBuffer();
