@@ -12,8 +12,13 @@ namespace Engine
 			float yaw;
 			float roll;
 
-			constexpr Angle();
-			constexpr Angle(float pitch, float yaw, float roll);
+			constexpr Angle() : pitch(0), yaw(0), roll(0)
+			{
+			}
+
+			constexpr Angle(float pitch, float yaw, float roll) : pitch(pitch), yaw(yaw), roll(roll)
+			{
+			}
 
 			Angle& ToDegrees();
 			Angle& ToRadians();
