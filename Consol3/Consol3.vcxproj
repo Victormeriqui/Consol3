@@ -151,7 +151,10 @@
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="MathUtil.hpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="AbstractMesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -166,8 +169,10 @@
     <ClInclude Include="DefaultConsoleFrameBufferRenderer.hpp" />
     <ClInclude Include="FrameBuffer.hpp" />
     <ClInclude Include="Matrix4.hpp" />
+    <ClInclude Include="AbstractMesh.hpp" />
     <ClInclude Include="Model.hpp" />
     <ClInclude Include="Quaternion.hpp" />
+    <ClInclude Include="StaticMesh.hpp" />
     <ClInclude Include="Vector2.hpp" />
     <ClInclude Include="Vector3.hpp" />
     <ClInclude Include="Vertex.hpp" />

@@ -40,7 +40,7 @@ namespace Engine
 			return *this;
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetRotated(const Vector3& axis, float amount) const
+		Vector3 Vector3::GetRotated(const Vector3& axis, float amount) const
 		{
 			float amount_sin = sinf(-amount);
 			float amount_cos = cosf(-amount);
@@ -63,27 +63,27 @@ namespace Engine
 			return *this;
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetRotated(const Quaternion& quat) const
+		Vector3 Vector3::GetRotated(const Quaternion& quat) const
 		{
 			return Vector3(*this).Rotate(quat);
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetPerspectiveDivided() const
+		Vector3 Vector3::GetPerspectiveDivided() const
 		{
 			return Vector3(*this).PerspectiveDivide();
 		}
 
-		[[nodiscard]] float Vector3::GetLength() const
+		float Vector3::GetLength() const
 		{
 			return sqrtf(x*x + y*y + z*z);
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetNormalized() const
+		Vector3 Vector3::GetNormalized() const
 		{
 			return Vector3(*this).Normalize();
 		}
 
-		[[nodiscard]] float Vector3::GetDistanceTo(const Vector3& other) const
+		float Vector3::GetDistanceTo(const Vector3& other) const
 		{
 			Vector3 sub = Vector3(other);
 			sub -= *this;
@@ -91,12 +91,12 @@ namespace Engine
 			return sub.GetLength();
 		}
 
-		[[nodiscard]] float Vector3::GetDotProduct(const Vector3& other) const
+		float Vector3::GetDotProduct(const Vector3& other) const
 		{
 			return x * other.x + y * other.y + z * other.z;
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetCrossProduct(const Vector3& other) const
+		Vector3 Vector3::GetCrossProduct(const Vector3& other) const
 		{
 			return Vector3(
 				y * other.z - z * other.y,
@@ -104,7 +104,7 @@ namespace Engine
 				x * other.y - y * other.x);
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetDirectionalTo(const Vector3& other) const
+		Vector3 Vector3::GetDirectionalTo(const Vector3& other) const
 		{
 			Vector3 sub = Vector3(other);
 			sub -= *this;
@@ -112,7 +112,7 @@ namespace Engine
 			return sub.Normalize();
 		}
 
-		[[nodiscard]] Vector3 Vector3::GetMiddleFrom(const Vector3& other) const
+		Vector3 Vector3::GetMiddleFrom(const Vector3& other) const
 		{
 			Vector3 mid = Vector3(other);
 			mid += *this;

@@ -23,7 +23,7 @@ namespace Engine
 			std::fill(&values[0][0], &values[0][0] + 4 * 4, value);
 		}
 
-		[[nodiscard]] Matrix4 Matrix4::operator*(const Matrix4& other) const noexcept
+		Matrix4 Matrix4::operator*(const Matrix4& other) const noexcept
 		{
 			return Matrix4(*this) *= other;
 		}

@@ -32,12 +32,12 @@ namespace Engine
 			return *this;
 		}
 
-		[[nodiscard]] Angle Angle::GetInDegrees() const
+		Angle Angle::GetInDegrees() const
 		{
 			return Angle(*this).ToDegrees();
 		}
 
-		[[nodiscard]] Angle Angle::GetInRadians() const
+		Angle Angle::GetInRadians() const
 		{
 			return Angle(*this).ToRadians();
 		}
@@ -114,47 +114,47 @@ namespace Engine
 			return *this;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator+(const Angle& other) const noexcept
+		constexpr Angle Angle::operator+(const Angle& other) const noexcept
 		{
 			return Angle(*this) += other;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator-(const Angle& other) const noexcept
+		constexpr Angle Angle::operator-(const Angle& other) const noexcept
 		{
 			return Angle(*this) -= other;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator/(const Angle& other) const noexcept
+		constexpr Angle Angle::operator/(const Angle& other) const noexcept
 		{
 			return Angle(*this) /= other;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator*(const Angle& other) const noexcept
+		constexpr Angle Angle::operator*(const Angle& other) const noexcept
 		{
 			return Angle(*this) *= other;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator+(float scalar) const noexcept
+		constexpr Angle Angle::operator+(float scalar) const noexcept
 		{
 			return Angle(*this) += scalar;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator-(float scalar) const noexcept
+		constexpr Angle Angle::operator-(float scalar) const noexcept
 		{
 			return Angle(*this) -= scalar;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator/(float scalar) const noexcept
+		constexpr Angle Angle::operator/(float scalar) const noexcept
 		{
 			return Angle(*this) /= scalar;
 		}
 
-		[[nodiscard]] constexpr Angle Angle::operator*(float scalar) const noexcept
+		constexpr Angle Angle::operator*(float scalar) const noexcept
 		{
 			return Angle(*this) *= scalar;
 		}
 
-		[[nodiscard]] constexpr bool Angle::operator==(const Angle& other) const noexcept
+		constexpr bool Angle::operator==(const Angle& other) const noexcept
 		{
 			return (pitch == other.pitch && yaw == other.yaw && roll == other.roll);
 		}
