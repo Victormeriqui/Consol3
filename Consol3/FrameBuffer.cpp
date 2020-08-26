@@ -14,12 +14,12 @@ namespace Display
 		delete buffer;
 	}
 
-	inline void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const Color& color)
+	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const Color& color)
 	{
 		buffer[x + width * y] = color.GetHexValues();
 	}
 
-	inline void FrameBuffer::SetPixel(uint16_t x, uint16_t y, uint32_t color)
+	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, uint32_t color)
 	{
 		buffer[x + width * y] = color;
 	}
