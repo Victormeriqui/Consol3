@@ -28,10 +28,23 @@ namespace Engine
 			return *this;
 		}
 
+		float Vertex::GetW() const
+		{
+			return w;
+		}
+
+		Vertex& Vertex::SetW(float w)
+		{
+			this->w = w;
+
+			return *this;
+		}
+
 		Vertex& Vertex::PerspectiveDivide()
 		{
-			//TODO: move homogenous coordinate to this class
-			position.PerspectiveDivide();
+			position.x /= w;
+			position.y /= w;
+			position.z /= w;
 
 			return *this;
 		}

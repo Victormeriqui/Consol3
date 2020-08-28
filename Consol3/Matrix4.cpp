@@ -1,7 +1,5 @@
 #include "Matrix4.hpp"
 
-#include "Vector3.hpp"
-
 #include <algorithm>
 
 namespace Engine
@@ -21,11 +19,6 @@ namespace Engine
 		Matrix4::Matrix4(float value)
 		{
 			std::fill(&values[0][0], &values[0][0] + 4 * 4, value);
-		}
-
-		Matrix4 Matrix4::operator*(const Matrix4& other) const noexcept
-		{
-			return Matrix4(*this) *= other;
 		}
 
 	}
