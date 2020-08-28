@@ -20,15 +20,6 @@ namespace Engine
 			return *this;
 		}
 
-		Vector3& Vector3::PerspectiveDivide()
-		{
-			x /= w;
-			y /= w;
-			z /= w;
-
-			return *this;
-		}
-
 		Vector3& Vector3::Rotate(const Vector3& axis, float amount)
 		{
 			Vector3 rotated = GetRotated(axis, amount);
@@ -66,11 +57,6 @@ namespace Engine
 		Vector3 Vector3::GetRotated(const Quaternion& quat) const
 		{
 			return Vector3(*this).Rotate(quat);
-		}
-
-		Vector3 Vector3::GetPerspectiveDivided() const
-		{
-			return Vector3(*this).PerspectiveDivide();
 		}
 
 		float Vector3::GetLength() const

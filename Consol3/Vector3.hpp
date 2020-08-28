@@ -13,28 +13,21 @@ namespace Engine
 			float x;
 			float y;
 			float z;
-			float w;
 
-			constexpr Vector3() : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+			constexpr Vector3() : x(0.0f), y(0.0f), z(0.0f)
 			{
 			}
 
-			constexpr Vector3(float x, float y, float z) : x(x), y(y), z(z), w(1.0f)
-			{
-			}
-
-			constexpr Vector3(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
+			constexpr Vector3(float x, float y, float z) : x(x), y(y), z(z)
 			{
 			}
 
 			Vector3& Normalize();
-			Vector3& PerspectiveDivide();
 			Vector3& Rotate(const Vector3& axis, float amount);
 			Vector3& Rotate(const Quaternion& quat);
 
 			[[nodiscard]] float GetLength() const;
 			[[nodiscard]] Vector3 GetNormalized() const;
-			[[nodiscard]] Vector3 GetPerspectiveDivided() const;
 			[[nodiscard]] Vector3 GetRotated(const Vector3& axis, float amount) const;
 			[[nodiscard]] Vector3 GetRotated(const Quaternion& quat) const;
 
