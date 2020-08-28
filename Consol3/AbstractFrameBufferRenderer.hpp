@@ -9,12 +9,15 @@ namespace Display
 	class AbstractFrameBufferRenderer 
 	{
 	protected:
-		const FrameBuffer& framebuffer;
 		const ConsoleBuffer consolebuffer;
 
-		AbstractFrameBufferRenderer(const FrameBuffer& framebuffer) : framebuffer(framebuffer), consolebuffer(ConsoleBuffer()) {}
+		AbstractFrameBufferRenderer() : consolebuffer(ConsoleBuffer()) {}
 
-		virtual void TranslateToConsoleBuffer() = 0;
+		/**
+		* Translates the given frame buffer to the inner consolebuffer held by this class
+		* After translation the consolebuffer is ready to drawn to the console
+		*/
+		virtual void TranslateToConsoleBuffer(const FrameBuffer& framebuffer) = 0;
 		virtual void DrawConsoleFrame() = 0;
 	};
 

@@ -10,9 +10,9 @@ namespace Display
 	class DefaultConsoleFrameBufferRenderer : public AbstractFrameBufferRenderer
 	{
 	public:
-		DefaultConsoleFrameBufferRenderer(const FrameBuffer& framebuffer);
+		DefaultConsoleFrameBufferRenderer();
 
-		void TranslateToConsoleBuffer();
+		void TranslateToConsoleBuffer(const FrameBuffer& framebuffer);
 		void DrawConsoleFrame();
 	};
 }

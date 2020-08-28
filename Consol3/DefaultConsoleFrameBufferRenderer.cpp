@@ -4,11 +4,11 @@
 
 namespace Display
 {
-	DefaultConsoleFrameBufferRenderer::DefaultConsoleFrameBufferRenderer(const FrameBuffer& framebuffer) : AbstractFrameBufferRenderer(framebuffer)
+	DefaultConsoleFrameBufferRenderer::DefaultConsoleFrameBufferRenderer()
 	{
 	}
 
-	void DefaultConsoleFrameBufferRenderer::TranslateToConsoleBuffer()
+	void DefaultConsoleFrameBufferRenderer::TranslateToConsoleBuffer(const FrameBuffer& framebuffer)
 	{
 	}
 
