@@ -6,22 +6,17 @@ namespace Display
 {
 	FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height), size(width * height)
 	{
-		buffer = new uint32_t[size];
-	}
-
-	FrameBuffer::~FrameBuffer()
-	{
-		delete buffer;
+		buffer = std::vector<uint32_t>(size);
 	}
 
 	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const Color& color)
 	{
-		buffer[x + width * y] = color.GetHexValues();
+		buffer.data()[x + width * y] = color.GetHexValues();
 	}
 
 	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, uint32_t color)
 	{
-		buffer[x + width * y] = color;
+		buffer.data()[x + width * y] = color;
 	}
 
 	Color FrameBuffer::GetPixel(uint16_t x, uint16_t y) const
@@ -31,17 +26,17 @@ namespace Display
 
 	void FrameBuffer::ClearBuffer()
 	{
-		std::fill_n(buffer, size, 0);
+		buffer.clear();
 	}
 
 	void FrameBuffer::FillBuffer(const Color& color)
 	{
-		std::fill_n(buffer, size, color.GetHexValues());
+		std::fill(buffer.begin(), buffer.end(), color.GetHexValues());
 	}
 
 	void FrameBuffer::FillBuffer(uint32_t color)
 	{
-		std::fill_n(buffer, size, color);
+		std::fill(buffer.begin(), buffer.end(), color);
 	}
 
 }
