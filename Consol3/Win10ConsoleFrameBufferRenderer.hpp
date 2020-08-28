@@ -10,9 +10,9 @@ namespace Display
 	class Win10ConsoleFrameBufferRenderer : public AbstractFrameBufferRenderer
 	{
 	public:
-		Win10ConsoleFrameBufferRenderer(const FrameBuffer& framebuffer);
+		Win10ConsoleFrameBufferRenderer();
 
-		void TranslateToConsoleBuffer();
+		void TranslateToConsoleBuffer(const FrameBuffer& framebuffer);
 		void DrawConsoleFrame();
 	};
 }

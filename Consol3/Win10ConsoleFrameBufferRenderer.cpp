@@ -4,11 +4,11 @@
 
 namespace Display
 {
-	Win10ConsoleFrameBufferRenderer::Win10ConsoleFrameBufferRenderer(const FrameBuffer& framebuffer) : AbstractFrameBufferRenderer(framebuffer)
+	Win10ConsoleFrameBufferRenderer::Win10ConsoleFrameBufferRenderer()
 	{
 	}
 
-	void Win10ConsoleFrameBufferRenderer::TranslateToConsoleBuffer()
+	void Win10ConsoleFrameBufferRenderer::TranslateToConsoleBuffer(const FrameBuffer& framebuffer)
 	{
 	}
 
