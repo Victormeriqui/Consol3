@@ -35,7 +35,7 @@ namespace Display
 
 		/**
 		* Translates the given frame buffer to the inner representation needed by the FrameBufferRenderer class
-		* After translation the frame is is ready to drawn
+		* After translation the frame is ready to drawn
 		*/
 		virtual void TranslateFrameForDrawing(const FrameBuffer& framebuffer) = 0;
 		virtual void DrawFrame() = 0;
