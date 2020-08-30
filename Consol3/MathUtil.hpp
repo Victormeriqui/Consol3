@@ -19,6 +19,11 @@ namespace Engine
 			{
 				return PI * rad / 180.f;
 			}
+
+			[[nodiscard]] constexpr inline static float Lerp(float val, float min, float max)
+			{
+				return (1 - val) * min + val * max;
+			}
 		}
 	}
 }
