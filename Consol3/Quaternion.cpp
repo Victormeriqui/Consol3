@@ -9,6 +9,22 @@ namespace Engine
 {
 	namespace Math
 	{
+
+		Quaternion::Quaternion(const Angle& angle)
+		{
+			float cy = cosf(angle.yaw * 0.5f);
+			float sy = sinf(angle.yaw * 0.5f);
+			float cp = cosf(angle.pitch * 0.5f);
+			float sp = sinf(angle.pitch * 0.5f);
+			float cr = cosf(angle.roll * 0.5f);
+			float sr = sinf(angle.roll * 0.5f);
+
+			w = cr * cp * cy + sr * sp * sy;
+			x = sr * cp * cy - cr * sp * sy;
+			y = cr * sp * cy + sr * cp * sy;
+			z = cr * cp * sy - sr * sp * cy;
+		}
+
 		Quaternion& Quaternion::Normalize()
 		{
 			float len = GetLength();
