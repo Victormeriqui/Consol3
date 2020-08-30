@@ -2,6 +2,7 @@
 #define QUATERNION_HPP
 
 #include "Vector3.hpp"
+#include "Angle.hpp"
 
 namespace Engine
 {
@@ -26,6 +27,8 @@ namespace Engine
 			constexpr Quaternion(const Vector3& axis, float w) : x(axis.x), y(axis.y), z(axis.z), w(w)
 			{
 			}
+
+			Quaternion(const Angle& angle);
 
 			Quaternion& Normalize();
 			Quaternion& Conjugate();
