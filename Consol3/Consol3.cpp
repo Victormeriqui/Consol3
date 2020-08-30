@@ -2,29 +2,51 @@
 #include <cstdio>
 
 #include "FrameBuffer.hpp"
+#include "GreyscaleFrameBufferRenderer.hpp"
+#include "MathUtil.hpp"
 
+using namespace Engine::Math;
 using namespace Display;
+
+int random(int min, int max)
+{
+	return rand() % (max + 1 - min) + min;
+}
 
 int main()
 {
-	FrameBuffer framebuffer = FrameBuffer(5, 5);
+	float width = 100;
+	float height = 80;
 
-	for (int y = 0; y < 5; y++)
+	FrameBuffer framebuffer = FrameBuffer(width, height);
+
+	for (int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < 5; x++)
+		for (int x = 0; x < width; x++)
 		{
-			framebuffer.SetPixel(x, y, x+y);
+			uint8_t inc = Util::Lerp(x / (float)width, 0, 255);
+			uint8_t dec = Util::Lerp(x / (float)width, 255, 0);
+			Color col1 = Color(inc, inc, inc);
+			Color col2 = Color(dec, dec, dec);
+
+			Color rand1 = Color(random(0, 255), random(0, 255), random(0, 255));
+			Color rand2 = Color(random(0, 255), random(0, 255), random(0, 255));
+
+			if ((y & 0x01) != 1)
+				framebuffer.SetPixel(x, y, rand1);
+			else
+				framebuffer.SetPixel(x, y, rand2);
 		}
 	}
 
-	for (int y = 0; y < 5; y++)
-	{
-		for (int x = 0; x < 5; x++)
-		{
-			printf("%u ", framebuffer.GetPixel(x, y).GetHexValues());
-		}
-		printf("\n");
-	}
+	
 
+	GreyscaleFrameBufferRenderer renderer = GreyscaleFrameBufferRenderer(framebuffer);
+
+	renderer.TranslateFrameForDrawing(framebuffer);
+	renderer.DrawFrame();
+
+	char a;
+	scanf_s("%c", &a, 1);
 	return 0;
 }
