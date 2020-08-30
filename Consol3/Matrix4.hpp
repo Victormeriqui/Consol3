@@ -15,6 +15,8 @@ namespace Engine
 			Matrix4(float values[4][4]);
 			Matrix4(float value);
 
+			Matrix4& SetIdentity();
+
 			constexpr Matrix4& operator*=(const Matrix4& other) noexcept
 			{
 				for (int y = 0; y < 4; y++)
