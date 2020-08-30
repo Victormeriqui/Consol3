@@ -29,6 +29,23 @@ namespace Display
 
 			return *this;
 		}
+
+		/**
+		* Returns a 0-255 float value representing the lightness of the color based on luminosity
+		*/
+		[[nodiscard]] inline constexpr float ToGreyscale()
+		{
+			return 0.3f * r + 0.59f * g + 0.11f * b;
+		}
+
+
+		/**
+		* Returns a 0-255 float value representing the brightness of the color based on luminosity
+		*/
+		[[nodiscard]] static inline constexpr float HexToGreyscale(uint32_t color)
+		{
+			return 0.3f * (color >> 16) + 0.59f * (color >> 8 & 0xFF) + 0.11f * (color & 0xFF);
+		}
 	};
 }
 
