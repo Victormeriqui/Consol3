@@ -51,16 +51,10 @@
     <ClInclude Include="FrameBuffer.hpp">
       <Filter>Source Files\Display</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleBuffer.hpp">
-      <Filter>Source Files\Display</Filter>
-    </ClInclude>
     <ClInclude Include="Color.hpp">
       <Filter>Source Files\Display</Filter>
     </ClInclude>
     <ClInclude Include="AbstractFrameBufferRenderer.hpp">
-      <Filter>Source Files\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultConsoleFrameBufferRenderer.hpp">
       <Filter>Source Files\Display</Filter>
     </ClInclude>
     <ClInclude Include="Model.hpp">
@@ -71,6 +65,15 @@
     </ClInclude>
     <ClInclude Include="StaticMesh.hpp">
       <Filter>Source Files\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleManager.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="Win10ConsoleFrameBufferRenderer.hpp">
+      <Filter>Source Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="GreyscaleFrameBufferRenderer.hpp">
+      <Filter>Source Files\Display</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,16 +101,7 @@
     <ClCompile Include="FrameBuffer.cpp">
       <Filter>Source Files\Display</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleBuffer.cpp">
-      <Filter>Source Files\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="Win10ConsoleFrameBufferRenderer.hpp">
-      <Filter>Source Files\Display</Filter>
-    </ClCompile>
     <ClCompile Include="Win10ConsoleFrameBufferRenderer.cpp">
-      <Filter>Source Files\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultConsoleFrameBufferRenderer.cpp">
       <Filter>Source Files\Display</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
@@ -121,6 +115,12 @@
     </ClCompile>
     <ClCompile Include="StaticMesh.cpp">
       <Filter>Source Files\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleManager.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="GreyscaleFrameBufferRenderer.cpp">
+      <Filter>Source Files\Display</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

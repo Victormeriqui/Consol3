@@ -146,8 +146,8 @@
   <ItemGroup>
     <ClCompile Include="Angle.cpp" />
     <ClCompile Include="Consol3.cpp" />
-    <ClCompile Include="ConsoleBuffer.cpp" />
-    <ClCompile Include="DefaultConsoleFrameBufferRenderer.cpp" />
+    <ClCompile Include="ConsoleManager.cpp" />
+    <ClCompile Include="GreyscaleFrameBufferRenderer.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="MathUtil.hpp" />
     <ClCompile Include="Matrix4.cpp" />
@@ -159,14 +159,13 @@
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Win10ConsoleFrameBufferRenderer.cpp" />
-    <ClCompile Include="Win10ConsoleFrameBufferRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFrameBufferRenderer.hpp" />
     <ClInclude Include="Angle.hpp" />
     <ClInclude Include="Color.hpp" />
-    <ClInclude Include="ConsoleBuffer.hpp" />
-    <ClInclude Include="DefaultConsoleFrameBufferRenderer.hpp" />
+    <ClInclude Include="ConsoleManager.hpp" />
+    <ClInclude Include="GreyscaleFrameBufferRenderer.hpp" />
     <ClInclude Include="FrameBuffer.hpp" />
     <ClInclude Include="Matrix4.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
@@ -176,6 +175,7 @@
     <ClInclude Include="Vector2.hpp" />
     <ClInclude Include="Vector3.hpp" />
     <ClInclude Include="Vertex.hpp" />
+    <ClInclude Include="Win10ConsoleFrameBufferRenderer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
