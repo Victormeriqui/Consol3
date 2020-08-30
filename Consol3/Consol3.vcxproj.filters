@@ -75,6 +75,9 @@
     <ClInclude Include="GreyscaleFrameBufferRenderer.hpp">
       <Filter>Source Files\Display</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.hpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Consol3.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="GreyscaleFrameBufferRenderer.cpp">
       <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
