@@ -4,9 +4,19 @@
 
 namespace Display
 {
-	FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height), size(width * height)
+	FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
 	{
-		buffer = std::vector<uint32_t>(size);
+		buffer = std::vector<uint32_t>(width * height);
+	}
+
+	uint16_t FrameBuffer::GetWidth() const
+	{
+		return width;
+	}
+
+	uint16_t FrameBuffer::GetHeight() const
+	{
+		return height;
 	}
 
 	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const Color& color)
@@ -21,7 +31,12 @@ namespace Display
 
 	Color FrameBuffer::GetPixel(uint16_t x, uint16_t y) const
 	{
-		return Color(buffer[x + width * y]);
+		return Color(buffer.data()[x + width * y]);
+	}
+
+	const uint32_t* FrameBuffer::GetFrameBufferData() const
+	{
+		return buffer.data();
 	}
 
 	void FrameBuffer::ClearBuffer()
