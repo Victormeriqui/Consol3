@@ -75,7 +75,13 @@
     <ClInclude Include="GreyscaleFrameBufferRenderer.hpp">
       <Filter>Source Files\Display</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractRasterizer.hpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
+    </ClInclude>
     <ClInclude Include="Transform.hpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="BarycentricRasterizer.hpp">
       <Filter>Source Files\Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
@@ -126,6 +132,9 @@
       <Filter>Source Files\Display</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="BarycentricRasterizer.cpp">
       <Filter>Source Files\Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
