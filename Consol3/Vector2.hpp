@@ -1,5 +1,9 @@
-#ifndef Vector2_HPP
-#define Vector2_HPP
+#ifndef VECTOR2_HPP
+#define VECTOR2_HPP
+
+#include "Vector3.hpp"
+
+#include <cstdint>
 
 namespace Engine
 {
@@ -16,6 +20,10 @@ namespace Engine
 			}
 
 			constexpr Vector2(float x, float y) : x(x), y(y)
+			{
+			}
+
+			constexpr Vector2(const Vector3& vector) : x((float)vector.x), y((float)vector.y)
 			{
 			}
 

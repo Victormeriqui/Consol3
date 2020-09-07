@@ -33,8 +33,8 @@ namespace Engine
 
 		Vector3 Vector3::GetRotated(const Vector3& axis, float amount) const
 		{
-			float amount_sin = sinf(-amount);
-			float amount_cos = cosf(-amount);
+			float amount_sin = std::sinf(-amount);
+			float amount_cos = std::cosf(-amount);
 
 			const Vector3 rx = GetCrossProduct(axis * amount_sin);
 			const Vector3 ry = axis * GetDotProduct((axis * (1 - amount_cos)));
@@ -61,7 +61,7 @@ namespace Engine
 
 		float Vector3::GetLength() const
 		{
-			return sqrtf(x*x + y*y + z*z);
+			return std::sqrtf(x*x + y*y + z*z);
 		}
 
 		Vector3 Vector3::GetNormalized() const
@@ -102,7 +102,7 @@ namespace Engine
 		{
 			Vector3 mid = Vector3(other);
 			mid += *this;
-			mid /= 2.f;
+			mid /= 2.0f;
 
 			return mid;
 		}
