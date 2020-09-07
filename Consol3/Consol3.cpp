@@ -4,9 +4,13 @@
 #include "FrameBuffer.hpp"
 #include "GreyscaleFrameBufferRenderer.hpp"
 #include "MathUtil.hpp"
+#include "BarycentricRasterizer.hpp"
+#include "Vertex.hpp"
+#include "Vector3.hpp"
 
 using namespace Engine::Math;
 using namespace Display;
+using namespace Engine::Rendering;
 
 int random(int min, int max)
 {
@@ -19,28 +23,22 @@ int main()
 	float height = 80;
 
 	FrameBuffer framebuffer = FrameBuffer(width, height);
+	framebuffer.ClearBuffer();
 
-	for (int y = 0; y < height; y++)
+	BarycentricRasterizer rasterizer = BarycentricRasterizer(framebuffer);
+	rasterizer.SetModelMatrix(Matrix4().SetIdentity());
+	rasterizer.SetViewMatrix(Matrix4().SetIdentity());
+	rasterizer.SetProjectionMatrix(Matrix4().SetIdentity());
+
+	for (int i = 0; i < 10; i++)
 	{
-		for (int x = 0; x < width; x++)
-		{
-			uint8_t inc = Util::Lerp(x / (float)width, 0, 255);
-			uint8_t dec = Util::Lerp(x / (float)width, 255, 0);
-			Color col1 = Color(inc, inc, inc);
-			Color col2 = Color(dec, dec, dec);
+		Vertex v0 = Vertex(Vector3(10, 60, 0));
+		Vertex v1 = Vertex(Vector3(80, 30, 0));
+		Vertex v2 = Vertex(Vector3(20, 10, 0));
+		
 
-			Color rand1 = Color(random(0, 255), random(0, 255), random(0, 255));
-			Color rand2 = Color(random(0, 255), random(0, 255), random(0, 255));
-
-			if ((y & 0x01) != 1)
-				framebuffer.SetPixel(x, y, rand1);
-			else
-				framebuffer.SetPixel(x, y, rand2);
-		}
+		rasterizer.RasterizeTriangle(v0, v1, v2, 0xFFFFFF);
 	}
-
-	
-
 	GreyscaleFrameBufferRenderer renderer = GreyscaleFrameBufferRenderer(framebuffer);
 
 	renderer.TranslateFrameForDrawing(framebuffer);

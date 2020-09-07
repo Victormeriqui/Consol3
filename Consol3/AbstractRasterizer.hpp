@@ -5,6 +5,9 @@
 #include "Vertex.hpp"
 #include "Color.hpp"
 #include "Transform.hpp"
+#include "FrameBuffer.hpp"
+
+#include <cstdint>
 
 using namespace Engine::Math;
 using namespace Display;
@@ -15,20 +18,24 @@ namespace Engine
 	{
 		class AbstractRasterizer
 		{
-		private:
+		protected:
+
 			Matrix4 model_mat;
 			Matrix4 view_mat;
 			Matrix4 projection_mat;
+
+			FrameBuffer& framebuffer;
+
+			AbstractRasterizer(FrameBuffer& framebuffer) : framebuffer(framebuffer) {}
 
 			Vertex& TransformVertexMVP(Vertex& vertex)
 			{
 				vertex *= model_mat;
 				vertex *= view_mat;
 				vertex *= projection_mat;
-			}
 
-		protected:
-			AbstractRasterizer() {}
+				return vertex;
+			}
 
 		public:
 			void SetModelMatrix(const Transform& model_transform)
