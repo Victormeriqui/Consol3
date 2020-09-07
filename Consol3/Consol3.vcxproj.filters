@@ -36,15 +36,6 @@
     <ClInclude Include="Angle.hpp">
       <Filter>Source Files\Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.hpp">
-      <Filter>Source Files\Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.hpp">
-      <Filter>Source Files\Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4.hpp">
-      <Filter>Source Files\Engine\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.hpp">
       <Filter>Source Files\Engine\Rendering</Filter>
     </ClInclude>
@@ -84,6 +75,18 @@
     <ClInclude Include="BarycentricRasterizer.hpp">
       <Filter>Source Files\Engine\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Vector3.hpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.hpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.hpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Point2.hpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Consol3.cpp">
@@ -96,15 +99,6 @@
       <Filter>Source Files\Engine\Math\Util</Filter>
     </ClCompile>
     <ClCompile Include="Quaternion.cpp">
-      <Filter>Source Files\Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>Source Files\Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>Source Files\Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4.cpp">
       <Filter>Source Files\Engine\Math</Filter>
     </ClCompile>
     <ClCompile Include="FrameBuffer.cpp">
@@ -136,6 +130,15 @@
     </ClCompile>
     <ClCompile Include="BarycentricRasterizer.cpp">
       <Filter>Source Files\Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
