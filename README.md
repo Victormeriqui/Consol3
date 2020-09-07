@@ -6,6 +6,3 @@ Requirements:
   - No "C with classes"
   - Use of modernish c++
   - Conhost must be left in the same state as it started, even with errors the engine must exit gracefully
-  - Everything weird/undocumented is fair game
-  - No hard attachment/dependencies, things need to be open for extension closed for modification
-  
