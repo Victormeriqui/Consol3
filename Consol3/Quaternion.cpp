@@ -12,12 +12,12 @@ namespace Engine
 
 		Quaternion::Quaternion(const Angle& angle)
 		{
-			float cy = cosf(angle.yaw * 0.5f);
-			float sy = sinf(angle.yaw * 0.5f);
-			float cp = cosf(angle.pitch * 0.5f);
-			float sp = sinf(angle.pitch * 0.5f);
-			float cr = cosf(angle.roll * 0.5f);
-			float sr = sinf(angle.roll * 0.5f);
+			float cy = std::cosf(angle.yaw * 0.5f);
+			float sy = std::sinf(angle.yaw * 0.5f);
+			float cp = std::cosf(angle.pitch * 0.5f);
+			float sp = std::sinf(angle.pitch * 0.5f);
+			float cr = std::cosf(angle.roll * 0.5f);
+			float sr = std::sinf(angle.roll * 0.5f);
 
 			w = cr * cp * cy + sr * sp * sy;
 			x = sr * cp * cy - cr * sp * sy;
@@ -49,7 +49,7 @@ namespace Engine
 
 		float Quaternion::GetLength() const
 		{
-			return sqrtf(x*x + y*y + z*z + w*w);
+			return std::sqrtf(x*x + y*y + z*z + w*w);
 		}
 
 		Quaternion Quaternion::GetNormalized() const

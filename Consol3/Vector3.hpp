@@ -1,5 +1,5 @@
-#ifndef Vector3_HPP
-#define Vector3_HPP
+#ifndef VECTOR3_HPP
+#define VECTOR3_HPP
 
 namespace Engine
 {

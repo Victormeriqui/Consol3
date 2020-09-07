@@ -19,7 +19,7 @@ namespace Engine
 
 		float Vector2::GetLength() const
 		{
-			return sqrtf(x*x + y*y);
+			return std::sqrtf(x*x + y*y);
 		}
 
 		Vector2 Vector2::GetNormalized() const
@@ -52,7 +52,7 @@ namespace Engine
 		{
 			Vector2 mid = Vector2(other);
 			mid += *this;
-			mid /= 2.f;
+			mid /= 2.0f;
 
 			return mid;
 		}
