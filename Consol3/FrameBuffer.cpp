@@ -6,7 +6,7 @@ namespace Display
 {
 	FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
 	{
-		buffer = std::vector<uint32_t>(width * height);
+		buffer = std::vector<uint32_t>(width * height, 0xffffff);
 	}
 
 	uint16_t FrameBuffer::GetWidth() const
@@ -41,7 +41,7 @@ namespace Display
 
 	void FrameBuffer::ClearBuffer()
 	{
-		buffer.clear();
+		FillBuffer(0x000000);
 	}
 
 	void FrameBuffer::FillBuffer(const Color& color)
