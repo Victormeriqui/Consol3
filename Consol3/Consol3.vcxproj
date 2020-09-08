@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="Angle.cpp" />
     <ClCompile Include="BarycentricRasterizer.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Consol3.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="GreyscaleFrameBufferRenderer.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="AbstractRasterizer.hpp" />
     <ClInclude Include="Angle.hpp" />
     <ClInclude Include="BarycentricRasterizer.hpp" />
+    <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="ConsoleManager.hpp" />
     <ClInclude Include="GreyscaleFrameBufferRenderer.hpp" />

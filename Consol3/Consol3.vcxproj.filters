@@ -87,6 +87,9 @@
     <ClInclude Include="Point2.hpp">
       <Filter>Source Files\Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Consol3.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="Matrix4.cpp">
       <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Engine\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
