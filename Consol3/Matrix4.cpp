@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+
 namespace Engine
 {
 	namespace Math
