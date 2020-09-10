@@ -1,7 +1,7 @@
 #include "Vector3.hpp"
 
 #include "Quaternion.hpp"
-#include "MathUtil.hpp"
+#include "Util/MathUtil.hpp"
 
 #include <cmath>
 

@@ -1,8 +1,8 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-#include "Vector3.hpp"
-#include "Matrix4.hpp"
+#include "../Math/Vector3.hpp"
+#include "../Math/Matrix4.hpp"
 
 using namespace Engine::Math;
 

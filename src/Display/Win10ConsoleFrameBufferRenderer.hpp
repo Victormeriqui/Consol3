@@ -12,8 +12,8 @@ namespace Display
 	public:
 		Win10ConsoleFrameBufferRenderer(const FrameBuffer& framebuffer);
 
-		void TranslateToConsoleBuffer(const FrameBuffer& framebuffer);
-		void DrawConsoleFrame();
+		void TranslateFrameForDrawing(const FrameBuffer& framebuffer);
+		void DrawFrame();
 	};
 }
 

@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-#include "MathUtil.hpp"
+#include "../Math/Util/MathUtil.hpp"
 
 #include <cmath>
 
@@ -110,7 +110,7 @@ namespace Engine
 
 		void Camera::Move(const Vector3& direction, float amount)
 		{
-			SetPosition(direction * amount);
+			SetPosition(position + (direction * amount));
 		}
 
 	}

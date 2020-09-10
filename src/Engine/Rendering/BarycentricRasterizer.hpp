@@ -3,8 +3,8 @@
 
 #include "AbstractRasterizer.hpp"
 
-#include "FrameBuffer.hpp"
-#include "Point2.hpp"
+#include "../../Display/FrameBuffer.hpp"
+#include "../Math/Point2.hpp"
 
 namespace Engine
 {

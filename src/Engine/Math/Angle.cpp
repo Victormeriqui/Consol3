@@ -1,6 +1,6 @@
 #include "Angle.hpp"
 
-#include "MathUtil.hpp"
+#include "Util/MathUtil.hpp"
 
 namespace Engine
 {

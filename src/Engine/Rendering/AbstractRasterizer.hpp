@@ -1,11 +1,11 @@
 #ifndef ABSTRACTRASTERIZER_HPP
 #define ABSTRACTRASTERIZER_HPP
 
-#include "Matrix4.hpp"
+#include "../Math/Matrix4.hpp"
 #include "Vertex.hpp"
-#include "Color.hpp"
+#include "../../Display/Color.hpp"
 #include "Transform.hpp"
-#include "FrameBuffer.hpp"
+#include "../../Display/FrameBuffer.hpp"
 
 #include <cstdint>
 
