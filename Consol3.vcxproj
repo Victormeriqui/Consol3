@@ -24,19 +24,20 @@
     <ClCompile Include="src\Display\FrameBuffer.cpp" />
     <ClCompile Include="src\Display\GreyscaleFrameBufferRenderer.cpp" />
     <ClCompile Include="src\Display\Win10ConsoleFrameBufferRenderer.cpp" />
-    <ClCompile Include="src\Engine\Engine.cpp" />
+    <ClCompile Include="src\Engine\Consol3Engine.cpp" />
     <ClCompile Include="src\Engine\Math\Angle.cpp" />
     <ClCompile Include="src\Engine\Math\Matrix4.cpp" />
     <ClCompile Include="src\Engine\Math\Quaternion.cpp" />
     <ClCompile Include="src\Engine\Math\Vector2.cpp" />
     <ClCompile Include="src\Engine\Math\Vector3.cpp" />
     <ClCompile Include="src\Engine\Rendering\AbstractMesh.cpp" />
-    <ClCompile Include="src\Engine\Rendering\BarycentricRasterizer.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Rasterizer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="src\Engine\Rendering\Model.cpp" />
     <ClCompile Include="src\Engine\Rendering\StaticMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Transform.cpp" />
     <ClCompile Include="src\Engine\Rendering\Vertex.cpp" />
+    <ClCompile Include="src\Game\Consol3Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\AbstractFrameBufferRenderer.hpp" />
@@ -45,7 +46,7 @@
     <ClInclude Include="src\Display\FrameBuffer.hpp" />
     <ClInclude Include="src\Display\GreyscaleFrameBufferRenderer.hpp" />
     <ClInclude Include="src\Display\Win10ConsoleFrameBufferRenderer.hpp" />
-    <ClInclude Include="src\Engine\Engine.hpp" />
+    <ClInclude Include="src\Engine\Consol3Engine.hpp" />
     <ClInclude Include="src\Engine\Math\Angle.hpp" />
     <ClInclude Include="src\Engine\Math\Matrix4.hpp" />
     <ClInclude Include="src\Engine\Math\Point2.hpp" />
@@ -54,13 +55,13 @@
     <ClInclude Include="src\Engine\Math\Vector2.hpp" />
     <ClInclude Include="src\Engine\Math\Vector3.hpp" />
     <ClInclude Include="src\Engine\Rendering\AbstractMesh.hpp" />
-    <ClInclude Include="src\Engine\Rendering\AbstractRasterizer.hpp" />
-    <ClInclude Include="src\Engine\Rendering\BarycentricRasterizer.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Camera.hpp" />
     <ClInclude Include="src\Engine\Rendering\Model.hpp" />
     <ClInclude Include="src\Engine\Rendering\StaticMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Transform.hpp" />
     <ClInclude Include="src\Engine\Rendering\Vertex.hpp" />
+    <ClInclude Include="src\Game\Consol3Game.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
