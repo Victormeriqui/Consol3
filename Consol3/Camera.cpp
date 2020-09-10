@@ -40,6 +40,11 @@ namespace Engine
 			projection_mat = Matrix4(mat);
 		}
 
+		const Matrix4& Camera::GetProjectionMatrix() const
+		{
+			return projection_mat;
+		}
+
 		Matrix4 Camera::GetViewMatrix() const
 		{
 			return transform.GetTransformationMatrix();
