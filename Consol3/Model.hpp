@@ -2,6 +2,7 @@
 #define MODEL_HPP
 
 #include "Vertex.hpp"
+#include "Transform.hpp"
 
 #include <string>
 #include <vector>
@@ -25,7 +26,7 @@ namespace Engine
 			[[nodiscard]] std::vector<Vertex> GetVertices() const;
 			[[nodiscard]] std::vector<unsigned int> GetIndices() const;
 
-			void DrawModel(/*const Transform& transform*/) const;
+			void DrawModel(const Transform& transform) const;
 		};
 	}
 }
