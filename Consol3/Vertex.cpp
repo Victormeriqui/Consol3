@@ -40,6 +40,11 @@ namespace Engine
 			return *this;
 		}
 
+		Vertex Vertex::GetPerspectiveDivided() const
+		{
+			return Vertex(*this).PerspectiveDivide();
+		}
+
 		Vertex& Vertex::PerspectiveDivide()
 		{
 			position.x /= w;
