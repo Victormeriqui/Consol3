@@ -21,8 +21,8 @@ namespace Engine
 			Vector3 normal;
 
 		public:
-			constexpr Vertex(Vector3 position) : position(position), w(0), normal(Vector3(0, 0, 0)) {}
-			constexpr Vertex(Vector3 position, Vector3 normal) : position(position), w(0), normal(normal) {};
+			constexpr Vertex(Vector3 position) : position(position), w(1), normal(Vector3(0, 0, 0)) {}
+			constexpr Vertex(Vector3 position, Vector3 normal) : position(position), w(1), normal(normal) {};
 
 			[[nodiscard]] Vector3 GetPosition() const;
 			Vertex& SetPosition(const Vector3& position);
