@@ -35,6 +35,7 @@ namespace Engine
 			Camera();
 			Camera(uint16_t width, uint16_t height, float znear, float zfar, float fov);
 
+			[[nodiscard]] const Matrix4& GetProjectionMatrix() const;
 			[[nodiscard]] Matrix4 GetViewMatrix() const;
 
 			[[nodiscard]] uint16_t GetWith() const;
