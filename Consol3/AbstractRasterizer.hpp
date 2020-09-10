@@ -23,10 +23,23 @@ namespace Engine
 			Matrix4 model_mat;
 			Matrix4 view_mat;
 			Matrix4 projection_mat;
+			Matrix4 viewport_mat;
 
 			FrameBuffer& framebuffer;
 
-			AbstractRasterizer(FrameBuffer& framebuffer) : framebuffer(framebuffer) {}
+			AbstractRasterizer(FrameBuffer& framebuffer) : framebuffer(framebuffer)
+			{
+				float width_h = framebuffer.GetWidth() / 2.0f;
+				float height_h = framebuffer.GetHeight() / 2.0f;
+				float mat[4][4];
+
+				mat[0][0] = width_h;  mat[0][1] = 0;          mat[0][2] = 0;     mat[0][3] = width_h - 0.5f;
+				mat[1][0] = 0;        mat[1][1] = -height_h;  mat[1][2] = 0;     mat[1][3] = height_h - 0.5f;
+				mat[2][0] = 0;        mat[2][1] = 0;          mat[2][2] = 1;     mat[2][3] = 0;
+				mat[3][0] = 0;        mat[3][1] = 0;          mat[3][2] = 0;     mat[3][3] = 1;
+
+				viewport_mat = Matrix4(mat);
+			}
 
 			Vertex& TransformVertexMVP(Vertex& vertex)
 			{
@@ -34,6 +47,14 @@ namespace Engine
 				vertex *= view_mat;
 				vertex *= projection_mat;
 
+				return vertex;
+			}
+
+			Vertex& TransformVertexNDC(Vertex& vertex)
+			{
+				
+				vertex *= viewport_mat;
+				vertex.PerspectiveDivide();
 				return vertex;
 			}
 
@@ -63,7 +84,12 @@ namespace Engine
 				projection_mat = projection_matrix;
 			}
 
-			virtual void RasterizeTriangle(Vertex v1, Vertex v2, Vertex v3, Color color) = 0;
+			void SetViewportMatrix(const Matrix4& viewport_matrix)
+			{
+				viewport_mat = viewport_matrix;
+			}
+
+			virtual void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color) = 0;
 			
 		};
 	}

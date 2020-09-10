@@ -1,5 +1,7 @@
 #include "Model.hpp"
 
+#include "Transform.hpp"
+
 #include <algorithm>
 
 namespace Engine
@@ -33,7 +35,7 @@ namespace Engine
 			return indices;
 		}
 
-		void Model::DrawModel(/*const Transform& transform*/) const
+		void Model::DrawModel(const Transform& transform) const
 		{
 			//TODO: do this, using the transform
 		}

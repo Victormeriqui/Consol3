@@ -20,19 +20,27 @@ namespace Engine
 
 		void BarycentricRasterizer::RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color)
 		{
-			TransformVertexMVP(v1);
+
+			TransformVertexMVP(v0);
 			TransformVertexMVP(v1);
 			TransformVertexMVP(v2);
 
-			const Vector3& v0_pos = v0.GetPosition();
-			const Vector3& v1_pos = v1.GetPosition();
-			const Vector3& v2_pos = v2.GetPosition();
+			TransformVertexNDC(v0);
+			TransformVertexNDC(v1);
+			TransformVertexNDC(v2);
+			
+			if (v0.GetPosition().x > v1.GetPosition().y)
+			{
+				Vertex temp = v0;
+				v0 = v1;
+				v1 = temp;
+			}
 
 			//clip triangle
 
-			Point2 v0_cliped = Point2(v0_pos);
-			Point2 v1_cliped = Point2(v1_pos);
-			Point2 v2_cliped = Point2(v2_pos);
+			Point2 v0_cliped = Point2(v0.GetPosition());
+			Point2 v1_cliped = Point2(v1.GetPosition());
+			Point2 v2_cliped = Point2(v2.GetPosition());
 			
 			uint16_t bb_min_x = std::min({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
 			uint16_t bb_min_y = std::min({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
@@ -53,7 +61,7 @@ namespace Engine
 					int32_t edge0to1_mag = GetEdgeMagnituteToPoint(v0_cliped, v1_cliped, point);
 
 					if (edge1to2_mag >= 0 && edge2to0_mag >= 0 && edge0to1_mag >= 0)
-						framebuffer.SetPixel(x, y, 0xffffff);
+						framebuffer.SetPixel(x, y, color);
 				}
 
 			}
