@@ -1,7 +1,7 @@
 #include "BarycentricRasterizer.hpp"
 
-#include "FrameBuffer.hpp"
-#include "Point2.hpp"
+#include "../../Display/FrameBuffer.hpp"
+#include "../Math/Point2.hpp"
 
 #include <algorithm>
 
@@ -29,7 +29,7 @@ namespace Engine
 			TransformVertexNDC(v1);
 			TransformVertexNDC(v2);
 			
-			if (v0.GetPosition().x > v1.GetPosition().y)
+			if (v0.GetPosition().x > v1.GetPosition().x)
 			{
 				Vertex temp = v0;
 				v0 = v1;
@@ -60,8 +60,9 @@ namespace Engine
 					int32_t edge2to0_mag = GetEdgeMagnituteToPoint(v2_cliped, v0_cliped, point);
 					int32_t edge0to1_mag = GetEdgeMagnituteToPoint(v0_cliped, v1_cliped, point);
 
-					if (edge1to2_mag >= 0 && edge2to0_mag >= 0 && edge0to1_mag >= 0)
+					if (edge1to2_mag <= 0 && edge2to0_mag <= 0 && edge0to1_mag <= 0)
 						framebuffer.SetPixel(x, y, color);
+			
 				}
 
 			}

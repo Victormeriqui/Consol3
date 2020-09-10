@@ -1,10 +1,10 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include "Color.hpp"
+#include "../../Display/Color.hpp"
 #include "Model.hpp"
-#include "Vector3.hpp"
-#include "Angle.hpp"
+#include "../Math/Vector3.hpp"
+#include "../Math/Angle.hpp"
 
 using namespace Display;
 

@@ -17,11 +17,11 @@ namespace Display
 	{
 	}
 
-	void Win10ConsoleFrameBufferRenderer::TranslateToConsoleBuffer(const FrameBuffer& framebuffer)
+	void Win10ConsoleFrameBufferRenderer::TranslateFrameForDrawing(const FrameBuffer& framebuffer)
 	{
 	}
 
-	void Win10ConsoleFrameBufferRenderer::DrawConsoleFrame()
+	void Win10ConsoleFrameBufferRenderer::DrawFrame()
 	{
 	}
 }

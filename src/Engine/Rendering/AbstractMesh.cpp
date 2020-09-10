@@ -1,8 +1,8 @@
 #include "AbstractMesh.hpp"
 
-#include "Color.hpp"
-#include "Vector3.hpp"
-#include "Angle.hpp"
+#include "../../Display/Color.hpp"
+#include "../Math/Vector3.hpp"
+#include "../Math/Angle.hpp"
 
 namespace Engine
 {

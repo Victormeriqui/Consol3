@@ -87,4 +87,5 @@ namespace Display
 	{
 		consolemanager.FillScreenBuffer(charbuffer.data());
 	}
+
 }
