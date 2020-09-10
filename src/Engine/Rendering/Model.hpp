@@ -3,6 +3,7 @@
 
 #include "Vertex.hpp"
 #include "Transform.hpp"
+#include "Rasterizer.hpp"
 
 #include <string>
 #include <vector>
@@ -18,6 +19,7 @@ namespace Engine
 			std::vector<unsigned int> indices;
 
 		public:
+			Model();
 			Model(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 			Model(std::string filename);
 
@@ -26,7 +28,7 @@ namespace Engine
 			[[nodiscard]] std::vector<Vertex> GetVertices() const;
 			[[nodiscard]] std::vector<unsigned int> GetIndices() const;
 
-			void DrawModel(const Transform& transform) const;
+			void DrawModel(const Transform& transform, Rasterizer& rasterizer) const;
 		};
 	}
 }
