@@ -82,7 +82,7 @@ namespace Engine
 				Vertex temp = v0;
 			//	v0 = v1;
 			//	v1 = temp;
-				return;
+				//return;
 			}
 
 			//clip triangle
@@ -114,7 +114,7 @@ namespace Engine
 					point.y = y;
 
 					if ((edge0_mag_x | edge1_mag_x | edge2_mag_x) >= 0)
-						framebuffer.SetPixel(x, y, 0x0ff00f);
+						framebuffer.SetPixel(x, y, color);
 
 					edge0_mag_x += edge0.step_delta_x;
 					edge1_mag_x += edge1.step_delta_x;

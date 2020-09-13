@@ -20,8 +20,9 @@ namespace Game
 {
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) : rasterizer(rasterizer)
 	{
-		camera = Camera(100, 80, 0.001f, 1000.0f, 90.0f);
+		camera = Camera(200, 200, 0.001f, 1000.0f, 90.0f);
 		camera.SetPosition(Vector3(0, 0, -5));
+
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
 		Vertex v0 = Vertex(Vector3(-2, 2, 5));
@@ -31,8 +32,8 @@ namespace Game
 		std::vector<Vertex> vertices{ v0, v1, v2 };
 		std::vector<unsigned int> indices{ 0, 1, 2 };
 
-		//model = Model("res/cube.obj");
-		model = Model(vertices, indices);
+		model = Model("res/cube.obj");
+		//model = Model(vertices, indices);
 		transform = Transform();
 	}
 
@@ -69,10 +70,10 @@ namespace Game
 		if ((GetKeyState(VK_DOWN) & 0x8000))
 			camera.RotatePitch(1);
 
-		if ((GetKeyState(VK_SHIFT) & 0x8000))
+		if ((GetKeyState(VK_NUMPAD1) & 0x8000))
 		{
-			transform.SetRotation(Quaternion(Vector3(0, 0, 1), rot.roll));
-			rot.roll += 0.1f;
+			rot.roll += 0.01f;
+			transform.SetRotation(Quaternion(Vector3(0, 1, 0), rot.roll));
 		}
 			//	camera.RotateRoll(0.5f);
 		
