@@ -25,8 +25,8 @@ namespace Engine
 			float fov;
 
 			Vector3 position;
-			Angle rotation;
-
+			Quaternion rotation;
+			
 			Transform transform;
 
 			Matrix4 projection_mat;
@@ -47,11 +47,18 @@ namespace Engine
 			void SetPosition(const Vector3& position);
 			[[nodiscard]] Vector3 GetPosition() const;
 			
-			void SetRotation(const Angle& rotation);
-
-			[[nodiscard]] Angle GetRotation() const;
+			void SetRotation(const Angle& rotation_ang);
+			[[nodiscard]] Quaternion GetRotation() const;
 
 			void Move(const Vector3& direction, float amount);
+			void MoveX(float amount);
+			void MoveY(float amount);
+			void MoveZ(float amount);
+
+			void RotatePitch(float amount);
+			void RotateYaw(float amount);
+			void RotateRoll(float amount);
+
 		};
 
 
