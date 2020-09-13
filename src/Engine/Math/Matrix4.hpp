@@ -1,6 +1,8 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include <cstdint>
+
 namespace Engine
 {
 	namespace Math
@@ -19,9 +21,9 @@ namespace Engine
 
 			constexpr Matrix4& operator*=(const Matrix4& other) noexcept
 			{
-				for (int y = 0; y < 4; y++)
+				for (uint8_t y = 0; y < 4; y++)
 				{
-					for (int x = 0; x < 4; x++)
+					for (uint8_t x = 0; x < 4; x++)
 					{
 						values[y][x] =
 							values[y][0] * other.values[0][x] +
