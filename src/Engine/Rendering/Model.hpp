@@ -18,6 +18,8 @@ namespace Engine
 			std::vector<Vertex> vertices;
 			std::vector<unsigned int> indices;
 
+			inline std::vector<std::string> SplitString(std::string string, char delimiter) const;
+
 		public:
 			Model();
 			Model(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
