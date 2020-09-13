@@ -54,7 +54,6 @@ namespace Engine
 
 		void Rasterizer::RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color)
 		{
-
 			TransformVertexMVP(v0);
 			TransformVertexMVP(v1);
 			TransformVertexMVP(v2);
@@ -96,6 +95,8 @@ namespace Engine
 
 					if (edge1to2_mag <= 0 && edge2to0_mag <= 0 && edge0to1_mag <= 0)
 						framebuffer.SetPixel(x, y, color);
+					if (edge1to2_mag >= 0 && edge2to0_mag >= 0 && edge0to1_mag >= 0)
+						framebuffer.SetPixel(x, y, 0xff0f0f);
 			
 				}
 
@@ -104,7 +105,7 @@ namespace Engine
 
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)
 		{
-			model_mat = model_transform.GetTransformationMatrix();
+			model_mat = model_transform.GetTranslationMatrix() * (model_transform.GetRotationMatrix() * model_transform.GetScaleMatrix());
 		}
 
 		void Rasterizer::SetModelMatrix(const Matrix4& model_matrix)

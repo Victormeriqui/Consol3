@@ -1,5 +1,10 @@
 #include "Transform.hpp"
 
+#include "../Math/Util/MathUtil.hpp"
+#include "../Math/Matrix4.hpp"
+#include "../Math/Vector3.hpp"
+#include "../Math/Angle.hpp"
+
 namespace Engine
 {
 	namespace Rendering
@@ -15,9 +20,20 @@ namespace Engine
 			scale_mat.SetIdentity();
 		}
 
-		Matrix4 Transform::GetTransformationMatrix() const
+
+		const Matrix4& Transform::GetTranslationMatrix() const
 		{
-			return translation_mat * (rotation_mat * scale_mat);
+			return translation_mat;
+		}
+
+		const Matrix4& Transform::GetRotationMatrix() const
+		{
+			return rotation_mat;
+		}
+
+		const Matrix4& Transform::GetScaleMatrix() const
+		{
+			return scale_mat;
 		}
 
 		Transform& Transform::SetTranslation(const Vector3& translation)
