@@ -26,10 +26,12 @@ namespace Engine
 			Transform& SetTranslation(const Vector3& translation);
 			Transform& SetRotation(const Angle& rotation);
 			Transform& SetRotation(const Quaternion& rotation);
+
 			Transform& SetScale(const Vector3& scale);
 
-			[[nodiscard]] Matrix4 GetTransformationMatrix() const;
-
+			[[nodiscard]] const Matrix4& GetTranslationMatrix() const;
+			[[nodiscard]] const Matrix4& GetRotationMatrix() const;
+			[[nodiscard]] const Matrix4& GetScaleMatrix() const;
 		};
 	}
 }
