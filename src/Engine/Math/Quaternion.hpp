@@ -4,6 +4,8 @@
 #include "Vector3.hpp"
 #include "Angle.hpp"
 
+#include <cmath>
+
 namespace Engine
 {
 	namespace Math
@@ -16,7 +18,7 @@ namespace Engine
 			float z;
 			float w;
 
-			constexpr Quaternion() : x(0), y(0), z(0), w(0)
+			constexpr Quaternion() : x(0), y(0), z(0), w(1)
 			{
 			}
 
@@ -24,8 +26,15 @@ namespace Engine
 			{
 			}
 
-			constexpr Quaternion(const Vector3& axis, float w) : x(axis.x), y(axis.y), z(axis.z), w(w)
+			Quaternion(const Vector3& axis, float w)
 			{
+				float half_sinw = std::sinf(w / 2.0f);
+				float half_cosw = std::cosf(w / 2.0f);
+
+				x = axis.x * half_sinw;
+				y = axis.y * half_sinw;
+				z = axis.z * half_sinw;
+				this->w = half_cosw;
 			}
 
 			Quaternion(const Angle& angle);
@@ -37,22 +46,39 @@ namespace Engine
 			[[nodiscard]] Quaternion GetNormalized() const;
 			[[nodiscard]] Quaternion GetConjugate() const;
 
+			[[nodiscard]] Vector3 GetForwardVector() const;
+			[[nodiscard]] Vector3 GetBackVector() const;
+			[[nodiscard]] Vector3 GetUpVector() const;
+			[[nodiscard]] Vector3 GetDownVector() const;
+			[[nodiscard]] Vector3 GetRightVector() const;
+			[[nodiscard]] Vector3 GetLeftVector() const;
+
 			constexpr Quaternion& operator*=(const Quaternion& other) noexcept
 			{
-				x = x * other.w + w * other.x + y * other.z - z * other.y;
-				y = y * other.w + w * other.y + z * other.x - x * other.z;
-				z = z * other.w + w * other.z + x * other.y - y * other.x;
-				w = w * other.w - x * other.x - y * other.y - z * other.z;
+				float x_new = x * other.w + w * other.x + y * other.z - z * other.y;
+				float y_new = y * other.w + w * other.y + z * other.x - x * other.z;
+				float z_new = z * other.w + w * other.z + x * other.y - y * other.x;
+				float w_new = w * other.w - x * other.x - y * other.y - z * other.z;
+
+				x = x_new;
+				y = y_new;
+				z = z_new;
+				w = w_new;
 
 				return *this;
 			}
 
 			constexpr Quaternion& operator*=(const Vector3& vec) noexcept
 			{
-				x = w * vec.x + y * vec.z - z * vec.y;
-				y = w * vec.y + z * vec.x - x * vec.z;
-				z = w * vec.z + x * vec.y - y * vec.x;
-				w = -x * vec.x - y * vec.y - z * vec.z;
+				float x_new = w * vec.x + y * vec.z - z * vec.y;
+				float y_new = w * vec.y + z * vec.x - x * vec.z;
+				float z_new = w * vec.z + x * vec.y - y * vec.x;
+				float w_new = -x * vec.x - y * vec.y - z * vec.z;
+
+				x = x_new;
+				y = y_new;
+				z = z_new;
+				w = w_new;
 
 				return *this;
 			}
