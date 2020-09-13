@@ -136,7 +136,7 @@ namespace Engine
 		void Camera::RotateYaw(float amount)
 		{
 			// to rotate the yaw we rotate over the camera's up axis
-			rotation = Quaternion(rotation.GetUpVector(), Util::ToRadians(amount)) * rotation;
+			rotation = Quaternion(Vector3(0, 1, 0), Util::ToRadians(amount)) * rotation;
 			transform.SetRotation(rotation.GetConjugate());
 		}
 

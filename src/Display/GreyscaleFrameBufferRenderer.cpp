@@ -37,7 +37,7 @@ namespace Display
 		// set the character of every cell to the half block, the position inside the cell (up or down) will be controled by the background and foreground colors
 		std::fill(charbuffer.begin(), charbuffer.end(), defaultchar);
 
-		consolemanager.SetPalette(palette_greyscale);
+		consolemanager.SetPalette(palette_default);
 	}
 
 	inline uint8_t GreyscaleFrameBufferRenderer::RGBToGreyscaleIndex(uint32_t color) const

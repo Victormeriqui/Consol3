@@ -114,10 +114,10 @@ namespace Engine
 			rasterizer.SetModelMatrix(transform);
 
 			uint32_t color = 0;
-			srand(123154);
+			srand(64564);
 			for (uint32_t i = 0; i < indices.size(); i += 3)
 			{
-				color = random(0, 0xffffff);
+				color = random(0xf0f0f0, 0xffffff);
 				Vertex v0 = vertices[indices[i]];
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
