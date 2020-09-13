@@ -2,6 +2,7 @@
 #define MATRIX_HPP
 
 #include <cstdint>
+#include <algorithm>
 
 namespace Engine
 {
@@ -19,13 +20,16 @@ namespace Engine
 
 			Matrix4& SetIdentity();
 
-			constexpr Matrix4& operator*=(const Matrix4& other) noexcept
+
+			[[nodiscard]] Matrix4 operator*(const Matrix4& other) const noexcept
 			{
+				float new_values[4][4];
+
 				for (uint8_t y = 0; y < 4; y++)
 				{
 					for (uint8_t x = 0; x < 4; x++)
 					{
-						values[y][x] =
+						new_values[y][x] =
 							values[y][0] * other.values[0][x] +
 							values[y][1] * other.values[1][x] +
 							values[y][2] * other.values[2][x] +
@@ -33,13 +37,16 @@ namespace Engine
 					}
 				}
 
-				return *this;
+				return Matrix4(new_values);
 			}
 
-			[[nodiscard]] Matrix4 operator*(const Matrix4& other) const noexcept
+			Matrix4& operator*=(const Matrix4& other) noexcept
 			{
-				return Matrix4(*this) *= other;
+				Matrix4 new_mat = *this * other;
+
+				std::copy(&new_mat.values[0][0], &new_mat.values[0][0] + 4 * 4, &this->values[0][0]);
 			}
+
 		};
 
 	}
