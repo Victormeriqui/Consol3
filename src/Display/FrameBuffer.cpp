@@ -21,11 +21,19 @@ namespace Display
 
 	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const Color& color)
 	{
+		// TODO: remove this, this is just for easier testing
+		if (x >= width || x < 0 || y >= height || y < 0)
+			return;
+
 		buffer.data()[x + width * y] = color.GetHexValues();
 	}
 
 	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, uint32_t color)
 	{
+		// TODO: remove this, this is just for easier testing
+		if (x >= width || x < 0 || y >= height || y < 0)
+			return;
+
 		buffer.data()[x + width * y] = color;
 	}
 
