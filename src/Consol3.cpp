@@ -10,8 +10,8 @@ using namespace Engine;
 
 int main()
 {
-	uint16_t width = 100;
-	uint16_t height = 80;
+	uint16_t width = 200;
+	uint16_t height = 200;
 
 	FrameBuffer framebuffer = FrameBuffer(width, height);
 	framebuffer.ClearBuffer();
