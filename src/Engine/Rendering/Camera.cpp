@@ -21,7 +21,7 @@ namespace Engine
 			zfar(1000.0),
 			fov(90.0f),
 			position(Vector3()),
-			rotation(Angle()),
+			rotation(Quaternion()),
 			transform(Transform())
 		{
 			// aspect ratio
@@ -47,7 +47,7 @@ namespace Engine
 
 		Matrix4 Camera::GetViewMatrix() const
 		{
-			return transform.GetTransformationMatrix();
+			return transform.GetRotationMatrix() * transform.GetTranslationMatrix();
 		}
 
 		uint16_t Camera::GetWith() const
@@ -91,19 +91,17 @@ namespace Engine
 			return position;
 		}
 
-		void Camera::SetRotation(const Angle& rotation)
+		void Camera::SetRotation(const Angle& rotation_ang)
 		{
-			// we store the rotation angle which is the camera rotation in the world
-			this->rotation = rotation;
-
+			// we store the rotation quaternion which is the camera rotation in the world
 			// convert the angle rotation to quat representation
 			// the rotation is the operation to get the rotation in camera space (rotate by the conjugate)
-			Quaternion rotation_quat = Quaternion(rotation).Conjugate();
+			rotation = Quaternion(rotation_ang);
 
-			transform.SetRotation(rotation_quat);
+			transform.SetRotation(rotation.GetConjugate());
 		}
 
-		Angle Camera::GetRotation() const
+		Quaternion Camera::GetRotation() const
 		{
 			return rotation;
 		}
@@ -111,6 +109,42 @@ namespace Engine
 		void Camera::Move(const Vector3& direction, float amount)
 		{
 			SetPosition(position + (direction * amount));
+		}
+
+		void Camera::MoveX(float amount)
+		{
+			Move(rotation.GetRightVector(), amount);
+		}
+
+		void Camera::MoveY(float amount)
+		{
+			Move(rotation.GetUpVector(), amount);
+		}
+
+		void Camera::MoveZ(float amount)
+		{
+			Move(rotation.GetForwardVector(), amount);
+		}
+
+		void Camera::RotatePitch(float amount)
+		{
+			// to rotate the pitch we rotate over the camera's right axis
+			rotation = Quaternion(rotation.GetRightVector(), Util::ToRadians(amount)) * rotation;
+			transform.SetRotation(rotation.GetConjugate());
+		}
+
+		void Camera::RotateYaw(float amount)
+		{
+			// to rotate the yaw we rotate over the camera's up axis
+			rotation = Quaternion(rotation.GetUpVector(), Util::ToRadians(amount)) * rotation;
+			transform.SetRotation(rotation.GetConjugate());
+		}
+
+		void Camera::RotateRoll(float amount)
+		{
+			// to rotate the roll we rotate over the camera's front axis
+			rotation = Quaternion(rotation.GetForwardVector(), Util::ToRadians(amount)) * rotation;
+			transform.SetRotation(rotation.GetConjugate());
 		}
 
 	}
