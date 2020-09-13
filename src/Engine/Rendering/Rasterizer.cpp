@@ -11,6 +11,15 @@
 #include <algorithm>
 #include <cstdint>
 
+// TODO: implement this without consequences for the framebuffer
+// this is done because the actual pixel size ratio in the framebuffer renderers might not be 1
+// for example the 4x6 Raster Fonts with half block drawing becomes a 4x3 pixel size
+// this fixes the squashing caused by the non 1 pixel size ratio, it's done here as it's easier before the framebuffer is already filled
+// the consequence is that if we output the framebuffer to an actual 1x1 pixel size it will be squashed
+#define FONT_WIDTH 4
+#define FONT_HEIGHT 6
+#define VIEWPORT_ASPECTRATIO FONT_WIDTH/(FONT_HEIGHT/2)
+
 using namespace Display;
 
 namespace Engine
@@ -23,10 +32,10 @@ namespace Engine
 			float height_h = framebuffer.GetHeight() / 2.0f;
 			float mat[4][4];
 
-			mat[0][0] = width_h;  mat[0][1] = 0;          mat[0][2] = 0;     mat[0][3] = width_h - 0.5f;
-			mat[1][0] = 0;        mat[1][1] = -height_h;  mat[1][2] = 0;     mat[1][3] = height_h - 0.5f;
-			mat[2][0] = 0;        mat[2][1] = 0;          mat[2][2] = 1;     mat[2][3] = 0;
-			mat[3][0] = 0;        mat[3][1] = 0;          mat[3][2] = 0;     mat[3][3] = 1;
+			mat[0][0] = width_h;  mat[0][1] = 0;                                 mat[0][2] = 0;     mat[0][3] = width_h - 0.5f;
+			mat[1][0] = 0;        mat[1][1] = -height_h * VIEWPORT_ASPECTRATIO;  mat[1][2] = 0;     mat[1][3] = height_h - 0.5f;
+			mat[2][0] = 0;        mat[2][1] = 0;                                 mat[2][2] = 1;     mat[2][3] = 0;
+			mat[3][0] = 0;        mat[3][1] = 0;                                 mat[3][2] = 0;     mat[3][3] = 1;
 
 			viewport_mat = Matrix4(mat);
 		}
