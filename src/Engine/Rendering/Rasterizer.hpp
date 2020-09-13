@@ -9,12 +9,29 @@
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
 
+#include <cstdint>
+
 using namespace Display;
 
 namespace Engine
 {
 	namespace Rendering
 	{
+		struct TriangleEdge
+		{
+			// the x component step of the edge function for each pixel to the right
+			int32_t step_delta_x;
+			// the y component step of the edge function for each pixel down
+			int32_t step_delta_y;
+
+			// the value of the edge function
+			// will be initialized with the result for the starting pixel, remaining values can be stepped with the deltas
+			int32_t edgefunction_res;
+
+			// calculates the edge function for a specific point (starting point), and fills in the step deltas taken from the function's components
+			TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& point);
+		};
+
 		class Rasterizer
 		{
 		private:
@@ -25,11 +42,9 @@ namespace Engine
 
 			FrameBuffer& framebuffer;
 
-			int32_t GetEdgeMagnituteToPoint(const Point2& p1, const Point2& p2, const Point2& point);
-
 			Vertex& TransformVertexMVP(Vertex& vertex);
 			Vertex& TransformVertexNDC(Vertex& vertex);
-	
+
 		public:
 			Rasterizer(FrameBuffer& framebuffer);
 

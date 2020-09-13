@@ -16,12 +16,12 @@ namespace Engine
 		{
 		}
 
-		int random(int min, int max)
+		uint32_t random(uint32_t min, uint32_t max)
 		{
 			return rand() % (max + 1 - min) + min;
 		}
 
-		Model::Model(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
+		Model::Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 		{
 			this->vertices = vertices;
 			this->indices = indices;
@@ -80,9 +80,9 @@ namespace Engine
 				{
 					// each face value can have textures or normal indices, we're only interested in the vertices (first before /)
 					// - 1 for 0 based array indices
-					unsigned int v0 = std::stoul(SplitString(line_split[1], '/')[0]) - 1;
-					unsigned int v1 = std::stoul(SplitString(line_split[2], '/')[0]) - 1;
-					unsigned int v2 = std::stoul(SplitString(line_split[3], '/')[0]) - 1;
+					uint32_t v0 = std::stoul(SplitString(line_split[1], '/')[0]) - 1;
+					uint32_t v1 = std::stoul(SplitString(line_split[2], '/')[0]) - 1;
+					uint32_t v2 = std::stoul(SplitString(line_split[3], '/')[0]) - 1;
 
 					indices.push_back(v0);
 					indices.push_back(v1);
@@ -104,20 +104,18 @@ namespace Engine
 			return vertices;
 		}
 
-		std::vector<unsigned int> Model::GetIndices() const
+		std::vector<uint32_t> Model::GetIndices() const
 		{
 			return indices;
 		}
-
-	
 
 		void Model::DrawModel(const Transform& transform, Rasterizer& rasterizer) const
 		{
 			rasterizer.SetModelMatrix(transform);
 
-			int color = 0;
+			uint32_t color = 0;
 			srand(123154);
-			for (unsigned int i = 0; i < indices.size(); i += 3)
+			for (uint32_t i = 0; i < indices.size(); i += 3)
 			{
 				color = random(0, 0xffffff);
 				Vertex v0 = vertices[indices[i]];

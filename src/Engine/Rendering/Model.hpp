@@ -5,6 +5,7 @@
 #include "Transform.hpp"
 #include "Rasterizer.hpp"
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -16,19 +17,19 @@ namespace Engine
 		{
 		private:
 			std::vector<Vertex> vertices;
-			std::vector<unsigned int> indices;
+			std::vector<uint32_t> indices;
 
 			inline std::vector<std::string> SplitString(std::string string, char delimiter) const;
 
 		public:
 			Model();
-			Model(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+			Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 			Model(std::string filename);
 
 			void CalculateNormals() const;
 
 			[[nodiscard]] std::vector<Vertex> GetVertices() const;
-			[[nodiscard]] std::vector<unsigned int> GetIndices() const;
+			[[nodiscard]] std::vector<uint32_t> GetIndices() const;
 
 			void DrawModel(const Transform& transform, Rasterizer& rasterizer) const;
 		};
