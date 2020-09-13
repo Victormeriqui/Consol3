@@ -42,7 +42,6 @@ namespace Engine
 			x = -x;
 			y = -y;
 			z = -z;
-			w = -w;
 
 			return *this;
 		}
@@ -61,5 +60,36 @@ namespace Engine
 		{
 			return Quaternion(*this).Conjugate();
 		}
+
+		Vector3 Quaternion::GetForwardVector() const
+		{
+			return Vector3(0, 0, 1).GetRotated(*this);
+		}
+
+		Vector3 Quaternion::GetBackVector() const
+		{
+			return Vector3(0, 0, -1).GetRotated(*this);
+		}
+
+		Vector3 Quaternion::GetUpVector() const
+		{
+			return Vector3(0, 1, 0).GetRotated(*this);
+		}
+
+		Vector3 Quaternion::GetDownVector() const
+		{
+			return Vector3(0, -1, 0).GetRotated(*this);
+		}
+
+		Vector3 Quaternion::GetRightVector() const
+		{
+			return Vector3(1, 0, 0).GetRotated(*this);
+		}
+
+		Vector3 Quaternion::GetLeftVector() const
+		{
+			return Vector3(-1, 0, 0).GetRotated(*this);
+		}
+
 	}
 }

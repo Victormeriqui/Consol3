@@ -45,7 +45,7 @@ namespace Engine
 
 		Vector3& Vector3::Rotate(const Quaternion& quat)
 		{
-			Quaternion rotated_quat = (quat * (*this)) *quat.GetConjugate();
+			Quaternion rotated_quat = (quat * (*this)) * quat.GetConjugate();
 
 			x = rotated_quat.x;
 			y = rotated_quat.y;
