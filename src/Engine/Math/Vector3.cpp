@@ -54,6 +54,15 @@ namespace Engine
 			return *this;
 		}
 
+		Vector3& Vector3::Lerp(const Vector3& other, float amount)
+		{
+			x = Util::Lerp(amount, x, other.x);
+			y = Util::Lerp(amount, y, other.y);
+			z = Util::Lerp(amount, z, other.z);
+
+			return *this;
+		}
+
 		Vector3 Vector3::GetRotated(const Quaternion& quat) const
 		{
 			return Vector3(*this).Rotate(quat);
@@ -105,6 +114,14 @@ namespace Engine
 			mid /= 2.0f;
 
 			return mid;
+		}
+
+		Vector3 Vector3::GetLerped(const Vector3& other, float amount) const
+		{
+			return Vector3(
+				Util::Lerp(amount, x, other.x),
+				Util::Lerp(amount, y, other.y),
+				Util::Lerp(amount, z, other.z));
 		}
 	}
 }

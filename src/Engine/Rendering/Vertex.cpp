@@ -1,5 +1,9 @@
 #include "Vertex.hpp"
 
+#include "../Math/Util/MathUtil.hpp"
+
+#include <cmath>
+
 namespace Engine
 {
 	namespace Rendering
@@ -54,5 +58,23 @@ namespace Engine
 			return *this;
 		}
 
+		bool Vertex::IsInsideViewFrustum() const
+		{
+			return std::fabs(position.x) < std::fabs(w) && std::fabs(position.y) < std::fabs(w) && std::fabs(position.z) < std::fabs(w);
+		}
+
+		Vertex& Vertex::Lerp(const Vertex& other, float amount)
+		{
+			position.Lerp(other.GetPosition(), amount);
+			normal.Lerp(other.GetNormal(), amount);
+			w = Util::Lerp(amount, w, other.GetW());
+
+			return *this;
+		}
+
+		[[nodiscard]] Vertex Vertex::GetLerped(const Vertex& other, float amount) const
+		{
+			return Vertex(*this).Lerp(other, amount);
+		}
 	}
 }

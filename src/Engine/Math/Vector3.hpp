@@ -25,6 +25,7 @@ namespace Engine
 			Vector3& Normalize();
 			Vector3& Rotate(const Vector3& axis, float amount);
 			Vector3& Rotate(const Quaternion& quat);
+			Vector3& Lerp(const Vector3& other, float amount);
 
 			[[nodiscard]] float GetLength() const;
 			[[nodiscard]] Vector3 GetNormalized() const;
@@ -36,6 +37,7 @@ namespace Engine
 			[[nodiscard]] Vector3 GetCrossProduct(const Vector3& other) const;
 			[[nodiscard]] Vector3 GetDirectionalTo(const Vector3& other) const;
 			[[nodiscard]] Vector3 GetMiddleFrom(const Vector3& other) const;
+			[[nodiscard]] Vector3 GetLerped(const Vector3& other, float amount) const;
 
 			constexpr Vector3& operator+=(const Vector3& other) noexcept
 			{
