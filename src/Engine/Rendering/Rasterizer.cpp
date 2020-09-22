@@ -7,18 +7,11 @@
 #include "../../Display/Color.hpp"
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
+#include "../Math/Util/MathUtil.hpp"
+#include "Clipper.hpp"
 
 #include <algorithm>
 #include <cstdint>
-
-// TODO: implement this without consequences for the framebuffer
-// this is done because the actual pixel size ratio in the framebuffer renderers might not be 1
-// for example the 4x6 Raster Fonts with half block drawing becomes a 4x3 pixel size
-// this fixes the squashing caused by the non 1 pixel size ratio, it's done here as it's easier before the framebuffer is already filled
-// the consequence is that if we output the framebuffer to an actual 1x1 pixel size it will be squashed
-#define FONT_WIDTH 4
-#define FONT_HEIGHT 6
-#define VIEWPORT_ASPECTRATIO FONT_WIDTH/(FONT_HEIGHT/2)
 
 using namespace Display;
 
@@ -26,16 +19,18 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		Rasterizer::Rasterizer(FrameBuffer& framebuffer) : framebuffer(framebuffer)
+		Rasterizer::Rasterizer(FrameBuffer& framebuffer) :
+			framebuffer(framebuffer),
+			clipper(Clipper())
 		{
 			float width_h = framebuffer.GetWidth() / 2.0f;
 			float height_h = framebuffer.GetHeight() / 2.0f;
 			float mat[4][4];
 
-			mat[0][0] = width_h;  mat[0][1] = 0;                                 mat[0][2] = 0;     mat[0][3] = width_h - 0.5f;
-			mat[1][0] = 0;        mat[1][1] = -height_h * VIEWPORT_ASPECTRATIO;  mat[1][2] = 0;     mat[1][3] = height_h - 0.5f;
-			mat[2][0] = 0;        mat[2][1] = 0;                                 mat[2][2] = 1;     mat[2][3] = 0;
-			mat[3][0] = 0;        mat[3][1] = 0;                                 mat[3][2] = 0;     mat[3][3] = 1;
+			mat[0][0] = width_h; mat[0][1] = 0;         mat[0][2] = 0; mat[0][3] = width_h;
+			mat[1][0] = 0;       mat[1][1] = -height_h; mat[1][2] = 0; mat[1][3] = height_h;
+			mat[2][0] = 0;       mat[2][1] = 0;         mat[2][2] = 1; mat[2][3] = 0;
+			mat[3][0] = 0;       mat[3][1] = 0;         mat[3][2] = 0; mat[3][3] = 1;
 
 			viewport_mat = Matrix4(mat);
 		}
@@ -49,12 +44,59 @@ namespace Engine
 			return vertex;
 		}
 
-		Vertex& Rasterizer::TransformVertexNDC(Vertex& vertex)
+		Vertex& Rasterizer::TransformVertexScreenspace(Vertex& vertex)
 		{
-
 			vertex *= viewport_mat;
 			vertex.PerspectiveDivide();
 			return vertex;
+		}
+
+		bool Rasterizer::IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const
+		{
+			Vector3 center = Vector3(
+				(p0.x + p1.x + p2.x) / 3,
+				(p0.y + p1.y + p2.y) / 3,
+				(p0.z + p1.z + p2.z) / 3);
+
+			Vector3 edge1 = p0 - p1;
+			Vector3 edge2 = p1 - p2;
+
+			Vector3 facenormal = edge1.GetCrossProduct(edge2);
+			
+			return center.GetDotProduct(facenormal) > 0;
+		}
+
+		void Rasterizer::DrawTriangle(Vertex v0, Vertex v1, Vertex v2, Color color)
+		{
+			TransformVertexMVP(v0);
+			TransformVertexMVP(v1);
+			TransformVertexMVP(v2);
+
+			if (IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition()))
+				return;
+
+			// if all three position components are inside the view frustum it doesn't need to be clipped
+			if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
+			{
+				RasterizeTriangle(v0, v1, v2, color);
+				return;
+			}
+	
+			// store the verts in a buffer to clip them
+			std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
+			uint8_t vertices_buffer_count = 3;
+
+			bool clip_x_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_X);
+			bool clip_y_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Y);
+			bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
+			
+			if (!clip_x_drawable || !clip_y_drawable || !clip_z_drawable)
+				return;
+
+			// draw the polygon as a triangle fan
+			for (uint8_t i = 1; i < vertices_buffer_count - 1; i++)
+				RasterizeTriangle(vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
+
 		}
 
 		TriangleEdge::TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& start_point)
@@ -64,9 +106,9 @@ namespace Engine
 			// the actual sign will depend if the edges are defined clockwise or counter-clockwise
 
 			// calculate each component without the point
-			int comp1 = v_a.y - v_b.y;
-			int comp2 = v_b.x - v_a.x;
-			int comp3 = v_a.x * v_b.y - v_a.y * v_b.x;
+			int32_t comp1 = v_a.y - v_b.y;
+			int32_t comp2 = v_b.x - v_a.x;
+			int32_t comp3 = v_a.x * v_b.y - v_a.y * v_b.x;
 
 			// step deltas
 			step_delta_x = comp1;
@@ -78,23 +120,9 @@ namespace Engine
 
 		void Rasterizer::RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color)
 		{
-			TransformVertexMVP(v0);
-			TransformVertexMVP(v1);
-			TransformVertexMVP(v2);
-
-			TransformVertexNDC(v0);
-			TransformVertexNDC(v1);
-			TransformVertexNDC(v2);
-			
-			if (v0.GetPosition().x > v1.GetPosition().x)
-			{
-				Vertex temp = v0;
-			//	v0 = v1;
-			//	v1 = temp;
-				//return;
-			}
-
-			//clip triangle
+			TransformVertexScreenspace(v0);
+			TransformVertexScreenspace(v1);
+			TransformVertexScreenspace(v2);
 
 			Point2 v0_cliped = Point2(v0.GetPosition());
 			Point2 v1_cliped = Point2(v1.GetPosition());
@@ -103,7 +131,7 @@ namespace Engine
 			uint16_t bb_min_x = std::min({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
 			uint16_t bb_min_y = std::min({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
 			uint16_t bb_max_x = std::max({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
-			uint16_t bb_max_y = std::max({ v0_cliped.y, v1_cliped.y, v2_cliped.y });		
+			uint16_t bb_max_y = std::max({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
 
 			Vector2 point = Vector2(bb_min_x, bb_min_y);
 

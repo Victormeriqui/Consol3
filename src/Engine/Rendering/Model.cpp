@@ -122,7 +122,7 @@ namespace Engine
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
 
-				rasterizer.RasterizeTriangle(v0, v1, v2, color);
+				rasterizer.DrawTriangle(v0, v1, v2, color);
 			}
 		}
 
