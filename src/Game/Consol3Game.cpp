@@ -20,8 +20,8 @@ namespace Game
 {
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) : rasterizer(rasterizer)
 	{
-		camera = Camera(200, 200, 0.001f, 1000.0f, 90.0f);
-		camera.SetPosition(Vector3(0, 0, -5));
+		camera = Camera(200, 200, 0.01f, 100.0f, 90.0f);
+		camera.SetPosition(Vector3(0, 0.1f, -0.2f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
@@ -32,50 +32,62 @@ namespace Game
 		std::vector<Vertex> vertices{ v0, v1, v2 };
 		std::vector<unsigned int> indices{ 0, 1, 2 };
 
-		model = Model("res/cube.obj");
+		model = Model("res/bunny.obj");
 		//model = Model(vertices, indices);
 		transform = Transform();
 	}
 
-	Angle rot = Angle(0, 0, 0);
+	float mov_speed = 0.02f;
+	bool shifting = false;
+	float rot = 0;
 	void Consol3Game::HandleInput()
 	{
-		if ((GetKeyState(VK_SPACE) & 0x8000))
-			camera.MoveY(0.1f);
+		if (GetKeyState(VK_SPACE) & 0x8000)
+			camera.MoveY(mov_speed);
 
-		if ((GetKeyState(VK_CONTROL) & 0x8000))
-			camera.MoveY(-0.1f);
+		if (GetKeyState(VK_CONTROL) & 0x8000)
+			camera.MoveY(-mov_speed);
 
-		if ((GetKeyState(0x41) & 0x8000))
-			camera.MoveX(-0.1f);
+		if (GetKeyState(0x41) & 0x8000)
+			camera.MoveX(-mov_speed);
 
-		if ((GetKeyState(0x44) & 0x8000))
-			camera.MoveX(0.1f);
+		if (GetKeyState(0x44) & 0x8000)
+			camera.MoveX(mov_speed);
 
-		if ((GetKeyState(0x53) & 0x8000))
-			camera.MoveZ(-0.1f);
+		if (GetKeyState(0x53) & 0x8000)
+			camera.MoveZ(-mov_speed);
 
-		if ((GetKeyState(0x57) & 0x8000))
-			camera.MoveZ(0.1f);
+		if (GetKeyState(0x57) & 0x8000)
+			camera.MoveZ(mov_speed);
 
-		if ((GetKeyState(VK_LEFT) & 0x8000))
+		if (GetKeyState(VK_LEFT) & 0x8000)
 			camera.RotateYaw(-1);
 
-		if ((GetKeyState(VK_RIGHT) & 0x8000))
+		if (GetKeyState(VK_RIGHT) & 0x8000)
 			camera.RotateYaw(1);
 
-		if ((GetKeyState(VK_UP) & 0x8000))
+		if (GetKeyState(VK_UP) & 0x8000)
 			camera.RotatePitch(-1);
 
-		if ((GetKeyState(VK_DOWN) & 0x8000))
+		if (GetKeyState(VK_DOWN) & 0x8000)
 			camera.RotatePitch(1);
 
-		if ((GetKeyState(VK_NUMPAD1) & 0x8000))
+		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
-			rot.roll += 0.01f;
-			transform.SetRotation(Quaternion(Vector3(0, 1, 0), rot.roll));
+			transform.SetRotation(Quaternion(Vector3(0, 1, 0), rot));
+			rot += 0.05f;
 		}
-			//	camera.RotateRoll(0.5f);
+
+		if (GetKeyState(VK_SHIFT) & 0x8000)
+		{
+			shifting = true;
+			mov_speed = 0.2f;
+		}
+		else if (shifting)
+		{
+			shifting = false;
+			mov_speed = 0.02f;
+		}
 		
 	}
 

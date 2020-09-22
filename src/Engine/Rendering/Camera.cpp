@@ -10,7 +10,7 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		Camera::Camera() : width(100), height(100), znear(0.1f), zfar(1000.0f), fov(90.0f), position(Vector3()), rotation(Angle()), transform(Transform())
+		Camera::Camera() : width(100), height(100), znear(0.1f), zfar(100.0f), fov(90.0f), position(Vector3()), rotation(Angle()), transform(Transform())
 		{
 		}
 
