@@ -74,6 +74,7 @@ namespace Engine
 		}
 	}
 
+	bool added = false;
 	inline void Consol3Engine::DrawFrame()
 	{
 		framebuffer.ClearBuffer();
