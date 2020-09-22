@@ -31,6 +31,7 @@
     <ClCompile Include="src\Engine\Math\Vector2.cpp" />
     <ClCompile Include="src\Engine\Math\Vector3.cpp" />
     <ClCompile Include="src\Engine\Rendering\AbstractMesh.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Clipper.cpp" />
     <ClCompile Include="src\Engine\Rendering\Rasterizer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="src\Engine\Rendering\Model.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="src\Engine\Math\Vector2.hpp" />
     <ClInclude Include="src\Engine\Math\Vector3.hpp" />
     <ClInclude Include="src\Engine\Rendering\AbstractMesh.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Clipper.hpp" />
     <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Camera.hpp" />
     <ClInclude Include="src\Engine\Rendering\Model.hpp" />
@@ -64,6 +66,12 @@
     <ClInclude Include="src\Game\Consol3Game.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Object Include="res\bunny.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
     <Object Include="res\cube.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
