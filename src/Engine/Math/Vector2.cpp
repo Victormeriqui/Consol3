@@ -1,5 +1,7 @@
 #include "Vector2.hpp"
 
+#include "Util/MathUtil.hpp"
+
 #include <cmath>
 
 namespace Engine
@@ -13,6 +15,14 @@ namespace Engine
 
 			x /= len;
 			y /= len;
+
+			return *this;
+		}
+
+		Vector2& Vector2::Lerp(const Vector2& other, float amount)
+		{
+			x = Util::Lerp(amount, x, other.x);
+			y = Util::Lerp(amount, y, other.y);
 
 			return *this;
 		}
@@ -56,5 +66,13 @@ namespace Engine
 
 			return mid;
 		}
+
+		Vector2 Vector2::GetLerped(const Vector2& other, float amount) const
+		{
+			return Vector2(
+				Util::Lerp(amount, x, other.x),
+				Util::Lerp(amount, y, other.y));
+		}
+
 	}
 }

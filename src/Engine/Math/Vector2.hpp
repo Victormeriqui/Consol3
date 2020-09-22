@@ -31,11 +31,13 @@ namespace Engine
 
 			[[nodiscard]] float GetLength() const;
 			[[nodiscard]] Vector2 GetNormalized() const;
+			Vector2& Lerp(const Vector2& other, float amount);
 
 			[[nodiscard]] float GetDistanceTo(const Vector2& other) const;
 			[[nodiscard]] float GetDotProduct(const Vector2& other) const;
 			[[nodiscard]] Vector2 GetDirectionalTo(const Vector2& other) const;
 			[[nodiscard]] Vector2 GetMiddleFrom(const Vector2& other) const;
+			[[nodiscard]] Vector2 GetLerped(const Vector2& other, float amount) const;
 
 			constexpr Vector2& operator+=(const Vector2& other) noexcept
 			{

@@ -21,6 +21,7 @@ namespace Engine
 			Vector3 normal;
 
 		public:
+			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()) {}
 			constexpr Vertex(Vector3 position) : position(position), w(1), normal(Vector3(0, 0, 0)) {}
 			constexpr Vertex(Vector3 position, Vector3 normal) : position(position), w(1), normal(normal) {};
 
@@ -35,6 +36,11 @@ namespace Engine
 
 			[[nodiscard]] Vertex GetPerspectiveDivided() const;
 			Vertex& PerspectiveDivide();
+
+			[[nodiscard]] bool IsInsideViewFrustum() const;
+
+			[[nodiscard]] Vertex GetLerped(const Vertex& other, float amount) const;
+			Vertex& Lerp(const Vertex& other, float amount);
 
 			constexpr Vertex& operator*= (const Matrix4& mat) noexcept
 			{

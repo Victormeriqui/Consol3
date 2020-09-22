@@ -24,6 +24,7 @@ namespace Engine
 			{
 				return (1 - val) * min + val * max;
 			}
+
 		}
 	}
 }
