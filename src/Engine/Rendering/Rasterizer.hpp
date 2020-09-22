@@ -8,8 +8,10 @@
 #include "../../Display/Color.hpp"
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
+#include "Clipper.hpp"
 
 #include <cstdint>
+#include <vector>
 
 using namespace Display;
 
@@ -17,6 +19,7 @@ namespace Engine
 {
 	namespace Rendering
 	{
+		// a triangle edge for rasterization, initializes with the edge function value for the given point
 		struct TriangleEdge
 		{
 			// the x component step of the edge function for each pixel to the right
@@ -32,6 +35,7 @@ namespace Engine
 			TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& point);
 		};
 
+
 		class Rasterizer
 		{
 		private:
@@ -42,8 +46,13 @@ namespace Engine
 
 			FrameBuffer& framebuffer;
 
-			Vertex& TransformVertexMVP(Vertex& vertex);
-			Vertex& TransformVertexNDC(Vertex& vertex);
+			inline Vertex& TransformVertexMVP(Vertex& vertex);
+			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
+
+			Clipper clipper;
+
+			[[nodiscard]] bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
+			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color);
 
 		public:
 			Rasterizer(FrameBuffer& framebuffer);
@@ -54,7 +63,7 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color);
+			void DrawTriangle(Vertex v0, Vertex v1, Vertex v2, Color color);
 		};
 	}
 }
