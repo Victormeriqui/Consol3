@@ -87,6 +87,7 @@ namespace Engine
 				frame_count = 0;
 				accumulated_delta = 0;
 			}
+			
 
 			accumulator += delta;
 

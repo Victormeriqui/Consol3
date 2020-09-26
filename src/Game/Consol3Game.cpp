@@ -7,6 +7,9 @@
 #include "../Engine/Rendering/Model.hpp"
 #include "../Display/Color.hpp"
 #include "../Engine/Rendering/Transform.hpp"
+#include "../Engine/Math/Point2.hpp"
+#include "../Engine/Math/Vector2.hpp"
+#include "MouseInput.hpp"
 
 #include <vector>
 #include <Windows.h>
@@ -38,11 +41,23 @@ namespace Game
 		transform = Transform();
 	}
 
-	float mov_speed = 0.02f;
+	float mov_speed = 0.01f;
 	bool shifting = false;
 	float rot = 0;
 	void Consol3Game::HandleInput()
 	{
+		if (GetKeyState(VK_CAPITAL))
+		{
+			Vector2 mouse_dist_center = MouseInput::GetMouseDistanceToCenter();
+
+			if (mouse_dist_center.x != 0)
+				camera.RotateYaw(mouse_dist_center.x * 0.1f);
+			if (mouse_dist_center.y != 0)
+				camera.RotatePitch(mouse_dist_center.y * 0.1f);
+
+			MouseInput::SetMousePositionToCenter();
+		}
+
 		if (GetKeyState(VK_SPACE) & 0x8000)
 			camera.MoveY(mov_speed);
 
@@ -82,12 +97,12 @@ namespace Game
 		if (GetKeyState(VK_SHIFT) & 0x8000)
 		{
 			shifting = true;
-			mov_speed = 0.2f;
+			mov_speed = 0.1f;
 		}
 		else if (shifting)
 		{
 			shifting = false;
-			mov_speed = 0.02f;
+			mov_speed = 0.01f;
 		}
 		
 	}
