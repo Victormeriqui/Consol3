@@ -10,6 +10,7 @@
 #include "../Engine/Math/Point2.hpp"
 #include "../Engine/Math/Vector2.hpp"
 #include "MouseInput.hpp"
+#include "../Engine/Rendering/StaticMesh.hpp"
 
 #include <vector>
 #include <Windows.h>
@@ -29,16 +30,7 @@ namespace Game
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		Vertex v0 = Vertex(Vector3(-2, 2, 5));
-		Vertex v1 = Vertex(Vector3(1, 1, 5));
-		Vertex v2 = Vertex(Vector3(0, -1, 5));
-		
-		std::vector<Vertex> vertices{ v0, v1, v2 };
-		std::vector<unsigned int> indices{ 0, 1, 2 };
-
-		model = Model("res/bunny.obj");
-		//model = Model(vertices, indices);
-		transform = Transform();
+		mesh = StaticMesh(Model("res/cube.obj"), Vector3(0, 0, 0));
 	}
 
 	float mov_speed = 0.01f;
@@ -90,7 +82,7 @@ namespace Game
 
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
-			transform.SetRotation(Quaternion(Vector3(0, 1, 0), rot));
+			mesh.SetRotation(Angle(0, rot, 0));
 			rot += 0.05f;
 		}
 
@@ -116,7 +108,7 @@ namespace Game
 	{
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
-		model.DrawModel(transform, rasterizer);
+		mesh.DrawMesh(rasterizer);
 	}
 
 }
