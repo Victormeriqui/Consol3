@@ -8,9 +8,20 @@ namespace Engine
 {
 	namespace Rendering
 	{
+		AbstractMesh::AbstractMesh() :
+			model(Model()),
+			color(Color(255, 255, 255)),
+			transform(Transform()),
+			position(Vector3(0.0f, 0.0f, 0.0f)),
+			rotation(Angle(0.0f, 0.0f, 0.0f)),
+			scale(Vector3(1.0f, 1.0f, 1.0f))
+		{
+		}
+
 		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position) :
 			model(model),
 			color(Color(255, 255, 255)),
+			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
@@ -20,6 +31,7 @@ namespace Engine
 		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Color& color) :
 			model(model),
 			color(color),
+			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
@@ -29,6 +41,7 @@ namespace Engine
 		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation) :
 			model(model),
 			color(Color(255, 255, 255)),
+			transform(Transform()),
 			position(position),
 			rotation(rotation),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
@@ -38,6 +51,7 @@ namespace Engine
 		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const Color& color) :
 			model(model),
 			color(color),
+			transform(Transform()),
 			position(position),
 			rotation(rotation),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
@@ -86,6 +100,7 @@ namespace Engine
 		AbstractMesh& AbstractMesh::SetPosition(const Vector3& position)
 		{
 			this->position = Vector3(position);
+			transform.SetTranslation(position);
 
 			return *this;
 		}
@@ -93,6 +108,7 @@ namespace Engine
 		AbstractMesh& AbstractMesh::SetRotation(const Angle& rotation)
 		{
 			this->rotation = Angle(rotation);
+			transform.SetRotation(rotation);
 
 			return *this;
 		}
@@ -100,6 +116,7 @@ namespace Engine
 		AbstractMesh& AbstractMesh::SetScale(const Vector3& scale)
 		{
 			this->scale = Vector3(scale);
+			transform.SetScale(scale);
 
 			return *this;
 		}

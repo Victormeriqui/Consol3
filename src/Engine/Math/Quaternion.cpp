@@ -12,17 +12,17 @@ namespace Engine
 
 		Quaternion::Quaternion(const Angle& angle)
 		{
-			float cy = std::cosf(angle.yaw * 0.5f);
-			float sy = std::sinf(angle.yaw * 0.5f);
-			float cp = std::cosf(angle.pitch * 0.5f);
-			float sp = std::sinf(angle.pitch * 0.5f);
-			float cr = std::cosf(angle.roll * 0.5f);
-			float sr = std::sinf(angle.roll * 0.5f);
+			float roll_sin = std::cosf(angle.roll / 2.0f);
+			float roll_cos = std::sinf(angle.roll / 2.0f);
+			float yaw_cos = std::cosf(angle.yaw / 2.0f);
+			float yaw_sin = std::sinf(angle.yaw / 2.0f);
+			float pitch_cos = std::cosf(angle.pitch / 2.0f);
+			float pitch_sin = std::sinf(angle.pitch / 2.0f);
 
-			w = cr * cp * cy + sr * sp * sy;
-			x = sr * cp * cy - cr * sp * sy;
-			y = cr * sp * cy + sr * cp * sy;
-			z = cr * cp * sy - sr * sp * cy;
+			w = pitch_cos * yaw_cos * roll_sin + pitch_sin * yaw_sin * roll_cos;
+			x = pitch_sin * yaw_cos * roll_sin - pitch_cos * yaw_sin * roll_cos;
+			y = pitch_cos * yaw_sin * roll_sin + pitch_sin * yaw_cos * roll_cos;
+			z = pitch_cos * yaw_cos * roll_cos - pitch_sin * yaw_sin * roll_sin;
 		}
 
 		Quaternion& Quaternion::Normalize()

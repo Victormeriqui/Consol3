@@ -4,6 +4,10 @@ namespace Engine
 {
 	namespace Rendering
 	{
+		StaticMesh::StaticMesh() : AbstractMesh()
+		{
+		}
+
 		StaticMesh::StaticMesh(const Model& model, const Vector3& position) : AbstractMesh(model, position)
 		{
 		}
@@ -20,9 +24,9 @@ namespace Engine
 		{
 		}
 
-		void StaticMesh::DrawMesh() const
+		void StaticMesh::DrawMesh(Rasterizer& rasterizer) const
 		{
-			//TODO : implement this
+			model.DrawModel(transform, rasterizer);
 		}
 
 	}
