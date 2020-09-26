@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <wchar.h>
-#include <strsafe.h>
 
 namespace Display
 {
@@ -63,9 +61,9 @@ namespace Display
 		int test =  SetConsoleScreenBufferInfoEx(consolescreenbuffer, &info);
 	}
 
-	void ConsoleManager::SetConsoleWindowTitle(const std::wstring title) const
+	void ConsoleManager::SetConsoleWindowTitle(const std::string title) const
 	{
-		SetConsoleTitle(title.c_str());
+		SetConsoleTitleA(title.c_str());
 	}
 
 	void ConsoleManager::SetPalette(const COLORREF palette[])

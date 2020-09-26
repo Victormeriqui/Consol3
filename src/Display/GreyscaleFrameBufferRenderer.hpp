@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <wincon.h>
-#include <string.h>
+#include <string>
 
 namespace Display
 {

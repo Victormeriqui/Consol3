@@ -7,6 +7,7 @@
 #include <vector>
 #include <wincon.h>
 #include <cstdint>
+#include <string>
 
 namespace Display
 {
@@ -90,7 +91,7 @@ namespace Display
 
 	void GreyscaleFrameBufferRenderer::ReportFPS(uint16_t frame_count)
 	{
-		consolemanager.SetConsoleWindowTitle(std::wstring(L"Consol3 - Grey scale renderer - FPS: ") + std::to_wstring(frame_count));
+		consolemanager.SetConsoleWindowTitle(std::string("Consol3 - Grey scale renderer - FPS: ") + std::to_string(frame_count));
 	}
 
 }
