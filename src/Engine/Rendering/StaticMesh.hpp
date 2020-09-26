@@ -11,12 +11,13 @@ namespace Engine
 		{
 
 		public:
+			StaticMesh();
 			StaticMesh(const Model& model, const Vector3& position);
 			StaticMesh(const Model& model, const Vector3& position, const Color& color);
 			StaticMesh(const Model& model, const Vector3& position, const Angle& rotation);
 			StaticMesh(const Model& model, const Vector3& position, const Angle& rotation, const Color& color);
 
-			virtual void DrawMesh() const;
+			virtual void DrawMesh(Rasterizer& rasterizer) const;
 		};
 
 	}

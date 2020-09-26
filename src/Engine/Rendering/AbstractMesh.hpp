@@ -5,6 +5,7 @@
 #include "Model.hpp"
 #include "../Math/Vector3.hpp"
 #include "../Math/Angle.hpp"
+#include "Transform.hpp"
 
 using namespace Display;
 
@@ -14,15 +15,18 @@ namespace Engine
 	{
 		class AbstractMesh
 		{
-		private:
+		protected:
 			Model model;
 			Color color;
 
+			Transform transform;
+			// these fields are just for useful getters, the real values that are used in the transform are encoded in the matrices
 			Vector3 position;
 			Angle rotation;
 			Vector3 scale;
 
-		protected:
+		public:
+			AbstractMesh();
 			AbstractMesh(const Model& model, const Vector3& position);
 			AbstractMesh(const Model& model, const Vector3& position, const Color& color);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation);
@@ -40,7 +44,7 @@ namespace Engine
 			AbstractMesh& SetRotation(const Angle& rotation);
 			AbstractMesh& SetScale(const Vector3& scale);
 
-			virtual void DrawMesh() const = 0;
+			virtual void DrawMesh(Rasterizer& rasterizer) const = 0;
 		};
 	}
 }
