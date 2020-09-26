@@ -91,12 +91,12 @@ namespace Game
 		
 	}
 
-	void Consol3Game::Update(long long delta)
+	void Consol3Game::Update()
 	{
 
 	}
 
-	void Consol3Game::Render()
+	void Consol3Game::Render(long long delta)
 	{
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 

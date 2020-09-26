@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <wchar.h>
+#include <strsafe.h>
 
 namespace Display
 {
@@ -60,6 +61,11 @@ namespace Display
 		info.bFullscreenSupported = false;
 
 		int test =  SetConsoleScreenBufferInfoEx(consolescreenbuffer, &info);
+	}
+
+	void ConsoleManager::SetConsoleWindowTitle(const std::wstring title) const
+	{
+		SetConsoleTitle(title.c_str());
 	}
 
 	void ConsoleManager::SetPalette(const COLORREF palette[])
