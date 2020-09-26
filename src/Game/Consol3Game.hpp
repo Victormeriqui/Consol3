@@ -8,6 +8,7 @@
 #include "../Engine/Rendering/Camera.hpp"
 #include "../Engine/Rendering/Model.hpp"
 #include "../Engine/Rendering/Transform.hpp"
+#include "../Engine/Rendering/StaticMesh.hpp"
 
 #include <cstdint>
 
@@ -24,8 +25,7 @@ namespace Game
 		Rasterizer& rasterizer;
 
 		Camera camera;
-		Model model;
-		Transform transform;
+		StaticMesh mesh;
 
 	public:
 
