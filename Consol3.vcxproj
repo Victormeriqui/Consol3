@@ -39,6 +39,7 @@
     <ClCompile Include="src\Engine\Rendering\Transform.cpp" />
     <ClCompile Include="src\Engine\Rendering\Vertex.cpp" />
     <ClCompile Include="src\Game\Consol3Game.cpp" />
+    <ClCompile Include="src\Game\MouseInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\AbstractFrameBufferRenderer.hpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="src\Engine\Rendering\Transform.hpp" />
     <ClInclude Include="src\Engine\Rendering\Vertex.hpp" />
     <ClInclude Include="src\Game\Consol3Game.hpp" />
+    <ClInclude Include="src\Game\MouseInput.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="res\bunny.obj">

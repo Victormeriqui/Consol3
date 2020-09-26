@@ -58,7 +58,7 @@ namespace Display
 		// TODO: test this?
 		info.bFullscreenSupported = false;
 
-		int test =  SetConsoleScreenBufferInfoEx(consolescreenbuffer, &info);
+		SetConsoleScreenBufferInfoEx(consolescreenbuffer, &info);
 	}
 
 	void ConsoleManager::SetConsoleWindowTitle(const std::string title) const
