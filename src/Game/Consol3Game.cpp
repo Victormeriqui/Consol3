@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <Windows.h>
+#include <cstdint>
 
 using namespace Display;
 using namespace Engine;
@@ -96,7 +97,7 @@ namespace Game
 
 	}
 
-	void Consol3Game::Render(long long delta)
+	void Consol3Game::Render(int64_t delta)
 	{
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 

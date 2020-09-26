@@ -9,6 +9,8 @@
 #include "../Engine/Rendering/Model.hpp"
 #include "../Engine/Rendering/Transform.hpp"
 
+#include <cstdint>
+
 using namespace Display;
 using namespace Engine;
 using namespace Engine::Rendering;
@@ -31,7 +33,7 @@ namespace Game
 
 		void HandleInput();
 		void Update();
-		void Render(long long delta);
+		void Render(int64_t delta);
 	};
 }
 

@@ -5,6 +5,7 @@
 #include "Rendering/Rasterizer.hpp"
 
 #include <chrono>
+#include <cstdint>
 
 #define UPDATE_STEP 10
 
@@ -26,7 +27,7 @@ namespace Engine
 	{
 	}
 
-	inline long long Consol3Engine::GetCurrentTime() const
+	inline int64_t Consol3Engine::GetCurrentTime() const
 	{
 		high_resolution_clock::time_point now_time = high_resolution_clock::now();
 		milliseconds time_span = duration_cast<milliseconds>(now_time - start_time);
@@ -64,11 +65,11 @@ namespace Engine
 
 	void Consol3Engine::RunLoop()
 	{
-		long long current_time = GetCurrentTime();
-		long long last_time = current_time;
-		long long delta = 0;
-		long long accumulator = 0;
-		long long accumulated_delta = 0;
+		int64_t current_time = GetCurrentTime();
+		int64_t last_time = current_time;
+		int64_t delta = 0;
+		int64_t accumulator = 0;
+		int64_t accumulated_delta = 0;
 
 		uint16_t frame_count = 0;
 
@@ -102,7 +103,7 @@ namespace Engine
 		}
 	}
 
-	inline void Consol3Engine::DrawFrame(long long delta)
+	inline void Consol3Engine::DrawFrame(int64_t delta)
 	{
 		framebuffer.ClearBuffer();
 

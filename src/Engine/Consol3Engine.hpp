@@ -7,6 +7,7 @@
 #include "Rendering/Rasterizer.hpp"
 
 #include <chrono>
+#include <cstdint>
 
 using namespace std;
 using namespace std::chrono;
@@ -30,10 +31,10 @@ namespace Engine
 		
 		high_resolution_clock::time_point start_time;
 
-		long long GetCurrentTime() const;
+		int64_t GetCurrentTime() const;
 
 		void RunLoop();
-		inline void DrawFrame(long long delta);
+		inline void DrawFrame(int64_t delta);
 		void UpdateWindowTitle(uint16_t frame_count);
 
 	public:
