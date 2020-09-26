@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <wincon.h>
+#include <string.h>
 
 namespace Display
 {
@@ -37,6 +38,8 @@ namespace Display
 
 		void TranslateFrameForDrawing(const FrameBuffer& framebuffer);
 		void DrawFrame();
+
+		void ReportFPS(uint16_t frame_count);
 	};
 }
 

@@ -30,8 +30,8 @@ namespace Game
 		Consol3Game(Rasterizer& rasterizer);
 
 		void HandleInput();
-		void Update(long long delta);
-		void Render();
+		void Update();
+		void Render(long long delta);
 	};
 }
 

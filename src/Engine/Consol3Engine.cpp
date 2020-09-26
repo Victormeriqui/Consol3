@@ -6,6 +6,8 @@
 
 #include <chrono>
 
+#define UPDATE_STEP 10
+
 using namespace std;
 using namespace std::chrono;
 using namespace Game;
@@ -27,7 +29,7 @@ namespace Engine
 	inline long long Consol3Engine::GetCurrentTime() const
 	{
 		high_resolution_clock::time_point now_time = high_resolution_clock::now();
-		nanoseconds time_span = duration_cast<nanoseconds>(now_time - start_time);
+		milliseconds time_span = duration_cast<milliseconds>(now_time - start_time);
 		return time_span.count();
 	}
 
@@ -55,31 +57,56 @@ namespace Engine
 		return running;
 	}
 
+	void Consol3Engine::UpdateWindowTitle(uint16_t frame_count)
+	{
+		renderer.ReportFPS(frame_count);
+	}
+
 	void Consol3Engine::RunLoop()
 	{
-		long long last_time = GetCurrentTime();
 		long long current_time = GetCurrentTime();
-		long long elapsed_time = 0;
+		long long last_time = current_time;
+		long long delta = 0;
+		long long accumulator = 0;
+		long long accumulated_delta = 0;
+
+		uint16_t frame_count = 0;
+
 		while (running)
 		{
 			current_time = GetCurrentTime();
-			elapsed_time = current_time - last_time;
-			
-			game.HandleInput();
-			game.Update(elapsed_time);
-			DrawFrame();
+			delta = current_time - last_time;
+		
+			accumulated_delta += delta;
 
+			// accumulated more than 1 second elapsed time
+			if (accumulated_delta > 1000)
+			{
+				UpdateWindowTitle(frame_count);
+				frame_count = 0;
+				accumulated_delta = 0;
+			}
+
+			accumulator += delta;
+
+			while (accumulator > 0)
+			{
+				game.HandleInput();
+				game.Update();
+				accumulator -= UPDATE_STEP;
+			}
+
+			DrawFrame(delta);
+			frame_count++;
 			last_time = current_time;
-
 		}
 	}
 
-	bool added = false;
-	inline void Consol3Engine::DrawFrame()
+	inline void Consol3Engine::DrawFrame(long long delta)
 	{
 		framebuffer.ClearBuffer();
 
-		game.Render();
+		game.Render(delta);
 
 		renderer.TranslateFrameForDrawing(framebuffer);
 		renderer.DrawFrame();

@@ -33,7 +33,8 @@ namespace Engine
 		long long GetCurrentTime() const;
 
 		void RunLoop();
-		inline void DrawFrame();
+		inline void DrawFrame(long long delta);
+		void UpdateWindowTitle(uint16_t frame_count);
 
 	public:
 		Consol3Engine(FrameBuffer& framebuffer);
