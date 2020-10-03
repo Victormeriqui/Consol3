@@ -50,7 +50,7 @@ namespace Display
 		// attributes used by preceding writes (irrelevant since we're not going to give input to the console)
 		info.wAttributes = 0;
 		// window size
-		info.srWindow = { 0, 0, width, height };
+		info.srWindow = { 0, 0, width + 1, height + 1 };
 		// maximum window size in chars
 		info.dwMaximumWindowSize = { 1920, 1080 };
 		// attributes used by popups (irrelevant)

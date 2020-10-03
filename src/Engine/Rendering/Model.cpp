@@ -16,11 +16,6 @@ namespace Engine
 		{
 		}
 
-		uint32_t random(uint32_t min, uint32_t max)
-		{
-			return rand() % (max + 1 - min) + min;
-		}
-
 		Model::Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 		{
 			this->vertices = vertices;
@@ -108,21 +103,23 @@ namespace Engine
 		{
 			return indices;
 		}
-
-		void Model::DrawModel(const Transform& transform, Rasterizer& rasterizer) const
+		float randMToN(float M, float N)
 		{
+			return M + (rand() / (RAND_MAX / (N - M)));
+		}
+
+		void Model::DrawModel(const Transform& transform, Rasterizer& rasterizer, const HSVColor& color) const
+		{
+			srand(1004);
 			rasterizer.SetModelMatrix(transform);
 
-			uint32_t color = 0;
-			srand(64564);
 			for (uint32_t i = 0; i < indices.size(); i += 3)
 			{
-				color = random(0xf0f0f0, 0xffffff);
 				Vertex v0 = vertices[indices[i]];
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
 
-				rasterizer.DrawTriangle(v0, v1, v2, color);
+				rasterizer.DrawTriangle(v0, v1, v2, HSVColor(randMToN(0.0f, 360.0f), randMToN(0.0f, 1.0f), randMToN(0.0f, 1.0f)));
 			}
 		}
 

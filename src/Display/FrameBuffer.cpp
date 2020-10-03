@@ -6,7 +6,7 @@ namespace Display
 {
 	FrameBuffer::FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
 	{
-		buffer = std::vector<uint32_t>(width * height, 0xffffff);
+		buffer = std::vector<HSVColor>(width * height, HSVColor());
 	}
 
 	uint16_t FrameBuffer::GetWidth() const
@@ -19,47 +19,40 @@ namespace Display
 		return height;
 	}
 
-	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const Color& color)
+	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
 	{
-		// TODO: remove this, this is just for easier testing
-		if (x >= width || x < 0 || y >= height || y < 0)
+		if (x <= 0 || y <= 0 || x >= width || y >= height)
 			return;
 
-		buffer.data()[x + width * y] = color.GetHexValues();
+		buffer.data()[x + width * y].hue = color.hue;
+		buffer.data()[x + width * y].saturation = color.saturation;
+		buffer.data()[x + width * y].value = color.value;
 	}
 
-	void FrameBuffer::SetPixel(uint16_t x, uint16_t y, uint32_t color)
+	HSVColor FrameBuffer::GetPixel(uint16_t x, uint16_t y) const
 	{
-		// TODO: remove this, this is just for easier testing
-		if (x >= width || x < 0 || y >= height || y < 0)
-			return;
-
-		buffer.data()[x + width * y] = color;
+		return buffer.data()[x + width * y];
 	}
 
-	Color FrameBuffer::GetPixel(uint16_t x, uint16_t y) const
-	{
-		return Color(buffer.data()[x + width * y]);
-	}
-
-	const uint32_t* FrameBuffer::GetFrameBufferData() const
+	const HSVColor* FrameBuffer::GetFrameBufferData() const
 	{
 		return buffer.data();
 	}
 
 	void FrameBuffer::ClearBuffer()
 	{
-		FillBuffer(0x000000);
+		FillBuffer(HSVColor());
 	}
 
-	void FrameBuffer::FillBuffer(const Color& color)
+	void FrameBuffer::FillBuffer(const HSVColor& color)
 	{
-		std::fill(buffer.begin(), buffer.end(), color.GetHexValues());
-	}
-
-	void FrameBuffer::FillBuffer(uint32_t color)
-	{
-		std::fill(buffer.begin(), buffer.end(), color);
+		HSVColor* data = buffer.data();
+		for (uint32_t i = 0; i < buffer.size(); i++)
+		{
+			data[i].hue = color.hue;
+			data[i].saturation = color.saturation;
+			data[i].value = color.value;
+		}
 	}
 
 }

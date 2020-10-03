@@ -5,7 +5,7 @@
 #include "../Engine/Rendering/Vertex.hpp"
 #include "../Engine/Math/Vector3.hpp"
 #include "../Engine/Rendering/Model.hpp"
-#include "../Display/Color.hpp"
+#include "../Display/RGBColor.hpp"
 #include "../Engine/Rendering/Transform.hpp"
 #include "../Engine/Math/Point2.hpp"
 #include "../Engine/Math/Vector2.hpp"
@@ -30,7 +30,7 @@ namespace Game
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/cube.obj"), Vector3(0, 0, 0));
+		mesh = StaticMesh(Model("res/bunny.obj"), Vector3(0, 0, 0), RGBColor(255, 255 ,255));
 	}
 
 	float mov_speed = 0.01f;
