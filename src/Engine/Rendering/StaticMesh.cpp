@@ -12,7 +12,7 @@ namespace Engine
 		{
 		}
 
-		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const Color& color) : AbstractMesh(model, position, color)
+		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const RGBColor& color) : AbstractMesh(model, position, color)
 		{
 		}
 
@@ -20,13 +20,13 @@ namespace Engine
 		{
 		}
 
-		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const Angle& rotation, const Color& color) : AbstractMesh(model, position, rotation, color)
+		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color) : AbstractMesh(model, position, rotation, color)
 		{
 		}
 
 		void StaticMesh::DrawMesh(Rasterizer& rasterizer) const
 		{
-			model.DrawModel(transform, rasterizer);
+			model.DrawModel(transform, rasterizer, hsvcolor);
 		}
 
 	}

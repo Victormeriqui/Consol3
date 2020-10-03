@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Consol3.cpp" />
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
+    <ClCompile Include="src\Display\DitheredFrameBufferRenderer.cpp" />
     <ClCompile Include="src\Display\FrameBuffer.cpp" />
     <ClCompile Include="src\Display\GreyscaleFrameBufferRenderer.cpp" />
     <ClCompile Include="src\Display\Win10ConsoleFrameBufferRenderer.cpp" />
@@ -43,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\AbstractFrameBufferRenderer.hpp" />
-    <ClInclude Include="src\Display\Color.hpp" />
+    <ClInclude Include="src\Display\DitheredFrameBufferRenderer.hpp" />
+    <ClInclude Include="src\Display\HSVColor.hpp" />
+    <ClInclude Include="src\Display\RGBColor.hpp" />
     <ClInclude Include="src\Display\ConsoleManager.hpp" />
     <ClInclude Include="src\Display\FrameBuffer.hpp" />
     <ClInclude Include="src\Display\GreyscaleFrameBufferRenderer.hpp" />

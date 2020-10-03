@@ -4,7 +4,8 @@
 #include "../Math/Point2.hpp"
 #include "../Math/Matrix4.hpp"
 #include "Vertex.hpp"
-#include "../../Display/Color.hpp"
+#include "../../Display/RGBColor.hpp"
+#include "../../Display/HSVColor.hpp"
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
 #include "../Math/Util/MathUtil.hpp"
@@ -66,7 +67,7 @@ namespace Engine
 			return center.GetDotProduct(facenormal) > 0;
 		}
 
-		void Rasterizer::DrawTriangle(Vertex v0, Vertex v1, Vertex v2, Color color)
+		void Rasterizer::DrawTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color)
 		{
 			TransformVertexMVP(v0);
 			TransformVertexMVP(v1);
@@ -118,7 +119,7 @@ namespace Engine
 			edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
 		}
 
-		void Rasterizer::RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color)
+		void Rasterizer::RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color)
 		{
 			TransformVertexScreenspace(v0);
 			TransformVertexScreenspace(v1);

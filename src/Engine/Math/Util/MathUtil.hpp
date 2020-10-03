@@ -3,6 +3,10 @@
 
 #define PI 3.1415921f
 
+#include <cstdint>
+
+// TODO remove entire math namespace from the engine
+
 namespace Engine
 {
 	namespace Math
@@ -21,6 +25,11 @@ namespace Engine
 			}
 
 			[[nodiscard]] constexpr inline static float Lerp(float val, float min, float max)
+			{
+				return (1 - val) * min + val * max;
+			}
+
+			[[nodiscard]] constexpr inline static uint8_t LerpFloatUInt8(float val, uint8_t min, uint8_t max)
 			{
 				return (1 - val) * min + val * max;
 			}

@@ -4,6 +4,7 @@
 #include "../Game/Consol3Game.hpp"
 #include "../Display/FrameBuffer.hpp"
 #include "../Display/GreyscaleFrameBufferRenderer.hpp"
+#include "../Display/DitheredFrameBufferRenderer.hpp"
 #include "Rendering/Rasterizer.hpp"
 
 #include <chrono>

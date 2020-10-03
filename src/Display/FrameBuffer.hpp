@@ -1,7 +1,7 @@
 #ifndef FRAMEBUFFER_HPP
 #define FRAMEBUFFER_HPP
 
-#include "Color.hpp"
+#include "HSVColor.hpp"
 
 #include <vector>
 #include <cstdint>
@@ -11,7 +11,7 @@ namespace Display
 	class FrameBuffer
 	{
 	private:
-		std::vector<uint32_t> buffer;
+		std::vector<HSVColor> buffer;
 
 		const uint16_t width;
 		const uint16_t height;
@@ -27,23 +27,17 @@ namespace Display
 		* Sets the framebuffer value at x, y.
 		* The bounds are NOT checked
 		*/
-		void SetPixel(uint16_t x, uint16_t y, const Color& color);
-		/**
-		* Sets the framebuffer value at x, y.
-		* The bounds are NOT checked
-		*/
-		void SetPixel(uint16_t x, uint16_t y, uint32_t color);
+		void SetPixel(uint16_t x, uint16_t y, const HSVColor& color);
 		/**
 		* Gets the framebuffer value at x, y.
 		* The bounds are NOT checked
 		*/
-		[[nodiscard]] Color GetPixel(uint16_t x, uint16_t y) const;
+		[[nodiscard]] HSVColor GetPixel(uint16_t x, uint16_t y) const;
 
-		[[nodiscard]] const uint32_t* GetFrameBufferData() const;
+		[[nodiscard]] const HSVColor* GetFrameBufferData() const;
 
 		void ClearBuffer();
-		void FillBuffer(const Color& color);
-		void FillBuffer(uint32_t color);
+		void FillBuffer(const HSVColor& color);
 	};
 
 }

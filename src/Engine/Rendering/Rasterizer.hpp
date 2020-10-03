@@ -5,7 +5,8 @@
 #include "../Math/Point2.hpp"
 #include "../Math/Matrix4.hpp"
 #include "Vertex.hpp"
-#include "../../Display/Color.hpp"
+#include "../../Display/RGBColor.hpp"
+#include "../../Display/HSVColor.hpp"
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
 #include "Clipper.hpp"
@@ -52,7 +53,7 @@ namespace Engine
 			Clipper clipper;
 
 			[[nodiscard]] bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
-			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, Color color);
+			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 
 		public:
 			Rasterizer(FrameBuffer& framebuffer);
@@ -63,7 +64,7 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void DrawTriangle(Vertex v0, Vertex v1, Vertex v2, Color color);
+			void DrawTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 		};
 	}
 }

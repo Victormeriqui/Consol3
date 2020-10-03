@@ -39,6 +39,12 @@ namespace Display
 		*/
 		virtual void TranslateFrameForDrawing(const FrameBuffer& framebuffer) = 0;
 		virtual void DrawFrame() = 0;
+
+	public:
+		void ReportFPS(uint16_t frame_count)
+		{
+			consolemanager.SetConsoleWindowTitle(std::string("Consol3 - Grey scale renderer - FPS: ") + std::to_string(frame_count));
+		}
 	};
 
 }

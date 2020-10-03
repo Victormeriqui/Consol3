@@ -1,6 +1,6 @@
 #include "AbstractMesh.hpp"
 
-#include "../../Display/Color.hpp"
+#include "../../Display/RGBColor.hpp"
 #include "../Math/Vector3.hpp"
 #include "../Math/Angle.hpp"
 
@@ -10,7 +10,8 @@ namespace Engine
 	{
 		AbstractMesh::AbstractMesh() :
 			model(Model()),
-			color(Color(255, 255, 255)),
+			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
+			rgbcolor(RGBColor(255, 255, 255)),
 			transform(Transform()),
 			position(Vector3(0.0f, 0.0f, 0.0f)),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
@@ -20,7 +21,8 @@ namespace Engine
 
 		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position) :
 			model(model),
-			color(Color(255, 255, 255)),
+			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
+			rgbcolor(RGBColor(255, 255, 255)),
 			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
@@ -28,9 +30,10 @@ namespace Engine
 		{
 		}
 
-		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Color& color) :
+		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const RGBColor& color) :
 			model(model),
-			color(color),
+			hsvcolor(HSVColor(color)),
+			rgbcolor(color),
 			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
@@ -40,7 +43,8 @@ namespace Engine
 
 		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation) :
 			model(model),
-			color(Color(255, 255, 255)),
+			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
+			rgbcolor(RGBColor(255, 255, 255)),
 			transform(Transform()),
 			position(position),
 			rotation(rotation),
@@ -48,9 +52,10 @@ namespace Engine
 		{
 		}
 
-		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const Color& color) :
+		AbstractMesh::AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color) :
 			model(model),
-			color(color),
+			hsvcolor(HSVColor(color)),
+			rgbcolor(color),
 			transform(Transform()),
 			position(position),
 			rotation(rotation),
@@ -63,9 +68,9 @@ namespace Engine
 			return model;
 		}
 
-		Color AbstractMesh::GetColor() const
+		RGBColor AbstractMesh::GetColor() const
 		{
-			return color;
+			return rgbcolor;
 		}
 
 		Vector3 AbstractMesh::GetPosition() const
@@ -90,9 +95,10 @@ namespace Engine
 			return *this;
 		}
 
-		AbstractMesh& AbstractMesh::SetColor(const Color& color)
+		AbstractMesh& AbstractMesh::SetColor(const RGBColor& color)
 		{
-			this->color = Color(color);
+			rgbcolor = RGBColor(color);
+			hsvcolor = HSVColor(color);
 
 			return *this;
 		}

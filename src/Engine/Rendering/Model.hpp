@@ -4,6 +4,7 @@
 #include "Vertex.hpp"
 #include "Transform.hpp"
 #include "Rasterizer.hpp"
+#include "../../Display/HSVColor.hpp"
 
 #include <cstdint>
 #include <string>
@@ -31,7 +32,7 @@ namespace Engine
 			[[nodiscard]] std::vector<Vertex> GetVertices() const;
 			[[nodiscard]] std::vector<uint32_t> GetIndices() const;
 
-			void DrawModel(const Transform& transform, Rasterizer& rasterizer) const;
+			void DrawModel(const Transform& transform, Rasterizer& rasterizer, const HSVColor& color) const;
 		};
 	}
 }
