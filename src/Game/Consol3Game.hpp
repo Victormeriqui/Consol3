@@ -4,7 +4,7 @@
 #include "../Display/FrameBuffer.hpp"
 #include "../Engine/Rendering/Rasterizer.hpp"
 #include "../Engine/Rendering/Vertex.hpp"
-#include "../Engine/Math/Vector3.hpp"
+#include "../Math/Vector3.hpp"
 #include "../Engine/Rendering/Camera.hpp"
 #include "../Engine/Rendering/Model.hpp"
 #include "../Engine/Rendering/Transform.hpp"
@@ -15,7 +15,7 @@
 using namespace Display;
 using namespace Engine;
 using namespace Engine::Rendering;
-using namespace Engine::Math;
+using namespace Math;
 
 namespace Game
 {

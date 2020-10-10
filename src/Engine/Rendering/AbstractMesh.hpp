@@ -4,11 +4,12 @@
 #include "../../Display/RGBColor.hpp"
 #include "../../Display/HSVColor.hpp"
 #include "Model.hpp"
-#include "../Math/Vector3.hpp"
-#include "../Math/Angle.hpp"
+#include "../../Math/Vector3.hpp"
+#include "../../Math/Angle.hpp"
 #include "Transform.hpp"
 
 using namespace Display;
+using namespace Math;
 
 namespace Engine
 {

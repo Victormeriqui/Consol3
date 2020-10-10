@@ -1,9 +1,11 @@
 #include "Transform.hpp"
 
-#include "../Math/Util/MathUtil.hpp"
-#include "../Math/Matrix4.hpp"
-#include "../Math/Vector3.hpp"
-#include "../Math/Angle.hpp"
+#include "../../Math/Util/MathUtil.hpp"
+#include "../../Math/Matrix4.hpp"
+#include "../../Math/Vector3.hpp"
+#include "../../Math/Angle.hpp"
+
+using namespace Math;
 
 namespace Engine
 {

@@ -1,13 +1,13 @@
 #include "DitheredPixelTranslator.hpp"
 
 #include "HSVColor.hpp"
-#include "../Engine/Math/Util/MathUtil.hpp"
+#include "../Math/Util/MathUtil.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
 
-using namespace Engine::Math;
+using namespace Math;
 
 namespace Display
 {

@@ -25,11 +25,6 @@
     <ClCompile Include="src\Display\FrameBuffer.cpp" />
     <ClCompile Include="src\Display\GreyscalePixelTranslator.cpp" />
     <ClCompile Include="src\Engine\Consol3Engine.cpp" />
-    <ClCompile Include="src\Engine\Math\Angle.cpp" />
-    <ClCompile Include="src\Engine\Math\Matrix4.cpp" />
-    <ClCompile Include="src\Engine\Math\Quaternion.cpp" />
-    <ClCompile Include="src\Engine\Math\Vector2.cpp" />
-    <ClCompile Include="src\Engine\Math\Vector3.cpp" />
     <ClCompile Include="src\Engine\Rendering\AbstractMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Clipper.cpp" />
     <ClCompile Include="src\Engine\Rendering\Rasterizer.cpp" />
@@ -40,6 +35,11 @@
     <ClCompile Include="src\Engine\Rendering\Vertex.cpp" />
     <ClCompile Include="src\Game\Consol3Game.cpp" />
     <ClCompile Include="src\Game\MouseInput.cpp" />
+    <ClCompile Include="src\Math\Angle.cpp" />
+    <ClCompile Include="src\Math\Matrix4.cpp" />
+    <ClCompile Include="src\Math\Quaternion.cpp" />
+    <ClCompile Include="src\Math\Vector2.cpp" />
+    <ClCompile Include="src\Math\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\DitheredPixelTranslator.hpp" />
@@ -50,13 +50,6 @@
     <ClInclude Include="src\Display\ConsoleManager.hpp" />
     <ClInclude Include="src\Display\FrameBuffer.hpp" />
     <ClInclude Include="src\Engine\Consol3Engine.hpp" />
-    <ClInclude Include="src\Engine\Math\Angle.hpp" />
-    <ClInclude Include="src\Engine\Math\Matrix4.hpp" />
-    <ClInclude Include="src\Engine\Math\Point2.hpp" />
-    <ClInclude Include="src\Engine\Math\Quaternion.hpp" />
-    <ClInclude Include="src\Engine\Math\Util\MathUtil.hpp" />
-    <ClInclude Include="src\Engine\Math\Vector2.hpp" />
-    <ClInclude Include="src\Engine\Math\Vector3.hpp" />
     <ClInclude Include="src\Engine\Rendering\AbstractMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Clipper.hpp" />
     <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
@@ -67,6 +60,13 @@
     <ClInclude Include="src\Engine\Rendering\Vertex.hpp" />
     <ClInclude Include="src\Game\Consol3Game.hpp" />
     <ClInclude Include="src\Game\MouseInput.hpp" />
+    <ClInclude Include="src\Math\Angle.hpp" />
+    <ClInclude Include="src\Math\Matrix4.hpp" />
+    <ClInclude Include="src\Math\Point2.hpp" />
+    <ClInclude Include="src\Math\Quaternion.hpp" />
+    <ClInclude Include="src\Math\Util\MathUtil.hpp" />
+    <ClInclude Include="src\Math\Vector2.hpp" />
+    <ClInclude Include="src\Math\Vector3.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="res\bunny.obj">

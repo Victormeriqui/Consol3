@@ -2,8 +2,8 @@
 #define RASTERIZER_HPP
 
 #include "../../Display/FrameBuffer.hpp"
-#include "../Math/Point2.hpp"
-#include "../Math/Matrix4.hpp"
+#include "../../Math/Point2.hpp"
+#include "../../Math/Matrix4.hpp"
 #include "Vertex.hpp"
 #include "../../Display/RGBColor.hpp"
 #include "../../Display/HSVColor.hpp"
@@ -17,6 +17,7 @@
 
 
 using namespace Display;
+using namespace Math;
 
 namespace Engine
 {
