@@ -16,7 +16,7 @@ namespace Display
 		// white/black
 		if (color.saturation <= 0.25f)
 		{
-			uint8_t shade_index = Util::LerpFloatUInt8(color.value, 0, 15);
+			uint8_t shade_index = Util::LerpToIndex(color.value, 0, 15);
 			return dithered_white[shade_index];;
 		}
 
@@ -24,7 +24,7 @@ namespace Display
 		{
 			if (dithered_color.min_hue <= color.hue && color.hue <= dithered_color.max_hue)
 			{
-				uint8_t shade_index = Util::LerpFloatUInt8(color.value, 0, 10);
+				uint8_t shade_index = Util::LerpToIndex(color.value, 0, 10);
 				return dithered_color.color_shades[shade_index];
 			}
 		}

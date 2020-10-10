@@ -25,9 +25,9 @@ namespace Math
 			return (1 - val) * min + val * max;
 		}
 
-		[[nodiscard]] constexpr inline static uint8_t LerpFloatUInt8(float val, uint8_t min, uint8_t max)
+		[[nodiscard]] constexpr inline static uint8_t LerpToIndex(float val, uint8_t min, uint8_t max)
 		{
-			return (1 - val) * min + val * max;
+			return (uint8_t)((1 - val) * min + val * max);
 		}
 
 	}
