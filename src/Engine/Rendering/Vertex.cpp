@@ -1,8 +1,10 @@
 #include "Vertex.hpp"
 
-#include "../Math/Util/MathUtil.hpp"
+#include "../../Math/Util/MathUtil.hpp"
 
 #include <cmath>
+
+using namespace Math;
 
 namespace Engine
 {

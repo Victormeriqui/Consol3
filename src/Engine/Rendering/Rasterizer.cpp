@@ -1,14 +1,14 @@
 #include "Rasterizer.hpp"
 
 #include "../../Display/FrameBuffer.hpp"
-#include "../Math/Point2.hpp"
-#include "../Math/Matrix4.hpp"
+#include "../../Math/Point2.hpp"
+#include "../../Math/Matrix4.hpp"
 #include "Vertex.hpp"
 #include "../../Display/RGBColor.hpp"
 #include "../../Display/HSVColor.hpp"
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
-#include "../Math/Util/MathUtil.hpp"
+#include "../../Math/Util/MathUtil.hpp"
 #include "Clipper.hpp"
 #include "../../Display/IPixelTranslator.hpp"
 
@@ -16,6 +16,7 @@
 #include <cstdint>
 
 using namespace Display;
+using namespace Math;
 
 namespace Engine
 {

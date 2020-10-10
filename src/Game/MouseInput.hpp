@@ -1,14 +1,14 @@
 #ifndef MOUSEINPUT_HPP
 #define MOUSEINPUT_HPP
 
-#include "../Engine/Math/Point2.hpp"
+#include "../Math/Point2.hpp"
 
 #include <cstdint>
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
 
-using namespace Engine::Math;
+using namespace Math;
 
 namespace Game
 {

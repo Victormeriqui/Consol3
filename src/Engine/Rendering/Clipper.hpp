@@ -2,12 +2,12 @@
 #define CLIPPER_HPP
 
 #include "Vertex.hpp"
-#include "../Math/Vector3.hpp"
+#include "../../Math/Vector3.hpp"
 
 #include <cstdint>
 #include <array>
 
-using namespace Engine::Math;
+using namespace Math;
 
 // TODO: refactor this class to use more readable datastructures
 // important to avoid heap allocations since this should be parallel
