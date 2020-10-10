@@ -10,6 +10,7 @@
 #include "../../Display/FrameBuffer.hpp"
 #include "../Math/Util/MathUtil.hpp"
 #include "Clipper.hpp"
+#include "../../Display/IPixelTranslator.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -20,8 +21,9 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		Rasterizer::Rasterizer(FrameBuffer& framebuffer) :
+		Rasterizer::Rasterizer(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator) :
 			framebuffer(framebuffer),
+			pixel_translator(pixel_translator),
 			clipper(Clipper())
 		{
 			float width_h = framebuffer.GetWidth() / 2.0f;
@@ -152,7 +154,7 @@ namespace Engine
 					point.y = y;
 
 					if ((edge0_mag_x | edge1_mag_x | edge2_mag_x) >= 0)
-						framebuffer.SetPixel(x, y, color);
+						framebuffer.SetPixel(x, y, pixel_translator.TranslatePixelToFrameBuffer(color));
 
 					edge0_mag_x += edge0.step_delta_x;
 					edge1_mag_x += edge1.step_delta_x;

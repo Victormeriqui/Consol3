@@ -4,6 +4,8 @@
 #include "../Engine/Math/Point2.hpp"
 
 #include <cstdint>
+// Windows.h overrides std::min
+#define NOMINMAX
 #include <Windows.h>
 
 using namespace Engine::Math;

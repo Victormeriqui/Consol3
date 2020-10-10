@@ -1,6 +1,8 @@
 #ifndef CONSOLEBUFFER_HPP
 #define CONSOLEBUFFER_HPP
 
+// Windows.h overrides std::min
+#define NOMINMAX
 #include <Windows.h>
 #include <cstdint>
 #include <string>
@@ -40,10 +42,11 @@ namespace Display
 		ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height);
 		~ConsoleManager();
 
-		void SetConsoleWindowTitle(const std::string title) const;
 		void SetPalette(const COLORREF palette[]);
 
 		void FillScreenBuffer(const CHAR_INFO* data);
+
+		void ReportFPS(uint16_t frame_count);
 	};
 }
 

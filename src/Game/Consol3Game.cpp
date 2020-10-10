@@ -13,6 +13,8 @@
 #include "../Engine/Rendering/StaticMesh.hpp"
 
 #include <vector>
+// Windows.h overrides std::min
+#define NOMINMAX
 #include <Windows.h>
 #include <cstdint>
 
@@ -30,7 +32,7 @@ namespace Game
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/bunny.obj"), Vector3(0, 0, 0), RGBColor(255, 255 ,255));
+		mesh = StaticMesh(Model("res/bunny.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 	}
 
 	float mov_speed = 0.01f;
@@ -96,7 +98,7 @@ namespace Game
 			shifting = false;
 			mov_speed = 0.01f;
 		}
-		
+
 	}
 
 	void Consol3Game::Update()

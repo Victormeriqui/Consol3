@@ -1,5 +1,7 @@
 #include "ConsoleManager.hpp"
 
+// Windows.h overrides std::min
+#define NOMINMAX
 #include <Windows.h>
 #include <cstdint>
 #include <algorithm>
@@ -61,11 +63,6 @@ namespace Display
 		SetConsoleScreenBufferInfoEx(consolescreenbuffer, &info);
 	}
 
-	void ConsoleManager::SetConsoleWindowTitle(const std::string title) const
-	{
-		SetConsoleTitleA(title.c_str());
-	}
-
 	void ConsoleManager::SetPalette(const COLORREF palette[])
 	{
 		CONSOLE_SCREEN_BUFFER_INFOEX curinfo = {};
@@ -123,6 +120,11 @@ namespace Display
 
 		GetCurrentConsoleFontEx(consolescreenbuffer, false, &font_info2);
 
+	}
+
+	void ConsoleManager::ReportFPS(uint16_t frame_count)
+	{
+		SetConsoleTitleA((std::string("Consol3 - FPS: ") + std::to_string(frame_count)).c_str());
 	}
 
 	void ConsoleManager::EnableCursor()

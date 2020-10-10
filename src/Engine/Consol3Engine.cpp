@@ -3,6 +3,9 @@
 #include "../Game/Consol3Game.hpp"
 #include "../Display/FrameBuffer.hpp"
 #include "Rendering/Rasterizer.hpp"
+#include "../Display/IPixelTranslator.hpp"
+#include "../Display/DitheredPixelTranslator.hpp"
+#include "../Display/GreyscalePixelTranslator.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -17,14 +20,16 @@ using namespace Rendering;
 
 namespace Engine
 {
-	Consol3Engine::Consol3Engine(FrameBuffer& framebuffer) :
+	Consol3Engine::Consol3Engine(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator) :
 		framebuffer(framebuffer),
-		rasterizer(Rasterizer(framebuffer)),
+		pixel_translator(pixel_translator),
+		rasterizer(Rasterizer(framebuffer, pixel_translator)),
 		game(Consol3Game(rasterizer)),
-		renderer(GreyscaleFrameBufferRenderer(framebuffer)),
+		console_manager(ConsoleManager((short)framebuffer.GetWidth(), (short)framebuffer.GetHeight(), pixel_translator.GetFontName(), pixel_translator.GetFontWidth(), pixel_translator.GetFontHeight())),
 		running(false),
 		delta(0)
 	{
+		console_manager.SetPalette(pixel_translator.GetColorPalette());
 	}
 
 	inline int64_t Consol3Engine::GetCurrentTime() const
@@ -58,11 +63,6 @@ namespace Engine
 		return running;
 	}
 
-	void Consol3Engine::UpdateWindowTitle(uint16_t frame_count)
-	{
-		renderer.ReportFPS(frame_count);
-	}
-
 	void Consol3Engine::RunLoop()
 	{
 		int64_t current_time = GetCurrentTime();
@@ -83,7 +83,7 @@ namespace Engine
 			// accumulated more than 1 second elapsed time
 			if (accumulated_delta > 1000)
 			{
-				UpdateWindowTitle(frame_count);
+				console_manager.ReportFPS(frame_count);
 				frame_count = 0;
 				accumulated_delta = 0;
 			}
@@ -110,8 +110,7 @@ namespace Engine
 
 		game.Render(delta);
 
-		renderer.TranslateFrameForDrawing(framebuffer);
-		renderer.DrawFrame();
+		console_manager.FillScreenBuffer(framebuffer.GetFrameBufferData());
 	}
 
 }

@@ -4,6 +4,8 @@
 
 #include "Display/FrameBuffer.hpp"
 #include "Engine/Consol3Engine.hpp"
+#include "Display/DitheredPixelTranslator.hpp"
+#include "Display/GreyscalePixelTranslator.hpp"
 
 using namespace Display;
 using namespace Engine;
@@ -16,7 +18,10 @@ int main()
 	FrameBuffer framebuffer = FrameBuffer(width, height);
 	framebuffer.ClearBuffer();
 
-	Consol3Engine engine = Consol3Engine(framebuffer);
+	//GreyscalePixelTranslator pixel_translator = GreyscalePixelTranslator();
+	DitheredPixelTranslator pixel_translator = DitheredPixelTranslator();
+
+	Consol3Engine engine = Consol3Engine(framebuffer, pixel_translator);
 	
 	engine.Start();
 	
@@ -24,3 +29,4 @@ int main()
 	//scanf_s("%c", &a, 1);
 	return 0;
 }
+

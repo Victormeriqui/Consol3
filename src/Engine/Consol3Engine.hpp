@@ -3,9 +3,11 @@
 
 #include "../Game/Consol3Game.hpp"
 #include "../Display/FrameBuffer.hpp"
-#include "../Display/GreyscaleFrameBufferRenderer.hpp"
-#include "../Display/DitheredFrameBufferRenderer.hpp"
+#include "../Display/IPixelTranslator.hpp"
+#include "../Display/DitheredPixelTranslator.hpp"
+#include "../Display/GreyscalePixelTranslator.hpp"
 #include "Rendering/Rasterizer.hpp"
+#include "../Display/ConsoleManager.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -22,8 +24,10 @@ namespace Engine
 	{
 	private:
 		FrameBuffer& framebuffer;
+		const IPixelTranslator& pixel_translator;
+
 		Rasterizer rasterizer;
-		GreyscaleFrameBufferRenderer renderer;
+		ConsoleManager console_manager;
 
 		Consol3Game game;
 
@@ -36,10 +40,9 @@ namespace Engine
 
 		void RunLoop();
 		inline void DrawFrame(int64_t delta);
-		void UpdateWindowTitle(uint16_t frame_count);
 
 	public:
-		Consol3Engine(FrameBuffer& framebuffer);
+		Consol3Engine(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator);
 
 		void Start();
 		void Stop();
