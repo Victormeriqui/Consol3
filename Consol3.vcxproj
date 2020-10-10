@@ -21,10 +21,9 @@
   <ItemGroup>
     <ClCompile Include="src\Consol3.cpp" />
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
-    <ClCompile Include="src\Display\DitheredFrameBufferRenderer.cpp" />
+    <ClCompile Include="src\Display\DitheredPixelTranslator.cpp" />
     <ClCompile Include="src\Display\FrameBuffer.cpp" />
-    <ClCompile Include="src\Display\GreyscaleFrameBufferRenderer.cpp" />
-    <ClCompile Include="src\Display\Win10ConsoleFrameBufferRenderer.cpp" />
+    <ClCompile Include="src\Display\GreyscalePixelTranslator.cpp" />
     <ClCompile Include="src\Engine\Consol3Engine.cpp" />
     <ClCompile Include="src\Engine\Math\Angle.cpp" />
     <ClCompile Include="src\Engine\Math\Matrix4.cpp" />
@@ -43,14 +42,13 @@
     <ClCompile Include="src\Game\MouseInput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Display\AbstractFrameBufferRenderer.hpp" />
-    <ClInclude Include="src\Display\DitheredFrameBufferRenderer.hpp" />
+    <ClInclude Include="src\Display\DitheredPixelTranslator.hpp" />
+    <ClInclude Include="src\Display\GreyscalePixelTranslator.hpp" />
     <ClInclude Include="src\Display\HSVColor.hpp" />
+    <ClInclude Include="src\Display\IPixelTranslator.hpp" />
     <ClInclude Include="src\Display\RGBColor.hpp" />
     <ClInclude Include="src\Display\ConsoleManager.hpp" />
     <ClInclude Include="src\Display\FrameBuffer.hpp" />
-    <ClInclude Include="src\Display\GreyscaleFrameBufferRenderer.hpp" />
-    <ClInclude Include="src\Display\Win10ConsoleFrameBufferRenderer.hpp" />
     <ClInclude Include="src\Engine\Consol3Engine.hpp" />
     <ClInclude Include="src\Engine\Math\Angle.hpp" />
     <ClInclude Include="src\Engine\Math\Matrix4.hpp" />

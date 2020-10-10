@@ -1,8 +1,9 @@
 #ifndef FRAMEBUFFER_HPP
 #define FRAMEBUFFER_HPP
 
-#include "HSVColor.hpp"
-
+// Windows.h overrides std::min
+#define NOMINMAX
+#include <Windows.h>
 #include <vector>
 #include <cstdint>
 
@@ -11,7 +12,7 @@ namespace Display
 	class FrameBuffer
 	{
 	private:
-		std::vector<HSVColor> buffer;
+		std::vector<CHAR_INFO> buffer;
 
 		const uint16_t width;
 		const uint16_t height;
@@ -27,17 +28,17 @@ namespace Display
 		* Sets the framebuffer value at x, y.
 		* The bounds are NOT checked
 		*/
-		void SetPixel(uint16_t x, uint16_t y, const HSVColor& color);
+		void SetPixel(uint16_t x, uint16_t y, const CHAR_INFO& chr);
 		/**
 		* Gets the framebuffer value at x, y.
 		* The bounds are NOT checked
 		*/
-		[[nodiscard]] HSVColor GetPixel(uint16_t x, uint16_t y) const;
+		[[nodiscard]] CHAR_INFO GetPixel(uint16_t x, uint16_t y) const;
 
-		[[nodiscard]] const HSVColor* GetFrameBufferData() const;
+		[[nodiscard]] const CHAR_INFO* GetFrameBufferData() const;
 
 		void ClearBuffer();
-		void FillBuffer(const HSVColor& color);
+		void FillBuffer(const CHAR_INFO& chr);
 	};
 
 }

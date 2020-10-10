@@ -10,9 +10,11 @@
 #include "Transform.hpp"
 #include "../../Display/FrameBuffer.hpp"
 #include "Clipper.hpp"
+#include "../../Display/IPixelTranslator.hpp"
 
 #include <cstdint>
 #include <vector>
+
 
 using namespace Display;
 
@@ -36,7 +38,6 @@ namespace Engine
 			TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& point);
 		};
 
-
 		class Rasterizer
 		{
 		private:
@@ -46,6 +47,7 @@ namespace Engine
 			Matrix4 viewport_mat;
 
 			FrameBuffer& framebuffer;
+			const IPixelTranslator& pixel_translator;
 
 			inline Vertex& TransformVertexMVP(Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
@@ -56,7 +58,7 @@ namespace Engine
 			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 
 		public:
-			Rasterizer(FrameBuffer& framebuffer);
+			Rasterizer(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator);
 
 			void SetModelMatrix(const Transform& model_transform);
 			void SetModelMatrix(const Matrix4& model_matrix);
