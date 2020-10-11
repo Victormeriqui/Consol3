@@ -2,6 +2,7 @@
 
 #include "Transform.hpp"
 #include "Rasterizer.hpp"
+#include "DepthBuffer.hpp"
 
 #include <string>
 #include <fstream>
@@ -105,7 +106,7 @@ namespace Engine
 			return M + (rand() / (RAND_MAX / (N - M)));
 		}
 
-		void Model::DrawModel(const Transform& transform, Rasterizer& rasterizer, const HSVColor& color) const
+		void Model::DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const HSVColor& color) const
 		{
 			srand(1004);
 			rasterizer.SetModelMatrix(transform);
@@ -116,7 +117,7 @@ namespace Engine
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
 
-				rasterizer.DrawTriangle(v0, v1, v2, HSVColor(randMToN(0.0f, 360.0f), randMToN(0.0f, 1.0f), randMToN(0.0f, 1.0f)));
+				rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(50, 1, (float)i/(float)(indices.size()-1)));
 			}
 		}
 	}

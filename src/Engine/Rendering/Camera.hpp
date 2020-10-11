@@ -8,6 +8,7 @@
 #include "../../Math/Quaternion.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Transform.hpp"
+#include "DepthBuffer.hpp"
 
 namespace Engine
 {
@@ -30,6 +31,8 @@ namespace Engine
 			Transform transform;
 
 			Matrix4 projection_mat;
+
+			DepthBuffer depthbuffer;
 
 		public:
 			Camera();
@@ -58,6 +61,8 @@ namespace Engine
 			void RotatePitch(float amount);
 			void RotateYaw(float amount);
 			void RotateRoll(float amount);
+
+			[[nodiscard]] DepthBuffer& GetDepthBuffer();
 		};
 	}
 }

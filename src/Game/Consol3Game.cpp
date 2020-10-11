@@ -24,9 +24,10 @@ namespace Game
 	using namespace Engine::Rendering;
 	using namespace Math;
 
-	Consol3Game::Consol3Game(Rasterizer& rasterizer) : rasterizer(rasterizer)
+	Consol3Game::Consol3Game(Rasterizer& rasterizer) :
+		rasterizer(rasterizer),
+		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f))
 	{
-		camera = Camera(200, 200, 0.01f, 100.0f, 90.0f);
 		camera.SetPosition(Vector3(0, 0.1f, -0.2f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
@@ -90,7 +91,7 @@ namespace Game
 		if (GetKeyState(VK_SHIFT) & 0x8000)
 		{
 			shifting = true;
-			mov_speed = 0.1f;
+			mov_speed = 0.001f;
 		}
 		else if (shifting)
 		{
@@ -105,8 +106,10 @@ namespace Game
 
 	void Consol3Game::Render(int64_t delta)
 	{
+		camera.GetDepthBuffer().ClearBuffer();
+
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
-		mesh.DrawMesh(rasterizer);
+		mesh.DrawMesh(camera, rasterizer);
 	}
 }

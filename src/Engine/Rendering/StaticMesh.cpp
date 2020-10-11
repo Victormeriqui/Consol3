@@ -1,5 +1,7 @@
 #include "StaticMesh.hpp"
 
+#include "Camera.hpp"
+
 namespace Engine
 {
 	namespace Rendering
@@ -24,9 +26,9 @@ namespace Engine
 		{
 		}
 
-		void StaticMesh::DrawMesh(Rasterizer& rasterizer) const
+		void StaticMesh::DrawMesh(Camera& camera, Rasterizer& rasterizer) const
 		{
-			model.DrawModel(transform, rasterizer, hsvcolor);
+			model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, hsvcolor);
 		}
 	}
 }

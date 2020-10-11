@@ -123,7 +123,8 @@ namespace Display
 
 	void ConsoleManager::ReportFPS(uint16_t frame_count)
 	{
-		SetConsoleTitleA((std::string("Consol3 - FPS: ") + std::to_string(frame_count)).c_str());
+		std::string title = std::string("Consol3 - FPS: ") + std::to_string(frame_count) + '\0';
+		SetConsoleTitleA(title.c_str());
 	}
 
 	void ConsoleManager::EnableCursor()

@@ -10,19 +10,29 @@ namespace Engine
 	{
 		using namespace Math;
 
-		Camera::Camera() : width(100), height(100), znear(0.1f), zfar(100.0f), fov(90.0f), position(Vector3()), rotation(Angle()), transform(Transform())
+		Camera::Camera() : 
+			width(100),
+			height(100),
+			znear(0.1f),
+			zfar(100.0f),
+			fov(90.0f),
+			position(Vector3()),
+			rotation(Angle()),
+			transform(Transform()),
+			depthbuffer(DepthBuffer(100, 100))
 		{
 		}
 
 		Camera::Camera(uint16_t width, uint16_t height, float znear, float zfar, float fov) :
-			width(100),
-			height(100),
-			znear(0.1f),
-			zfar(1000.0),
-			fov(90.0f),
+			width(width),
+			height(height),
+			znear(znear),
+			zfar(zfar),
+			fov(fov),
 			position(Vector3()),
 			rotation(Quaternion()),
-			transform(Transform())
+			transform(Transform()),
+			depthbuffer(DepthBuffer(width, height))
 		{
 			// aspect ratio
 			float ar = (float)width / (float)height;
@@ -145,6 +155,11 @@ namespace Engine
 			// to rotate the roll we rotate over the camera's front axis
 			rotation = Quaternion(rotation.GetForwardVector(), Util::ToRadians(amount)) * rotation;
 			transform.SetRotation(rotation.GetConjugate());
+		}
+
+		[[nodiscard]] DepthBuffer& Camera::GetDepthBuffer()
+		{
+			return depthbuffer;
 		}
 	}
 }
