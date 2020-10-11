@@ -9,7 +9,7 @@ namespace Math
 		pitch = Util::ToDegrees(pitch);
 		yaw = Util::ToDegrees(pitch);
 		roll = Util::ToDegrees(pitch);
-			
+
 		return *this;
 	}
 
@@ -31,7 +31,4 @@ namespace Math
 	{
 		return Angle(*this).ToRadians();
 	}
-
-
 }
-

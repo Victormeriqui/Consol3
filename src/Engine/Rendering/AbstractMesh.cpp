@@ -128,6 +128,5 @@ namespace Engine
 
 			return *this;
 		}
-
 	}
 }

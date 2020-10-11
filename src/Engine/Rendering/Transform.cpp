@@ -22,7 +22,6 @@ namespace Engine
 			scale_mat.SetIdentity();
 		}
 
-
 		const Matrix4& Transform::GetTranslationMatrix() const
 		{
 			return translation_mat;

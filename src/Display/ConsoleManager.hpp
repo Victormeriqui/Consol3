@@ -24,7 +24,7 @@ namespace Display
 		std::wstring original_font_name;
 		short original_font_weight;
 		short original_font_family;
-	
+
 		COORD font_size;
 		std::wstring font_name;
 		short font_weight;

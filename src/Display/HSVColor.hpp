@@ -46,8 +46,6 @@ namespace Display
 			saturation = chroma / (r + 1e-20f);
 			value = r;
 		}
-
-
 	};
 }
 

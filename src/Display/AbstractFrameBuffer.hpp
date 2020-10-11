@@ -31,12 +31,10 @@ namespace Display
 
 		virtual const COLORREF* GetColorPalette() const = 0;
 
-
 		[[nodiscard]] T GetPixel(uint16_t x, uint16_t y) const
 		{
 			return buffer.data()[x + width * y];
 		};
-
 
 		[[nodiscard]] uint16_t GetWidth() const
 		{
@@ -57,7 +55,7 @@ namespace Display
 		{
 			FillBuffer({ ' ', 0x00 });
 		}
-		
+
 		void FillBuffer(const T& value)
 		{
 			std::fill(buffer.begin(), buffer.end(), value);

@@ -21,6 +21,7 @@ namespace Engine
 	class Consol3Engine
 	{
 	private:
+		// TODO make a new component that holds the framebuffer so the engine doesnt need to specify the framebuffer type
 		std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer;
 
 		Rasterizer rasterizer;
@@ -30,7 +31,7 @@ namespace Engine
 
 		bool running;
 		float delta;
-		
+
 		high_resolution_clock::time_point start_time;
 
 		int64_t GetCurrentTime() const;

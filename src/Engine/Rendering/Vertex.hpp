@@ -10,7 +10,6 @@ namespace Engine
 
 	namespace Rendering
 	{
-
 		class Vertex
 		{
 		private:
@@ -48,7 +47,7 @@ namespace Engine
 				float y_new = mat.values[1][0] * position.x + mat.values[1][1] * position.y + mat.values[1][2] * position.z + mat.values[1][3] * w;
 				float z_new = mat.values[2][0] * position.x + mat.values[2][1] * position.y + mat.values[2][2] * position.z + mat.values[2][3] * w;
 				float w_new = mat.values[3][0] * position.x + mat.values[3][1] * position.y + mat.values[3][2] * position.z + mat.values[3][3] * w;
-				
+
 				position.x = x_new;
 				position.y = y_new;
 				position.z = z_new;

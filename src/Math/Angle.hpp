@@ -23,7 +23,7 @@ namespace Math
 
 		[[nodiscard]] Angle GetInDegrees() const;
 		[[nodiscard]] Angle GetInRadians() const;
-			
+
 		constexpr Angle& operator+=(const Angle& other) noexcept
 		{
 			pitch += other.pitch;

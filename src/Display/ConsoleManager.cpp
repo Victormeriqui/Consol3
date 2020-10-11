@@ -24,7 +24,7 @@ namespace Display
 		writeregion = { 0, 0, width, height };
 
 		SetConsoleActiveScreenBuffer(consolescreenbuffer);
-		
+
 		StoreOriginalFontInfo();
 		SetFontInfo(font_name, font_width, font_height, 0, 0);
 
@@ -85,7 +85,7 @@ namespace Display
 		font_info.cbSize = sizeof(font_info);
 
 		GetCurrentConsoleFontEx(consolescreenbuffer, false, &font_info);
-		
+
 		original_front_size = font_info.dwFontSize;
 		original_font_name = std::wstring(font_info.FaceName);
 		original_font_weight = font_info.FontWeight;
@@ -119,7 +119,6 @@ namespace Display
 		font_info2.cbSize = sizeof(font_info2);
 
 		GetCurrentConsoleFontEx(consolescreenbuffer, false, &font_info2);
-
 	}
 
 	void ConsoleManager::ReportFPS(uint16_t frame_count)

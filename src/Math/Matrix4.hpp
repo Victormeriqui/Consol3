@@ -8,7 +8,6 @@ namespace Math
 {
 	class Matrix4
 	{
-
 	public:
 		float values[4][4];
 
@@ -17,7 +16,6 @@ namespace Math
 		Matrix4(float value);
 
 		Matrix4& SetIdentity();
-
 
 		[[nodiscard]] Matrix4 operator*(const Matrix4& other) const noexcept
 		{
@@ -44,9 +42,7 @@ namespace Math
 
 			std::copy(&new_mat.values[0][0], &new_mat.values[0][0] + 4 * 4, &this->values[0][0]);
 		}
-
 	};
-
 }
 
 #endif

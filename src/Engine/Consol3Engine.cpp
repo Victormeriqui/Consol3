@@ -74,7 +74,7 @@ namespace Engine
 		{
 			current_time = GetCurrentTime();
 			delta = current_time - last_time;
-		
+
 			accumulated_delta += delta;
 
 			// accumulated more than 1 second elapsed time
@@ -84,7 +84,6 @@ namespace Engine
 				frame_count = 0;
 				accumulated_delta = 0;
 			}
-			
 
 			accumulator += delta;
 
@@ -109,5 +108,4 @@ namespace Engine
 
 		console_manager.FillScreenBuffer(framebuffer->GetFrameBufferData());
 	}
-
 }

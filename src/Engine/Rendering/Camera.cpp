@@ -82,7 +82,7 @@ namespace Engine
 
 			// the translation is the operation to get the positions in camera space (subtraction of the camera world coords)
 			Vector3 translation = Vector3(-position.x, -position.y, -position.z);
-			
+
 			transform.SetTranslation(translation);
 		}
 
@@ -146,6 +146,5 @@ namespace Engine
 			rotation = Quaternion(rotation.GetForwardVector(), Util::ToRadians(amount)) * rotation;
 			transform.SetRotation(rotation.GetConjugate());
 		}
-
 	}
 }

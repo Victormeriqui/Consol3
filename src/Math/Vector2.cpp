@@ -6,7 +6,6 @@
 
 namespace Math
 {
-
 	Vector2& Vector2::Normalize()
 	{
 		float len = GetLength();
@@ -27,7 +26,7 @@ namespace Math
 
 	float Vector2::GetLength() const
 	{
-		return std::sqrtf(x*x + y*y);
+		return std::sqrtf(x * x + y * y);
 	}
 
 	Vector2 Vector2::GetNormalized() const
@@ -38,7 +37,7 @@ namespace Math
 	float Vector2::GetDistanceTo(const Vector2& other) const
 	{
 		Vector2 sub = Vector2(other);
-		sub -= *this; 
+		sub -= *this;
 
 		return sub.GetLength();
 	}
@@ -71,5 +70,4 @@ namespace Math
 			Util::Lerp(amount, x, other.x),
 			Util::Lerp(amount, y, other.y));
 	}
-
 }

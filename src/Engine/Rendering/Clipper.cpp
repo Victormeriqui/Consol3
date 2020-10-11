@@ -87,10 +87,10 @@ namespace Engine
 				Vertex cur_vert = out_vertices_buffer[i];
 
 				float cur_point_component = GetComponentForPlane(cur_vert.GetPosition(), plane);
-				
+
 				if (!negative_clipping)
 					cur_point_component = -cur_point_component;
-				
+
 				bool cur_point_is_inside = cur_point_component <= cur_vert.GetW();
 
 				// one of the vertices is outside the plane, interpolate to the edge

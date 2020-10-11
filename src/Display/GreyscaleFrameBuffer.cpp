@@ -33,5 +33,4 @@ namespace Display
 	{
 		return palette_greyscale;
 	}
-
 }

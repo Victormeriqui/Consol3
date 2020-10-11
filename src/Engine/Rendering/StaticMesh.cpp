@@ -28,6 +28,5 @@ namespace Engine
 		{
 			model.DrawModel(transform, rasterizer, hsvcolor);
 		}
-
 	}
 }

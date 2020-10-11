@@ -9,7 +9,6 @@ namespace Engine
 	{
 		class StaticMesh : public AbstractMesh
 		{
-
 		public:
 			StaticMesh();
 			StaticMesh(const Model& model, const Vector3& position);
@@ -19,7 +18,6 @@ namespace Engine
 
 			virtual void DrawMesh(Rasterizer& rasterizer) const;
 		};
-
 	}
 }
 

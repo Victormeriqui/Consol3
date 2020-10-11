@@ -29,8 +29,8 @@ namespace Engine
 			// the y component step of the edge function for each pixel down
 			int32_t step_delta_y;
 
-			// the value of the edge function
-			// will be initialized with the result for the starting pixel, remaining values can be stepped with the deltas
+			// the value of the edge function will be initialized with the result for the starting
+			// pixel, remaining values can be stepped with the deltas
 			int32_t edgefunction_res;
 
 			// calculates the edge function for a specific point (starting point), and fills in the step deltas taken from the function's components
@@ -52,7 +52,7 @@ namespace Engine
 
 			Clipper clipper;
 
-			[[nodiscard]] bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
+			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
 			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 
 		public:
