@@ -1,12 +1,13 @@
-#ifndef DITHEREDPIXELTRANSLATOR_HPP
-#define DITHEREDPIXELTRANSLATOR_HPP
+#ifndef DITHEREDFRAMEBUFFER_HPP
+#define DITHEREDFRAMEBUFFER_HPP
 
-#include "IPixelTranslator.hpp"
+#include "AbstractFrameBuffer.hpp"
 #include "HSVColor.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
+#include <cstdint>
 
 namespace Display
 {
@@ -166,15 +167,15 @@ namespace Display
 	// excludes white and black (not determined by hue)
 	static const std::vector<DitheredColor> dithered_colors = { dithered_red, dithered_green, dithered_blue, dithered_yellow, dithered_cyan, dithered_magenta };
 
-	class DitheredPixelTranslator : public IPixelTranslator
+	class DitheredFrameBuffer : public AbstractFrameBuffer<CHAR_INFO>
 	{
-		virtual CHAR_INFO TranslatePixelToFrameBuffer(const HSVColor& color) const override;
+	public:
+
+		DitheredFrameBuffer(uint16_t width, uint16_t height);
+
+		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override;
 
 		virtual const COLORREF* GetColorPalette() const override;
-
-		virtual std::wstring GetFontName() const override;
-		virtual short GetFontWidth() const override;
-		virtual short GetFontHeight() const override;
 	};
 
 }

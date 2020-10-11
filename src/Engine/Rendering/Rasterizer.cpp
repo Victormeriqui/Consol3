@@ -1,16 +1,14 @@
 #include "Rasterizer.hpp"
 
-#include "../../Display/FrameBuffer.hpp"
+#include "../../Display/AbstractFrameBuffer.hpp"
 #include "../../Math/Point2.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Vertex.hpp"
 #include "../../Display/RGBColor.hpp"
 #include "../../Display/HSVColor.hpp"
 #include "Transform.hpp"
-#include "../../Display/FrameBuffer.hpp"
 #include "../../Math/Util/MathUtil.hpp"
 #include "Clipper.hpp"
-#include "../../Display/IPixelTranslator.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -22,13 +20,12 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		Rasterizer::Rasterizer(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator) :
+		Rasterizer::Rasterizer(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer) :
 			framebuffer(framebuffer),
-			pixel_translator(pixel_translator),
 			clipper(Clipper())
 		{
-			float width_h = framebuffer.GetWidth() / 2.0f;
-			float height_h = framebuffer.GetHeight() / 2.0f;
+			float width_h = framebuffer->GetWidth() / 2.0f;
+			float height_h = framebuffer->GetHeight() / 2.0f;
 			float mat[4][4];
 
 			mat[0][0] = width_h; mat[0][1] = 0;         mat[0][2] = 0; mat[0][3] = width_h;
@@ -155,7 +152,7 @@ namespace Engine
 					point.y = y;
 
 					if ((edge0_mag_x | edge1_mag_x | edge2_mag_x) >= 0)
-						framebuffer.SetPixel(x, y, pixel_translator.TranslatePixelToFrameBuffer(color));
+						framebuffer->SetPixel(x, y, color);
 
 					edge0_mag_x += edge0.step_delta_x;
 					edge1_mag_x += edge1.step_delta_x;

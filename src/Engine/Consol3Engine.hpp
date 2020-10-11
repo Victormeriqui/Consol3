@@ -2,15 +2,13 @@
 #define CONSOL3ENGINE_HPP
 
 #include "../Game/Consol3Game.hpp"
-#include "../Display/FrameBuffer.hpp"
-#include "../Display/IPixelTranslator.hpp"
-#include "../Display/DitheredPixelTranslator.hpp"
-#include "../Display/GreyscalePixelTranslator.hpp"
+#include "../Display/AbstractFrameBuffer.hpp"
 #include "Rendering/Rasterizer.hpp"
 #include "../Display/ConsoleManager.hpp"
 
 #include <chrono>
 #include <cstdint>
+#include <memory>
 
 using namespace std;
 using namespace std::chrono;
@@ -23,8 +21,7 @@ namespace Engine
 	class Consol3Engine
 	{
 	private:
-		FrameBuffer& framebuffer;
-		const IPixelTranslator& pixel_translator;
+		std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer;
 
 		Rasterizer rasterizer;
 		ConsoleManager console_manager;
@@ -42,7 +39,7 @@ namespace Engine
 		inline void DrawFrame(int64_t delta);
 
 	public:
-		Consol3Engine(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator);
+		Consol3Engine(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer);
 
 		void Start();
 		void Stop();
