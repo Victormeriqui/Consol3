@@ -6,12 +6,12 @@
 #include <cstdint>
 #include <array>
 
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Math;
+
 		Clipper::Clipper()
 		{
 		}

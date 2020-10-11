@@ -13,13 +13,13 @@
 #include <algorithm>
 #include <cstdint>
 
-using namespace Display;
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Display;
+		using namespace Math;
+
 		Rasterizer::Rasterizer(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer) :
 			framebuffer(framebuffer),
 			clipper(Clipper())

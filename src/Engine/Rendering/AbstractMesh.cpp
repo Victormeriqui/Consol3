@@ -4,12 +4,12 @@
 #include "../../Math/Vector3.hpp"
 #include "../../Math/Angle.hpp"
 
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Math;
+
 		AbstractMesh::AbstractMesh() :
 			model(Model()),
 			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),

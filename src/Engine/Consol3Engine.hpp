@@ -10,14 +10,14 @@
 #include <cstdint>
 #include <memory>
 
-using namespace std;
-using namespace std::chrono;
-using namespace Game;
-using namespace Display;
-using namespace Rendering;
-
 namespace Engine
 {
+	using namespace std;
+	using namespace std::chrono;
+	using namespace Game;
+	using namespace Display;
+	using namespace Rendering;
+
 	class Consol3Engine
 	{
 	private:

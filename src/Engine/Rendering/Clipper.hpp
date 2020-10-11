@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <array>
 
-using namespace Math;
 
 // TODO: refactor this class to use more readable datastructures
 // important to avoid heap allocations since this should be parallel
@@ -15,6 +14,8 @@ namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Math;
+
 		// planes to clip against, used to decide which component to clip from the vertices positions
 		enum class ClipPlane
 		{

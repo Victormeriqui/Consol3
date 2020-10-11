@@ -7,10 +7,10 @@
 #define NOMINMAX
 #include <Windows.h>
 
-using namespace Math;
-
 namespace Display
 {
+	using namespace Math;
+
 	DitheredFrameBuffer::DitheredFrameBuffer(uint16_t width, uint16_t height) : AbstractFrameBuffer(width, height)
 	{}
 

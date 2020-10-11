@@ -6,10 +6,10 @@
 #include "../../Math/Angle.hpp"
 #include "../../Math/Vector3.hpp"
 
-using namespace Math;
-
 namespace Engine
 {
+	using namespace Math;
+
 	namespace Rendering
 	{
 		class Transform

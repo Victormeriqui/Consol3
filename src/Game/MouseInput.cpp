@@ -7,10 +7,10 @@
 #define NOMINMAX
 #include <Windows.h>
 
-using namespace Math;
-
 namespace Game
 {
+	using namespace Math;
+
 	MouseInput::MouseInput()
 	{};
 
