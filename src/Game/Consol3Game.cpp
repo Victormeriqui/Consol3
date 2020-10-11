@@ -1,6 +1,5 @@
 #include "Consol3Game.hpp"
 
-#include "../Display/FrameBuffer.hpp"
 #include "../Engine/Rendering/Rasterizer.hpp"
 #include "../Engine/Rendering/Vertex.hpp"
 #include "../Math/Vector3.hpp"

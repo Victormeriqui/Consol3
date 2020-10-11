@@ -1,7 +1,6 @@
 #ifndef CONSOL3GAME_HPP
 #define CONSOL3GAME_HPP
 
-#include "../Display/FrameBuffer.hpp"
 #include "../Engine/Rendering/Rasterizer.hpp"
 #include "../Engine/Rendering/Vertex.hpp"
 #include "../Math/Vector3.hpp"

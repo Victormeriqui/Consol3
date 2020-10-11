@@ -1,14 +1,12 @@
 #include "Consol3Engine.hpp"
 
 #include "../Game/Consol3Game.hpp"
-#include "../Display/FrameBuffer.hpp"
 #include "Rendering/Rasterizer.hpp"
-#include "../Display/IPixelTranslator.hpp"
-#include "../Display/DitheredPixelTranslator.hpp"
-#include "../Display/GreyscalePixelTranslator.hpp"
+#include "../Display/AbstractFrameBuffer.hpp"
 
 #include <chrono>
 #include <cstdint>
+#include <memory>
 
 #define UPDATE_STEP 10
 
@@ -20,16 +18,15 @@ using namespace Rendering;
 
 namespace Engine
 {
-	Consol3Engine::Consol3Engine(FrameBuffer& framebuffer, const IPixelTranslator& pixel_translator) :
+	Consol3Engine::Consol3Engine(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(framebuffer),
-		pixel_translator(pixel_translator),
-		rasterizer(Rasterizer(framebuffer, pixel_translator)),
+		rasterizer(Rasterizer(framebuffer)),
 		game(Consol3Game(rasterizer)),
-		console_manager(ConsoleManager((short)framebuffer.GetWidth(), (short)framebuffer.GetHeight(), pixel_translator.GetFontName(), pixel_translator.GetFontWidth(), pixel_translator.GetFontHeight())),
+		console_manager(ConsoleManager((short)framebuffer->GetWidth(), (short)framebuffer->GetHeight(), L"Consolas", 4, 4)),
 		running(false),
 		delta(0)
 	{
-		console_manager.SetPalette(pixel_translator.GetColorPalette());
+		console_manager.SetPalette(framebuffer->GetColorPalette());
 	}
 
 	inline int64_t Consol3Engine::GetCurrentTime() const
@@ -106,11 +103,11 @@ namespace Engine
 
 	inline void Consol3Engine::DrawFrame(int64_t delta)
 	{
-		framebuffer.ClearBuffer();
+		framebuffer->ClearBuffer();
 
 		game.Render(delta);
 
-		console_manager.FillScreenBuffer(framebuffer.GetFrameBufferData());
+		console_manager.FillScreenBuffer(framebuffer->GetFrameBufferData());
 	}
 
 }
