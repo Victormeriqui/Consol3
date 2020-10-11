@@ -4,10 +4,10 @@
 #include "../../Math/Vector3.hpp"
 #include "../../Math/Matrix4.hpp"
 
-using namespace Math;
-
 namespace Engine
 {
+	using namespace Math;
+
 	namespace Rendering
 	{
 

@@ -11,13 +11,13 @@
 
 #include <cstdint>
 
-using namespace Display;
-using namespace Engine;
-using namespace Engine::Rendering;
-using namespace Math;
-
 namespace Game
 {
+	using namespace Display;
+	using namespace Engine;
+	using namespace Engine::Rendering;
+	using namespace Math;
+
 	class Consol3Game
 	{
 	private:

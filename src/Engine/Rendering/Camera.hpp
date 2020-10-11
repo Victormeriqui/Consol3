@@ -9,12 +9,12 @@
 #include "../../Math/Matrix4.hpp"
 #include "Transform.hpp"
 
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Math;
+
 		class Camera
 		{
 		private:

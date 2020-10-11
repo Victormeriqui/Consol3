@@ -4,12 +4,12 @@
 
 #include <cmath>
 
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Math;
+
 		Camera::Camera() : width(100), height(100), znear(0.1f), zfar(100.0f), fov(90.0f), position(Vector3()), rotation(Angle()), transform(Transform())
 		{
 		}

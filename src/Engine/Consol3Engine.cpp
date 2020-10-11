@@ -10,14 +10,14 @@
 
 #define UPDATE_STEP 10
 
-using namespace std;
-using namespace std::chrono;
-using namespace Game;
-using namespace Display;
-using namespace Rendering;
-
 namespace Engine
 {
+	using namespace std;
+	using namespace std::chrono;
+	using namespace Game;
+	using namespace Display;
+	using namespace Rendering;
+
 	Consol3Engine::Consol3Engine(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(framebuffer),
 		rasterizer(Rasterizer(framebuffer)),

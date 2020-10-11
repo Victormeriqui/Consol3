@@ -4,12 +4,12 @@
 
 #include <cmath>
 
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Math;
+
 		Vector3 Vertex::GetPosition() const
 		{
 			return position;

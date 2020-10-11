@@ -8,13 +8,13 @@
 #include "../../Math/Angle.hpp"
 #include "Transform.hpp"
 
-using namespace Display;
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Display;
+		using namespace Math;
+
 		class AbstractMesh
 		{
 		protected:

@@ -14,14 +14,13 @@
 #include <vector>
 #include <memory>
 
-
-using namespace Display;
-using namespace Math;
-
 namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Display;
+		using namespace Math;
+
 		// a triangle edge for rasterization, initializes with the edge function value for the given point
 		struct TriangleEdge
 		{

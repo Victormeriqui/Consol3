@@ -17,13 +17,13 @@
 #include <Windows.h>
 #include <cstdint>
 
-using namespace Display;
-using namespace Engine;
-using namespace Engine::Rendering;
-using namespace Math;
-
 namespace Game
 {
+	using namespace Display;
+	using namespace Engine;
+	using namespace Engine::Rendering;
+	using namespace Math;
+
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) : rasterizer(rasterizer)
 	{
 		camera = Camera(200, 200, 0.01f, 100.0f, 90.0f);
