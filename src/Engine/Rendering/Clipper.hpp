@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <array>
 
-
 // TODO: refactor this class to use more readable datastructures
 // important to avoid heap allocations since this should be parallel
 namespace Engine
@@ -49,10 +48,9 @@ namespace Engine
 
 		public:
 			Clipper();
-			
+
 			[[nodiscard]] bool ClipVerticesAgainstAxis(std::array<Vertex, 10>& out_vertices_buffer, uint8_t* out_vertices_buffer_count, const ClipAxis axis);
 		};
-
 	}
 }
 

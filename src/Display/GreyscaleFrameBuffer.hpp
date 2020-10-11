@@ -28,7 +28,6 @@ namespace Display
 
 		virtual const COLORREF* GetColorPalette() const override;
 	};
-
 }
 
 #endif

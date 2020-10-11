@@ -36,7 +36,7 @@ namespace Display
 			if (dithered_color.min_hue <= color.hue && color.hue <= dithered_color.max_hue)
 			{
 				uint8_t shade_index = Util::LerpToIndex(color.value, 0, 10);
-			
+
 				buffer.data()[x + y * width].Char = dithered_color.color_shades[shade_index].Char;
 				buffer.data()[x + y * width].Attributes = dithered_color.color_shades[shade_index].Attributes;
 
@@ -47,7 +47,6 @@ namespace Display
 
 	const COLORREF* DitheredFrameBuffer::GetColorPalette() const
 	{
-
 		return palette_default;
 	}
 }

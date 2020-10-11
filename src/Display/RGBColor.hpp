@@ -38,7 +38,6 @@ namespace Display
 			return 0.3f * r + 0.59f * g + 0.11f * b;
 		}
 
-
 		/**
 		* Returns a 0-255 float value representing the brightness of the color based on luminosity
 		*/

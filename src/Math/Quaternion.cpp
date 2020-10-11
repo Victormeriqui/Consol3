@@ -7,7 +7,6 @@
 
 namespace Math
 {
-
 	Quaternion::Quaternion(const Angle& angle)
 	{
 		float roll_sin = std::cosf(angle.roll / 2.0f);
@@ -46,7 +45,7 @@ namespace Math
 
 	float Quaternion::GetLength() const
 	{
-		return std::sqrtf(x*x + y*y + z*z + w*w);
+		return std::sqrtf(x * x + y * y + z * z + w * w);
 	}
 
 	Quaternion Quaternion::GetNormalized() const
@@ -88,6 +87,4 @@ namespace Math
 	{
 		return Vector3(-1, 0, 0).GetRotated(*this);
 	}
-
 }
-

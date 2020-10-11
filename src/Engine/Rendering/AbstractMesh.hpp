@@ -19,7 +19,7 @@ namespace Engine
 		{
 		protected:
 			Model model;
-			
+
 			// rgb color is the one that is actually exposed, hsvcolor is internal for the frambuffer
 			RGBColor rgbcolor;
 			HSVColor hsvcolor;
@@ -36,7 +36,7 @@ namespace Engine
 			AbstractMesh(const Model& model, const Vector3& position, const RGBColor& color);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color);
-			
+
 			[[nodiscard]] Model GetModel() const;
 			[[nodiscard]] RGBColor GetColor() const;
 			[[nodiscard]] Vector3 GetPosition() const;

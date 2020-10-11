@@ -25,7 +25,7 @@ namespace Math
 		x = rotated.x;
 		y = rotated.x;
 		z = rotated.x;
-			
+
 		return *this;
 	}
 
@@ -48,7 +48,7 @@ namespace Math
 		x = rotated_quat.x;
 		y = rotated_quat.y;
 		z = rotated_quat.z;
-			
+
 		return *this;
 	}
 
@@ -68,7 +68,7 @@ namespace Math
 
 	float Vector3::GetLength() const
 	{
-		return std::sqrtf(x*x + y*y + z*z);
+		return std::sqrtf(x * x + y * y + z * z);
 	}
 
 	Vector3 Vector3::GetNormalized() const

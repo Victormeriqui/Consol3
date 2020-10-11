@@ -11,7 +11,6 @@ namespace Engine
 {
 	namespace Rendering
 	{
-
 		Model::Model()
 		{
 		}
@@ -20,7 +19,6 @@ namespace Engine
 		{
 			this->vertices = vertices;
 			this->indices = indices;
-
 		}
 
 		inline std::vector<std::string> Model::SplitString(std::string string, char delimiter) const
@@ -48,7 +46,7 @@ namespace Engine
 			file_stream.open(filename);
 
 			std::string line;
-			
+
 			if (!file_stream.is_open())
 				return;
 
@@ -57,7 +55,7 @@ namespace Engine
 			while (std::getline(file_stream, line))
 			{
 				line_split = SplitString(line, ' ');
-				
+
 				// ignore lines that arent "v 1 2 3" or "f 1 2 3"
 				if (line_split.size() != 4)
 					continue;
@@ -83,7 +81,6 @@ namespace Engine
 					indices.push_back(v1);
 					indices.push_back(v2);
 				}
-
 			}
 
 			file_stream.close();
@@ -122,6 +119,5 @@ namespace Engine
 				rasterizer.DrawTriangle(v0, v1, v2, HSVColor(randMToN(0.0f, 360.0f), randMToN(0.0f, 1.0f), randMToN(0.0f, 1.0f)));
 			}
 		}
-
 	}
 }

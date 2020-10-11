@@ -26,7 +26,7 @@ namespace Engine
 
 			Vector3 position;
 			Quaternion rotation;
-			
+
 			Transform transform;
 
 			Matrix4 projection_mat;
@@ -46,7 +46,7 @@ namespace Engine
 
 			void SetPosition(const Vector3& position);
 			[[nodiscard]] Vector3 GetPosition() const;
-			
+
 			void SetRotation(const Angle& rotation_ang);
 			[[nodiscard]] Quaternion GetRotation() const;
 
@@ -58,10 +58,7 @@ namespace Engine
 			void RotatePitch(float amount);
 			void RotateYaw(float amount);
 			void RotateRoll(float amount);
-
 		};
-
-
 	}
 }
 

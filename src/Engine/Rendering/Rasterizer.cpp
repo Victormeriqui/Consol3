@@ -63,7 +63,7 @@ namespace Engine
 			Vector3 edge2 = p1 - p2;
 
 			Vector3 facenormal = edge1.GetCrossProduct(edge2);
-			
+
 			return center.GetDotProduct(facenormal) > 0;
 		}
 
@@ -82,7 +82,7 @@ namespace Engine
 				RasterizeTriangle(v0, v1, v2, color);
 				return;
 			}
-	
+
 			// store the verts in a buffer to clip them
 			std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
 			uint8_t vertices_buffer_count = 3;
@@ -90,14 +90,13 @@ namespace Engine
 			bool clip_x_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_X);
 			bool clip_y_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Y);
 			bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
-			
+
 			if (!clip_x_drawable || !clip_y_drawable || !clip_z_drawable)
 				return;
 
 			// draw the polygon as a triangle fan
 			for (uint8_t i = 1; i < vertices_buffer_count - 1; i++)
 				RasterizeTriangle(vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
-
 		}
 
 		TriangleEdge::TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& start_point)
@@ -128,7 +127,7 @@ namespace Engine
 			Point2 v0_cliped = Point2(v0.GetPosition());
 			Point2 v1_cliped = Point2(v1.GetPosition());
 			Point2 v2_cliped = Point2(v2.GetPosition());
-			
+
 			uint16_t bb_min_x = std::min({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
 			uint16_t bb_min_y = std::min({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
 			uint16_t bb_max_x = std::max({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
@@ -189,6 +188,5 @@ namespace Engine
 		{
 			viewport_mat = viewport_matrix;
 		}
-
 	}
 }

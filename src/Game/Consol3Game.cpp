@@ -97,12 +97,10 @@ namespace Game
 			shifting = false;
 			mov_speed = 0.01f;
 		}
-
 	}
 
 	void Consol3Game::Update()
 	{
-
 	}
 
 	void Consol3Game::Render(int64_t delta)
@@ -111,5 +109,4 @@ namespace Game
 
 		mesh.DrawMesh(rasterizer);
 	}
-
 }

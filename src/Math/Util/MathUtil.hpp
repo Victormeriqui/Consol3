@@ -9,7 +9,6 @@ namespace Math
 {
 	namespace Util
 	{
-
 		[[nodiscard]] constexpr inline static float ToRadians(float deg) noexcept
 		{
 			return PI * deg / 180.f;
@@ -29,7 +28,6 @@ namespace Math
 		{
 			return (uint8_t)((1 - val) * min + val * max);
 		}
-
 	}
 }
 

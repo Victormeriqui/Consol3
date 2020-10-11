@@ -20,7 +20,7 @@ namespace Engine
 			Matrix4 scale_mat;
 
 		public:
-			
+
 			Transform();
 
 			Transform& SetTranslation(const Vector3& translation);
