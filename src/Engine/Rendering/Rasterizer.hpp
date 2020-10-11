@@ -9,9 +9,9 @@
 #include "../../Display/HSVColor.hpp"
 #include "Transform.hpp"
 #include "Clipper.hpp"
+#include "DepthBuffer.hpp"
 
 #include <cstdint>
-#include <vector>
 #include <memory>
 
 namespace Engine
@@ -53,7 +53,7 @@ namespace Engine
 			Clipper clipper;
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
-			void RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void RasterizeTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 
 		public:
 			Rasterizer(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer);
@@ -64,7 +64,7 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void DrawTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void DrawTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 		};
 	}
 }

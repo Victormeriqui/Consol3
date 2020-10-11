@@ -2,6 +2,7 @@
 #define STATICMESH_HPP
 
 #include "AbstractMesh.hpp"
+#include "Camera.hpp"
 
 namespace Engine
 {
@@ -16,7 +17,7 @@ namespace Engine
 			StaticMesh(const Model& model, const Vector3& position, const Angle& rotation);
 			StaticMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color);
 
-			virtual void DrawMesh(Rasterizer& rasterizer) const;
+			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const;
 		};
 	}
 }

@@ -7,6 +7,7 @@
 #include "../../Math/Vector3.hpp"
 #include "../../Math/Angle.hpp"
 #include "Transform.hpp"
+#include "Camera.hpp"
 
 namespace Engine
 {
@@ -49,7 +50,7 @@ namespace Engine
 			AbstractMesh& SetRotation(const Angle& rotation);
 			AbstractMesh& SetScale(const Vector3& scale);
 
-			virtual void DrawMesh(Rasterizer& rasterizer) const = 0;
+			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const = 0;
 		};
 	}
 }

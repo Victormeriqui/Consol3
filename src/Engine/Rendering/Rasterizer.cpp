@@ -9,9 +9,11 @@
 #include "Transform.hpp"
 #include "../../Math/Util/MathUtil.hpp"
 #include "Clipper.hpp"
+#include "DepthBuffer.hpp"
 
 #include <algorithm>
 #include <cstdint>
+
 
 namespace Engine
 {
@@ -67,7 +69,7 @@ namespace Engine
 			return center.GetDotProduct(facenormal) > 0;
 		}
 
-		void Rasterizer::DrawTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color)
+		void Rasterizer::DrawTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
 		{
 			TransformVertexMVP(v0);
 			TransformVertexMVP(v1);
@@ -79,7 +81,7 @@ namespace Engine
 			// if all three position components are inside the view frustum it doesn't need to be clipped
 			if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
 			{
-				RasterizeTriangle(v0, v1, v2, color);
+				RasterizeTriangle(depthbuffer, v0, v1, v2, color);
 				return;
 			}
 
@@ -96,7 +98,7 @@ namespace Engine
 
 			// draw the polygon as a triangle fan
 			for (uint8_t i = 1; i < vertices_buffer_count - 1; i++)
-				RasterizeTriangle(vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
+				RasterizeTriangle(depthbuffer, vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
 		}
 
 		TriangleEdge::TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& start_point)
@@ -118,7 +120,7 @@ namespace Engine
 			edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
 		}
 
-		void Rasterizer::RasterizeTriangle(Vertex v0, Vertex v1, Vertex v2, HSVColor color)
+		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
 		{
 			TransformVertexScreenspace(v0);
 			TransformVertexScreenspace(v1);
@@ -138,24 +140,40 @@ namespace Engine
 			TriangleEdge edge0 = TriangleEdge(v1_cliped, v2_cliped, point);
 			TriangleEdge edge1 = TriangleEdge(v2_cliped, v0_cliped, point);
 			TriangleEdge edge2 = TriangleEdge(v0_cliped, v1_cliped, point);
+			TriangleEdge area = TriangleEdge(v0_cliped, v1_cliped, v2_cliped);
+
+			if (area.edgefunction_res == 0)
+				return;
 
 			for (uint16_t y = bb_min_y; y <= bb_max_y; y++)
 			{
-				int32_t edge0_mag_x = edge0.edgefunction_res;
-				int32_t edge1_mag_x = edge1.edgefunction_res;
-				int32_t edge2_mag_x = edge2.edgefunction_res;
+				int32_t edge0_mag_xy = edge0.edgefunction_res;
+				int32_t edge1_mag_xy = edge1.edgefunction_res;
+				int32_t edge2_mag_xy = edge2.edgefunction_res;
 
 				for (uint16_t x = bb_min_x; x <= bb_max_x; x++)
 				{
 					point.x = x;
 					point.y = y;
 
-					if ((edge0_mag_x | edge1_mag_x | edge2_mag_x) >= 0)
-						framebuffer->SetPixel(x, y, color);
+					if ((edge0_mag_xy | edge1_mag_xy | edge2_mag_xy) >= 0)
+					{
+						float barcord0 = edge0_mag_xy / (float)area.edgefunction_res;
+						float barcord1 = edge1_mag_xy / (float)area.edgefunction_res;
+						float barcord2 = edge2_mag_xy / (float)area.edgefunction_res;
 
-					edge0_mag_x += edge0.step_delta_x;
-					edge1_mag_x += edge1.step_delta_x;
-					edge2_mag_x += edge2.step_delta_x;
+						float z = barcord0* v0.GetPosition().z + barcord1 * v1.GetPosition().z + barcord2 * v2.GetPosition().z;
+						
+						if (depthbuffer.GetDepth(x, y) > z)
+						{
+							framebuffer->SetPixel(x, y, color);
+							depthbuffer.SetDepth(x, y, z);
+						}
+					}
+
+					edge0_mag_xy += edge0.step_delta_x;
+					edge1_mag_xy += edge1.step_delta_x;
+					edge2_mag_xy += edge2.step_delta_x;
 				}
 
 				edge0.edgefunction_res += edge0.step_delta_y;
