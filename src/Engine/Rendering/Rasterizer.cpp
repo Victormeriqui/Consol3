@@ -1,6 +1,6 @@
 #include "Rasterizer.hpp"
 
-#include "../../Display/AbstractFrameBuffer.hpp"
+#include "../../Display/IRenderer.hpp"
 #include "../../Math/Point2.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Vertex.hpp"
@@ -22,12 +22,12 @@ namespace Engine
 		using namespace Display;
 		using namespace Math;
 
-		Rasterizer::Rasterizer(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer) :
-			framebuffer(framebuffer),
+		Rasterizer::Rasterizer(std::shared_ptr<IRenderer> renderer) :
+			renderer(renderer),
 			clipper(Clipper())
 		{
-			float width_h = framebuffer->GetWidth() / 2.0f;
-			float height_h = framebuffer->GetHeight() / 2.0f;
+			float width_h = renderer->GetFrameBufferWidth() / 2.0f;
+			float height_h = renderer->GetFrameBufferHeight() / 2.0f;
 			float mat[4][4];
 
 			mat[0][0] = width_h; mat[0][1] = 0;         mat[0][2] = 0; mat[0][3] = width_h;
@@ -153,20 +153,17 @@ namespace Engine
 
 				for (uint16_t x = bb_min_x; x <= bb_max_x; x++)
 				{
-					point.x = x;
-					point.y = y;
-
 					if ((edge0_mag_xy | edge1_mag_xy | edge2_mag_xy) >= 0)
 					{
 						float barcord0 = edge0_mag_xy / (float)area.edgefunction_res;
 						float barcord1 = edge1_mag_xy / (float)area.edgefunction_res;
 						float barcord2 = edge2_mag_xy / (float)area.edgefunction_res;
 
-						float z = barcord0* v0.GetPosition().z + barcord1 * v1.GetPosition().z + barcord2 * v2.GetPosition().z;
-						
+						float z = barcord0 * v0.GetPosition().z + barcord1 * v1.GetPosition().z + barcord2 * v2.GetPosition().z;
+
 						if (depthbuffer.GetDepth(x, y) > z)
 						{
-							framebuffer->SetPixel(x, y, color);
+							renderer->SetPixel(x, y, color);
 							depthbuffer.SetDepth(x, y, z);
 						}
 					}

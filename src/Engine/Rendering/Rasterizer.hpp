@@ -1,7 +1,7 @@
 #ifndef RASTERIZER_HPP
 #define RASTERIZER_HPP
 
-#include "../../Display/AbstractFrameBuffer.hpp"
+#include "../../Display/IRenderer.hpp"
 #include "../../Math/Point2.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Vertex.hpp"
@@ -45,7 +45,7 @@ namespace Engine
 			Matrix4 projection_mat;
 			Matrix4 viewport_mat;
 
-			std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer;
+			std::shared_ptr<IRenderer> renderer;
 
 			inline Vertex& TransformVertexMVP(Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
@@ -56,7 +56,7 @@ namespace Engine
 			void RasterizeTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 
 		public:
-			Rasterizer(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer);
+			Rasterizer(std::shared_ptr<IRenderer> renderer);
 
 			void SetModelMatrix(const Transform& model_transform);
 			void SetModelMatrix(const Matrix4& model_matrix);

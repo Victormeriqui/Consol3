@@ -2,7 +2,8 @@
 #define CONSOL3ENGINE_HPP
 
 #include "../Game/Consol3Game.hpp"
-#include "../Display/AbstractFrameBuffer.hpp"
+#include "../Display/FrameBuffer.hpp"
+#include "../Display/IRenderer.hpp"
 #include "Rendering/Rasterizer.hpp"
 #include "../Display/ConsoleManager.hpp"
 
@@ -21,11 +22,9 @@ namespace Engine
 	class Consol3Engine
 	{
 	private:
-		// TODO make a new component that holds the framebuffer so the engine doesnt need to specify the framebuffer type
-		std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer;
+		std::shared_ptr<IRenderer> renderer;
 
 		Rasterizer rasterizer;
-		ConsoleManager console_manager;
 
 		Consol3Game game;
 
@@ -40,7 +39,7 @@ namespace Engine
 		inline void DrawFrame(int64_t delta);
 
 	public:
-		Consol3Engine(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer);
+		Consol3Engine(std::shared_ptr<IRenderer> renderer);
 
 		void Start();
 		void Stop();

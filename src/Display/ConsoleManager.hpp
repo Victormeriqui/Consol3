@@ -30,7 +30,7 @@ namespace Display
 		short font_weight;
 		short font_family;
 
-		void SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height);
+		void SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const COLORREF palette[]);
 
 		void StoreOriginalFontInfo();
 		void SetFontInfo(std::wstring name, short width, short height, short weight, short family);
@@ -39,14 +39,14 @@ namespace Display
 		void EnableCursor();
 
 	public:
-		ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height);
+		ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height, const COLORREF palette[]);
 		~ConsoleManager();
 
 		void SetPalette(const COLORREF palette[]);
 
 		void FillScreenBuffer(const CHAR_INFO* data);
 
-		void ReportFPS(uint16_t frame_count);
+		void SetTitle(const std::string& title);
 	};
 }
 

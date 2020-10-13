@@ -10,7 +10,7 @@
 
 namespace Display
 {
-	ConsoleManager::ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height) : width(width), height(height)
+	ConsoleManager::ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height, const COLORREF palette[]) : width(width), height(height)
 	{
 		consolescreenbuffer = CreateConsoleScreenBuffer(
 			GENERIC_READ | GENERIC_WRITE, // access
@@ -19,7 +19,7 @@ namespace Display
 			CONSOLE_TEXTMODE_BUFFER, // mode TODO: check if CONSOLE_GRAPHICS_BUFFER works
 			NULL); // used by CONSOLE_GRAPHICS_BUFFER
 
-		SetConsoleScreenBufferInfo(consolescreenbuffer, width, height, font_width, font_height);
+		SetConsoleScreenBufferInfo(consolescreenbuffer, width, height, font_width, font_height, palette);
 
 		writeregion = { 0, 0, width, height };
 
@@ -39,7 +39,7 @@ namespace Display
 		EnableCursor();
 	}
 
-	void ConsoleManager::SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height)
+	void ConsoleManager::SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const COLORREF palette[])
 	{
 		CONSOLE_SCREEN_BUFFER_INFOEX info;
 
@@ -59,6 +59,7 @@ namespace Display
 		info.wPopupAttributes = 0;
 		// TODO: test this?
 		info.bFullscreenSupported = false;
+		std::copy(palette, palette + 16, info.ColorTable);
 
 		SetConsoleScreenBufferInfoEx(consolescreenbuffer, &info);
 	}
@@ -121,9 +122,8 @@ namespace Display
 		GetCurrentConsoleFontEx(consolescreenbuffer, false, &font_info2);
 	}
 
-	void ConsoleManager::ReportFPS(uint16_t frame_count)
+	void ConsoleManager::SetTitle(const std::string& title)
 	{
-		std::string title = std::string("Consol3 - FPS: ") + std::to_string(frame_count) + '\0';
 		SetConsoleTitleA(title.c_str());
 	}
 
