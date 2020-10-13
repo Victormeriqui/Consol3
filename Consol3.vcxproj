@@ -22,8 +22,8 @@
     <ClCompile Include="src\Consol3.cpp" />
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
     <ClCompile Include="src\Engine\Rendering\DepthBuffer.cpp" />
-    <ClCompile Include="src\Display\DitheredFrameBuffer.cpp" />
-    <ClCompile Include="src\Display\GreyscaleFrameBuffer.cpp" />
+    <ClCompile Include="src\Display\DitheredRenderer.cpp" />
+    <ClCompile Include="src\Display\GreyscaleRenderer.cpp" />
     <ClCompile Include="src\Engine\Consol3Engine.cpp" />
     <ClCompile Include="src\Engine\Rendering\AbstractMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Clipper.cpp" />
@@ -42,11 +42,12 @@
     <ClCompile Include="src\Math\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\DepthBuffer.hpp" />
-    <ClInclude Include="src\Display\DitheredFrameBuffer.hpp" />
-    <ClInclude Include="src\Display\GreyscaleFrameBuffer.hpp" />
+    <ClInclude Include="src\Display\DitheredRenderer.hpp" />
+    <ClInclude Include="src\Display\GreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\HSVColor.hpp" />
-    <ClInclude Include="src\Display\AbstractFrameBuffer.hpp" />
+    <ClInclude Include="src\Display\FrameBuffer.hpp" />
     <ClInclude Include="src\Display\RGBColor.hpp" />
     <ClInclude Include="src\Display\ConsoleManager.hpp" />
     <ClInclude Include="src\Engine\Consol3Engine.hpp" />

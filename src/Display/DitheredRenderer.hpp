@@ -1,13 +1,17 @@
-#ifndef DITHEREDFRAMEBUFFER_HPP
-#define DITHEREDFRAMEBUFFER_HPP
+#ifndef DITHEREDRENDERER_HPP
+#define DITHEREDRENDERER_HPP
 
-#include "AbstractFrameBuffer.hpp"
+#include "IRenderer.hpp"
+#include "FrameBuffer.hpp"
 #include "HSVColor.hpp"
+#include "ConsoleManager.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
 #include <cstdint>
+#include <string>
+#include <memory>
 
 namespace Display
 {
@@ -167,15 +171,25 @@ namespace Display
 	// excludes white and black (not determined by hue)
 	static const std::vector<DitheredColor> dithered_colors = { dithered_red, dithered_green, dithered_blue, dithered_yellow, dithered_cyan, dithered_magenta };
 
-	class DitheredFrameBuffer : public AbstractFrameBuffer<CHAR_INFO>
+	class DitheredRenderer : public IRenderer
 	{
-	public:
+	private:
+		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
+		ConsoleManager console_manager;
 
-		DitheredFrameBuffer(uint16_t width, uint16_t height);
+	public:
+		DitheredRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override;
 
-		virtual const COLORREF* GetColorPalette() const override;
+		virtual void DisplayFrame() override;
+
+		virtual void ClearFrameBuffer() override;
+		
+		virtual void ReportInformation(const std::string& info) override;
+
+		[[nodiscard]] virtual const uint16_t GetFrameBufferWidth() const override;
+		[[nodiscard]] virtual const uint16_t GetFrameBufferHeight() const override;
 	};
 }
 

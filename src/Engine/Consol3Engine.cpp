@@ -2,7 +2,7 @@
 
 #include "../Game/Consol3Game.hpp"
 #include "Rendering/Rasterizer.hpp"
-#include "../Display/AbstractFrameBuffer.hpp"
+#include "../Display/IRenderer.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -18,15 +18,13 @@ namespace Engine
 	using namespace Display;
 	using namespace Rendering;
 
-	Consol3Engine::Consol3Engine(std::shared_ptr<AbstractFrameBuffer<CHAR_INFO>> framebuffer) :
-		framebuffer(framebuffer),
-		rasterizer(Rasterizer(framebuffer)),
+	Consol3Engine::Consol3Engine(std::shared_ptr<IRenderer> renderer) :
+		renderer(renderer),
+		rasterizer(Rasterizer(renderer)),
 		game(Consol3Game(rasterizer)),
-		console_manager(ConsoleManager((short)framebuffer->GetWidth(), (short)framebuffer->GetHeight(), L"Consolas", 4, 4)),
 		running(false),
 		delta(0)
 	{
-		console_manager.SetPalette(framebuffer->GetColorPalette());
 	}
 
 	inline int64_t Consol3Engine::GetCurrentTime() const
@@ -80,7 +78,7 @@ namespace Engine
 			// accumulated more than 1 second elapsed time
 			if (accumulated_delta > 1000)
 			{
-				console_manager.ReportFPS(frame_count);
+				renderer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
 				frame_count = 0;
 				accumulated_delta = 0;
 			}
@@ -102,10 +100,10 @@ namespace Engine
 
 	inline void Consol3Engine::DrawFrame(int64_t delta)
 	{
-		framebuffer->ClearBuffer();
+		renderer->ClearFrameBuffer();
 
 		game.Render(delta);
 
-		console_manager.FillScreenBuffer(framebuffer->GetFrameBufferData());
+		renderer->DisplayFrame();
 	}
 }

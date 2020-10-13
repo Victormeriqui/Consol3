@@ -1,18 +1,15 @@
-#ifndef ABSTRACTFRAMEBUFFER_HPP
-#define ABSTRACTFRAMEBUFFER_HPP
+#ifndef FRAMEBUFFER_HPP
+#define FRAMEBUFFER_HPP
 
 #include "HSVColor.hpp"
 
-// Windows.h overrides std::min
-#define NOMINMAX
-#include <Windows.h>
 #include <cstdint>
 #include <vector>
 
 namespace Display
 {
 	template<typename T>
-	class AbstractFrameBuffer
+	class FrameBuffer
 	{
 	protected:
 		const uint16_t width;
@@ -22,18 +19,23 @@ namespace Display
 
 	public:
 
-		AbstractFrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
+		FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
 		{
 			buffer = std::vector<T>(width * height, T());
 		}
 
-		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) = 0;
+		void SetPixel(uint16_t x, uint16_t y, const T& value)
+		{
+			// TODO: figure out why this is needed, this check shouldnt be necessary if we have correct clipping
+			if (x < 0 || x >= width || y < 0 || y >= height)
+				return;
 
-		virtual const COLORREF* GetColorPalette() const = 0;
+			buffer.data()[x + width * y] = value;
+		}
 
 		[[nodiscard]] T GetPixel(uint16_t x, uint16_t y) const
 		{
-			return buffer.data()[x + width * y];
+			return buffer[x + width * y];
 		};
 
 		[[nodiscard]] uint16_t GetWidth() const
@@ -49,11 +51,6 @@ namespace Display
 		[[nodiscard]] const T* GetFrameBufferData() const
 		{
 			return buffer.data();
-		}
-
-		void ClearBuffer()
-		{
-			FillBuffer({ ' ', 0x00 });
 		}
 
 		void FillBuffer(const T& value)

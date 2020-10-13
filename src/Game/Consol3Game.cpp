@@ -28,14 +28,14 @@ namespace Game
 		rasterizer(rasterizer),
 		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f))
 	{
-		camera.SetPosition(Vector3(0, 0.1f, -0.2f));
+		camera.SetPosition(Vector3(0, 0.1f, -2.0f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/bunny.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 	}
 
-	float mov_speed = 0.01f;
+	float mov_speed = 0.05f;
 	bool shifting = false;
 	float rot = 0;
 	void Consol3Game::HandleInput()
@@ -96,7 +96,7 @@ namespace Game
 		else if (shifting)
 		{
 			shifting = false;
-			mov_speed = 0.01f;
+			mov_speed = 0.05f;
 		}
 	}
 
