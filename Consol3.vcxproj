@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Consol3.cpp" />
+    <ClCompile Include="src\Display\ANSIRenderer.cpp" />
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
     <ClCompile Include="src\Engine\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="src\Display\DitheredRenderer.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="src\Math\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Display\ANSIRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\DepthBuffer.hpp" />
     <ClInclude Include="src\Display\DitheredRenderer.hpp" />
