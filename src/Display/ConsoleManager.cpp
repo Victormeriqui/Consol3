@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace Display
 {
@@ -46,7 +47,7 @@ namespace Display
 		// struct
 		info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 		// resolution, how many chars there are
-		info.dwSize = { width + 1, height + 1 }; // the +1 avoids problems when resizing
+		info.dwSize = { width , height }; // the +1 avoids problems when resizing
 		// position of the cursor (irrelevant since we're going to hide it)
 		info.dwCursorPosition = { 0, 0 };
 		// attributes used by preceding writes (irrelevant since we're not going to give input to the console)
@@ -155,5 +156,14 @@ namespace Display
 			{ width, height }, // size of the data to write
 			{ 0, 0 }, // start of the data to write
 			&writeregion); // region to write to
+	}
+
+	void ConsoleManager::WriteConsoleString(const std::shared_ptr<std::string> string, uint32_t size)
+	{
+		DWORD written_count;
+
+		SetConsoleCursorPosition(consolescreenbuffer, { 0, 0 });
+
+		WriteConsoleA(consolescreenbuffer, string->c_str(), size, &written_count, nullptr);
 	}
 }

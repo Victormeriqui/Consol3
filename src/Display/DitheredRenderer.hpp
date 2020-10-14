@@ -15,7 +15,7 @@
 
 namespace Display
 {
-	static const COLORREF palette_default[16] =
+	static const COLORREF palette_dithered[16] =
 	{
 		0x000000, 0x800000, 0x008000, 0x808000,
 		0x000080, 0x800080, 0x008080, 0xC0C0C0,
