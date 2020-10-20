@@ -24,12 +24,14 @@ namespace Engine
 
 			inline std::vector<std::string> SplitString(std::string string, char delimiter) const;
 
+			void CalculateNormals();
+
 		public:
 			Model();
 			Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 			Model(std::string filename);
 
-			void CalculateNormals() const;
+		
 
 			[[nodiscard]] std::vector<Vertex> GetVertices() const;
 			[[nodiscard]] std::vector<uint32_t> GetIndices() const;
