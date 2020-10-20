@@ -28,6 +28,8 @@
     <ClCompile Include="src\Engine\Consol3Engine.cpp" />
     <ClCompile Include="src\Engine\Rendering\AbstractMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Clipper.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Lighting\DirectionalLight.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Lighting\LightingSystem.cpp" />
     <ClCompile Include="src\Engine\Rendering\Rasterizer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="src\Engine\Rendering\Model.cpp" />
@@ -45,6 +47,8 @@
   <ItemGroup>
     <ClInclude Include="src\Display\ANSIRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Lighting\DirectionalLight.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Lighting\ILight.hpp" />
     <ClInclude Include="src\Engine\Rendering\DepthBuffer.hpp" />
     <ClInclude Include="src\Display\DitheredRenderer.hpp" />
     <ClInclude Include="src\Display\GreyscaleRenderer.hpp" />
@@ -55,6 +59,7 @@
     <ClInclude Include="src\Engine\Consol3Engine.hpp" />
     <ClInclude Include="src\Engine\Rendering\AbstractMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Clipper.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Lighting\LightingSystem.hpp" />
     <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Camera.hpp" />
     <ClInclude Include="src\Engine\Rendering\Model.hpp" />

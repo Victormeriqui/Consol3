@@ -85,11 +85,32 @@ namespace Engine
 			}
 
 			file_stream.close();
+
+			CalculateNormals();
 		}
 
-		void Model::CalculateNormals() const
+		void Model::CalculateNormals()
 		{
-			//TODO: do this
+			for (unsigned int i = 0; i < indices.size() - 3; i += 3)
+			{
+				Vertex& v0 = vertices[indices[i]];
+				Vertex& v1 = vertices[indices[i + 1]];
+				Vertex& v2 = vertices[indices[i + 2]];
+
+				Vector3 edge0 = v1.GetPosition() - v0.GetPosition();
+				Vector3 edge1 = v2.GetPosition() - v0.GetPosition();
+
+				Vector3 normal = edge0.GetCrossProduct(edge1);
+				normal.Normalize();
+
+				// each adjacent face to each vertex contributes to the vertex normal
+				v0.SetNormal(v0.GetNormal() + normal);
+				v1.SetNormal(v1.GetNormal() + normal);
+				v2.SetNormal(v2.GetNormal() + normal);
+			}
+
+			for (Vertex& vert : vertices)
+				vert.SetNormal(vert.GetNormal().GetNormalized());
 		}
 
 		std::vector<Vertex> Model::GetVertices() const
@@ -117,7 +138,7 @@ namespace Engine
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
 
-				rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1, randMToN(0, 1)));
+				rasterizer.DrawLitTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
 			}
 		}
 	}
