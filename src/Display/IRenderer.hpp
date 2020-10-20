@@ -12,6 +12,8 @@ namespace Display
 {
 	class IRenderer
 	{
+	protected:
+		IRenderer() {}
 	public:
 		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) = 0;
 

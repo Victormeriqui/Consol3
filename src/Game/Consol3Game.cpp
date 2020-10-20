@@ -10,12 +10,16 @@
 #include "../Math/Vector2.hpp"
 #include "MouseInput.hpp"
 #include "../Engine/Rendering/StaticMesh.hpp"
+#include "../Engine/Rendering/Lighting/ILight.hpp"
+#include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
+#include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 
 #include <vector>
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
 #include <cstdint>
+#include <memory>
 
 namespace Game
 {
@@ -26,13 +30,18 @@ namespace Game
 
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) :
 		rasterizer(rasterizer),
-		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f))
+		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f)),
+		lighting_system(std::make_shared<LightingSystem>())
 	{
 		camera.SetPosition(Vector3(0, 0.1f, -2.0f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
+		rasterizer.SetLightingSystem(lighting_system);
 
 		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+
+		std::shared_ptr<DirectionalLight> dir_light = std::make_shared<DirectionalLight>(Vector3(-1, 0, 0));
+		lighting_system->AddLight(dir_light);
 	}
 
 	float mov_speed = 0.05f;

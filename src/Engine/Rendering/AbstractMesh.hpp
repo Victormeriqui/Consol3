@@ -30,14 +30,14 @@ namespace Engine
 			Vector3 position;
 			Angle rotation;
 			Vector3 scale;
-
-		public:
+			
 			AbstractMesh();
 			AbstractMesh(const Model& model, const Vector3& position);
 			AbstractMesh(const Model& model, const Vector3& position, const RGBColor& color);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color);
 
+		public:
 			[[nodiscard]] Model GetModel() const;
 			[[nodiscard]] RGBColor GetColor() const;
 			[[nodiscard]] Vector3 GetPosition() const;
