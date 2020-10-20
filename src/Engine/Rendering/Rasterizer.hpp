@@ -10,6 +10,9 @@
 #include "Transform.hpp"
 #include "Clipper.hpp"
 #include "DepthBuffer.hpp"
+#include "../Rendering/Lighting/ILight.hpp"
+#include "../Rendering/Lighting/DirectionalLight.hpp"
+#include "../Rendering/Lighting/LightingSystem.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -20,6 +23,7 @@ namespace Engine
 	{
 		using namespace Display;
 		using namespace Math;
+		using namespace Lighting;
 
 		// a triangle edge for rasterization, initializes with the edge function value for the given point
 		struct TriangleEdge
@@ -51,9 +55,11 @@ namespace Engine
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
 
 			Clipper clipper;
+			std::shared_ptr<LightingSystem> lighting_system;
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
-			void RasterizeTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void RasterizeFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void RasterizeLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
@@ -64,7 +70,10 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void DrawTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
+
+			void DrawFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void DrawLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
 		};
 	}
 }
