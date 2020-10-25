@@ -22,6 +22,7 @@
     <ClCompile Include="src\Consol3.cpp" />
     <ClCompile Include="src\Display\ANSIRenderer.cpp" />
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
+    <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
     <ClCompile Include="src\Engine\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="src\Display\DitheredRenderer.cpp" />
     <ClCompile Include="src\Display\GreyscaleRenderer.cpp" />
@@ -46,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\ANSIRenderer.hpp" />
+    <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\DirectionalLight.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\ILight.hpp" />
