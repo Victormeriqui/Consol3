@@ -21,7 +21,7 @@ namespace Display
 	}
 
 	void DitheredRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
-	{
+	{		
 		// white/black
 		if (color.saturation <= 0.25f)
 		{

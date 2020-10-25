@@ -11,6 +11,7 @@
 #include "Display/DitheredRenderer.hpp"
 #include "Display/GreyscaleRenderer.hpp"
 #include "Display/ANSIRenderer.hpp"
+#include "Display/DitheredGreyscaleRenderer.hpp"
 
 using namespace Display;
 using namespace Engine;
@@ -23,7 +24,8 @@ int main()
 	std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer = std::make_shared<FrameBuffer<CHAR_INFO>>(FrameBuffer<CHAR_INFO>(width, height));
 	//std::shared_ptr<FrameBuffer<RGBColor>> framebuffer = std::make_shared<FrameBuffer<RGBColor>>(width, height);
 	//std::shared_ptr<GreyscaleRenderer> renderer = std::make_shared<GreyscaleRenderer>(framebuffer);
-	std::shared_ptr<DitheredRenderer> renderer = std::make_shared<DitheredRenderer>(framebuffer);
+	//std::shared_ptr<DitheredRenderer> renderer = std::make_shared<DitheredRenderer>(framebuffer);
+	std::shared_ptr<DitheredGreyscaleRenderer> renderer = std::make_shared<DitheredGreyscaleRenderer>(framebuffer);
 	//std::shared_ptr<ANSIRenderer> renderer = std::make_shared<ANSIRenderer>(framebuffer);
 
 	Consol3Engine engine = Consol3Engine(renderer);
