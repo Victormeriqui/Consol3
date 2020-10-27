@@ -31,8 +31,6 @@ namespace Engine
 			Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 			Model(std::string filename);
 
-		
-
 			[[nodiscard]] std::vector<Vertex> GetVertices() const;
 			[[nodiscard]] std::vector<uint32_t> GetIndices() const;
 
