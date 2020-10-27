@@ -53,5 +53,4 @@ namespace Display
 	{
 		return framebuffer->GetHeight();
 	}
-
 }

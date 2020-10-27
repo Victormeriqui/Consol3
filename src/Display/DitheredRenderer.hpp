@@ -185,7 +185,7 @@ namespace Display
 		virtual void DisplayFrame() override;
 
 		virtual void ClearFrameBuffer() override;
-		
+
 		virtual void ReportInformation(const std::string& info) override;
 
 		[[nodiscard]] virtual const uint16_t GetFrameBufferWidth() const override;

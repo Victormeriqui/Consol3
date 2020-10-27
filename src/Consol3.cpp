@@ -29,7 +29,7 @@ int main()
 	//std::shared_ptr<ANSIRenderer> renderer = std::make_shared<ANSIRenderer>(framebuffer);
 
 	Consol3Engine engine = Consol3Engine(renderer);
-	
+
 	engine.Start();
 
 	//char a;

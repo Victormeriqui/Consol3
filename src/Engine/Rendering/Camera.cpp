@@ -10,7 +10,7 @@ namespace Engine
 	{
 		using namespace Math;
 
-		Camera::Camera() : 
+		Camera::Camera() :
 			width(100),
 			height(100),
 			znear(0.1f),

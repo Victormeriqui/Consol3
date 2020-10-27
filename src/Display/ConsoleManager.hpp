@@ -45,7 +45,7 @@ namespace Display
 
 		void SetPalette(const COLORREF palette[]);
 		void SetTitle(const std::string& title);
-		
+
 		void FillScreenBuffer(const CHAR_INFO* data);
 		void WriteConsoleString(const std::shared_ptr<std::string> string, uint32_t size);
 	};

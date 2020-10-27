@@ -21,7 +21,6 @@ namespace Display
 		framebuffer(framebuffer),
 		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 8, 8, palette_ansi))
 	{
-		
 		ClearFrameBuffer();
 		framebuffer_string = std::shared_ptr<std::string>(new std::string());
 		CreateFrameBufferString();
@@ -62,7 +61,7 @@ namespace Display
 
 				std::string green_string = std::to_string(color.g);
 				green_string = std::string(3 - green_string.length(), '0') + green_string;
-				
+
 				std::string blue_string = std::to_string(color.b);
 				blue_string = std::string(3 - blue_string.length(), '0') + blue_string;
 
@@ -70,7 +69,7 @@ namespace Display
 				uint32_t red_offset = base_offset + PIXEL_RED_OFFSET;
 				uint32_t green_offset = base_offset + PIXEL_GREEN_OFFSET;
 				uint32_t blue_offset = base_offset + PIXEL_BLUE_OFFSET;
-				
+
 				red_string.copy(string_data + red_offset, 3);
 				green_string.copy(string_data + green_offset, 3);
 				blue_string.copy(string_data + blue_offset, 3);
@@ -103,5 +102,4 @@ namespace Display
 	{
 		return framebuffer->GetHeight();
 	}
-
 }
