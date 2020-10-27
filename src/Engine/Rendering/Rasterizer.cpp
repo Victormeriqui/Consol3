@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <cstdint>
 
-
 namespace Engine
 {
 	namespace Rendering
@@ -37,7 +36,7 @@ namespace Engine
 
 			viewport_mat = Matrix4(mat);
 		}
-		
+
 		void Rasterizer::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
 		{
 			this->lighting_system = std::move(lighting_system);
@@ -46,6 +45,8 @@ namespace Engine
 		Vertex& Rasterizer::TransformVertexMVP(Vertex& vertex)
 		{
 			vertex *= model_mat;
+			vertex.TransformNormals(normal_mat);
+
 			vertex *= view_mat;
 			vertex *= projection_mat;
 
@@ -217,7 +218,6 @@ namespace Engine
 				RasterizeLitTriangle(depthbuffer, vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
 		}
 
-
 		void Rasterizer::RasterizeLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
 		{
 			TransformVertexScreenspace(v0);
@@ -264,7 +264,7 @@ namespace Engine
 
 						if (depthbuffer.GetDepth(x, y) > z)
 						{
-							HSVColor lit_color = HSVColor(color.hue, color.saturation, std::min(1.0f, color.value + light_amount + 0.1f ));
+							HSVColor lit_color = HSVColor(color.hue, color.saturation, std::min(1.0f, color.value + light_amount + 0.02f));
 							renderer->SetPixel(x, y, lit_color);
 							depthbuffer.SetDepth(x, y, z);
 						}
@@ -284,11 +284,15 @@ namespace Engine
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)
 		{
 			model_mat = model_transform.GetTranslationMatrix() * (model_transform.GetRotationMatrix() * model_transform.GetScaleMatrix());
+			// shouldn't this also have the view_mat?
+			// TODO: figure out why this works
+			normal_mat = Matrix4(model_mat).Invert().Transpose();
 		}
 
 		void Rasterizer::SetModelMatrix(const Matrix4& model_matrix)
 		{
 			model_mat = model_matrix;
+			normal_mat = Matrix4(model_mat).Invert().Transpose();
 		}
 
 		void Rasterizer::SetViewMatrix(const Matrix4& view_matrix)

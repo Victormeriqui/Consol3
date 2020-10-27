@@ -94,7 +94,7 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
-			rot += 0.05f;
+			rot += 0.001f;
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)

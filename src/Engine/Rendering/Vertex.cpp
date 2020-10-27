@@ -46,6 +46,22 @@ namespace Engine
 			return *this;
 		}
 
+		Vertex& Vertex::TransformNormals(const Matrix4& normal_mat)
+		{
+			float norm_x_new = normal_mat.values[0][0] * normal.x + normal_mat.values[0][1] * normal.y + normal_mat.values[0][2] * normal.z;
+			float norm_y_new = normal_mat.values[1][0] * normal.x + normal_mat.values[1][1] * normal.y + normal_mat.values[1][2] * normal.z;
+			float norm_z_new = normal_mat.values[2][0] * normal.x + normal_mat.values[2][1] * normal.y + normal_mat.values[2][2] * normal.z;
+			float norm_w_new = normal_mat.values[3][0] * normal.x + normal_mat.values[3][1] * normal.y + normal_mat.values[3][2] * normal.z;
+
+			normal.x = norm_x_new;
+			normal.y = norm_y_new;
+			normal.z = norm_z_new;
+
+			normal.Normalize();
+
+			return *this;
+		}
+
 		Vertex Vertex::GetPerspectiveDivided() const
 		{
 			return Vertex(*this).PerspectiveDivide();

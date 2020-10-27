@@ -17,6 +17,12 @@ namespace Math
 
 		Matrix4& SetIdentity();
 
+		Matrix4& Invert();
+		Matrix4& Transpose();
+
+		Matrix4 GetInverted();
+		Matrix4 GetTransposed();
+
 		[[nodiscard]] Matrix4 operator*(const Matrix4& other) const noexcept
 		{
 			float new_values[4][4];
