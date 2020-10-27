@@ -16,10 +16,9 @@ namespace Display
 {
 	using namespace Math;
 
-
 	DitheredGreyscaleRenderer::DitheredGreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(framebuffer),
-		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered_greyscale)),
+		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 8, 8, palette_dithered_greyscale)),
 		shade_map()
 	{
 		ClearFrameBuffer();
@@ -58,7 +57,6 @@ namespace Display
 			// exact match
 			if (closest.first == closest.second)
 				shade_map[shade] = { 32, (WORD)(closest.first * 16) };
-		
 
 			uint8_t low_idx = closest.first;
 			uint8_t low_shade = palette_shades[low_idx];
@@ -83,7 +81,6 @@ namespace Display
 			else if (shade_progress >= 0.875f && shade_progress < 1.0f)
 				shade_map[shade] = { 32, (WORD)(high_idx * 16) };
 		}
-
 	}
 
 	void DitheredGreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)

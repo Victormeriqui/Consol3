@@ -45,6 +45,7 @@ namespace Engine
 		{
 		private:
 			Matrix4 model_mat;
+			Matrix4 normal_mat;
 			Matrix4 view_mat;
 			Matrix4 projection_mat;
 			Matrix4 viewport_mat;

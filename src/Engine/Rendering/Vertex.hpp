@@ -41,6 +41,8 @@ namespace Engine
 			[[nodiscard]] Vertex GetLerped(const Vertex& other, float amount) const;
 			Vertex& Lerp(const Vertex& other, float amount);
 
+			Vertex& TransformNormals(const Matrix4& normal_mat);
+
 			constexpr Vertex& operator*= (const Matrix4& mat) noexcept
 			{
 				float x_new = mat.values[0][0] * position.x + mat.values[0][1] * position.y + mat.values[0][2] * position.z + mat.values[0][3] * w;
@@ -52,7 +54,6 @@ namespace Engine
 				position.y = y_new;
 				position.z = z_new;
 				w = w_new;
-				//TODO: normal = ??
 
 				return *this;
 			}
