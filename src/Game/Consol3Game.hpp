@@ -11,9 +11,11 @@
 #include "../Engine/Rendering/Lighting/ILight.hpp"
 #include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
+#include "ModelGenerator.hpp"
 
 #include <cstdint>
 #include <memory>
+#include "ModelGenerator.hpp"
 
 namespace Game
 {
@@ -28,9 +30,12 @@ namespace Game
 	private:
 		Rasterizer& rasterizer;
 		std::shared_ptr<LightingSystem> lighting_system;
+		ModelGenerator model_generator;
 
 		Camera camera;
+
 		StaticMesh mesh;
+		StaticMesh floor;
 
 	public:
 

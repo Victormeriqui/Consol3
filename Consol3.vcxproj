@@ -38,6 +38,7 @@
     <ClCompile Include="src\Engine\Rendering\Transform.cpp" />
     <ClCompile Include="src\Engine\Rendering\Vertex.cpp" />
     <ClCompile Include="src\Game\Consol3Game.cpp" />
+    <ClCompile Include="src\Game\ModelGenerator.cpp" />
     <ClCompile Include="src\Game\MouseInput.cpp" />
     <ClCompile Include="src\Math\Angle.cpp" />
     <ClCompile Include="src\Math\Matrix4.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="src\Engine\Rendering\Transform.hpp" />
     <ClInclude Include="src\Engine\Rendering\Vertex.hpp" />
     <ClInclude Include="src\Game\Consol3Game.hpp" />
+    <ClInclude Include="src\Game\ModelGenerator.hpp" />
     <ClInclude Include="src\Game\MouseInput.hpp" />
     <ClInclude Include="src\Math\Angle.hpp" />
     <ClInclude Include="src\Math\Matrix4.hpp" />
