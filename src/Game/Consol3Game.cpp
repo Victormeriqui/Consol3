@@ -40,7 +40,11 @@ namespace Game
 
 		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 
-		std::shared_ptr<DirectionalLight> dir_light = std::make_shared<DirectionalLight>(Vector3(-1, 0, 0));
+		floor = StaticMesh(model_generator.GeneratePlane(4, 4), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
+		floor.SetScale(Vector3(6, 6, 6));
+		floor.SetPosition(Vector3(-3, -2, -3));
+
+		std::shared_ptr<DirectionalLight> dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
 		lighting_system->AddLight(dir_light);
 	}
 
@@ -120,5 +124,6 @@ namespace Game
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		mesh.DrawMesh(camera, rasterizer);
+		floor.DrawMesh(camera, rasterizer);
 	}
 }

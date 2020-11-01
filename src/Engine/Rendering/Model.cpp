@@ -7,6 +7,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 namespace Engine
 {
@@ -139,6 +140,7 @@ namespace Engine
 				Vertex v2 = vertices[indices[i + 2]];
 
 				rasterizer.DrawLitTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
+				//rasterizer.DrawFilledTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
 			}
 		}
 	}
