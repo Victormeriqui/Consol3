@@ -12,6 +12,7 @@
 #include "../Engine/Rendering/StaticMesh.hpp"
 #include "../Engine/Rendering/Lighting/ILight.hpp"
 #include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
+#include "../Engine/Rendering/Lighting/PointLight.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 
 #include <vector>
@@ -38,6 +39,7 @@ namespace Game
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 		rasterizer.SetLightingSystem(lighting_system);
 
+		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 
 		floor = StaticMesh(model_generator.GeneratePlane(4, 4), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
@@ -45,7 +47,12 @@ namespace Game
 		floor.SetPosition(Vector3(-3, -2, -3));
 
 		std::shared_ptr<DirectionalLight> dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
+		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
+		point_light->SetRange(15.0f);
+
 		lighting_system->AddLight(dir_light);
+		lighting_system->AddLight(point_light);
+		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
 
 	float mov_speed = 0.05f;
@@ -98,7 +105,7 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
-			rot += 0.001f;
+			rot += 0.01f;
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)
@@ -113,8 +120,12 @@ namespace Game
 		}
 	}
 
+	float i = 0;
 	void Consol3Game::Update()
 	{
+		point_light->SetPosition(Vector3(std::sin(i)*2, 0, std::cos(i)*2));
+		plight_mesh.SetPosition(Vector3(std::sin(i)*2, 0, std::cos(i)*2));
+		i += 0.01f;
 	}
 
 	void Consol3Game::Render(int64_t delta)
@@ -124,6 +135,8 @@ namespace Game
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		mesh.DrawMesh(camera, rasterizer);
-		floor.DrawMesh(camera, rasterizer);
+	//	floor.DrawMesh(camera, rasterizer);
+
+		plight_mesh.DrawMesh(camera, rasterizer);
 	}
 }

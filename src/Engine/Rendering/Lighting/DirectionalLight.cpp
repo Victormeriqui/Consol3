@@ -46,9 +46,9 @@ namespace Engine
 			
 			float DirectionalLight::GetLightAmountAt(const Vertex& vertex) const
 			{
-				float value = -direction.GetDotProduct(vertex.GetNormal()) * intensity;
+				float amount = -direction.GetDotProduct(vertex.GetNormal()) * intensity;
 
-				return std::max(0.0f, value);
+				return std::max(0.0f, amount);
 			}
 		}
 	}

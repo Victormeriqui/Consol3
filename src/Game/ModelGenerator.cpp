@@ -26,6 +26,7 @@ namespace Game
 		float tile_width = 1.0f / tile_amount_x;
 		float tile_height = 1.0f / tile_amount_y;
 
+		// prevent vertex duplication
 		for (uint32_t y = 0; y < (tile_amount_y + 1); y++)
 		{
 			for (uint32_t x = 0; x < tile_amount_x + 1; x++)
@@ -36,6 +37,7 @@ namespace Game
 		uint32_t col = 0;
 		for (uint32_t i = 0; i < (vertices.size() - (tile_amount_x + 1)); i++)
 		{
+			// each iteration builds a full square, so the last column isn't needed
 			if (col == tile_amount_x)
 			{
 				col = 0;
