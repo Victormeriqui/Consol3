@@ -47,20 +47,24 @@ namespace Engine
 			Matrix4 model_mat;
 			Matrix4 normal_mat;
 			Matrix4 view_mat;
+			Matrix4 inverse_view_mat;
 			Matrix4 projection_mat;
+			Matrix4 inverse_projection_mat;
 			Matrix4 viewport_mat;
 
 			std::shared_ptr<IRenderer> renderer;
 
-			inline Vertex& TransformVertexMVP(Vertex& vertex);
+			inline Vertex& TransformVertexVP(Vertex& vertex);
+			inline Vertex& TransformVertexM(Vertex& vertex);
+			inline Vertex GetTransformedVertexInverseVP(const Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
 
 			Clipper clipper;
 			std::shared_ptr<LightingSystem> lighting_system;
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
-			void RasterizeFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
-			void RasterizeLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void RasterizeFilledTriangle(DepthBuffer& depthbuffer, const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
+			void RasterizeLitTriangle(DepthBuffer& depthbuffer, const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
 
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
@@ -73,8 +77,8 @@ namespace Engine
 
 			void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
 
-			void DrawFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
-			void DrawLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color);
+			void DrawFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color);
+			void DrawLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color);
 		};
 	}
 }
