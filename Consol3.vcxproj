@@ -31,6 +31,7 @@
     <ClCompile Include="src\Engine\Rendering\Clipper.cpp" />
     <ClCompile Include="src\Engine\Rendering\Lighting\DirectionalLight.cpp" />
     <ClCompile Include="src\Engine\Rendering\Lighting\LightingSystem.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Lighting\PointLight.cpp" />
     <ClCompile Include="src\Engine\Rendering\Rasterizer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="src\Engine\Rendering\Model.cpp" />
@@ -63,6 +64,7 @@
     <ClInclude Include="src\Engine\Rendering\AbstractMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Clipper.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\LightingSystem.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Lighting\PointLight.hpp" />
     <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Camera.hpp" />
     <ClInclude Include="src\Engine\Rendering\Model.hpp" />
