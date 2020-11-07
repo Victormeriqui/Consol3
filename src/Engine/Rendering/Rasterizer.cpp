@@ -42,15 +42,25 @@ namespace Engine
 			this->lighting_system = std::move(lighting_system);
 		}
 
-		Vertex& Rasterizer::TransformVertexMVP(Vertex& vertex)
+		Vertex& Rasterizer::TransformVertexM(Vertex& vertex)
 		{
 			vertex *= model_mat;
 			vertex.TransformNormals(normal_mat);
 
+			return vertex;
+		}
+
+		Vertex& Rasterizer::TransformVertexVP(Vertex& vertex)
+		{
 			vertex *= view_mat;
 			vertex *= projection_mat;
 
 			return vertex;
+		}
+
+		Vertex Rasterizer::GetTransformedVertexInverseVP(const Vertex& vertex)
+		{
+			return (Vertex(vertex) * inverse_projection_mat) * inverse_view_mat;
 		}
 
 		Vertex& Rasterizer::TransformVertexScreenspace(Vertex& vertex)
@@ -75,38 +85,6 @@ namespace Engine
 			return center.GetDotProduct(facenormal) > 0;
 		}
 
-		void Rasterizer::DrawFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
-		{
-			TransformVertexMVP(v0);
-			TransformVertexMVP(v1);
-			TransformVertexMVP(v2);
-
-			if (IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition()))
-				return;
-
-			// if all three position components are inside the view frustum it doesn't need to be clipped
-			if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
-			{
-				RasterizeFilledTriangle(depthbuffer, v0, v1, v2, color);
-				return;
-			}
-
-			// store the verts in a buffer to clip them
-			std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
-			uint8_t vertices_buffer_count = 3;
-
-			bool clip_x_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_X);
-			bool clip_y_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Y);
-			bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
-
-			if (!clip_x_drawable || !clip_y_drawable || !clip_z_drawable)
-				return;
-
-			// draw the polygon as a triangle fan
-			for (uint8_t i = 1; i < vertices_buffer_count - 1; i++)
-				RasterizeFilledTriangle(depthbuffer, vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
-		}
-
 		TriangleEdge::TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& start_point)
 		{
 			// edge function: F(p) = (v_a.y - v_b.y)*start_point.x + (v_b.x - v_a.x)*start_point.y + (v_a.x * v_b.y - v_a.y * v_a.x)
@@ -126,27 +104,77 @@ namespace Engine
 			edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
 		}
 
-		void Rasterizer::RasterizeFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
+		void Rasterizer::DrawFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color)
 		{
-			TransformVertexScreenspace(v0);
-			TransformVertexScreenspace(v1);
-			TransformVertexScreenspace(v2);
+			TransformVertexM(v0);
+			TransformVertexM(v1);
+			TransformVertexM(v2);
 
-			Point2 v0_cliped = Point2(v0.GetPosition());
-			Point2 v1_cliped = Point2(v1.GetPosition());
-			Point2 v2_cliped = Point2(v2.GetPosition());
+			Vertex original_v0 = v0;
+			Vertex original_v1 = v1;
+			Vertex original_v2 = v2;
 
-			uint16_t bb_min_x = std::min({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
-			uint16_t bb_min_y = std::min({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
-			uint16_t bb_max_x = std::max({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
-			uint16_t bb_max_y = std::max({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
+			TransformVertexVP(v0);
+			TransformVertexVP(v1);
+			TransformVertexVP(v2);
 
-			Vector2 point = Vector2(bb_min_x, bb_min_y);
+			if (IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition()))
+				return;
 
-			TriangleEdge edge0 = TriangleEdge(v1_cliped, v2_cliped, point);
-			TriangleEdge edge1 = TriangleEdge(v2_cliped, v0_cliped, point);
-			TriangleEdge edge2 = TriangleEdge(v0_cliped, v1_cliped, point);
-			TriangleEdge area = TriangleEdge(v0_cliped, v1_cliped, v2_cliped);
+			// if all three position components are inside the view frustum it doesn't need to be clipped
+			if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
+			{
+				TransformVertexScreenspace(v0);
+				TransformVertexScreenspace(v1);
+				TransformVertexScreenspace(v2);
+
+				RasterizeFilledTriangle(depthbuffer, v0.GetPosition(), v1.GetPosition(), v2.GetPosition(), original_v0, original_v1, original_v2, color);
+				return;
+			}
+
+			// store the verts in a buffer to clip them
+			std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
+			uint8_t vertices_buffer_count = 3;
+
+			bool clip_x_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_X);
+			bool clip_y_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Y);
+			bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
+
+			if (!clip_x_drawable || !clip_y_drawable || !clip_z_drawable)
+				return;
+
+			// draw the polygon as a triangle fan
+			for (uint8_t i = 1; i < vertices_buffer_count - 1; i++)
+			{
+				Vertex clipped_v0 = vertices_buffer[0];
+				Vertex clipped_v1 = vertices_buffer[i];
+				Vertex clipped_v2 = vertices_buffer[i + 1];
+
+				Vertex clipped_original_v0 = GetTransformedVertexInverseVP(clipped_v0);
+				Vertex clipped_original_v1 = GetTransformedVertexInverseVP(clipped_v1);
+				Vertex clipped_original_v2 = GetTransformedVertexInverseVP(clipped_v2);
+				
+				TransformVertexScreenspace(clipped_v0);
+				TransformVertexScreenspace(clipped_v1);
+				TransformVertexScreenspace(clipped_v2);
+
+				RasterizeFilledTriangle(depthbuffer, clipped_v0.GetPosition(), clipped_v1.GetPosition(), clipped_v2.GetPosition(), clipped_original_v0, clipped_original_v1, clipped_original_v2, color);
+			}
+		}
+
+		void Rasterizer::RasterizeFilledTriangle(DepthBuffer& depthbuffer, const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color)
+		{
+			uint16_t bb_min_x = std::min({ (uint16_t)p0.x, (uint16_t)p1.x, (uint16_t)p2.x });
+			uint16_t bb_min_y = std::min({ (uint16_t)p0.y, (uint16_t)p1.y, (uint16_t)p2.y });
+			uint16_t bb_max_x = std::max({ (uint16_t)p0.x, (uint16_t)p1.x, (uint16_t)p2.x });
+			uint16_t bb_max_y = std::max({ (uint16_t)p0.y, (uint16_t)p1.y, (uint16_t)p2.y });
+
+			Point2 point = Point2(bb_min_x, bb_min_y);
+
+			TriangleEdge edge0 = TriangleEdge(p1, p2, point);
+			TriangleEdge edge1 = TriangleEdge(p2, p0, point);
+			TriangleEdge edge2 = TriangleEdge(p0, p1, point);
+			TriangleEdge area = TriangleEdge(p0, p1, p2);
 
 			if (area.edgefunction_res == 0)
 				return;
@@ -165,7 +193,7 @@ namespace Engine
 						float barcord1 = edge1_mag_xy / (float)area.edgefunction_res;
 						float barcord2 = edge2_mag_xy / (float)area.edgefunction_res;
 
-						float z = barcord0 * v0.GetPosition().z + barcord1 * v1.GetPosition().z + barcord2 * v2.GetPosition().z;
+						float z = barcord0 * p0.z + barcord1 * p1.z + barcord2 * p2.z;
 
 						if (depthbuffer.GetDepth(x, y) > z)
 						{
@@ -186,11 +214,19 @@ namespace Engine
 		}
 
 		//TODO: get rid of code duplication in this class
-		void Rasterizer::DrawLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
+		void Rasterizer::DrawLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color)
 		{
-			TransformVertexMVP(v0);
-			TransformVertexMVP(v1);
-			TransformVertexMVP(v2);
+			TransformVertexM(v0);
+			TransformVertexM(v1);
+			TransformVertexM(v2);
+
+			Vertex original_v0 = v0;
+			Vertex original_v1 = v1;
+			Vertex original_v2 = v2;
+
+			TransformVertexVP(v0);
+			TransformVertexVP(v1);
+			TransformVertexVP(v2);
 
 			if (IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition()))
 				return;
@@ -198,7 +234,11 @@ namespace Engine
 			// if all three position components are inside the view frustum it doesn't need to be clipped
 			if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
 			{
-				RasterizeLitTriangle(depthbuffer, v0, v1, v2, color);
+				TransformVertexScreenspace(v0);
+				TransformVertexScreenspace(v1);
+				TransformVertexScreenspace(v2);
+
+				RasterizeLitTriangle(depthbuffer, v0.GetPosition(), v1.GetPosition(), v2.GetPosition(), original_v0, original_v1, original_v2, color);
 				return;
 			}
 
@@ -215,30 +255,36 @@ namespace Engine
 
 			// draw the polygon as a triangle fan
 			for (uint8_t i = 1; i < vertices_buffer_count - 1; i++)
-				RasterizeLitTriangle(depthbuffer, vertices_buffer[0], vertices_buffer[i], vertices_buffer[i + 1], color);
+			{
+				Vertex clipped_v0 = vertices_buffer[0];
+				Vertex clipped_v1 = vertices_buffer[i];
+				Vertex clipped_v2 = vertices_buffer[i + 1];
+
+				Vertex clipped_original_v0 = GetTransformedVertexInverseVP(clipped_v0);
+				Vertex clipped_original_v1 = GetTransformedVertexInverseVP(clipped_v1);
+				Vertex clipped_original_v2 = GetTransformedVertexInverseVP(clipped_v2);
+
+				TransformVertexScreenspace(clipped_v0);
+				TransformVertexScreenspace(clipped_v1);
+				TransformVertexScreenspace(clipped_v2);
+
+				RasterizeLitTriangle(depthbuffer, clipped_v0.GetPosition(), clipped_v1.GetPosition(), clipped_v2.GetPosition(), clipped_original_v0, clipped_original_v1, clipped_original_v2, color);
+			}
 		}
 
-		void Rasterizer::RasterizeLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, HSVColor color)
+		void Rasterizer::RasterizeLitTriangle(DepthBuffer& depthbuffer, const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color)
 		{
-			TransformVertexScreenspace(v0);
-			TransformVertexScreenspace(v1);
-			TransformVertexScreenspace(v2);
+			uint16_t bb_min_x = std::min({ (uint16_t)p0.x, (uint16_t)p1.x, (uint16_t)p2.x });
+			uint16_t bb_min_y = std::min({ (uint16_t)p0.y, (uint16_t)p1.y, (uint16_t)p2.y });
+			uint16_t bb_max_x = std::max({ (uint16_t)p0.x, (uint16_t)p1.x, (uint16_t)p2.x });
+			uint16_t bb_max_y = std::max({ (uint16_t)p0.y, (uint16_t)p1.y, (uint16_t)p2.y });
 
-			Point2 v0_cliped = Point2(v0.GetPosition());
-			Point2 v1_cliped = Point2(v1.GetPosition());
-			Point2 v2_cliped = Point2(v2.GetPosition());
+			Point2 point = Point2(bb_min_x, bb_min_y);
 
-			uint16_t bb_min_x = std::min({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
-			uint16_t bb_min_y = std::min({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
-			uint16_t bb_max_x = std::max({ v0_cliped.x, v1_cliped.x, v2_cliped.x });
-			uint16_t bb_max_y = std::max({ v0_cliped.y, v1_cliped.y, v2_cliped.y });
-
-			Vector2 point = Vector2(bb_min_x, bb_min_y);
-
-			TriangleEdge edge0 = TriangleEdge(v1_cliped, v2_cliped, point);
-			TriangleEdge edge1 = TriangleEdge(v2_cliped, v0_cliped, point);
-			TriangleEdge edge2 = TriangleEdge(v0_cliped, v1_cliped, point);
-			TriangleEdge area = TriangleEdge(v0_cliped, v1_cliped, v2_cliped);
+			TriangleEdge edge0 = TriangleEdge(p1, p2, point);
+			TriangleEdge edge1 = TriangleEdge(p2, p0, point);
+			TriangleEdge edge2 = TriangleEdge(p0, p1, point);
+			TriangleEdge area = TriangleEdge(p0, p1, p2);
 
 			if (area.edgefunction_res == 0)
 				return;
@@ -257,12 +303,13 @@ namespace Engine
 						float barcord1 = edge1_mag_xy / (float)area.edgefunction_res;
 						float barcord2 = edge2_mag_xy / (float)area.edgefunction_res;
 
-						float z = barcord0 * v0.GetPosition().z + barcord1 * v1.GetPosition().z + barcord2 * v2.GetPosition().z;
+						float z = barcord0 * p0.z + barcord1 * p1.z + barcord2 * p2.z;
 						float light_amount = barcord0 * lighting_system->GetLightAmountAt(v0) +
-							barcord1 * lighting_system->GetLightAmountAt(v1)
-							+ barcord2 * lighting_system->GetLightAmountAt(v2);
+											barcord1 * lighting_system->GetLightAmountAt(v1) +
+											barcord2 * lighting_system->GetLightAmountAt(v2);
 
-						if (depthbuffer.GetDepth(x, y) > z)
+						float depth = depthbuffer.GetDepth(x, y);
+						if (depth > z)
 						{
 							HSVColor lit_color = HSVColor(color.hue, color.saturation, std::min(1.0f, color.value + light_amount + 0.02f));
 							renderer->SetPixel(x, y, lit_color);
@@ -298,14 +345,17 @@ namespace Engine
 		void Rasterizer::SetViewMatrix(const Matrix4& view_matrix)
 		{
 			view_mat = view_matrix;
+			inverse_view_mat = view_mat.GetInverted();
 		}
 
 		void Rasterizer::SetProjectionMatrix(const Matrix4& projection_matrix)
 		{
 			projection_mat = projection_matrix;
+			inverse_projection_mat = projection_mat.GetInverted();
 		}
 
 		void Rasterizer::SetViewportMatrix(const Matrix4& viewport_matrix)
+
 		{
 			viewport_mat = viewport_matrix;
 		}
