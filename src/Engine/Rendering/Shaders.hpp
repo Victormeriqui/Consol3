@@ -13,7 +13,7 @@
 
 // TODO: find a better way to do this, repeating it in the Rasterizer methods arguments is not an option either
 // arguments received by every shader lambda:
-// x, y, z, lighting_system, renderer, barycentric coord 0, barycentric coord 1, barycentric coord 2, triangle { screen pos 0, screen pos 1, screen pos 2, vertex 0, vertex 1, vertex 2 }, color
+// x, y, z, lighting_system, renderer, barycentric coord 0, barycentric coord 1, barycentric coord 2, vertex 0, vertex 1, vertex 2, color
 #define SHADER_ARGUMENTS uint16_t, uint16_t, float, std::shared_ptr<LightingSystem>, std::shared_ptr<IRenderer>, float, float, float, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor&
 
 namespace Engine
