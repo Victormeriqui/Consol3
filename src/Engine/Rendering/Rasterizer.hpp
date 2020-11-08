@@ -13,9 +13,11 @@
 #include "../Rendering/Lighting/ILight.hpp"
 #include "../Rendering/Lighting/DirectionalLight.hpp"
 #include "../Rendering/Lighting/LightingSystem.hpp"
+#include "Shaders.hpp"
 
 #include <cstdint>
 #include <memory>
+#include <functional>
 
 namespace Engine
 {
@@ -41,6 +43,17 @@ namespace Engine
 			TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& point);
 		};
 
+		// wrapper for the paramenters passed to RasterizeTriangle
+		struct Triangle
+		{
+			const Vector3& screen_p0;
+			const Vector3& screen_p1;
+			const Vector3& screen_p2;
+			const Vertex& v0;
+			const Vertex& v1;
+			const Vertex& v2;
+		};
+
 		class Rasterizer
 		{
 		private:
@@ -54,18 +67,19 @@ namespace Engine
 
 			std::shared_ptr<IRenderer> renderer;
 
-			inline Vertex& TransformVertexVP(Vertex& vertex);
-			inline Vertex& TransformVertexM(Vertex& vertex);
-			inline Vertex GetTransformedVertexInverseVP(const Vertex& vertex);
+			inline Vertex& TransformVertexViewProjection(Vertex& vertex);
+			inline Vertex& TransformVertexModel(Vertex& vertex);
+			inline Vertex GetTransformedVertexInverseViewProjection(const Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
 
 			Clipper clipper;
 			std::shared_ptr<LightingSystem> lighting_system;
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
-			void RasterizeFilledTriangle(DepthBuffer& depthbuffer, const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
-			void RasterizeLitTriangle(DepthBuffer& depthbuffer, const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
-
+			
+			void DrawClippedTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color, std::function<void(SHADER_ARGUMENTS)> shader);
+			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, std::function<void(SHADER_ARGUMENTS)> shader);
+			
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
 
@@ -77,8 +91,8 @@ namespace Engine
 
 			void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
 
-			void DrawFilledTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color);
-			void DrawLitTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color);
+			void DrawTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
+			void DrawShadedTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
 		};
 	}
 }

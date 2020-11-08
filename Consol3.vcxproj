@@ -68,6 +68,7 @@
     <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Camera.hpp" />
     <ClInclude Include="src\Engine\Rendering\Model.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders.hpp" />
     <ClInclude Include="src\Engine\Rendering\StaticMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Transform.hpp" />
     <ClInclude Include="src\Engine\Rendering\Vertex.hpp" />

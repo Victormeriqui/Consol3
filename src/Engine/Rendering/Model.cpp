@@ -139,8 +139,8 @@ namespace Engine
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
 
-				rasterizer.DrawLitTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
-				//rasterizer.DrawFilledTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
+				rasterizer.DrawShadedTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
+				//rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
 			}
 		}
 	}
