@@ -12,6 +12,7 @@
 #include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 #include "../Engine/Rendering/Lighting/PointLight.hpp"
+#include "../Engine/Rendering/Lighting/SpotLight.hpp"
 #include "ModelGenerator.hpp"
 
 #include <cstdint>
@@ -39,6 +40,7 @@ namespace Game
 		StaticMesh floor;
 
 		std::shared_ptr<PointLight> point_light;
+		std::shared_ptr<SpotLight> spot_light;
 		StaticMesh plight_mesh;
 
 	public:

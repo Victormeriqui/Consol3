@@ -50,6 +50,8 @@ namespace Engine
 			void SetPosition(const Vector3& position);
 			[[nodiscard]] Vector3 GetPosition() const;
 
+			[[nodiscard]] Vector3 GetLookDirection() const;
+
 			void SetRotation(const Angle& rotation_ang);
 			[[nodiscard]] Quaternion GetRotation() const;
 

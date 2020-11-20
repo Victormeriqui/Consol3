@@ -40,18 +40,28 @@ namespace Game
 		rasterizer.SetLightingSystem(lighting_system);
 
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
-		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh(Model("res/bunny.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh.SetScale(Vector3(10, 10, 10));
 
-		floor = StaticMesh(model_generator.GeneratePlane(4, 4), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
+		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(6, 6, 6));
 		floor.SetPosition(Vector3(-3, -2, -3));
 
 		std::shared_ptr<DirectionalLight> dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
+		dir_light->SetIntensity(1.0f);
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
 		point_light->SetRange(15.0f);
 
+		spot_light = std::make_shared<SpotLight>(Vector3(0, 0.1f, -2.0f), Vector3(0, 0, 1));
+		spot_light->SetRange(15.0f);
+		spot_light->SetAngle(15);
+		spot_light->SetIntensity(5.0f);
+
+
 		lighting_system->AddLight(dir_light);
-		lighting_system->AddLight(point_light);
+		//lighting_system->AddLight(point_light);
+		lighting_system->AddLight(spot_light);
+
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
 
@@ -125,6 +135,8 @@ namespace Game
 	{
 		point_light->SetPosition(Vector3(std::sin(i)*2, 0, std::cos(i)*2));
 		plight_mesh.SetPosition(Vector3(std::sin(i)*2, 0, std::cos(i)*2));
+		spot_light->SetPosition(camera.GetPosition());
+		spot_light->SetDirection(camera.GetLookDirection());
 		i += 0.01f;
 	}
 
@@ -135,8 +147,8 @@ namespace Game
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		mesh.DrawMesh(camera, rasterizer);
-	//	floor.DrawMesh(camera, rasterizer);
+		floor.DrawMesh(camera, rasterizer);
 
-		plight_mesh.DrawMesh(camera, rasterizer);
+//		plight_mesh.DrawMesh(camera, rasterizer);
 	}
 }

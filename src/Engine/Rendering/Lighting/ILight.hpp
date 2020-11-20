@@ -9,6 +9,13 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			struct Attenuation
+			{
+				float a;
+				float b;
+				float c;
+			};
+
 			class ILight
 			{
 			protected:
