@@ -1,5 +1,5 @@
-#ifndef POINTLIGHT_HPP
-#define POINTLIGHT_HPP
+#ifndef SPOTLIGHT_HPP
+#define SPOTLIGHT_HPP
 
 #include "ILight.hpp"
 #include "../Vertex.hpp"
@@ -11,25 +11,33 @@ namespace Engine
 	{
 		namespace Lighting
 		{
-			class PointLight : public ILight
+			class SpotLight : public ILight
 			{
 			private:
 				Vector3 position;
+				Vector3 direction;
+				float angle;
 				Attenuation attenuation;
-				
+
 				float range;
 				float intensity;
 
 			public:
-				PointLight();
-				PointLight(const Vector3& position);
-				PointLight(const Vector3& position, float range);
+				SpotLight();
+				SpotLight(const Vector3& position, const Vector3& direction);
+				SpotLight(const Vector3& position, const Vector3& direction, float range);
 
 				[[nodiscard]] Vector3 GetPosition() const;
 				void SetPosition(const Vector3& position);
 
+				[[nodiscard]] Vector3 GetDirection() const;
+				void SetDirection(const Vector3& direction);
+
 				[[nodiscard]] float GetRange() const;
 				void SetRange(float range);
+
+				[[nodiscard]] float GetAngle() const;
+				void SetAngle(float angle);
 
 				[[nodiscard]] float GetIntensity() const;
 				void SetIntensity(float intensity);

@@ -101,6 +101,11 @@ namespace Engine
 			return position;
 		}
 
+		Vector3 Camera::GetLookDirection() const
+		{
+			return rotation.GetForwardVector();
+		}
+
 		void Camera::SetRotation(const Angle& rotation_ang)
 		{
 			// we store the rotation quaternion which is the camera rotation in the world

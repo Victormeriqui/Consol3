@@ -18,7 +18,7 @@ namespace Display
 		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Terminal", 4, 4, palette_textonly)),
 		shades({' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219}),
 		//shades(" .:-=+*#%@"),
-		shades_count(shades.length())
+		shades_count((uint8_t)shades.length())
 	{
 		ClearFrameBuffer();
 	}
