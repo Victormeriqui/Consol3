@@ -6,29 +6,14 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		StaticMesh::StaticMesh() : AbstractMesh()
-		{
-		}
 
-		StaticMesh::StaticMesh(const Model& model, const Vector3& position) : AbstractMesh(model, position)
-		{
-		}
-
-		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const RGBColor& color) : AbstractMesh(model, position, color)
-		{
-		}
-
-		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const Angle& rotation) : AbstractMesh(model, position, rotation)
-		{
-		}
-
-		StaticMesh::StaticMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color) : AbstractMesh(model, position, rotation, color)
-		{
-		}
 
 		void StaticMesh::DrawMesh(Camera& camera, Rasterizer& rasterizer) const
 		{
-			model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, hsvcolor);
+			if (has_texture)
+				model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, std::make_shared<Texture>(texture), hsvcolor);
+			else
+				model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, hsvcolor);
 		}
 	}
 }

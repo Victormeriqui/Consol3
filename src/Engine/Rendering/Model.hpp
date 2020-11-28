@@ -5,12 +5,14 @@
 #include "Transform.hpp"
 #include "Rasterizer.hpp"
 #include "../../Display/HSVColor.hpp"
+#include "Texture.hpp"
+#include "DepthBuffer.hpp"
 
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <memory>
 
-#include "DepthBuffer.hpp"
 
 namespace Engine
 {
@@ -35,6 +37,7 @@ namespace Engine
 			[[nodiscard]] std::vector<uint32_t> GetIndices() const;
 
 			void DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const HSVColor& color) const;
+			void DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const;
 		};
 	}
 }

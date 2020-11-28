@@ -38,11 +38,10 @@ namespace Game
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 		rasterizer.SetLightingSystem(lighting_system);
-
+		mesh = StaticMesh(Model("res/cube.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh.SetScale(Vector3(1, 1, 1));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
-		mesh = StaticMesh(Model("res/bunny.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		mesh.SetScale(Vector3(10, 10, 10));
-
+	
 		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(6, 6, 6));
 		floor.SetPosition(Vector3(-3, -2, -3));
@@ -59,8 +58,8 @@ namespace Game
 
 
 		lighting_system->AddLight(dir_light);
-		//lighting_system->AddLight(point_light);
-		lighting_system->AddLight(spot_light);
+	//	lighting_system->AddLight(point_light);
+		//lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -147,8 +146,8 @@ namespace Game
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		mesh.DrawMesh(camera, rasterizer);
-		floor.DrawMesh(camera, rasterizer);
+		//floor.DrawMesh(camera, rasterizer);
 
-//		plight_mesh.DrawMesh(camera, rasterizer);
+	//	plight_mesh.DrawMesh(camera, rasterizer);
 	}
 }

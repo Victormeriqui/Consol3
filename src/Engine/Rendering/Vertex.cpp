@@ -46,6 +46,18 @@ namespace Engine
 			return *this;
 		}
 
+		Vector2 Vertex::GetUV() const
+		{
+			return uv;
+		}
+
+		Vertex& Vertex::SetUV(const Vector2& uv)
+		{
+			this->uv = uv;
+
+			return *this;
+		}
+
 		Vertex& Vertex::TransformNormals(const Matrix4& normal_mat)
 		{
 			float norm_x_new = normal_mat.values[0][0] * normal.x + normal_mat.values[0][1] * normal.y + normal_mat.values[0][2] * normal.z;
@@ -85,6 +97,8 @@ namespace Engine
 		{
 			position.Lerp(other.GetPosition(), amount);
 			normal.Lerp(other.GetNormal(), amount);
+			uv.Lerp(other.GetUV(), amount);
+
 			w = Util::Lerp(amount, w, other.GetW());
 
 			return *this;

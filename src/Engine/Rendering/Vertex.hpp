@@ -2,6 +2,7 @@
 #define VERTEX_HPP
 
 #include "../../Math/Vector3.hpp"
+#include "../../Math/Vector2.hpp"
 #include "../../Math/Matrix4.hpp"
 
 namespace Engine
@@ -18,11 +19,14 @@ namespace Engine
 			float w;
 
 			Vector3 normal;
+			Vector2 uv;
 
 		public:
-			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()) {}
-			constexpr Vertex(Vector3 position) : position(position), w(1), normal(Vector3(0, 0, 0)) {}
-			constexpr Vertex(Vector3 position, Vector3 normal) : position(position), w(1), normal(normal) {};
+			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()), uv(Vector2()) {}
+			constexpr Vertex(const Vector3& position) : position(position), w(1), normal(Vector3(0, 0, 0)), uv(Vector2()) {}
+			constexpr Vertex(const Vector3& position, const Vector3& normal) : position(position), w(1), normal(normal), uv(Vector2()) {};
+			constexpr Vertex(const Vector3& position, const Vector2& uv) : position(position), w(1), normal(Vector3(0, 0, 0)), uv(uv) {}
+			constexpr Vertex(const Vector3& position, const Vector3& normal, const Vector2& uv) : position(position), w(1), normal(normal), uv(uv) {};
 
 			[[nodiscard]] Vector3 GetPosition() const;
 			Vertex& SetPosition(const Vector3& position);
@@ -32,6 +36,9 @@ namespace Engine
 
 			[[nodiscard]] float GetW() const;
 			Vertex& SetW(float w);
+
+			[[nodiscard]] Vector2 GetUV() const;
+			Vertex& SetUV(const Vector2& uv);
 
 			[[nodiscard]] Vertex GetPerspectiveDivided() const;
 			Vertex& PerspectiveDivide();

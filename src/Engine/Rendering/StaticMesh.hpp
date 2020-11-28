@@ -11,11 +11,7 @@ namespace Engine
 		class StaticMesh : public AbstractMesh
 		{
 		public:
-			StaticMesh();
-			StaticMesh(const Model& model, const Vector3& position);
-			StaticMesh(const Model& model, const Vector3& position, const RGBColor& color);
-			StaticMesh(const Model& model, const Vector3& position, const Angle& rotation);
-			StaticMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color);
+			using AbstractMesh::AbstractMesh;
 
 			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const;
 		};

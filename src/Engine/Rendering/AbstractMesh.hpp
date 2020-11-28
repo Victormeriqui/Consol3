@@ -8,6 +8,7 @@
 #include "../../Math/Angle.hpp"
 #include "Transform.hpp"
 #include "Camera.hpp"
+#include "Texture.hpp"
 
 namespace Engine
 {
@@ -20,6 +21,8 @@ namespace Engine
 		{
 		protected:
 			Model model;
+			Texture texture;
+			bool has_texture;
 
 			// rgb color is the one that is actually exposed, hsvcolor is internal for the frambuffer
 			RGBColor rgbcolor;
@@ -31,20 +34,28 @@ namespace Engine
 			Angle rotation;
 			Vector3 scale;
 
+		public:
+			
 			AbstractMesh();
 			AbstractMesh(const Model& model, const Vector3& position);
 			AbstractMesh(const Model& model, const Vector3& position, const RGBColor& color);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation);
 			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color);
 
-		public:
+			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position);
+			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const RGBColor& color);
+			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const Angle& rotation);
+			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const Angle& rotation, const RGBColor& color);
+
 			[[nodiscard]] Model GetModel() const;
+			[[nodiscard]] Texture GetTexture() const;
 			[[nodiscard]] RGBColor GetColor() const;
 			[[nodiscard]] Vector3 GetPosition() const;
 			[[nodiscard]] Angle GetRotation() const;
 			[[nodiscard]] Vector3 GetScale() const;
 
 			AbstractMesh& SetModel(const Model& model);
+			AbstractMesh& SetTexture(const Texture& texture);
 			AbstractMesh& SetColor(const RGBColor& color);
 			AbstractMesh& SetPosition(const Vector3& position);
 			AbstractMesh& SetRotation(const Angle& rotation);
