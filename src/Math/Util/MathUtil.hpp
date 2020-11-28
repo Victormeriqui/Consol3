@@ -24,9 +24,11 @@ namespace Math
 			return (1 - val) * min + val * max;
 		}
 
-		[[nodiscard]] constexpr inline static uint8_t LerpToIndex(float val, uint8_t min, uint8_t max)
+
+		template <class T>
+		[[nodiscard]] constexpr inline static T LerpCast(float val, T min, T max)
 		{
-			return (uint8_t)((1 - val) * min + val * max);
+			return (T)((1 - val) * min + val * max);
 		}
 	}
 }

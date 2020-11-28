@@ -25,21 +25,27 @@ namespace Display
 		// white/black
 		if (color.saturation <= 0.25f)
 		{
-			uint8_t shade_index = Util::LerpToIndex(color.value, 0, 15);
+			uint8_t shade_index = Util::LerpCast<uint8_t>(color.value, 0, 15);
 
 			framebuffer->SetPixel(x, y, dithered_white[shade_index]);
+			return;
 		}
 
+		// TODO: this shouldn't be a linear interpolation as the shade_indexes are not linear
+		// the shade amount should be pre calculated and this should be made into a binary search
+		uint8_t shade_index = Util::LerpCast<uint8_t>(color.value, 0, 10);
+
+		// special red case because it wraps over the 360 mark
+		if (color.hue >= dithered_red.min_hue || color.hue <= dithered_red.max_hue)
+			framebuffer->SetPixel(x, y, dithered_red.color_shades[shade_index]);
+		
 		// select color by hue
-		for (const DitheredColor& dithered_color : dithered_colors)
+		for (const DitheredColor& dithered_color : sequential_dithered_colors)
 		{
 			if (dithered_color.min_hue <= color.hue && color.hue <= dithered_color.max_hue)
 			{
-				// TODO: this shouldn't be a linear interpolation as the shade_indexes are not linear
-				// the shade amount should be pre calculated and this should be made into a binary search
-				uint8_t shade_index = Util::LerpToIndex(color.value, 0, 10);
-
 				framebuffer->SetPixel(x, y, dithered_color.color_shades[shade_index]);
+				break;
 			}
 		}
 	}

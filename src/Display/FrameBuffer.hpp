@@ -12,12 +12,17 @@ namespace Display
 	class FrameBuffer
 	{
 	protected:
-		const uint16_t width;
-		const uint16_t height;
+		uint16_t width;
+		uint16_t height;
 
 		std::vector<T> buffer;
 
 	public:
+
+		FrameBuffer() : width(0), height(0)
+		{
+			buffer = std::vector<T>(width * height, T());
+		}
 
 		FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
 		{
