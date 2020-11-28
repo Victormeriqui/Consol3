@@ -14,6 +14,7 @@
 #include "../Rendering/Lighting/DirectionalLight.hpp"
 #include "../Rendering/Lighting/LightingSystem.hpp"
 #include "Shaders.hpp"
+#include "Texture.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -67,13 +68,14 @@ namespace Engine
 
 			std::shared_ptr<IRenderer> renderer;
 
+			Clipper clipper;
+			std::shared_ptr<LightingSystem> lighting_system;
+			std::shared_ptr<Texture> active_texture;
+
 			inline Vertex& TransformVertexViewProjection(Vertex& vertex);
 			inline Vertex& TransformVertexModel(Vertex& vertex);
 			inline Vertex GetTransformedVertexInverseViewProjection(const Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
-
-			Clipper clipper;
-			std::shared_ptr<LightingSystem> lighting_system;
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
 			
@@ -90,9 +92,11 @@ namespace Engine
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
 			void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
+			void SetActiveTexture(std::shared_ptr<Texture> texture);
 
 			void DrawTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
 			void DrawShadedTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
+			void DrawTexturedTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
 		};
 	}
 }

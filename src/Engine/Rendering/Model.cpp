@@ -3,6 +3,7 @@
 #include "Transform.hpp"
 #include "Rasterizer.hpp"
 #include "DepthBuffer.hpp"
+#include "../../Math/Vector2.hpp"
 
 #include <string>
 #include <fstream>
@@ -54,12 +55,15 @@ namespace Engine
 
 			std::vector<std::string> line_split;
 
+			std::vector<Vector3> normals;
+			std::vector<Vector2> uvs;
+
 			while (std::getline(file_stream, line))
 			{
 				line_split = SplitString(line, ' ');
 
-				// ignore lines that arent "v 1 2 3" or "f 1 2 3"
-				if (line_split.size() != 4)
+	
+				if (line_split.size() > 5 || line_split.empty())
 					continue;
 
 				if (line_split[0] == "v")
@@ -71,17 +75,96 @@ namespace Engine
 					vertices.push_back(Vertex(Vector3(x, y, z)));
 				}
 
+				if (line_split[0] == "vt")
+				{
+					float u = std::stof(line_split[1]);
+					float v = std::stof(line_split[2]);
+					
+					uvs.push_back(Math::Vector2(u, v));
+				}
+
+				if (line_split[0] == "vn")
+				{
+					float x = std::stof(line_split[1]);
+					float y = std::stof(line_split[2]);
+					float z = std::stof(line_split[3]);
+
+					normals.push_back(Vector3(x, y, z));
+				}
+
 				if (line_split[0] == "f")
 				{
 					// each face value can have textures or normal indices, we're only interested in the vertices (first before /)
 					// - 1 for 0 based array indices
-					uint32_t v0 = std::stoul(SplitString(line_split[1], '/')[0]) - 1;
-					uint32_t v1 = std::stoul(SplitString(line_split[2], '/')[0]) - 1;
-					uint32_t v2 = std::stoul(SplitString(line_split[3], '/')[0]) - 1;
+					std::vector<std::string> face0 = SplitString(line_split[1], '/');
+					std::vector<std::string> face1 = SplitString(line_split[2], '/');
+					std::vector<std::string> face2 = SplitString(line_split[3], '/');
 
+					int slashes = std::count(line_split[1].begin(), line_split[1].end(), '/');
+					bool has_empty_mid = line_split[1].find("//") != std::string::npos;
+
+					uint32_t v0 = std::stoul(face0[0]) - 1;
+					uint32_t v1 = std::stoul(face1[0]) - 1;
+					uint32_t v2 = std::stoul(face2[0]) - 1;
+
+					bool has_uv = false;
+					uint32_t uv0 = 0;
+					uint32_t uv1 = 0;
+					uint32_t uv2 = 0;
+
+					bool has_normal = false;
+					uint32_t norm0 = 0;
+					uint32_t norm1 = 0;
+					uint32_t norm2 = 0;
+
+					
+					switch (slashes)
+					{
+					case 1:
+						has_uv = true;
+						uv0 = std::stoul(face0[1]) - 1;
+						uv1 = std::stoul(face1[1]) - 1;
+						uv2 = std::stoul(face2[1]) - 1;
+						break;
+					case 2:
+						if (!has_empty_mid)
+						{
+							has_uv = true;
+							uv0 = std::stoul(face0[1]) - 1;
+							uv1 = std::stoul(face1[1]) - 1;
+							uv2 = std::stoul(face2[1]) - 1;
+
+							has_normal = true;
+							norm0 = std::stoul(face0[2]) - 1;
+							norm1 = std::stoul(face1[2]) - 1;
+							norm2 = std::stoul(face2[2]) - 1;
+						}
+						else
+						{
+							has_normal = true;
+							norm0 = std::stoul(face0[1]) - 1;
+							norm1 = std::stoul(face1[1]) - 1;
+							norm2 = std::stoul(face2[1]) - 1;
+						}
+						break;
+					}
+					
 					indices.push_back(v0);
 					indices.push_back(v1);
 					indices.push_back(v2);
+
+					if (has_uv)
+					{
+						vertices[v0].SetUV(uvs[uv0]);
+						vertices[v1].SetUV(uvs[uv1]);
+						vertices[v2].SetUV(uvs[uv2]);
+					}
+					if (has_normal)
+					{
+						vertices[v0].SetNormal(normals[norm0]);
+						vertices[v1].SetNormal(normals[norm1]);
+						vertices[v2].SetNormal(normals[norm2]);
+					}
 				}
 			}
 
@@ -139,8 +222,27 @@ namespace Engine
 				Vertex v1 = vertices[indices[i + 1]];
 				Vertex v2 = vertices[indices[i + 2]];
 
-				rasterizer.DrawShadedTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
+				//rasterizer.DrawShadedTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
 				//rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
+				
+
+				rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
+			}
+		}
+
+		void Model::DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const
+		{
+			srand(1004);
+			rasterizer.SetModelMatrix(transform);
+			rasterizer.SetActiveTexture(texture);
+
+			for (uint32_t i = 0; i < indices.size(); i += 3)
+			{
+				Vertex v0 = vertices[indices[i]];
+				Vertex v1 = vertices[indices[i + 1]];
+				Vertex v2 = vertices[indices[i + 2]];
+
+				rasterizer.DrawTexturedTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
 			}
 		}
 	}

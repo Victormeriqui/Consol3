@@ -42,7 +42,7 @@ namespace Display
 
 			float chroma = r - std::min(g, b);
 
-			hue = std::fabs(k + (g - b) / (6.0f * chroma + 1e-20f));
+			hue = std::fabs(k + (g - b) / (6.0f * chroma + 1e-20f)) * 360.0f;
 			saturation = chroma / (r + 1e-20f);
 			value = r;
 		}

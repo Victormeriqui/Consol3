@@ -43,6 +43,11 @@ namespace Engine
 			this->lighting_system = std::move(lighting_system);
 		}
 
+		void Rasterizer::SetActiveTexture(std::shared_ptr<Texture> texture)
+		{
+			this->active_texture = texture;
+		}
+
 		Vertex& Rasterizer::TransformVertexModel(Vertex& vertex)
 		{
 			vertex *= model_mat;
@@ -115,6 +120,11 @@ namespace Engine
 			DrawClippedTriangle(depthbuffer, v0, v1, v2, color, Shaders::shaded_color_shader);
 		}
 
+		void Rasterizer::DrawTexturedTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color)
+		{
+			DrawClippedTriangle(depthbuffer, v0, v1, v2, color, Shaders::fixed_texture_shader);
+		}
+
 		void Rasterizer::DrawClippedTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color, std::function<void(SHADER_ARGUMENTS)> shader)
 		{
 			TransformVertexModel(v0);
@@ -135,6 +145,11 @@ namespace Engine
 			// if all three position components are inside the view frustum it doesn't need to be clipped
 			if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
 			{
+
+				original_v0.SetW(v0.GetW());
+				original_v1.SetW(v1.GetW());
+				original_v2.SetW(v2.GetW());
+
 				TransformVertexScreenspace(v0);
 				TransformVertexScreenspace(v1);
 				TransformVertexScreenspace(v2);
@@ -174,6 +189,12 @@ namespace Engine
 				Vertex clipped_original_v0 = GetTransformedVertexInverseViewProjection(clipped_v0);
 				Vertex clipped_original_v1 = GetTransformedVertexInverseViewProjection(clipped_v1);
 				Vertex clipped_original_v2 = GetTransformedVertexInverseViewProjection(clipped_v2);
+
+
+				clipped_original_v0.SetW(clipped_v0.GetW());
+				clipped_original_v1.SetW(clipped_v1.GetW());
+				clipped_original_v2.SetW(clipped_v2.GetW());
+
 
 				TransformVertexScreenspace(clipped_v0);
 				TransformVertexScreenspace(clipped_v1);
@@ -230,8 +251,9 @@ namespace Engine
 					
 						if (depthbuffer.GetDepth(x, y) > z)
 						{
-							shader(x, y, z, lighting_system, renderer, barcoord0, barcoord1, barcoord2, triangle.v0, triangle.v1, triangle.v2, color);
+							shader(x, y, z, lighting_system, renderer, barcoord0, barcoord1, barcoord2, triangle.v0, triangle.v1, triangle.v2, color, active_texture);
 							depthbuffer.SetDepth(x, y, z);
+							//renderer->DisplayFrame();
 						}
 					}
 
@@ -244,6 +266,7 @@ namespace Engine
 				edge1.edgefunction_res += edge1.step_delta_y;
 				edge2.edgefunction_res += edge2.step_delta_y;
 			}
+		
 		}
 
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)

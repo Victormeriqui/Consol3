@@ -24,6 +24,7 @@
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
     <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
     <ClCompile Include="src\Display\TextOnlyRenderer.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Texture.cpp" />
     <ClCompile Include="src\Engine\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="src\Display\DitheredRenderer.cpp" />
     <ClCompile Include="src\Display\GreyscaleRenderer.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Texture.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\DirectionalLight.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\ILight.hpp" />
     <ClInclude Include="src\Engine\Rendering\DepthBuffer.hpp" />
