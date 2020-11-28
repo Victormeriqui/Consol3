@@ -18,7 +18,7 @@ namespace Display
 
 	DitheredGreyscaleRenderer::DitheredGreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(framebuffer),
-		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 8, 8, palette_dithered_greyscale)),
+		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered_greyscale)),
 		shade_map()
 	{
 		ClearFrameBuffer();
@@ -85,7 +85,7 @@ namespace Display
 
 	void DitheredGreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
 	{
-		uint8_t shade = Util::LerpToIndex(color.value, 0, 255);
+		uint8_t shade = Util::LerpCast<uint8_t>(color.value, 0, 255);
 		framebuffer->SetPixel(x, y, shade_map[shade]);
 	}
 

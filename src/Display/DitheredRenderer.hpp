@@ -35,8 +35,8 @@ namespace Display
 
 	static const DitheredColor dithered_red =
 	{
-		0,
-		60,
+		331,
+		30,
 		{
 			{(WCHAR)32, 0x00},
 			{(WCHAR)176, 0x04},
@@ -52,48 +52,11 @@ namespace Display
 		}
 	};
 
-	static const DitheredColor dithered_green =
-	{
-		61,
-		120,
-		{
-			{(WCHAR)32, 0x00},
-			{(WCHAR)176, 0x02},
-			{(WCHAR)177, 0x02},
-			{(WCHAR)177, 0x20},
-			{(WCHAR)176, 0x20},
-			{(WCHAR)32, 0x20},
-			{(WCHAR)176, 0x2A},
-			{(WCHAR)177, 0x2A},
-			{(WCHAR)177, 0xA2},
-			{(WCHAR)176, 0xA2},
-			{(WCHAR)32, 0xA2}
-		}
-	};
-
-	static const DitheredColor dithered_blue =
-	{
-		121,
-		180,
-		{
-			{(WCHAR)32, 0x00},
-			{(WCHAR)176, 0x01},
-			{(WCHAR)177, 0x01},
-			{(WCHAR)177, 0x10},
-			{(WCHAR)176, 0x10},
-			{(WCHAR)32, 0x10},
-			{(WCHAR)176, 0x19},
-			{(WCHAR)177, 0x19},
-			{(WCHAR)177, 0x91},
-			{(WCHAR)176, 0x91},
-			{(WCHAR)32, 0x91}
-		}
-	};
 
 	static const DitheredColor dithered_yellow =
 	{
-		181,
-		240,
+		31,
+		90,
 		{
 			{(WCHAR)32, 0x00},
 			{(WCHAR)176, 0x06},
@@ -109,10 +72,30 @@ namespace Display
 		}
 	};
 
+
+	static const DitheredColor dithered_green =
+	{
+		61,
+		150,
+		{
+			{(WCHAR)32, 0x00},
+			{(WCHAR)176, 0x02},
+			{(WCHAR)177, 0x02},
+			{(WCHAR)177, 0x20},
+			{(WCHAR)176, 0x20},
+			{(WCHAR)32, 0x20},
+			{(WCHAR)176, 0x2A},
+			{(WCHAR)177, 0x2A},
+			{(WCHAR)177, 0xA2},
+			{(WCHAR)176, 0xA2},
+			{(WCHAR)32, 0xA2}
+		}
+	}; 
+
 	static const DitheredColor dithered_cyan =
 	{
-		241,
-		300,
+		151,
+		210,
 		{
 			{(WCHAR)32, 0x00},
 			{(WCHAR)176, 0x03},
@@ -128,10 +111,31 @@ namespace Display
 		}
 	};
 
+
+	static const DitheredColor dithered_blue =
+	{
+		211,
+		270,
+		{
+			{(WCHAR)32, 0x00},
+			{(WCHAR)176, 0x01},
+			{(WCHAR)177, 0x01},
+			{(WCHAR)177, 0x10},
+			{(WCHAR)176, 0x10},
+			{(WCHAR)32, 0x10},
+			{(WCHAR)176, 0x19},
+			{(WCHAR)177, 0x19},
+			{(WCHAR)177, 0x91},
+			{(WCHAR)176, 0x91},
+			{(WCHAR)32, 0x91}
+		}
+	};
+
+	
 	static const DitheredColor dithered_magenta =
 	{
-		301,
-		360,
+		271,
+		330,
 		{
 			{(WCHAR)32, 0x00},
 			{(WCHAR)176, 0x05},
@@ -168,8 +172,8 @@ namespace Display
 
 	static const CHAR_INFO dithered_black = { (WCHAR)32, 0x00 };
 
-	// excludes white and black (not determined by hue)
-	static const std::vector<DitheredColor> dithered_colors = { dithered_red, dithered_green, dithered_blue, dithered_yellow, dithered_cyan, dithered_magenta };
+	// excludes white and black (not determined by hue), and red (wraps over)
+	static const std::vector<DitheredColor> sequential_dithered_colors = { dithered_green, dithered_blue, dithered_yellow, dithered_cyan, dithered_magenta };
 
 	class DitheredRenderer : public IRenderer
 	{

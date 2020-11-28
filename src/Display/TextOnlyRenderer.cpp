@@ -26,7 +26,7 @@ namespace Display
 	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
 	{
 
-		uint8_t index = Math::Util::LerpToIndex(color.value, 0, shades_count-1);
+		uint8_t index = Math::Util::LerpCast<uint8_t>(color.value, 0, shades_count-1);
 
 		framebuffer->SetPixel(x, y, { (WCHAR)shades[index], 0x0F });
 	
