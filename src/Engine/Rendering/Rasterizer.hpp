@@ -9,7 +9,7 @@
 #include "Transform.hpp"
 #include "Clipper.hpp"
 #include "DepthBuffer.hpp"
-#include "Shaders/AbstractShader.hpp"
+#include "Shaders/IShader.hpp"
 #include "VertexBuffer.hpp"
 #include "Triangle.hpp"
 
@@ -47,8 +47,8 @@ namespace Engine
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
 			
-			void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const AbstractShader& frag_shader);
-			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const AbstractShader& frag_shader);
+			void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const IShader& frag_shader);
+			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const IShader& frag_shader);
 			
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
@@ -59,7 +59,7 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const AbstractShader& frag_shader);
+			void DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const IShader& frag_shader);
 		};
 	}
 }

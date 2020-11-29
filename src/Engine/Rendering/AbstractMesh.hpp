@@ -11,6 +11,8 @@
 #include "Texture.hpp"
 #include "Lighting/LightingSystem.hpp"
 
+#include <memory>
+
 namespace Engine
 {
 	namespace Rendering
@@ -64,7 +66,7 @@ namespace Engine
 			AbstractMesh& SetScale(const Vector3& scale);
 
 			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const = 0;
-			virtual void DrawShadedMesh(Camera& camera, const LightingSystem& lighting_system, Rasterizer& rasterizer) const = 0;
+			virtual void DrawShadedMesh(Camera& camera, std::shared_ptr<LightingSystem> lighting_system, Rasterizer& rasterizer) const = 0;
 		};
 	}
 }

@@ -17,7 +17,7 @@
 
 #include <cstdint>
 #include <memory>
-#include "ModelGenerator.hpp"
+#include <chrono>
 
 namespace Game
 {
@@ -31,7 +31,7 @@ namespace Game
 	{
 	private:
 		Rasterizer& rasterizer;
-		LightingSystem lighting_system;
+		std::shared_ptr<LightingSystem> lighting_system;
 		ModelGenerator model_generator;
 
 		Camera camera;
@@ -49,7 +49,7 @@ namespace Game
 
 		void HandleInput();
 		void Update();
-		void Render(int64_t delta);
+		std::chrono::milliseconds Render(int64_t delta);
 	};
 }
 

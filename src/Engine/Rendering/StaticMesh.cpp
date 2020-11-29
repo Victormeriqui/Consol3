@@ -2,6 +2,8 @@
 
 #include "Camera.hpp"
 
+#include <memory>
+
 namespace Engine
 {
 	namespace Rendering
@@ -14,7 +16,7 @@ namespace Engine
 				model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, hsvcolor);
 		}
 
-		void StaticMesh::DrawShadedMesh(Camera& camera, const LightingSystem& lighting_system, Rasterizer& rasterizer) const
+		void StaticMesh::DrawShadedMesh(Camera& camera, std::shared_ptr<LightingSystem> lighting_system, Rasterizer& rasterizer) const
 		{
 			if (has_texture)
 				model.DrawTexturedAndShadedModel(transform, camera.GetDepthBuffer(), rasterizer, lighting_system, std::make_shared<Texture>(texture), hsvcolor);

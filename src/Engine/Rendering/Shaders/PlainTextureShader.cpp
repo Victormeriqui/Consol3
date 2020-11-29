@@ -13,10 +13,13 @@ namespace Engine
 	{
 		namespace Shaders
 		{
+			void PlainTextureShader::SetTexture(std::shared_ptr<Texture> texture)
+			{
+				this->texture = texture;
+			}
+
 			void PlainTextureShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const
 			{
-				std::shared_ptr<Texture> texture = std::static_pointer_cast<Texture>(GetFragmentData(std::string("texture")));
-
 				Vector2 v0_texture_coord = triangle.v0.GetTextureCoords();
 				Vector2 v1_texture_coord = triangle.v1.GetTextureCoords();
 				Vector2 v2_texture_coord = triangle.v2.GetTextureCoords();

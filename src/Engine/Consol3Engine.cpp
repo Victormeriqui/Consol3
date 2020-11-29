@@ -78,7 +78,7 @@ namespace Engine
 			// accumulated more than 1 second elapsed time
 			if (accumulated_delta > 1000)
 			{
-				renderer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
+				//renderer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
 				frame_count = 0;
 				accumulated_delta = 0;
 			}
@@ -102,7 +102,7 @@ namespace Engine
 	{
 		renderer->ClearFrameBuffer();
 
-		game.Render(delta);
+		renderer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(game.Render(delta).count()));
 
 		renderer->DisplayFrame();
 	}

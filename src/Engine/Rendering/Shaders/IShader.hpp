@@ -1,5 +1,5 @@
-#ifndef ABSTRACTSHADER_HPP
-#define ABSTRACTSHADER_HPP
+#ifndef ISHADER_HPP
+#define ISHADER_HPP
 
 #include "../Vertex.hpp"
 #include "../../../Math/Matrix4.hpp"
@@ -16,21 +16,12 @@ namespace Engine
 	{
 		namespace Shaders
 		{
-			using namespace Math;
 			using namespace Display;
 
-			class AbstractShader
+			class IShader
 			{
-			private:
-				std::map<std::string, std::shared_ptr<void>> fragment_shader_attributes;
-			
-			protected:
-				[[nodiscard]] std::shared_ptr<void> GetFragmentData(const std::string& key) const;
-			
 			public:
 				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const = 0;
-
-				void SetFragmentData(const std::string& key, std::shared_ptr<void> attribute);
 			};
 		}
 	}
