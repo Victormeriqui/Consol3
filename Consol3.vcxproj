@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -24,6 +24,11 @@
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
     <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
     <ClCompile Include="src\Display\TextOnlyRenderer.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Shaders\AbstractShader.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Shaders\PlainColorShader.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Shaders\PlainTextureShader.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Shaders\ShadedColorShader.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Shaders\ShadedTextureShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Texture.cpp" />
     <ClCompile Include="src\Engine\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="src\Display\DitheredRenderer.cpp" />
@@ -41,6 +46,7 @@
     <ClCompile Include="src\Engine\Rendering\StaticMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Transform.cpp" />
     <ClCompile Include="src\Engine\Rendering\Vertex.cpp" />
+    <ClCompile Include="src\Engine\Rendering\VertexBuffer.cpp" />
     <ClCompile Include="src\Game\Consol3Game.cpp" />
     <ClCompile Include="src\Game\ModelGenerator.cpp" />
     <ClCompile Include="src\Game\MouseInput.cpp" />
@@ -55,6 +61,13 @@
     <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\AbstractShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\FixedColorShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\PlainColorShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\PlainTextureShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\ShadedColorShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\ShadedTextureShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\ShaderStore.hpp" />
     <ClInclude Include="src\Engine\Rendering\Texture.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\DirectionalLight.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\ILight.hpp" />
@@ -74,10 +87,11 @@
     <ClInclude Include="src\Engine\Rendering\Rasterizer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Camera.hpp" />
     <ClInclude Include="src\Engine\Rendering\Model.hpp" />
-    <ClInclude Include="src\Engine\Rendering\Shaders.hpp" />
     <ClInclude Include="src\Engine\Rendering\StaticMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Transform.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Triangle.hpp" />
     <ClInclude Include="src\Engine\Rendering\Vertex.hpp" />
+    <ClInclude Include="src\Engine\Rendering\VertexBuffer.hpp" />
     <ClInclude Include="src\Game\Consol3Game.hpp" />
     <ClInclude Include="src\Game\ModelGenerator.hpp" />
     <ClInclude Include="src\Game\MouseInput.hpp" />

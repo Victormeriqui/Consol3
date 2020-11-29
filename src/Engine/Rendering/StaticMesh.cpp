@@ -6,14 +6,20 @@ namespace Engine
 {
 	namespace Rendering
 	{
-
-
 		void StaticMesh::DrawMesh(Camera& camera, Rasterizer& rasterizer) const
 		{
 			if (has_texture)
-				model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, std::make_shared<Texture>(texture), hsvcolor);
+				model.DrawTexturedModel(transform, camera.GetDepthBuffer(), rasterizer, std::make_shared<Texture>(texture), hsvcolor);
 			else
 				model.DrawModel(transform, camera.GetDepthBuffer(), rasterizer, hsvcolor);
+		}
+
+		void StaticMesh::DrawShadedMesh(Camera& camera, const LightingSystem& lighting_system, Rasterizer& rasterizer) const
+		{
+			if (has_texture)
+				model.DrawTexturedAndShadedModel(transform, camera.GetDepthBuffer(), rasterizer, lighting_system, std::make_shared<Texture>(texture), hsvcolor);
+			else
+				model.DrawShadedModel(transform, camera.GetDepthBuffer(), rasterizer, lighting_system, hsvcolor);
 		}
 	}
 }
