@@ -4,6 +4,7 @@
 #include "Rasterizer.hpp"
 #include "DepthBuffer.hpp"
 #include "../../Math/Vector2.hpp"
+#include "Lighting/LightingSystem.hpp"
 
 #include <string>
 #include <fstream>
@@ -14,14 +15,15 @@ namespace Engine
 {
 	namespace Rendering
 	{
+		using namespace Shaders;
+		using namespace Lighting;
+
 		Model::Model()
 		{
 		}
 
-		Model::Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+		Model::Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) : vertex_buffer(vertices, indices)
 		{
-			this->vertices = vertices;
-			this->indices = indices;
 		}
 
 		inline std::vector<std::string> Model::SplitString(std::string string, char delimiter) const
@@ -55,6 +57,8 @@ namespace Engine
 
 			std::vector<std::string> line_split;
 
+			std::vector<Vertex> vertices;
+			std::vector<uint32_t> indices;
 			std::vector<Vector3> normals;
 			std::vector<Vector2> uvs;
 
@@ -155,9 +159,9 @@ namespace Engine
 
 					if (has_uv)
 					{
-						vertices[v0].SetUV(uvs[uv0]);
-						vertices[v1].SetUV(uvs[uv1]);
-						vertices[v2].SetUV(uvs[uv2]);
+						vertices[v0].SetTextureCoords(uvs[uv0]);
+						vertices[v1].SetTextureCoords(uvs[uv1]);
+						vertices[v2].SetTextureCoords(uvs[uv2]);
 					}
 					if (has_normal)
 					{
@@ -170,10 +174,11 @@ namespace Engine
 
 			file_stream.close();
 
-			CalculateNormals();
+			CalculateNormals(vertices, indices);
+			vertex_buffer = VertexBuffer(vertices, indices);
 		}
 
-		void Model::CalculateNormals()
+		void Model::CalculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 		{
 			for (unsigned int i = 0; i < indices.size() - 3; i += 3)
 			{
@@ -197,53 +202,42 @@ namespace Engine
 				vert.SetNormal(vert.GetNormal().GetNormalized());
 		}
 
-		std::vector<Vertex> Model::GetVertices() const
+		const VertexBuffer& Model::GetVertexBuffer() const
 		{
-			return vertices;
-		}
-
-		std::vector<uint32_t> Model::GetIndices() const
-		{
-			return indices;
-		}
-		float randMToN(float M, float N)
-		{
-			return M + (rand() / (RAND_MAX / (N - M)));
+			return vertex_buffer;
 		}
 
 		void Model::DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const HSVColor& color) const
 		{
-			srand(1004);
 			rasterizer.SetModelMatrix(transform);
 
-			for (uint32_t i = 0; i < indices.size(); i += 3)
-			{
-				Vertex v0 = vertices[indices[i]];
-				Vertex v1 = vertices[indices[i + 1]];
-				Vertex v2 = vertices[indices[i + 2]];
-
-				//rasterizer.DrawShadedTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 0.0f));
-				//rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
-				
-
-				rasterizer.DrawTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
-			}
+			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_store.shader_plaincolor);
 		}
 
-		void Model::DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const
+		void Model::DrawShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const LightingSystem& lighting_system, const HSVColor& color) const
 		{
-			srand(1004);
 			rasterizer.SetModelMatrix(transform);
-			rasterizer.SetActiveTexture(texture);
 
-			for (uint32_t i = 0; i < indices.size(); i += 3)
-			{
-				Vertex v0 = vertices[indices[i]];
-				Vertex v1 = vertices[indices[i + 1]];
-				Vertex v2 = vertices[indices[i + 2]];
+			shader_store.shader_shadedcolor.SetFragmentData(std::string("lighting_system"), std::make_shared<LightingSystem>(lighting_system));
+			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_store.shader_shadedcolor);
+		}
 
-				rasterizer.DrawTexturedTriangle(depthbuffer, v0, v1, v2, HSVColor(randMToN(0, 360), 1.0f, 1.0f));
-			}
+		void Model::DrawTexturedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const
+		{
+			rasterizer.SetModelMatrix(transform);
+
+			shader_store.shader_plaintexture.SetFragmentData(std::string("texture"), texture);
+			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_store.shader_plaintexture);
+		}
+
+		void Model::DrawTexturedAndShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const LightingSystem& lighting_system, std::shared_ptr<Texture> texture,
+			const HSVColor& color) const
+		{
+			rasterizer.SetModelMatrix(transform);
+
+			shader_store.shader_shadedtexture.SetFragmentData(std::string("lighting_system"), std::make_shared<LightingSystem>(lighting_system));
+			shader_store.shader_shadedtexture.SetFragmentData(std::string("texture"), texture);
+			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_store.shader_shadedtexture);
 		}
 	}
 }

@@ -9,6 +9,7 @@
 #include "Transform.hpp"
 #include "Camera.hpp"
 #include "Texture.hpp"
+#include "Lighting/LightingSystem.hpp"
 
 namespace Engine
 {
@@ -16,6 +17,7 @@ namespace Engine
 	{
 		using namespace Display;
 		using namespace Math;
+		using namespace Lighting;
 
 		class AbstractMesh
 		{
@@ -62,6 +64,7 @@ namespace Engine
 			AbstractMesh& SetScale(const Vector3& scale);
 
 			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const = 0;
+			virtual void DrawShadedMesh(Camera& camera, const LightingSystem& lighting_system, Rasterizer& rasterizer) const = 0;
 		};
 	}
 }

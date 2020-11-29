@@ -19,14 +19,14 @@ namespace Engine
 			float w;
 
 			Vector3 normal;
-			Vector2 uv;
+			Vector2 texture_coords;
 
 		public:
-			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()), uv(Vector2()) {}
-			constexpr Vertex(const Vector3& position) : position(position), w(1), normal(Vector3(0, 0, 0)), uv(Vector2()) {}
-			constexpr Vertex(const Vector3& position, const Vector3& normal) : position(position), w(1), normal(normal), uv(Vector2()) {};
-			constexpr Vertex(const Vector3& position, const Vector2& uv) : position(position), w(1), normal(Vector3(0, 0, 0)), uv(uv) {}
-			constexpr Vertex(const Vector3& position, const Vector3& normal, const Vector2& uv) : position(position), w(1), normal(normal), uv(uv) {};
+			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()), texture_coords(Vector2()) {}
+			constexpr Vertex(const Vector3& position) : position(position), w(1), normal(Vector3(0, 0, 0)), texture_coords(Vector2()) {}
+			constexpr Vertex(const Vector3& position, const Vector3& normal) : position(position), w(1), normal(normal), texture_coords(Vector2()) {};
+			constexpr Vertex(const Vector3& position, const Vector2& uv) : position(position), w(1), normal(Vector3(0, 0, 0)), texture_coords(uv) {}
+			constexpr Vertex(const Vector3& position, const Vector3& normal, const Vector2& uv) : position(position), w(1), normal(normal), texture_coords(uv) {};
 
 			[[nodiscard]] Vector3 GetPosition() const;
 			Vertex& SetPosition(const Vector3& position);
@@ -37,8 +37,8 @@ namespace Engine
 			[[nodiscard]] float GetW() const;
 			Vertex& SetW(float w);
 
-			[[nodiscard]] Vector2 GetUV() const;
-			Vertex& SetUV(const Vector2& uv);
+			[[nodiscard]] Vector2 GetTextureCoords() const;
+			Vertex& SetTextureCoords(const Vector2& texture_coords);
 
 			[[nodiscard]] Vertex GetPerspectiveDivided() const;
 			Vertex& PerspectiveDivide();

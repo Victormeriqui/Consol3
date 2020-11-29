@@ -31,13 +31,12 @@ namespace Game
 
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) :
 		rasterizer(rasterizer),
-		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f)),
-		lighting_system(std::make_shared<LightingSystem>())
+		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f))
 	{
 		camera.SetPosition(Vector3(0, 0.1f, -2.0f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
-		rasterizer.SetLightingSystem(lighting_system);
+
 		mesh = StaticMesh(Model("res/cube.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
@@ -57,9 +56,9 @@ namespace Game
 		spot_light->SetIntensity(5.0f);
 
 
-		lighting_system->AddLight(dir_light);
-	//	lighting_system->AddLight(point_light);
-		//lighting_system->AddLight(spot_light);
+		lighting_system.AddLight(dir_light);
+	//	lighting_system.AddLight(point_light);
+		//lighting_system.AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -146,8 +145,9 @@ namespace Game
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		mesh.DrawMesh(camera, rasterizer);
-		//floor.DrawMesh(camera, rasterizer);
 
-	//	plight_mesh.DrawMesh(camera, rasterizer);
+		//floor.DrawMesh(camera, lighting_system, rasterizer);
+
+	//	plight_mesh.DrawMesh(camera, lighting_system, rasterizer);
 	}
 }

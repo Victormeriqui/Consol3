@@ -46,14 +46,14 @@ namespace Engine
 			return *this;
 		}
 
-		Vector2 Vertex::GetUV() const
+		Vector2 Vertex::GetTextureCoords() const
 		{
-			return uv;
+			return texture_coords;
 		}
 
-		Vertex& Vertex::SetUV(const Vector2& uv)
+		Vertex& Vertex::SetTextureCoords(const Vector2& texture_coords)
 		{
-			this->uv = uv;
+			this->texture_coords = texture_coords;
 
 			return *this;
 		}
@@ -97,7 +97,7 @@ namespace Engine
 		{
 			position.Lerp(other.GetPosition(), amount);
 			normal.Lerp(other.GetNormal(), amount);
-			uv.Lerp(other.GetUV(), amount);
+			texture_coords.Lerp(other.GetTextureCoords(), amount);
 
 			w = Util::Lerp(amount, w, other.GetW());
 

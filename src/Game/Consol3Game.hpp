@@ -31,7 +31,7 @@ namespace Game
 	{
 	private:
 		Rasterizer& rasterizer;
-		std::shared_ptr<LightingSystem> lighting_system;
+		LightingSystem lighting_system;
 		ModelGenerator model_generator;
 
 		Camera camera;

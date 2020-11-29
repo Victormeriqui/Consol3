@@ -2,7 +2,6 @@
 #define RASTERIZER_HPP
 
 #include "../../Display/IRenderer.hpp"
-#include "../../Math/Point2.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Vertex.hpp"
 #include "../../Display/RGBColor.hpp"
@@ -10,11 +9,9 @@
 #include "Transform.hpp"
 #include "Clipper.hpp"
 #include "DepthBuffer.hpp"
-#include "../Rendering/Lighting/ILight.hpp"
-#include "../Rendering/Lighting/DirectionalLight.hpp"
-#include "../Rendering/Lighting/LightingSystem.hpp"
-#include "Shaders.hpp"
-#include "Texture.hpp"
+#include "Shaders/AbstractShader.hpp"
+#include "VertexBuffer.hpp"
+#include "Triangle.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -26,34 +23,7 @@ namespace Engine
 	{
 		using namespace Display;
 		using namespace Math;
-		using namespace Lighting;
-
-		// a triangle edge for rasterization, initializes with the edge function value for the given point
-		struct TriangleEdge
-		{
-			// the x component step of the edge function for each pixel to the right
-			int32_t step_delta_x;
-			// the y component step of the edge function for each pixel down
-			int32_t step_delta_y;
-
-			// the value of the edge function will be initialized with the result for the starting
-			// pixel, remaining values can be stepped with the deltas
-			int32_t edgefunction_res;
-
-			// calculates the edge function for a specific point (starting point), and fills in the step deltas taken from the function's components
-			TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& point);
-		};
-
-		// wrapper for the paramenters passed to RasterizeTriangle
-		struct Triangle
-		{
-			const Vector3& screen_p0;
-			const Vector3& screen_p1;
-			const Vector3& screen_p2;
-			const Vertex& v0;
-			const Vertex& v1;
-			const Vertex& v2;
-		};
+		using namespace Shaders;
 
 		class Rasterizer
 		{
@@ -69,8 +39,6 @@ namespace Engine
 			std::shared_ptr<IRenderer> renderer;
 
 			Clipper clipper;
-			std::shared_ptr<LightingSystem> lighting_system;
-			std::shared_ptr<Texture> active_texture;
 
 			inline Vertex& TransformVertexViewProjection(Vertex& vertex);
 			inline Vertex& TransformVertexModel(Vertex& vertex);
@@ -79,8 +47,8 @@ namespace Engine
 
 			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
 			
-			void DrawClippedTriangle(DepthBuffer& depthbuffer, Vertex v0, Vertex v1, Vertex v2, const HSVColor& color, std::function<void(SHADER_ARGUMENTS)> shader);
-			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, std::function<void(SHADER_ARGUMENTS)> shader);
+			void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const AbstractShader& frag_shader);
+			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const AbstractShader& frag_shader);
 			
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
@@ -91,12 +59,7 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
-			void SetActiveTexture(std::shared_ptr<Texture> texture);
-
-			void DrawTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
-			void DrawShadedTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
-			void DrawTexturedTriangle(DepthBuffer& depthbuffer, const Vertex& v0, const Vertex& v1, const Vertex& v2, const HSVColor& color);
+			void DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const AbstractShader& frag_shader);
 		};
 	}
 }
