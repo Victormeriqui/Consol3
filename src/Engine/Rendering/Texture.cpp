@@ -26,7 +26,7 @@ namespace Engine
 		{
 		}
 
-		Texture::Texture(const std::string& filename)
+		Texture::Texture(const std::string& filename, bool flip_y)
 		{
 			std::ifstream file_stream;
 
@@ -54,7 +54,7 @@ namespace Engine
 			file_stream.read((char*)data.data(), data.size());
 
 			uint16_t x = 0;
-			uint16_t y = 0;// height - 1;
+			uint16_t y = flip_y ? height - 1 : 0;
 			for (uint32_t i = 0; i < data.size(); i += 3)
 			{
 
@@ -65,7 +65,7 @@ namespace Engine
 				imagebuffer.SetPixel(x++, y, RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b));
 				if (x >= width)
 				{
-					y++;
+					y += flip_y ? -1 : 1;
 					x = 0;
 				}
 			}
@@ -78,24 +78,21 @@ namespace Engine
 			return imagebuffer;
 		}
 
-		RGBColor Texture::GetColorFromUV(const Vector2& uv)
+		RGBColor Texture::GetColorFromTextureCoords(const Vector2& texture_coords)
 		{
-			return GetColorFromUV(uv.x, uv.y);
+			return GetColorFromTextureCoords(texture_coords.x, texture_coords.y);
 		}
 
-		RGBColor Texture::GetColorFromUV(float u, float v)
-		{
-			//uint16_t x = Util::LerpCast<uint16_t>(u, 0, imagebuffer.GetWidth());
-			//uint16_t y = Util::LerpCast<uint16_t>(v, 0, imagebuffer.GetHeight());
-
-			uint16_t x = u * imagebuffer.GetWidth();
-			uint16_t y = v * imagebuffer.GetHeight();
+		RGBColor Texture::GetColorFromTextureCoords(float x, float y)
+		{			
+			uint16_t text_x = (uint16_t)(x * imagebuffer.GetWidth());
+			uint16_t text_y = (uint16_t)(y * imagebuffer.GetHeight());
 
 			// TODO: remove this
-			if (x >= imagebuffer.GetWidth() || y >= imagebuffer.GetHeight())
+			if (text_x >= imagebuffer.GetWidth() || text_y >= imagebuffer.GetHeight())
 				return RGBColor(0, 0, 0);
 
-			return imagebuffer.GetPixel(x, y);
+			return imagebuffer.GetPixel(text_x, text_y);
 		}
 	}
 }
