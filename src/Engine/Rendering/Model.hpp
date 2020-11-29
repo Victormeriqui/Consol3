@@ -8,8 +8,11 @@
 #include "Texture.hpp"
 #include "DepthBuffer.hpp"
 #include "VertexBuffer.hpp"
-#include "Shaders/ShaderStore.hpp"
 #include "Lighting/LightingSystem.hpp"
+#include "Shaders/PlainColorShader.hpp"
+#include "Shaders/PlainTextureShader.hpp"
+#include "Shaders/ShadedColorShader.hpp"
+#include "Shaders/ShadedTextureShader.hpp"
 
 #include <cstdint>
 #include <string>
@@ -23,7 +26,10 @@ namespace Engine
 		using namespace Shaders;
 		using namespace Lighting;
 
-		static ShaderStore shader_store;
+		static PlainColorShader shader_plaincolor;
+		static PlainTextureShader shader_plaintexture;
+		static ShadedColorShader shader_shadedcolor;
+		static ShadedTextureShader shader_shadedtexture;
 
 		class Model
 		{
@@ -37,15 +43,15 @@ namespace Engine
 		public:
 			Model();
 			Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
-			Model(std::string filename);
+			Model(const std::string& filename);
 
 			[[nodiscard]] const VertexBuffer& GetVertexBuffer() const;
 
 			void DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const HSVColor& color) const;
-			void DrawShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const LightingSystem& lighting_system, const HSVColor& color) const;
+			void DrawShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system, const HSVColor& color) const;
 			void DrawTexturedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const;
-			void DrawTexturedAndShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const LightingSystem& lighting_system, std::shared_ptr<Texture> texture,
-				const HSVColor& color) const;
+			void DrawTexturedAndShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system,
+				std::shared_ptr<Texture> texture, const HSVColor& color) const;
 		};
 	}
 }

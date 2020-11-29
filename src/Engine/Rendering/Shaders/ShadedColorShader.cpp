@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <string>
+#include <memory>
 
 namespace Engine
 {
@@ -16,10 +17,13 @@ namespace Engine
 		{
 			using namespace Lighting;
 
+			void ShadedColorShader::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
+			{
+				this->lighting_system = lighting_system;
+			}
+
 			void ShadedColorShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const
 			{
-				std::shared_ptr<LightingSystem> lighting_system = std::static_pointer_cast<LightingSystem>(GetFragmentData(std::string("lighting_system")));
-
 				float v0_light = lighting_system->GetLightAmountAt(triangle.v0);
 				float v1_light = lighting_system->GetLightAmountAt(triangle.v1);
 				float v2_light = lighting_system->GetLightAmountAt(triangle.v2);

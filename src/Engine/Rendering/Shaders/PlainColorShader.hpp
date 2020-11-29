@@ -1,7 +1,7 @@
 #ifndef PLAINCOLORSHADER_HPP
 #define PLAINCOLORSHADER_HPP
 
-#include "AbstractShader.hpp"
+#include "IShader.hpp"
 
 #include "../Vertex.hpp"
 #include "../../../Math/Matrix4.hpp"
@@ -14,7 +14,9 @@ namespace Engine
 	{
 		namespace Shaders
 		{
-			class PlainColorShader : public AbstractShader
+			using namespace Display;
+
+			class PlainColorShader : public IShader
 			{
 				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const override;
 			};

@@ -10,7 +10,7 @@
 #include "../../Math/Util/MathUtil.hpp"
 #include "Clipper.hpp"
 #include "DepthBuffer.hpp"
-#include "Shaders/AbstractShader.hpp"
+#include "Shaders/IShader.hpp"
 #include "VertexBuffer.hpp"
 #include "Triangle.hpp"
 
@@ -103,12 +103,12 @@ namespace Engine
 			edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
 		}
 
-		void Rasterizer::DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const AbstractShader& frag_shader)
+		void Rasterizer::DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const IShader& frag_shader)
 		{
 			ClipAndRasterize(depthbuffer, vertex_buffer, color, frag_shader);
 		}
 
-		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const AbstractShader& frag_shader)
+		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const IShader& frag_shader)
 		{
 			for (uint32_t i = 0; i < vertex_buffer.GetIndices().size(); i += 3)
 			{
@@ -201,7 +201,7 @@ namespace Engine
 			}
 		}
 
-		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const AbstractShader& frag_shader)
+		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const IShader& frag_shader)
 		{
 			uint16_t bb_min_x = std::min({ (uint16_t)triangle.v0_screen.x, (uint16_t)triangle.v1_screen.x, (uint16_t)triangle.v2_screen.x });
 			uint16_t bb_min_y = std::min({ (uint16_t)triangle.v0_screen.y, (uint16_t)triangle.v1_screen.y, (uint16_t)triangle.v2_screen.y });

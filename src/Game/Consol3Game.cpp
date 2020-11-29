@@ -21,6 +21,7 @@
 #include <Windows.h>
 #include <cstdint>
 #include <memory>
+#include <chrono>
 
 namespace Game
 {
@@ -31,13 +32,14 @@ namespace Game
 
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) :
 		rasterizer(rasterizer),
-		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f))
+		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f)),
+		lighting_system(std::make_shared<LightingSystem>())
 	{
 		camera.SetPosition(Vector3(0, 0.1f, -2.0f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/cube.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh(Model("res/bunny.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 	
@@ -56,9 +58,9 @@ namespace Game
 		spot_light->SetIntensity(5.0f);
 
 
-		lighting_system.AddLight(dir_light);
-	//	lighting_system.AddLight(point_light);
-		//lighting_system.AddLight(spot_light);
+		lighting_system->AddLight(dir_light);
+		//lighting_system->AddLight(point_light);
+		//lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -113,7 +115,7 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
-			rot += 0.01f;
+			rot += 0.001f;
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)
@@ -138,13 +140,16 @@ namespace Game
 		i += 0.01f;
 	}
 
-	void Consol3Game::Render(int64_t delta)
+	std::chrono::milliseconds Consol3Game::Render(int64_t delta)
 	{
 		camera.GetDepthBuffer().ClearBuffer();
 
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
+		auto time = std::chrono::high_resolution_clock::now();
 		mesh.DrawMesh(camera, rasterizer);
+		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
+		
 
 		//floor.DrawMesh(camera, lighting_system, rasterizer);
 
