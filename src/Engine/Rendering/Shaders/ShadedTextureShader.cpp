@@ -50,7 +50,7 @@ namespace Engine
 				u *= oneoverperspective;
 				v *= oneoverperspective;
 				
-				HSVColor texel_hsv = HSVColor(texture->GetColorFromUV(u, v));
+				HSVColor texel_hsv = HSVColor(texture->GetColorFromTextureCoords(u, v));
 				out_color = HSVColor(texel_hsv.hue, texel_hsv.saturation, std::min(light_amount + 0.02f, 1.0f));
 			}
 		}

@@ -33,7 +33,7 @@ namespace Engine
 				u *= oneoverperspective;
 				v *= oneoverperspective;
 
-				RGBColor texel_rgb = texture->GetColorFromUV(u, v);
+				RGBColor texel_rgb = texture->GetColorFromTextureCoords(u, v);
 				
 				out_color = HSVColor(texel_rgb);
 			}
