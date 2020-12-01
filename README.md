@@ -10,7 +10,7 @@ Consol3 is a 3d graphics engine that doesn't use the GPU to render any frame, in
 ###### Windows Console
 Consol3 as it stands today is a Windows console application, it uses the console as it's output display, by taking advantage of the console API available in Windows
 
-I have plans to add support for other terminals/plataforms, but as of now they are just plans
+I have plans to add support for other terminals/platforms, but as of now they are just plans
 
 ###### Older Versions
 Building this engine is a hobby of mine and I've been working on it infrequently for some years now, as such it has gone through many refactors, partial and complete rewrites, this is the latest version of the engine
