@@ -24,6 +24,7 @@ namespace Math
 		Vector3& Rotate(const Vector3& axis, float amount);
 		Vector3& Rotate(const Quaternion& quat);
 		Vector3& Lerp(const Vector3& other, float amount);
+		Vector3& Round();
 
 		[[nodiscard]] float GetLength() const;
 		[[nodiscard]] Vector3 GetNormalized() const;
@@ -36,6 +37,7 @@ namespace Math
 		[[nodiscard]] Vector3 GetDirectionalTo(const Vector3& other) const;
 		[[nodiscard]] Vector3 GetMiddleFrom(const Vector3& other) const;
 		[[nodiscard]] Vector3 GetLerped(const Vector3& other, float amount) const;
+		[[nodiscard]] Vector3 GetRounded() const;
 
 		constexpr Vector3& operator+=(const Vector3& other) noexcept
 		{

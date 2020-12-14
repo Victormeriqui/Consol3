@@ -29,18 +29,19 @@ namespace Game
 	using namespace Engine;
 	using namespace Engine::Rendering;
 	using namespace Math;
-
+	float rot = 1.33f;
 	Consol3Game::Consol3Game(Rasterizer& rasterizer) :
 		rasterizer(rasterizer),
 		camera(Camera(200, 200, 0.001f, 100.0f, 90.0f)),
 		lighting_system(std::make_shared<LightingSystem>())
 	{
-		camera.SetPosition(Vector3(0, 0.1f, -2.0f));
+		camera.SetPosition(Vector3(0, 0.1f, -1.155f));
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/bunny.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh(Model("res/cube.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
+		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 	
 		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
@@ -67,7 +68,7 @@ namespace Game
 
 	float mov_speed = 0.05f;
 	bool shifting = false;
-	float rot = 0;
+
 	void Consol3Game::HandleInput()
 	{
 		if (GetKeyState(VK_CAPITAL))
@@ -115,7 +116,7 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
-			rot += 0.001f;
+			rot += 0.01f;
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)
@@ -147,11 +148,12 @@ namespace Game
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		auto time = std::chrono::high_resolution_clock::now();
+		//mesh.DrawShadedMesh(camera, lighting_system, rasterizer);
 		mesh.DrawMesh(camera, rasterizer);
-		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
-		
 
-		//floor.DrawMesh(camera, lighting_system, rasterizer);
+
+		//floor.DrawShadedMesh(camera, lighting_system, rasterizer);
+		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
 
 	//	plight_mesh.DrawMesh(camera, lighting_system, rasterizer);
 	}

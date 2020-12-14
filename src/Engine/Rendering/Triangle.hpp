@@ -30,11 +30,12 @@ namespace Engine
 		// wrapper for the paramenters passed to the rasterizer and shader
 		struct Triangle
 		{
+			// original vertices for interpolation
 			const Vertex& v0;
 			const Vertex& v1;
 			const Vertex& v2;
 
-			// we multiply with 1/w because its faster to multiply than to divide
+			// we multiply with 1/w because its faster to multiply than to divide multiple times
 			float v0_oneoverw;
 			float v1_oneoverw;
 			float v2_oneoverw;

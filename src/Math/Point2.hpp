@@ -11,12 +11,12 @@ namespace Math
 	class Point2
 	{
 	public:
-		uint16_t x;
-		uint16_t y;
+		int32_t x;
+		int32_t y;
 
-		constexpr Point2(uint16_t x, uint16_t y) : x(x), y(y) {}
-		constexpr Point2(const Vector2& vector) : x((uint16_t)vector.x), y((uint16_t)vector.y) {}
-		constexpr Point2(const Vector3& vector) : x((uint16_t)vector.x), y((uint16_t)vector.y) {}
+		constexpr Point2(int32_t x, int32_t y) : x(x), y(y) {}
+		constexpr Point2(const Vector2& vector) : x((int32_t)vector.x), y((int32_t)vector.y) {}
+		constexpr Point2(const Vector3& vector) : x((int32_t)vector.x), y((int32_t)vector.y) {}
 
 		constexpr Point2& operator+=(const Point2& other) noexcept
 		{

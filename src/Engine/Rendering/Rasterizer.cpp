@@ -135,7 +135,6 @@ namespace Engine
 				// if all three position components are inside the view frustum it doesn't need to be clipped
 				if (v0.IsInsideViewFrustum() && v1.IsInsideViewFrustum() && v2.IsInsideViewFrustum())
 				{
-	
 					TransformVertexScreenspace(v0);
 					TransformVertexScreenspace(v1);
 					TransformVertexScreenspace(v2);
@@ -155,19 +154,16 @@ namespace Engine
 					};
 
 					RasterizeTriangle(depthbuffer, triangle, color, frag_shader);
-					
+
 					continue;
 				}
-
 				// store the verts in a buffer to clip them
 				std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
 				uint8_t vertices_buffer_count = 3;
 
-				bool clip_x_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_X);
-				bool clip_y_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Y);
 				bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
 
-				if (!clip_x_drawable || !clip_y_drawable || !clip_z_drawable)
+				if (!clip_z_drawable)
 					continue;
 
 				// draw the polygon as a triangle fan
@@ -183,7 +179,7 @@ namespace Engine
 
 					Triangle triangle
 					{
-						// store original, model transformed vertices
+						// original verts for attribute interpolation
 						GetTransformedVertexInverseViewProjection(clipped_v0),
 						GetTransformedVertexInverseViewProjection(clipped_v1),
 						GetTransformedVertexInverseViewProjection(clipped_v2),
@@ -191,6 +187,7 @@ namespace Engine
 						1.0f / clipped_v0.GetW(),
 						1.0f / clipped_v1.GetW(),
 						1.0f / clipped_v2.GetW(),
+						// screen space vertices
 						clipped_v0.GetPosition(),
 						clipped_v1.GetPosition(),
 						clipped_v2.GetPosition()
@@ -198,17 +195,31 @@ namespace Engine
 
 					RasterizeTriangle(depthbuffer, triangle, color, frag_shader);
 				}
+
 			}
+
 		}
 
 		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const IShader& frag_shader)
 		{
-			uint16_t bb_min_x = std::min({ (uint16_t)triangle.v0_screen.x, (uint16_t)triangle.v1_screen.x, (uint16_t)triangle.v2_screen.x });
-			uint16_t bb_min_y = std::min({ (uint16_t)triangle.v0_screen.y, (uint16_t)triangle.v1_screen.y, (uint16_t)triangle.v2_screen.y });
-			uint16_t bb_max_x = std::max({ (uint16_t)triangle.v0_screen.x, (uint16_t)triangle.v1_screen.x, (uint16_t)triangle.v2_screen.x });
-			uint16_t bb_max_y = std::max({ (uint16_t)triangle.v0_screen.y, (uint16_t)triangle.v1_screen.y, (uint16_t)triangle.v2_screen.y });
+			int32_t bbox_min_x = std::min({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
+			int32_t bbox_min_y = std::min({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
+			int32_t bbox_max_x = std::max({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
+			int32_t bbox_max_y = std::max({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
+			
+			// guaranteed to be outside the camera
+			if (bbox_min_x >= renderer->GetFrameBufferWidth() || bbox_max_x < 0 || bbox_min_y >= renderer->GetFrameBufferHeight() || bbox_max_y < 0)
+				return;
 
-			Point2 point = Point2(bb_min_x, bb_min_y);
+			Point2 bbox_min = Point2(
+				std::max(0, bbox_min_x),
+				std::max(0, bbox_min_y));
+
+			Point2 bbox_max = Point2(
+				std::min(bbox_max_x, (int32_t)renderer->GetFrameBufferWidth()),
+				std::min(bbox_max_y, (int32_t)renderer->GetFrameBufferHeight()));
+
+			Point2 point = Point2(bbox_min.x, bbox_min.y);
 
 			TriangleEdge edge0 = TriangleEdge(triangle.v1_screen, triangle.v2_screen, point);
 			TriangleEdge edge1 = TriangleEdge(triangle.v2_screen, triangle.v0_screen, point);
@@ -219,13 +230,13 @@ namespace Engine
 			if (area.edgefunction_res == 0)
 				return;
 
-			for (uint16_t y = bb_min_y; y <= bb_max_y; y++)
+			for (uint16_t y = bbox_min.y; y <= bbox_max.y; y++)
 			{
 				int32_t edge0_mag_xy = edge0.edgefunction_res;
 				int32_t edge1_mag_xy = edge1.edgefunction_res;
 				int32_t edge2_mag_xy = edge2.edgefunction_res;
 
-				for (uint16_t x = bb_min_x; x <= bb_max_x; x++)
+				for (uint16_t x = bbox_min.x; x <= bbox_max.x; x++)
 				{
 					if ((edge0_mag_xy | edge1_mag_xy | edge2_mag_xy) >= 0)
 					{
@@ -244,6 +255,7 @@ namespace Engine
 							frag_shader.FragmentShader(out_color, triangle, barcoord0, barcoord1, barcoord2);
 							depthbuffer.SetDepth(x, y, z);
 							renderer->SetPixel(x, y, out_color);
+							
 						}
 					}
 
@@ -256,6 +268,7 @@ namespace Engine
 				edge1.edgefunction_res += edge1.step_delta_y;
 				edge2.edgefunction_res += edge2.step_delta_y;
 			}
+
 		}
 
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)
