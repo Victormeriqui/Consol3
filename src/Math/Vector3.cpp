@@ -61,6 +61,15 @@ namespace Math
 		return *this;
 	}
 
+	Vector3& Vector3::Round()
+	{
+	//	x = std::round(x);
+	//	y = std::round(y);
+	//	z = std::round(z);
+
+		return *this;
+	}
+
 	Vector3 Vector3::GetRotated(const Quaternion& quat) const
 	{
 		return Vector3(*this).Rotate(quat);
@@ -120,5 +129,10 @@ namespace Math
 			Util::Lerp(amount, x, other.x),
 			Util::Lerp(amount, y, other.y),
 			Util::Lerp(amount, z, other.z));
+	}
+
+	Vector3 Vector3::GetRounded() const
+	{
+		return Vector3(*this).Round();
 	}
 }
