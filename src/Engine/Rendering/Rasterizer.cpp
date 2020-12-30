@@ -41,22 +41,6 @@ namespace Engine
 			viewport_mat = Matrix4(mat);
 		}
 
-		Vertex& Rasterizer::TransformVertexModel(Vertex& vertex)
-		{
-			vertex *= model_mat;
-			vertex.TransformNormals(normal_mat);
-
-			return vertex;
-		}
-
-		Vertex& Rasterizer::TransformVertexViewProjection(Vertex& vertex)
-		{
-			vertex *= view_mat;
-			vertex *= projection_mat;
-
-			return vertex;
-		}
-
 		Vertex Rasterizer::GetTransformedVertexInverseViewProjection(const Vertex& vertex)
 		{
 			return (Vertex(vertex) * inverse_projection_mat) * inverse_view_mat;
@@ -69,46 +53,12 @@ namespace Engine
 			return vertex;
 		}
 
-		bool Rasterizer::IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const
+		void Rasterizer::DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader)
 		{
-			Vector3 center = Vector3(
-				(p0.x + p1.x + p2.x) / 3,
-				(p0.y + p1.y + p2.y) / 3,
-				(p0.z + p1.z + p2.z) / 3);
-
-			Vector3 edge1 = p0 - p1;
-			Vector3 edge2 = p1 - p2;
-
-			Vector3 facenormal = edge1.GetCrossProduct(edge2);
-
-			return center.GetDotProduct(facenormal) > 0;
+			ClipAndRasterize(depthbuffer, vertex_buffer, color, shader);
 		}
 
-		TriangleEdge::TriangleEdge(const Point2& v_a, const Point2& v_b, const Point2& start_point)
-		{
-			// edge function: F(p) = (v_a.y - v_b.y)*start_point.x + (v_b.x - v_a.x)*start_point.y + (v_a.x * v_b.y - v_a.y * v_a.x)
-			// this will have one sign if the point is to the left of the edge (v_a -> v_b), and another sign if it is to the right
-			// the actual sign will depend if the edges are defined clockwise or counter-clockwise
-
-			// calculate each component without the point
-			int32_t comp1 = v_a.y - v_b.y;
-			int32_t comp2 = v_b.x - v_a.x;
-			int32_t comp3 = v_a.x * v_b.y - v_a.y * v_b.x;
-
-			// step deltas
-			step_delta_x = comp1;
-			step_delta_y = comp2;
-
-			// calculate the whole edge function for the point
-			edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
-		}
-
-		void Rasterizer::DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const IShader& frag_shader)
-		{
-			ClipAndRasterize(depthbuffer, vertex_buffer, color, frag_shader);
-		}
-
-		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, const IShader& frag_shader)
+		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader)
 		{
 			for (uint32_t i = 0; i < vertex_buffer.GetIndices().size(); i += 3)
 			{
@@ -116,20 +66,17 @@ namespace Engine
 				Vertex v1 = vertex_buffer.GetVertex(i + 1);
 				Vertex v2 = vertex_buffer.GetVertex(i + 2);
 
-				TransformVertexModel(v0);
-				TransformVertexModel(v1);
-				TransformVertexModel(v2);
+				MVPTransform vs_shader_mats =
+				{
+					model_mat,
+					normal_mat,
+					view_mat,
+					projection_mat
+				};
 
-				// store original, model transformed vertices
-				Vertex model_v0 = v0;
-				Vertex model_v1 = v1;
-				Vertex model_v2 = v2;
+				bool should_draw_triangle = shader.VertexShader(v0, v1, v2, vs_shader_mats);
 
-				TransformVertexViewProjection(v0);
-				TransformVertexViewProjection(v1);
-				TransformVertexViewProjection(v2);
-
-				if (IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition()))
+				if (!should_draw_triangle)
 					continue;
 
 				// if all three position components are inside the view frustum it doesn't need to be clipped
@@ -141,9 +88,6 @@ namespace Engine
 
 					Triangle triangle
 					{
-						model_v0,
-						model_v1,
-						model_v2,
 						// store view projected W for perspective correct interpolation
 						1.0f / v0.GetW(),
 						1.0f / v1.GetW(),
@@ -153,10 +97,11 @@ namespace Engine
 						v2.GetPosition(),
 					};
 
-					RasterizeTriangle(depthbuffer, triangle, color, frag_shader);
+					RasterizeTriangle(depthbuffer, triangle, color, shader);
 
 					continue;
 				}
+
 				// store the verts in a buffer to clip them
 				std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
 				uint8_t vertices_buffer_count = 3;
@@ -179,10 +124,6 @@ namespace Engine
 
 					Triangle triangle
 					{
-						// original verts for attribute interpolation
-						GetTransformedVertexInverseViewProjection(clipped_v0),
-						GetTransformedVertexInverseViewProjection(clipped_v1),
-						GetTransformedVertexInverseViewProjection(clipped_v2),
 						// store view projected W for perspective correct interpolation
 						1.0f / clipped_v0.GetW(),
 						1.0f / clipped_v1.GetW(),
@@ -193,14 +134,14 @@ namespace Engine
 						clipped_v2.GetPosition()
 					};
 
-					RasterizeTriangle(depthbuffer, triangle, color, frag_shader);
+					RasterizeTriangle(depthbuffer, triangle, color, shader);
 				}
 
 			}
 
 		}
 
-		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const IShader& frag_shader)
+		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const IShader& shader)
 		{
 			int32_t bbox_min_x = std::min({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
 			int32_t bbox_min_y = std::min({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
@@ -216,8 +157,8 @@ namespace Engine
 				std::max(0, bbox_min_y));
 
 			Point2 bbox_max = Point2(
-				std::min(bbox_max_x, (int32_t)renderer->GetFrameBufferWidth()),
-				std::min(bbox_max_y, (int32_t)renderer->GetFrameBufferHeight()));
+				std::min(bbox_max_x, (int32_t)renderer->GetFrameBufferWidth() - 1),
+				std::min(bbox_max_y, (int32_t)renderer->GetFrameBufferHeight() - 1));
 
 			Point2 point = Point2(bbox_min.x, bbox_min.y);
 
@@ -249,11 +190,12 @@ namespace Engine
 								barcoord1 * triangle.v1_screen.z + 
 								barcoord2 * triangle.v2_screen.z;
 					
-						if (depthbuffer.GetDepth(x, y) > z)
+						if (depthbuffer.GetValue(x, y) > z)
 						{
 							HSVColor out_color = color;
-							frag_shader.FragmentShader(out_color, triangle, barcoord0, barcoord1, barcoord2);
-							depthbuffer.SetDepth(x, y, z);
+							shader.FragmentShader(out_color, triangle, barcoord0, barcoord1, barcoord2);
+							depthbuffer.SetValue(x, y, z);
+
 							renderer->SetPixel(x, y, out_color);
 							
 						}
@@ -274,15 +216,14 @@ namespace Engine
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)
 		{
 			model_mat = model_transform.GetTranslationMatrix() * (model_transform.GetRotationMatrix() * model_transform.GetScaleMatrix());
-			// shouldn't this also have the view_mat?
-			// TODO: figure out why this works
-			normal_mat = Matrix4(model_mat).Invert().Transpose();
+			// this should be the inverse transpose, but it's causing issues, TODO: investigate
+			normal_mat = Matrix4(model_mat);
 		}
 
 		void Rasterizer::SetModelMatrix(const Matrix4& model_matrix)
 		{
 			model_mat = model_matrix;
-			normal_mat = Matrix4(model_mat).Invert().Transpose();
+			normal_mat = Matrix4(model_mat);
 		}
 
 		void Rasterizer::SetViewMatrix(const Matrix4& view_matrix)
