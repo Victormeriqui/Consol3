@@ -28,7 +28,7 @@ namespace Display
 
 		uint8_t index = Math::Util::LerpCast<uint8_t>(color.value, 0, shades_count-1);
 
-		framebuffer->SetPixel(x, y, { (WCHAR)shades[index], 0x0F });
+		framebuffer->SetValue(x, y, { (WCHAR)shades[index], 0x0F });
 	
 	}
 

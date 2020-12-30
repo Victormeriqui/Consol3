@@ -26,7 +26,7 @@ namespace Display
 		uint8_t background_index = index * 16;
 
 		// in greyscale all pixels are a space and we control the color through the background
-		framebuffer->SetPixel(x, y, { ' ', background_index });
+		framebuffer->SetValue(x, y, { ' ', background_index });
 	}
 
 	void GreyscaleRenderer::DisplayFrame()
