@@ -31,9 +31,9 @@ namespace Display
 		// TODO: Calculate the rgb value from the HSVColor
 		// or... refactor so we can make the engine output whatever we want (hsv or rgb) - the main issue here is how the IRenderer interface would look like
 		if (color.value != 0)
-			framebuffer->SetPixel(x, y, RGBColor(255, 255, 255));
+			framebuffer->SetValue(x, y, RGBColor(255, 255, 255));
 		else
-			framebuffer->SetPixel(x, y, RGBColor());
+			framebuffer->SetValue(x, y, RGBColor());
 	}
 
 	void ANSIRenderer::CreateFrameBufferString()
@@ -54,7 +54,7 @@ namespace Display
 		{
 			for (uint16_t x = 0; x < framebuffer->GetWidth(); x++)
 			{
-				const RGBColor& color = framebuffer->GetPixel(x, y);
+				const RGBColor& color = framebuffer->GetValue(x, y);
 
 				std::string red_string = std::to_string(color.r);
 				red_string = std::string(3 - red_string.length(), '0') + red_string;

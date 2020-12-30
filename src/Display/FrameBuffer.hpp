@@ -29,16 +29,12 @@ namespace Display
 			buffer = std::vector<T>(width * height, T());
 		}
 
-		void SetPixel(uint16_t x, uint16_t y, const T& value)
+		void SetValue(uint16_t x, uint16_t y, const T& value)
 		{
-			// TODO: figure out why this is needed, this check shouldnt be necessary if we have correct clipping
-			if (x < 0 || x >= width || y < 0 || y >= height)
-				return;
-
 			buffer.data()[x + width * y] = value;
 		}
 
-		[[nodiscard]] T GetPixel(uint16_t x, uint16_t y) const
+		[[nodiscard]] T GetValue(uint16_t x, uint16_t y) const
 		{
 			return buffer[x + width * y];
 		};

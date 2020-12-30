@@ -62,7 +62,7 @@ namespace Engine
 				unsigned char g = data[i + 1];
 				unsigned char r = data[i + 2];
 
-				imagebuffer.SetPixel(x++, y, RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b));
+				imagebuffer.SetValue(x++, y, RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b));
 				if (x >= width)
 				{
 					y += flip_y ? -1 : 1;
@@ -92,7 +92,7 @@ namespace Engine
 			if (text_x >= imagebuffer.GetWidth() || text_y >= imagebuffer.GetHeight())
 				return RGBColor(0, 0, 0);
 
-			return imagebuffer.GetPixel(text_x, text_y);
+			return imagebuffer.GetValue(text_x, text_y);
 		}
 	}
 }
