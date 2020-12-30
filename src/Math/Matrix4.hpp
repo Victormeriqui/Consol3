@@ -16,6 +16,8 @@ namespace Math
 		Matrix4(float value);
 
 		Matrix4& SetIdentity();
+		Matrix4& SetPerspective(uint16_t width, uint16_t height, float znear, float zfar, float fov);
+		Matrix4& SetOrthographic(float left, float right, float up, float down, float near, float far);
 
 		Matrix4& Invert();
 		Matrix4& Transpose();
