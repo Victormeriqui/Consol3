@@ -1,6 +1,9 @@
 #include "Matrix4.hpp"
 
+#include "Util/MathUtil.hpp"
+
 #include <algorithm>
+#include <cmath>
 
 namespace Math
 {
@@ -25,6 +28,36 @@ namespace Math
 		values[1][0] = 0;	values[1][1] = 1;	values[1][2] = 0;	values[1][3] = 0;
 		values[2][0] = 0;	values[2][1] = 0;	values[2][2] = 1;	values[2][3] = 0;
 		values[3][0] = 0;	values[3][1] = 0;	values[3][2] = 0;	values[3][3] = 1;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetPerspective(uint16_t width, uint16_t height, float znear, float zfar, float fov)
+	{
+		// aspect ratio
+		float ar = (float)width / (float)height;
+		float fov_rad = Util::ToRadians(fov);
+		float tanhf = std::tan(fov_rad / 2.0f);
+		float zrange = znear - zfar;
+
+		values[0][0] = 1.0f / (tanhf * ar); values[0][1] = 0;            values[0][2] = 0;                        values[0][3] = 0;
+		values[1][0] = 0;                   values[1][1] = 1.0f / tanhf; values[1][2] = 0;                        values[1][3] = 0;
+		values[2][0] = 0;                   values[2][1] = 0;            values[2][2] = (-znear - zfar) / zrange; values[2][3] = (2.0f * zfar * znear) / zrange;
+		values[3][0] = 0;                   values[3][1] = 0;            values[3][2] = 1;                        values[3][3] = 0;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetOrthographic(float left, float right, float up, float down, float near, float far)
+	{
+		float width = right - left;
+		float height = up - down;
+		float depth = far - near;
+
+		values[0][0] = 2.0f / width; values[0][1] = 0;             values[0][2] = 0;             values[0][3] = -(right + left) / width;
+		values[1][0] = 0;            values[1][1] = 2.0f / height; values[1][2] = 0;             values[1][3] = -(up + down) / height;
+		values[2][0] = 0;            values[2][1] = 0;             values[2][2] = -2.0f / depth; values[2][3] = -(far + near) / depth;
+		values[3][0] = 0;            values[3][1] = 0;             values[3][2] = 0;             values[3][3] = 1;
 
 		return *this;
 	}
