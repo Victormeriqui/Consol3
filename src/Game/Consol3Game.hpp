@@ -39,6 +39,7 @@ namespace Game
 		StaticMesh mesh;
 		StaticMesh floor;
 
+		std::shared_ptr<DirectionalLight> dir_light;
 		std::shared_ptr<PointLight> point_light;
 		std::shared_ptr<SpotLight> spot_light;
 		StaticMesh plight_mesh;

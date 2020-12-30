@@ -5,6 +5,9 @@
 #include "../Vertex.hpp"
 #include "../../../Math/Vector3.hpp"
 
+#include <optional>
+#include <functional>
+
 namespace Engine
 {
 	namespace Rendering
@@ -35,6 +38,10 @@ namespace Engine
 				void SetIntensity(float intensity);
 
 				virtual float GetLightAmountAt(const Vertex& vertex) const override;
+
+				virtual bool IsShadowCaster() const override;
+				virtual std::optional<std::reference_wrapper<const Matrix4>> GetLightMatrix() const override;
+				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;
 			};
 		}
 	}

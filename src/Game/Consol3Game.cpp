@@ -39,17 +39,18 @@ namespace Game
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/cube.obj"), Texture("res/text.bmp"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
-		mesh.SetRotation(Angle(0, 1.33f, 0));
+//		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 	
 		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(6, 6, 6));
 		floor.SetPosition(Vector3(-3, -2, -3));
 
-		std::shared_ptr<DirectionalLight> dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
+		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
 		dir_light->SetIntensity(1.0f);
+
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
 		point_light->SetRange(15.0f);
 
@@ -61,7 +62,7 @@ namespace Game
 
 		lighting_system->AddLight(dir_light);
 		//lighting_system->AddLight(point_light);
-		//lighting_system->AddLight(spot_light);
+		lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -129,32 +130,40 @@ namespace Game
 			shifting = false;
 			mov_speed = 0.05f;
 		}
+
+		if (GetKeyState(VK_NUMPAD2) & 0X8000)
+			dir_light->SetDirection(camera.GetLookDirection());
+
+		if (GetKeyState(VK_MBUTTON) & 0X8000)
+		{
+			spot_light->SetPosition(camera.GetPosition());
+			spot_light->SetDirection(camera.GetLookDirection());
+		}
 	}
 
 	float i = 0;
 	void Consol3Game::Update()
 	{
-		point_light->SetPosition(Vector3(std::sin(i)*2, 0, std::cos(i)*2));
-		plight_mesh.SetPosition(Vector3(std::sin(i)*2, 0, std::cos(i)*2));
-		spot_light->SetPosition(camera.GetPosition());
-		spot_light->SetDirection(camera.GetLookDirection());
+		point_light->SetPosition(Vector3(std::sin(i)*2, 0.5, std::cos(i) * 2));
+		plight_mesh.SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
+
+	
 		i += 0.01f;
 	}
 
 	std::chrono::milliseconds Consol3Game::Render(int64_t delta)
 	{
-		camera.GetDepthBuffer().ClearBuffer();
+		camera.GetDepthBuffer().FillBuffer(std::numeric_limits<float>::max());
 
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		auto time = std::chrono::high_resolution_clock::now();
-		//mesh.DrawShadedMesh(camera, lighting_system, rasterizer);
-		mesh.DrawMesh(camera, rasterizer);
 
-
+		mesh.DrawShadedMesh(camera, lighting_system, rasterizer);
+		//mesh.DrawMesh(camera, rasterizer);
 		//floor.DrawShadedMesh(camera, lighting_system, rasterizer);
-		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
+		//plight_mesh.DrawMesh(camera, rasterizer);
 
-	//	plight_mesh.DrawMesh(camera, lighting_system, rasterizer);
+		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
 	}
 }
