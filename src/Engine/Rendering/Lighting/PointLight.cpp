@@ -3,7 +3,9 @@
 #include "../../../Math/Vector3.hpp"
 #include "../Vertex.hpp"
 
+#include <optional>
 #include <algorithm>
+#include <functional>
 
 namespace Engine
 {
@@ -65,12 +67,29 @@ namespace Engine
 
 				float attenuation_amount = attenuation.c + attenuation.b * light_dist + attenuation.a * light_dist * light_dist + 0.0001f;
 
-				float amount = -light_dir.GetDotProduct(vertex.GetNormal());
+				float amount = vertex.GetNormal().GetDotProduct(-light_dir);
 
 				amount = (amount * intensity) / attenuation_amount;
 
 				return std::max(0.0f, amount);
 			}
+
+			bool PointLight::IsShadowCaster() const
+			{
+				return false;
+			}
+
+			std::optional<std::reference_wrapper<const Matrix4>> PointLight::GetLightMatrix() const
+			{
+				return std::nullopt;
+			}
+
+			std::optional<std::reference_wrapper<DepthBuffer>> PointLight::GetLightDepthBuffer()
+			{
+				return std::nullopt;
+			}
+
+
 		}
 	}
 }

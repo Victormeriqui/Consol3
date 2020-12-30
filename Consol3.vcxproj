@@ -29,7 +29,6 @@
     <ClCompile Include="src\Engine\Rendering\Shaders\ShadedColorShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\ShadedTextureShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Texture.cpp" />
-    <ClCompile Include="src\Engine\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="src\Display\DitheredRenderer.cpp" />
     <ClCompile Include="src\Display\GreyscaleRenderer.cpp" />
     <ClCompile Include="src\Engine\Consol3Engine.cpp" />
