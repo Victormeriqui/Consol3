@@ -60,6 +60,7 @@ namespace Engine
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
 			void DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader);
+			void DrawPixel(uint16_t x, uint16_t y, const HSVColor& color);
 		};
 	}
 }

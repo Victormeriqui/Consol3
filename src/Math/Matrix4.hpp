@@ -1,6 +1,9 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include "Quaternion.hpp"
+#include "Vector3.hpp"
+
 #include <cstdint>
 #include <algorithm>
 
@@ -16,8 +19,12 @@ namespace Math
 		Matrix4(float value);
 
 		Matrix4& SetIdentity();
-		Matrix4& SetPerspective(uint16_t width, uint16_t height, float znear, float zfar, float fov);
-		Matrix4& SetOrthographic(float left, float right, float up, float down, float near, float far);
+		Matrix4& SetTranslation(const Vector3& translation);
+		Matrix4& SetScale(const Vector3& scale);
+		Matrix4& SetDirectionalRotation(const Vector3& right, const Vector3& up, const Vector3& forward);
+		Matrix4& SetQuaternionRotation(const Quaternion& rotation);
+		Matrix4& SetPerspectiveProjection(uint16_t width, uint16_t height, float znear, float zfar, float fov);
+		Matrix4& SetOrthographicProjection(float left, float right, float up, float down, float near, float far);
 
 		Matrix4& Invert();
 		Matrix4& Transpose();

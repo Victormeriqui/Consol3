@@ -1,7 +1,7 @@
 #include "SpotLight.hpp"
 
 #include "../../../Math/Vector3.hpp"
-#include "../Vertex.hpp"
+#include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Util/MathUtil.hpp"
 #include "../Transform.hpp"
 
@@ -20,11 +20,10 @@ namespace Engine
 				range(1.0f),
 				intensity(1.0f),
 				attenuation({ 1.2f, 1, 1 }),
-				transform(Transform()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				// TODO: calculate width, height and fov with the light's angle
-				projection_mat(Matrix4().SetPerspective(200, 200, 0.1f, 100.0f, 50))
+				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
 			{
 				// by calling the setters explicitly we also update the light matrix
 				SetPosition(Vector3());
@@ -36,11 +35,10 @@ namespace Engine
 				range(1.0f),
 				intensity(1.0f),
 				attenuation({ 1.2f, 1, 1 }),
-				transform(Transform()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				// TODO: calculate width, height and fov with the light's angle
-				projection_mat(Matrix4().SetPerspective(200, 200, 0.1f, 100.0f, 50))
+				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
 			{
 				SetPosition(Vector3());
 				SetDirection(Vector3());
@@ -51,19 +49,29 @@ namespace Engine
 				range(range),
 				intensity(1.0f),
 				attenuation({ 1.2f, 1, 1 }),
-				transform(Transform()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				// TODO: calculate width, height and fov with the light's angle
-				projection_mat(Matrix4().SetPerspective(200, 200, 0.1f, 100.0f, 50))
+				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
 			{
 				SetPosition(Vector3());
 				SetDirection(Vector3());
 			}
 
-			void SpotLight::UpdateLightMatrix()
+			void SpotLight::UpdateViewMatrix()
 			{
-				light_mat = projection_mat * (transform.GetRotationMatrix() * transform.GetTranslationMatrix());
+				Vector3 translation = Vector3(-position.x, -position.y, -position.z);
+
+				Vector3 right = Util::yaxis.GetCrossProduct(direction);
+				right.Normalize();
+
+				Vector3 up = direction.GetCrossProduct(right);
+				up.Normalize();
+
+				Matrix4 translation_mat = Matrix4().SetTranslation(translation);
+				Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, up, direction);
+
+				view_mat = rotation_mat * translation_mat;
 			}
 
 			Vector3 SpotLight::GetPosition() const
@@ -75,28 +83,18 @@ namespace Engine
 			{
 				this->position = position;
 
-				// recalculate the light_matrix
-				transform.SetTranslation(position);
-
-				UpdateLightMatrix();
+				UpdateViewMatrix();
 			}
 
 			Vector3 SpotLight::GetDirection() const
 			{
 				return direction;
 			}
-
 			void SpotLight::SetDirection(const Vector3& direction)
 			{
 				this->direction = direction;
 
-				// recalculate the light_matrix
-				float pitch = pitch = std::atan(direction.z / std::sqrt(direction.x * direction.x + direction.y * direction.y));
-				float yaw = std::atan(direction.y / direction.x);
-
-				transform.SetRotation(Angle(pitch, yaw, 0));
-
-				UpdateLightMatrix();
+				UpdateViewMatrix();
 			}
 
 			float SpotLight::GetAngle() const
@@ -129,9 +127,9 @@ namespace Engine
 				this->intensity = intensity;
 			}
 
-			float SpotLight::GetLightAmountAt(const Vertex& vertex) const
+			float SpotLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
 			{
-				Vector3 light_dir = vertex.GetPosition() - position;
+				Vector3 light_dir = position - this->position;
 				float light_dist = light_dir.GetLength();
 
 				if (light_dist > range)
@@ -148,7 +146,7 @@ namespace Engine
 
 				float attenuation_amount = attenuation.c + attenuation.b * light_dist + attenuation.a * light_dist * light_dist + 0.0001f;
 
-				float amount = vertex.GetNormal().GetDotProduct(-light_dir);
+				float amount = normal.GetDotProduct(-light_dir);
 
 				amount = (amount * intensity) / attenuation_amount;
 
@@ -160,9 +158,14 @@ namespace Engine
 				return true;
 			}
 
-			std::optional<std::reference_wrapper<const Matrix4>> SpotLight::GetLightMatrix() const
+			std::optional<std::reference_wrapper<const Matrix4>> SpotLight::GetProjectionMatrix() const
 			{
-				return std::optional(std::reference_wrapper(light_mat));
+				return std::optional(std::reference_wrapper(projection_mat));
+			}
+
+			std::optional<std::reference_wrapper<const Matrix4>> SpotLight::GetViewMatrix() const
+			{
+				return std::optional(std::reference_wrapper(view_mat));
 			}
 
 			std::optional<std::reference_wrapper<DepthBuffer>> SpotLight::GetLightDepthBuffer()
@@ -170,6 +173,10 @@ namespace Engine
 				return std::optional(std::reference_wrapper(depthbuffer));
 			}
 
+			void SpotLight::ClearDepthBuffer()
+			{
+				depthbuffer.FillBuffer(std::numeric_limits<float>::max());
+			}
 		}
 	}
 }

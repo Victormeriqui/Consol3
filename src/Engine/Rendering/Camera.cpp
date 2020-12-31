@@ -20,7 +20,7 @@ namespace Engine
 			rotation(Angle()),
 			transform(Transform()),
 			depthbuffer(DepthBuffer(100, 100)),
-			projection_mat(Matrix4().SetPerspective(width, height, znear, zfar, fov))
+			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov))
 		{
 		}
 
@@ -34,7 +34,7 @@ namespace Engine
 			rotation(Quaternion()),
 			transform(Transform()),
 			depthbuffer(DepthBuffer(width, height)),
-			projection_mat(Matrix4().SetPerspective(width, height, znear, zfar, fov))
+			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov))
 		{	
 		}
 
@@ -153,6 +153,11 @@ namespace Engine
 		[[nodiscard]] DepthBuffer& Camera::GetDepthBuffer()
 		{
 			return depthbuffer;
+		}
+
+		void Camera::ClearDepthBuffer()
+		{
+			depthbuffer.FillBuffer(std::numeric_limits<float>::max());
 		}
 	}
 }

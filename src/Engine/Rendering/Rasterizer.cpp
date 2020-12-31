@@ -194,10 +194,9 @@ namespace Engine
 						{
 							HSVColor out_color = color;
 							shader.FragmentShader(out_color, triangle, barcoord0, barcoord1, barcoord2);
-							depthbuffer.SetValue(x, y, z);
 
+							depthbuffer.SetValue(x, y, z);
 							renderer->SetPixel(x, y, out_color);
-							
 						}
 					}
 
@@ -211,6 +210,11 @@ namespace Engine
 				edge2.edgefunction_res += edge2.step_delta_y;
 			}
 
+		}
+
+		void Rasterizer::DrawPixel(uint16_t x, uint16_t y, const HSVColor& color)
+		{
+			renderer->SetPixel(x, y, color);
 		}
 
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)

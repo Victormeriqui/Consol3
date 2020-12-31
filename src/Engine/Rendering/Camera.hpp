@@ -65,6 +65,7 @@ namespace Engine
 			void RotateRoll(float amount);
 
 			[[nodiscard]] DepthBuffer& GetDepthBuffer();
+			void ClearDepthBuffer();
 		};
 	}
 }

@@ -1,7 +1,8 @@
 #ifndef ILIGHT_HPP
 #define ILIGHT_HPP
 
-#include "../Vertex.hpp"
+#include "../../../Math/Vector3.hpp"
+#include "../../../Math/Matrix4.hpp"
 #include "../DepthBuffer.hpp"
 
 #include <optional>
@@ -13,6 +14,8 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			using namespace Math;
+
 			struct Attenuation
 			{
 				float a;
@@ -25,12 +28,14 @@ namespace Engine
 			protected:
 				ILight() {}
 			public:
-				[[nodiscard]] virtual float GetLightAmountAt(const Vertex& vertex) const = 0;
+				[[nodiscard]] virtual float GetLightAmountAt(const Vector3& position, const Vector3& normal) const = 0;
 				
 				[[nodiscard]] virtual bool IsShadowCaster() const = 0;
 				// i dislike the need for the referece_wrapper here, but C++ optionals don't allow references
-				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetLightMatrix() const = 0;
+				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const = 0;
+				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const = 0;
 				[[nodiscard]] virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() = 0;
+				virtual void ClearDepthBuffer() = 0;
 			};
 		}
 	}

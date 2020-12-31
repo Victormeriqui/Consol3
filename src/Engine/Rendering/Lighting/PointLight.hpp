@@ -2,8 +2,8 @@
 #define POINTLIGHT_HPP
 
 #include "ILight.hpp"
-#include "../Vertex.hpp"
 #include "../../../Math/Vector3.hpp"
+#include "../../../Math/Matrix4.hpp"
 
 #include <optional>
 #include <functional>
@@ -37,11 +37,13 @@ namespace Engine
 				[[nodiscard]] float GetIntensity() const;
 				void SetIntensity(float intensity);
 
-				virtual float GetLightAmountAt(const Vertex& vertex) const override;
+				virtual float GetLightAmountAt(const Vector3& position, const Vector3& normal) const override;
 
 				virtual bool IsShadowCaster() const override;
-				virtual std::optional<std::reference_wrapper<const Matrix4>> GetLightMatrix() const override;
+				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;
+				virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const override;
 				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;
+				virtual void ClearDepthBuffer() override;
 			};
 		}
 	}

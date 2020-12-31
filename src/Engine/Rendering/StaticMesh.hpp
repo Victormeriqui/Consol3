@@ -15,7 +15,7 @@ namespace Engine
 		public:
 			using AbstractMesh::AbstractMesh;
 
-			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const override;
+			virtual void DrawMesh(Camera& camera, std::shared_ptr<LightingSystem> lighting_system, Rasterizer& rasterizer) const override;
 			virtual void DrawShadedMesh(Camera& camera, std::shared_ptr<LightingSystem> lighting_system, Rasterizer& rasterizer) const override;
 		};
 	}

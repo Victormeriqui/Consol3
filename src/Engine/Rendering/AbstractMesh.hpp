@@ -65,7 +65,7 @@ namespace Engine
 			AbstractMesh& SetRotation(const Angle& rotation);
 			AbstractMesh& SetScale(const Vector3& scale);
 
-			virtual void DrawMesh(Camera& camera, Rasterizer& rasterizer) const = 0;
+			virtual void DrawMesh(Camera& camera, std::shared_ptr<LightingSystem> lighting_system, Rasterizer& rasterizer) const = 0;
 			virtual void DrawShadedMesh(Camera& camera, std::shared_ptr<LightingSystem> lighting_system, Rasterizer& rasterizer) const = 0;
 		};
 	}
