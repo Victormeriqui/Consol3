@@ -24,6 +24,7 @@
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
     <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
     <ClCompile Include="src\Display\TextOnlyRenderer.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Lighting\LightRenderer.hpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainColorShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainTextureShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\ShadedColorShader.cpp" />

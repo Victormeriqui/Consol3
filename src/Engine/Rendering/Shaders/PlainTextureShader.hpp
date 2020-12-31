@@ -25,9 +25,9 @@ namespace Engine
 				std::shared_ptr<Texture> texture;
 
 				// set by the vertex shader for the fragment shader
-				Vector2 v0_texture_coord;
-				Vector2 v1_texture_coord;
-				Vector2 v2_texture_coord;
+				Vector2 vert_v0_texture_coord;
+				Vector2 vert_v1_texture_coord;
+				Vector2 vert_v2_texture_coord;
 
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;

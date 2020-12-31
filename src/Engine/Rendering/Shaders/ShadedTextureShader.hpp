@@ -6,6 +6,7 @@
 #include "../Vertex.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector2.hpp"
+#include "../../../Math/Vector3.hpp"
 #include "../../../Display/HSVColor.hpp"
 #include "../Lighting/LightingSystem.hpp"
 #include "../Texture.hpp"
@@ -26,13 +27,16 @@ namespace Engine
 				std::shared_ptr<LightingSystem> lighting_system;
 
 				// set by the vertex shader for the fragment shader
-				float v0_light_amount;
-				float v1_light_amount;
-				float v2_light_amount;
+				Vector3 vert_v0_position;
+				Vector3 vert_v1_position;
+				Vector3 vert_v2_position;
+				Vector3 vert_v0_normal;
+				Vector3 vert_v1_normal;
+				Vector3 vert_v2_normal;
 
-				Vector2 v0_texture_coord;
-				Vector2 v1_texture_coord;
-				Vector2 v2_texture_coord;
+				Vector2 vert_v0_texture_coord;
+				Vector2 vert_v1_texture_coord;
+				Vector2 vert_v2_texture_coord;
 
 			public:
 

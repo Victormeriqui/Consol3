@@ -56,7 +56,7 @@ namespace Engine
 					return vertex;
 				}
 
-				[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2)
+				[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const
 				{
 					Vector3 center = Vector3(
 						(p0.x + p1.x + p2.x) / 3,
@@ -69,6 +69,22 @@ namespace Engine
 					Vector3 facenormal = edge1.GetCrossProduct(edge2);
 
 					return center.GetDotProduct(facenormal) > 0;
+				}
+
+				template <class T>
+				[[nodiscard]] inline T PerspectiveCorrectInterpolate(const T& value0, const T& value1, const T& value2, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const
+				{
+					// perspective correct
+					T value0_pc = value0 * triangle.v0_oneoverw;
+					T value1_pc = value1 * triangle.v1_oneoverw;
+					T value2_pc = value2 * triangle.v2_oneoverw;
+				
+					T interpolated = (value0_pc * barcoord0) + (value1_pc * barcoord1) + (value2_pc * barcoord2);
+					
+					float w = (triangle.v0_oneoverw * barcoord0) + (triangle.v1_oneoverw * barcoord1) + (triangle.v2_oneoverw * barcoord2);
+					interpolated /= w;
+
+					return interpolated;
 				}
 
 			public:
