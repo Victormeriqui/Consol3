@@ -14,6 +14,7 @@
 #include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
 #include "../Engine/Rendering/Lighting/PointLight.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
+#include "../Math/Util/MathUtil.hpp"
 
 #include <vector>
 // Windows.h overrides std::min
@@ -39,7 +40,7 @@ namespace Game
 
 		rasterizer.SetProjectionMatrix(camera.GetProjectionMatrix());
 
-		mesh = StaticMesh(Model("res/gourd.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh(Model("res/monkey.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
 //		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
@@ -59,10 +60,15 @@ namespace Game
 		spot_light->SetAngle(15);
 		spot_light->SetIntensity(5.0f);
 
+		spot_light2 = std::make_shared<SpotLight>(Vector3(0, 0.1f, -2.0f), Vector3(0, 0, 1));
+		spot_light2->SetRange(15.0f);
+		spot_light2->SetAngle(15);
+		spot_light2->SetIntensity(5.0f);
 
-		lighting_system->AddLight(dir_light);
+		//lighting_system->AddLight(dir_light);
 		//lighting_system->AddLight(point_light);
 		lighting_system->AddLight(spot_light);
+		lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -139,6 +145,11 @@ namespace Game
 			spot_light->SetPosition(camera.GetPosition());
 			spot_light->SetDirection(camera.GetLookDirection());
 		}
+		if (GetKeyState(VK_ADD) & 0X8000)
+		{
+			spot_light2->SetPosition(camera.GetPosition());
+			spot_light2->SetDirection(camera.GetLookDirection());
+		}
 	}
 
 	float i = 0;
@@ -153,16 +164,53 @@ namespace Game
 
 	std::chrono::milliseconds Consol3Game::Render(int64_t delta)
 	{
-		camera.GetDepthBuffer().FillBuffer(std::numeric_limits<float>::max());
+		lighting_system->ClearDepthBuffers();
+		camera.ClearDepthBuffer();
 
 		rasterizer.SetViewMatrix(camera.GetViewMatrix());
 
 		auto time = std::chrono::high_resolution_clock::now();
 
 		mesh.DrawShadedMesh(camera, lighting_system, rasterizer);
-		//mesh.DrawMesh(camera, rasterizer);
-		//floor.DrawShadedMesh(camera, lighting_system, rasterizer);
-		//plight_mesh.DrawMesh(camera, rasterizer);
+		//mesh.DrawMesh(camera, lighting_system, rasterizer);
+		floor.DrawShadedMesh(camera, lighting_system, rasterizer);
+		//plight_mesh.DrawMesh(camera, lighting_system, rasterizer);
+
+	/*	for (int y = 0; y < 200; y++)
+		{
+			for (int x = 0; x < 200; x++)
+			{
+				float z = dir_light->GetLightDepthBuffer().value().get().GetValue(x, y);
+				uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
+				uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
+				rasterizer.DrawPixel(nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+			}
+		}
+
+		*/
+		for (int y = 0; y < 200; y++)
+		{
+			for (int x = 0; x < 200; x++)
+			{
+				float z = spot_light->GetLightDepthBuffer().value().get().GetValue(x, y);
+				uint16_t nx = Util::LerpCast<uint16_t>(x/200.0f, 0, 50);
+				uint16_t ny = Util::LerpCast<uint16_t>(y/200.0f, 0, 50);
+				rasterizer.DrawPixel(nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+			}
+		}
+
+
+		for (int y = 0; y < 200; y++)
+		{
+			for (int x = 0; x < 200; x++)
+			{
+				float z = spot_light2->GetLightDepthBuffer().value().get().GetValue(x, y);
+				uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
+				uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
+				rasterizer.DrawPixel(150+nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+			}
+		}
+
 
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
 	}

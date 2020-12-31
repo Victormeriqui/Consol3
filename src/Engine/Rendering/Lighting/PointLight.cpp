@@ -1,7 +1,7 @@
 #include "PointLight.hpp"
 
 #include "../../../Math/Vector3.hpp"
-#include "../Vertex.hpp"
+#include "../../../Math/Matrix4.hpp"
 
 #include <optional>
 #include <algorithm>
@@ -13,6 +13,8 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			using namespace Math;
+
 			PointLight::PointLight() : position(Vector3()), range(1.0f), intensity(1.0f), attenuation({ 1.2f, 1, 1})
 			{
 			}
@@ -55,9 +57,9 @@ namespace Engine
 				this->intensity = intensity;
 			}
 
-			float PointLight::GetLightAmountAt(const Vertex& vertex) const
+			float PointLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
 			{
-				Vector3 light_dir = vertex.GetPosition() - position;
+				Vector3 light_dir = position - this->position;
 				float light_dist = light_dir.GetLength();
 
 				if (light_dist > range)
@@ -67,7 +69,7 @@ namespace Engine
 
 				float attenuation_amount = attenuation.c + attenuation.b * light_dist + attenuation.a * light_dist * light_dist + 0.0001f;
 
-				float amount = vertex.GetNormal().GetDotProduct(-light_dir);
+				float amount = normal.GetDotProduct(-light_dir);
 
 				amount = (amount * intensity) / attenuation_amount;
 
@@ -79,7 +81,12 @@ namespace Engine
 				return false;
 			}
 
-			std::optional<std::reference_wrapper<const Matrix4>> PointLight::GetLightMatrix() const
+			std::optional<std::reference_wrapper<const Matrix4>> PointLight::GetProjectionMatrix() const
+			{
+				return std::nullopt;
+			}
+
+			std::optional<std::reference_wrapper<const Matrix4>> PointLight::GetViewMatrix() const
 			{
 				return std::nullopt;
 			}
@@ -89,7 +96,9 @@ namespace Engine
 				return std::nullopt;
 			}
 
-
+			void PointLight::ClearDepthBuffer()
+			{
+			}
 		}
 	}
 }

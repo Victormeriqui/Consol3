@@ -42,6 +42,7 @@ namespace Game
 		std::shared_ptr<DirectionalLight> dir_light;
 		std::shared_ptr<PointLight> point_light;
 		std::shared_ptr<SpotLight> spot_light;
+		std::shared_ptr<SpotLight> spot_light2;
 		StaticMesh plight_mesh;
 
 	public:

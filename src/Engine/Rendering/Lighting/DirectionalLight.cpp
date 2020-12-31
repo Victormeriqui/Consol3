@@ -1,7 +1,8 @@
 #include "DirectionalLight.hpp"
 
 #include "../../../Math/Vector3.hpp"
-#include "../Vertex.hpp"
+#include "../../../Math/Util/MathUtil.hpp"
+#include "../../../Math/Matrix4.hpp"
 #include "../Transform.hpp"
 
 #include <algorithm>
@@ -16,38 +17,43 @@ namespace Engine
 		{
 			DirectionalLight::DirectionalLight() :
 				intensity(1.0f),
-				transform(Transform()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographic(-5, 5, 5, -5, -5, 5))
+				projection_mat(Matrix4().SetOrthographicProjection(-5, 5, 5, -5, -5, 5))
 			{
-				// by calling the setter explicitly we also update the light matrix
+				// by calling the setter explicitly we also update the view matrix
 				SetDirection(Vector3());
 			}
 
 			DirectionalLight::DirectionalLight(const Vector3& direction) :
 				intensity(1.0f),
-				transform(Transform()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographic(-5, 5, 5, -5, -5, 5))
+				projection_mat(Matrix4().SetOrthographicProjection(-5, 5, 5, -5, -5, 5))
 			{
 				SetDirection(direction);
 			}
 
 			DirectionalLight::DirectionalLight(const Vector3& direction, float intensity) :
 				intensity(intensity),
-				transform(Transform()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographic(-5, 5, 5, -5, -5, 5))
+				projection_mat(Matrix4().SetOrthographicProjection(-5, 5, 5, -5, -5, 5))
 			{
 				SetDirection(direction);
 			}
 
-			void DirectionalLight::UpdateLightMatrix()
+			void DirectionalLight::UpdateViewMatrix()
 			{
-				light_mat = projection_mat * transform.GetRotationMatrix();
+				Vector3 right = Util::yaxis.GetCrossProduct(direction);
+				right.Normalize();
+
+				Vector3 up = direction.GetCrossProduct(right);
+				up.Normalize();
+
+				Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, up, direction);
+
+				view_mat = rotation_mat;
 			}
 
 			Vector3 DirectionalLight::GetDirection() const
@@ -59,13 +65,7 @@ namespace Engine
 			{
 				this->direction = direction;
 
-				// recalculate the light_matrix
-				float pitch = pitch = std::atan(direction.z / std::sqrt(direction.x * direction.x + direction.y * direction.y));
-				float yaw = std::atan(direction.y / direction.x);
-
-				transform.SetRotation(Angle(pitch, yaw, 0));
-				
-				UpdateLightMatrix();
+				UpdateViewMatrix();
 			}
 
 			float DirectionalLight::GetIntensity() const
@@ -78,9 +78,9 @@ namespace Engine
 				this->intensity = intensity;
 			}
 			
-			float DirectionalLight::GetLightAmountAt(const Vertex& vertex) const
+			float DirectionalLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
 			{
-				float amount = vertex.GetNormal().GetDotProduct(-direction);
+				float amount = normal.GetDotProduct(-direction);
 
 				amount *= intensity;
 
@@ -92,9 +92,14 @@ namespace Engine
 				return true;
 			}
 
-			std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetLightMatrix() const
+			std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetProjectionMatrix() const
 			{
-				return std::optional(std::reference_wrapper(light_mat));
+				return std::optional(std::reference_wrapper(projection_mat));
+			}
+
+			std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetViewMatrix() const
+			{
+				return std::optional(std::reference_wrapper(view_mat));
 			}
 
 			std::optional<std::reference_wrapper<DepthBuffer>> DirectionalLight::GetLightDepthBuffer()
@@ -102,6 +107,10 @@ namespace Engine
 				return std::optional(std::reference_wrapper(depthbuffer));
 			}
 
+			void DirectionalLight::ClearDepthBuffer()
+			{
+				depthbuffer.FillBuffer(std::numeric_limits<float>::max());
+			}
 		}
 	}
 }

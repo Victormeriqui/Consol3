@@ -1,6 +1,8 @@
 #include "Matrix4.hpp"
 
 #include "Util/MathUtil.hpp"
+#include "Quaternion.hpp"
+#include "Vector3.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -24,15 +26,70 @@ namespace Math
 
 	Matrix4& Matrix4::SetIdentity()
 	{
-		values[0][0] = 1;	values[0][1] = 0;	values[0][2] = 0;	values[0][3] = 0;
-		values[1][0] = 0;	values[1][1] = 1;	values[1][2] = 0;	values[1][3] = 0;
-		values[2][0] = 0;	values[2][1] = 0;	values[2][2] = 1;	values[2][3] = 0;
-		values[3][0] = 0;	values[3][1] = 0;	values[3][2] = 0;	values[3][3] = 1;
+		values[0][0] = 1; values[0][1] = 0; values[0][2] = 0; values[0][3] = 0;
+		values[1][0] = 0; values[1][1] = 1; values[1][2] = 0; values[1][3] = 0;
+		values[2][0] = 0; values[2][1] = 0; values[2][2] = 1; values[2][3] = 0;
+		values[3][0] = 0; values[3][1] = 0; values[3][2] = 0; values[3][3] = 1;
 
 		return *this;
 	}
 
-	Matrix4& Matrix4::SetPerspective(uint16_t width, uint16_t height, float znear, float zfar, float fov)
+	Matrix4& Matrix4::SetTranslation(const Vector3& translation)
+	{
+		values[0][0] = 1; values[0][1] = 0; values[0][2] = 0; values[0][3] = translation.x;
+		values[1][0] = 0; values[1][1] = 1; values[1][2] = 0; values[1][3] = translation.y;
+		values[2][0] = 0; values[2][1] = 0; values[2][2] = 1; values[2][3] = translation.z;
+		values[3][0] = 0; values[3][1] = 0; values[3][2] = 0; values[3][3] = 1;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetScale(const Vector3& scale)
+	{
+		values[0][0] = scale.x; values[0][1] = 0;       values[0][2] = 0;       values[0][3] = 0;
+		values[1][0] = 0;       values[1][1] = scale.y; values[1][2] = 0;       values[1][3] = 0;
+		values[2][0] = 0;       values[2][1] = 0;       values[2][2] = scale.z; values[2][3] = 0;
+		values[3][0] = 0;       values[3][1] = 0;       values[3][2] = 0;       values[3][3] = 1;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetDirectionalRotation(const Vector3& right, const Vector3& up, const Vector3& forward)
+	{
+		values[0][0] = right.x;   values[0][1] = right.y;   values[0][2] = right.z;   values[0][3] = 0;
+		values[1][0] = up.x;      values[1][1] = up.y;      values[1][2] = up.z;      values[1][3] = 0;
+		values[2][0] = forward.x; values[2][1] = forward.y; values[2][2] = forward.z; values[2][3] = 0;
+		values[3][0] = 0;         values[3][1] = 0;         values[3][2] = 0;         values[3][3] = 1;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetQuaternionRotation(const Quaternion& rotation)
+	{
+		float xx = rotation.x * rotation.x;
+		float yy = rotation.y * rotation.y;
+		float zz = rotation.z * rotation.z;
+		float ww = rotation.w * rotation.w;
+		float x2 = rotation.x * 2.0f;
+		float y2 = rotation.y * 2.0f;
+		float z2 = rotation.z * 2.0f;
+		float w2 = rotation.w * 2.0f;
+		float xy = x2 * rotation.y;
+		float xz = x2 * rotation.z;
+		float yz = y2 * rotation.z;
+		float wx = w2 * rotation.x;
+		float wy = w2 * rotation.y;
+		float wz = w2 * rotation.z;
+
+		values[0][0] = ww + xx - yy - zz; values[0][1] = xy - wz;           values[0][2] = xz + wy;           values[0][3] = 0;
+		values[1][0] = xy + wz;           values[1][1] = ww - xx + yy - zz; values[1][2] = yz - wx;           values[1][3] = 0;
+		values[2][0] = xz - wy;           values[2][1] = yz + wx;           values[2][2] = ww - xx - yy + zz; values[2][3] = 0;
+		values[3][0] = 0;                 values[3][1] = 0;                 values[3][2] = 0;                 values[3][3] = 1;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetPerspectiveProjection(uint16_t width, uint16_t height, float znear, float zfar, float fov)
 	{
 		// aspect ratio
 		float ar = (float)width / (float)height;
@@ -48,7 +105,7 @@ namespace Math
 		return *this;
 	}
 
-	Matrix4& Matrix4::SetOrthographic(float left, float right, float up, float down, float near, float far)
+	Matrix4& Matrix4::SetOrthographicProjection(float left, float right, float up, float down, float near, float far)
 	{
 		float width = right - left;
 		float height = up - down;

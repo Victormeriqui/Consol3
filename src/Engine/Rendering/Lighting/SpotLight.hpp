@@ -2,8 +2,8 @@
 #define SPOTLIGHT_HPP
 
 #include "ILight.hpp"
-#include "../Vertex.hpp"
 #include "../../../Math/Vector3.hpp"
+#include "../../../Math/Matrix4.hpp"
 #include "../DepthBuffer.hpp"
 #include "../Transform.hpp"
 
@@ -29,11 +29,10 @@ namespace Engine
 
 				DepthBuffer depthbuffer;
 
-				Transform transform;
 				Matrix4 projection_mat;
-				Matrix4 light_mat;
+				Matrix4 view_mat;
 
-				void UpdateLightMatrix();
+				void UpdateViewMatrix();
 
 			public:
 				SpotLight();
@@ -55,11 +54,13 @@ namespace Engine
 				[[nodiscard]] float GetIntensity() const;
 				void SetIntensity(float intensity);
 
-				virtual float GetLightAmountAt(const Vertex& vertex) const override;
+				virtual float GetLightAmountAt(const Vector3& position, const Vector3& normal) const override;
 
 				virtual bool IsShadowCaster() const override;
-				virtual std::optional<std::reference_wrapper<const Matrix4>> GetLightMatrix() const override;
+				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;
+				virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const override;
 				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;
+				virtual void ClearDepthBuffer() override;
 			};
 		}
 	}
