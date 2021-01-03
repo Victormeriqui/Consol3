@@ -3,15 +3,15 @@
 
 #include "IShader.hpp"
 
-#include "../Vertex.hpp"
-#include "../../../Math/Matrix4.hpp"
 #include "../../../Display/HSVColor.hpp"
-#include "../Lighting/LightingSystem.hpp"
+#include "../../../Math/Matrix4.hpp"
 #include "../DepthBuffer.hpp"
+#include "../Lighting/LightingSystem.hpp"
+#include "../Vertex.hpp"
 
-#include <memory>
-#include <functional>
 #include <cstdint>
+#include <functional>
+#include <memory>
 
 namespace Engine
 {
@@ -44,16 +44,15 @@ namespace Engine
 				// non linear projections need to account for perspective
 				bool vert_light_islinearprojection[10];
 
-
 				Vector3 frag_position_lights[10];
 
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
-				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
+				virtual void FragmentShader(
+					HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
 
 				void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
 			};
-
 
 		}
 	}

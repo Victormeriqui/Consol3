@@ -5,8 +5,8 @@
 
 #include "../Vector3.hpp"
 
-#include <cstdint>
 #include <algorithm>
+#include <cstdint>
 
 namespace Math
 {
@@ -32,15 +32,15 @@ namespace Math
 		[[nodiscard]] constexpr inline static float Lerp(float val, float from_min, float from_max, float to_min, float to_max)
 		{
 			float clamped_val = from_min < from_max ? std::clamp(val, from_min, from_max) : std::clamp(val, from_max, from_min);
-			float from_dist = from_max - from_min;
-			float to_dist = to_max - to_min;
+			float from_dist	  = from_max - from_min;
+			float to_dist	  = to_max - to_min;
 
 			float scaled = (clamped_val - from_min) / from_dist;
 
 			return to_min + (scaled * to_dist);
 		}
 
-		template <class T>
+		template<class T>
 		[[nodiscard]] constexpr inline static T LerpCast(float val, T min, T max)
 		{
 			return (T)((1 - val) * min + val * max);

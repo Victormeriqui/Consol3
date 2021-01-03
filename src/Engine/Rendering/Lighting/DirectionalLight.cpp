@@ -1,8 +1,8 @@
 #include "DirectionalLight.hpp"
 
-#include "../../../Math/Vector3.hpp"
-#include "../../../Math/Util/MathUtil.hpp"
 #include "../../../Math/Matrix4.hpp"
+#include "../../../Math/Util/MathUtil.hpp"
+#include "../../../Math/Vector3.hpp"
 #include "../Transform.hpp"
 
 #include <algorithm>
@@ -78,7 +78,7 @@ namespace Engine
 			{
 				this->intensity = intensity;
 			}
-			
+
 			float DirectionalLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
 			{
 				float amount = normal.GetDotProduct(-direction);

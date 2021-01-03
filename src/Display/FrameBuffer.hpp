@@ -18,7 +18,6 @@ namespace Display
 		std::vector<T> buffer;
 
 	public:
-
 		FrameBuffer() : width(0), height(0)
 		{
 			buffer = std::vector<T>(width * height, T());

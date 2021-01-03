@@ -42,9 +42,7 @@ namespace Engine
 				// calculate the whole edge function for the point
 				edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
 			}
-
 		};
-
 
 		// wrapper for the paramenters passed to the rasterizer and shader
 		struct Triangle
@@ -60,6 +58,5 @@ namespace Engine
 		};
 	}
 }
-
 
 #endif

@@ -1,11 +1,11 @@
 #ifndef CLIPPER_HPP
 #define CLIPPER_HPP
 
-#include "Vertex.hpp"
 #include "../../Math/Vector3.hpp"
+#include "Vertex.hpp"
 
-#include <cstdint>
 #include <array>
+#include <cstdint>
 
 // TODO: refactor this class to use more readable datastructures
 // important to avoid heap allocations since this should be parallel
@@ -40,16 +40,20 @@ namespace Engine
 			// returns the correct component from the position for the given plane (ex: PLANE_POSITIVE_X or PLANE_NEGATIVE_X returns position.x)
 			[[nodiscard]] inline float GetComponentForPlane(const Vector3& position, const ClipPlane plane) const;
 
-			//solving the lerp equation to find the value that interpolates to the edge of the clipping plane
+			// solving the lerp equation to find the value that interpolates to the edge of the clipping plane
 			[[nodiscard]] inline float GetLerpAmount(float point1, float point2, float start, float end);
 
 			// clips the vertices currently in the buffer against the given plane, returns whether or not they should be drawn
-			[[nodiscard]] bool ClipVerticesAgainstPlane(std::array<Vertex, 10>& out_vertices_buffer, uint8_t* out_vertices_buffer_count, const ClipPlane plane);
+			[[nodiscard]] bool ClipVerticesAgainstPlane(std::array<Vertex, 10>& out_vertices_buffer,
+														uint8_t* out_vertices_buffer_count,
+														const ClipPlane plane);
 
 		public:
 			Clipper();
 
-			[[nodiscard]] bool ClipVerticesAgainstAxis(std::array<Vertex, 10>& out_vertices_buffer, uint8_t* out_vertices_buffer_count, const ClipAxis axis);
+			[[nodiscard]] bool ClipVerticesAgainstAxis(std::array<Vertex, 10>& out_vertices_buffer,
+													   uint8_t* out_vertices_buffer_count,
+													   const ClipAxis axis);
 		};
 	}
 }

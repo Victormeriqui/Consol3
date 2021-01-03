@@ -1,8 +1,8 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
-#include "../../Display/RGBColor.hpp"
 #include "../../Display/Framebuffer.hpp"
+#include "../../Display/RGBColor.hpp"
 #include "../../Math/Vector2.hpp"
 
 #include <cstdint>

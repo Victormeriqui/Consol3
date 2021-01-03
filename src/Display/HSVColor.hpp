@@ -4,8 +4,8 @@
 #include "RGBColor.hpp"
 
 #include <algorithm>
-#include <cstdint>
 #include <cmath>
+#include <cstdint>
 
 namespace Display
 {
@@ -16,8 +16,12 @@ namespace Display
 		float saturation;
 		float value;
 
-		constexpr HSVColor() : hue(0), saturation(0), value(0) {}
-		constexpr HSVColor(float hue, float saturation, float value) : hue(hue), saturation(saturation), value(value) {}
+		constexpr HSVColor() : hue(0), saturation(0), value(0)
+		{
+		}
+		constexpr HSVColor(float hue, float saturation, float value) : hue(hue), saturation(saturation), value(value)
+		{
+		}
 		HSVColor(RGBColor rgb_color) : hue(), saturation(), value()
 		{
 			// http://lolengine.net/blog/2013/01/13/fast-rgb-to-hsv
@@ -42,9 +46,9 @@ namespace Display
 
 			float chroma = r - std::min(g, b);
 
-			hue = std::fabs(k + (g - b) / (6.0f * chroma + 1e-20f)) * 360.0f;
+			hue		   = std::fabs(k + (g - b) / (6.0f * chroma + 1e-20f)) * 360.0f;
 			saturation = chroma / (r + 1e-20f);
-			value = r;
+			value	   = r;
 		}
 	};
 }

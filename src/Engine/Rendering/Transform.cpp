@@ -11,8 +11,8 @@ namespace Engine
 		Transform::Transform()
 		{
 			translation_mat = Matrix4();
-			rotation_mat = Matrix4();
-			scale_mat = Matrix4();
+			rotation_mat	= Matrix4();
+			scale_mat		= Matrix4();
 
 			translation_mat.SetIdentity();
 			rotation_mat.SetIdentity();

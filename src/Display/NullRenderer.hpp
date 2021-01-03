@@ -1,11 +1,11 @@
 #ifndef NULLRENDERER_HPP
 #define NULLRENDERER_HPP
 
-#include "IRenderer.hpp"
 #include "HSVColor.hpp"
+#include "IRenderer.hpp"
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 namespace Display
 {
@@ -44,8 +44,6 @@ namespace Display
 			return 200;
 		}
 	};
-
 }
-
 
 #endif

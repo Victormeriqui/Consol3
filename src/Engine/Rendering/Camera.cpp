@@ -35,7 +35,7 @@ namespace Engine
 			transform(Transform()),
 			depthbuffer(DepthBuffer(width, height)),
 			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov))
-		{	
+		{
 		}
 
 		const Matrix4& Camera::GetProjectionMatrix() const

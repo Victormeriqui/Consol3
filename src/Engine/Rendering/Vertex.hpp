@@ -1,9 +1,9 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-#include "../../Math/Vector3.hpp"
-#include "../../Math/Vector2.hpp"
 #include "../../Math/Matrix4.hpp"
+#include "../../Math/Vector2.hpp"
+#include "../../Math/Vector3.hpp"
 
 namespace Engine
 {
@@ -22,11 +22,21 @@ namespace Engine
 			Vector2 texture_coords;
 
 		public:
-			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()), texture_coords(Vector2()) {}
-			constexpr Vertex(const Vector3& position) : position(position), w(1), normal(Vector3(0, 0, 0)), texture_coords(Vector2()) {}
+			constexpr Vertex() : position(Vector3()), w(1), normal(Vector3()), texture_coords(Vector2())
+			{
+			}
+			constexpr Vertex(const Vector3& position) : position(position), w(1), normal(Vector3(0, 0, 0)), texture_coords(Vector2())
+			{
+			}
 			constexpr Vertex(const Vector3& position, const Vector3& normal) : position(position), w(1), normal(normal), texture_coords(Vector2()) {};
-			constexpr Vertex(const Vector3& position, const Vector2& uv) : position(position), w(1), normal(Vector3(0, 0, 0)), texture_coords(uv) {}
-			constexpr Vertex(const Vector3& position, const Vector3& normal, const Vector2& uv) : position(position), w(1), normal(normal), texture_coords(uv) {};
+			constexpr Vertex(const Vector3& position, const Vector2& uv) : position(position), w(1), normal(Vector3(0, 0, 0)), texture_coords(uv)
+			{
+			}
+			constexpr Vertex(const Vector3& position, const Vector3& normal, const Vector2& uv) :
+				position(position),
+				w(1),
+				normal(normal),
+				texture_coords(uv) {};
 
 			[[nodiscard]] Vector3 GetPosition() const;
 			Vertex& SetPosition(const Vector3& position);
@@ -50,7 +60,7 @@ namespace Engine
 
 			Vertex& TransformNormals(const Matrix4& normal_mat);
 
-			constexpr Vertex& operator*= (const Matrix4& mat) noexcept
+			constexpr Vertex& operator*=(const Matrix4& mat) noexcept
 			{
 				float x_new = mat.values[0][0] * position.x + mat.values[0][1] * position.y + mat.values[0][2] * position.z + mat.values[0][3] * w;
 				float y_new = mat.values[1][0] * position.x + mat.values[1][1] * position.y + mat.values[1][2] * position.z + mat.values[1][3] * w;
@@ -60,12 +70,12 @@ namespace Engine
 				position.x = x_new;
 				position.y = y_new;
 				position.z = z_new;
-				w = w_new;
+				w		   = w_new;
 
 				return *this;
 			}
 
-			[[nodiscard]] constexpr Vertex operator* (const Matrix4& mat) const noexcept
+			[[nodiscard]] constexpr Vertex operator*(const Matrix4& mat) const noexcept
 			{
 				return Vertex(*this) *= mat;
 			}

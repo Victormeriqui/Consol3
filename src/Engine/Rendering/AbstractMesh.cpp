@@ -70,7 +70,6 @@ namespace Engine
 		{
 		}
 
-
 		AbstractMesh::AbstractMesh(const Model& model, const Texture& texture, const Vector3& position) :
 			model(model),
 			texture(texture),
@@ -110,7 +109,8 @@ namespace Engine
 		{
 		}
 
-		AbstractMesh::AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const Angle& rotation, const RGBColor& color) :
+		AbstractMesh::AbstractMesh(
+			const Model& model, const Texture& texture, const Vector3& position, const Angle& rotation, const RGBColor& color) :
 			model(model),
 			texture(texture),
 			has_texture(true),

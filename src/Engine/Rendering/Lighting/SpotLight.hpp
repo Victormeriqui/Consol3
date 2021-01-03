@@ -1,14 +1,14 @@
 #ifndef SPOTLIGHT_HPP
 #define SPOTLIGHT_HPP
 
-#include "ILight.hpp"
-#include "../../../Math/Vector3.hpp"
 #include "../../../Math/Matrix4.hpp"
+#include "../../../Math/Vector3.hpp"
 #include "../DepthBuffer.hpp"
 #include "../Transform.hpp"
+#include "ILight.hpp"
 
-#include <optional>
 #include <functional>
+#include <optional>
 
 namespace Engine
 {

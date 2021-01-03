@@ -2,9 +2,9 @@
 
 #include "../../Math/Util/MathUtil.hpp"
 
+#include <array>
 #include <fstream>
 #include <sstream>
-#include <array>
 
 namespace Engine
 {
@@ -29,7 +29,7 @@ namespace Engine
 
 			if (!file_stream.is_open())
 				return;
-			
+
 			const uint8_t bmp_header_bytes = 54;
 
 			std::array<unsigned char, bmp_header_bytes> header;
@@ -37,11 +37,11 @@ namespace Engine
 			file_stream.read((char*)header.data(), header.size());
 
 			uint32_t file_size = *reinterpret_cast<uint32_t*>(&header[2]);
-			uint32_t offset = *reinterpret_cast<uint32_t*>(&header[10]);
-			uint32_t width = *reinterpret_cast<uint32_t*>(&header[18]);
-			uint32_t height = *reinterpret_cast<uint32_t*>(&header[22]);
-			uint16_t depth = *reinterpret_cast<uint16_t*>(&header[28]);
-			
+			uint32_t offset	   = *reinterpret_cast<uint32_t*>(&header[10]);
+			uint32_t width	   = *reinterpret_cast<uint32_t*>(&header[18]);
+			uint32_t height	   = *reinterpret_cast<uint32_t*>(&header[22]);
+			uint16_t depth	   = *reinterpret_cast<uint16_t*>(&header[28]);
+
 			imagebuffer = FrameBuffer<RGBColor>(width, height);
 
 			uint32_t data_size = width * height * 3;
@@ -52,7 +52,6 @@ namespace Engine
 			uint16_t y = flip_y ? height - 1 : 0;
 			for (uint32_t i = 0; i < data.size(); i += 3)
 			{
-
 				unsigned char b = data[i];
 				unsigned char g = data[i + 1];
 				unsigned char r = data[i + 2];
@@ -79,7 +78,7 @@ namespace Engine
 		}
 
 		RGBColor Texture::GetColorFromTextureCoords(float x, float y)
-		{			
+		{
 			uint16_t text_x = (uint16_t)(x * imagebuffer.GetWidth());
 			uint16_t text_y = (uint16_t)(y * imagebuffer.GetHeight());
 

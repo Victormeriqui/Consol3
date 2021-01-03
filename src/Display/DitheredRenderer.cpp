@@ -31,7 +31,7 @@ namespace Display
 		// special red case because it wraps over the 360 mark
 		if (color.hue >= dithered_red.min_hue || color.hue <= dithered_red.max_hue)
 			framebuffer->SetValue(x, y, dithered_red.color_shades[shade_index]);
-		
+
 		// select color by hue
 		for (const DitheredColor& dithered_color : sequential_dithered_colors)
 		{

@@ -66,8 +66,6 @@ namespace Math
 
 	Vector2 Vector2::GetLerped(const Vector2& other, float amount) const
 	{
-		return Vector2(
-			Util::Lerp(amount, x, other.x),
-			Util::Lerp(amount, y, other.y));
+		return Vector2(Util::Lerp(amount, x, other.x), Util::Lerp(amount, y, other.y));
 	}
 }

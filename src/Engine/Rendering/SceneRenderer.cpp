@@ -53,25 +53,37 @@ namespace Engine
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_plain)
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(), mesh.get().GetModel().GetVertexBuffer(), nocolor, shader_depthmap);
+					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
+														  mesh.get().GetModel().GetVertexBuffer(),
+														  nocolor,
+														  shader_depthmap);
 				}
 
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded)
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(), mesh.get().GetModel().GetVertexBuffer(), nocolor, shader_depthmap);
+					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
+														  mesh.get().GetModel().GetVertexBuffer(),
+														  nocolor,
+														  shader_depthmap);
 				}
 
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_textured)
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(), mesh.get().GetModel().GetVertexBuffer(), nocolor, shader_depthmap);
+					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
+														  mesh.get().GetModel().GetVertexBuffer(),
+														  nocolor,
+														  shader_depthmap);
 				}
 
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded_textured)
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(), mesh.get().GetModel().GetVertexBuffer(), nocolor, shader_depthmap);
+					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
+														  mesh.get().GetModel().GetVertexBuffer(),
+														  nocolor,
+														  shader_depthmap);
 				}
 			}
 		}
@@ -88,31 +100,43 @@ namespace Engine
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_plain)
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(), mesh.get().GetModel().GetVertexBuffer(), mesh.get().GetColor(), shader_plaincolor);
+				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
+											mesh.get().GetModel().GetVertexBuffer(),
+											mesh.get().GetColor(),
+											shader_plaincolor);
 			}
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded)
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(), mesh.get().GetModel().GetVertexBuffer(), mesh.get().GetColor(), shader_shadedcolor);
+				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
+											mesh.get().GetModel().GetVertexBuffer(),
+											mesh.get().GetColor(),
+											shader_shadedcolor);
 			}
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_textured)
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
 
-				//TODO: we need a texture cache to avoid doing this every frame!
+				// TODO: we need a texture cache to avoid doing this every frame!
 				shader_plaintexture.SetTexture(std::make_shared<Texture>(mesh.get().GetTexture()));
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(), mesh.get().GetModel().GetVertexBuffer(), mesh.get().GetColor(), shader_plaintexture);
+				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
+											mesh.get().GetModel().GetVertexBuffer(),
+											mesh.get().GetColor(),
+											shader_plaintexture);
 			}
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded_textured)
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
 
-				//TODO: we need a texture cache to avoid doing this every frame!
+				// TODO: we need a texture cache to avoid doing this every frame!
 				shader_plaintexture.SetTexture(std::make_shared<Texture>(mesh.get().GetTexture()));
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(), mesh.get().GetModel().GetVertexBuffer(), mesh.get().GetColor(), shader_shadedtexture);
+				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
+											mesh.get().GetModel().GetVertexBuffer(),
+											mesh.get().GetColor(),
+											shader_shadedtexture);
 			}
 
 			render_buffer_plain.clear();

@@ -1,7 +1,7 @@
 #include "Consol3Game.hpp"
 
-#include "MouseInput.hpp"
 #include "../Math/Util/MathUtil.hpp"
+#include "MouseInput.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -14,6 +14,7 @@ namespace Game
 	using namespace Engine;
 	using namespace Engine::Rendering;
 	using namespace Math;
+
 	float rot = 1.33f;
 	Consol3Game::Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer, std::shared_ptr<LightingSystem> lighting_system) :
 		scene_renderer(std::move(scene_renderer)),
@@ -25,10 +26,10 @@ namespace Game
 
 		mesh = StaticMesh(Model("res/monkey.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
-//		mesh.SetRotation(Angle(0, 1.33f, 0));
+		//		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
-	
-		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0 ,0), RGBColor(255, 255, 255));
+
+		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(12, 12, 12));
 		floor.SetPosition(Vector3(-6, -2, -6));
 
@@ -49,16 +50,16 @@ namespace Game
 		spot_light2->SetIntensity(6.0f);
 
 		this->lighting_system->SetAmbientLight(0.02f);
-		//lighting_system->AddLight(dir_light);
-		//lighting_system->AddLight(point_light);
+		// lighting_system->AddLight(dir_light);
+		// lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
-	//	lighting_system->AddLight(spot_light2);
+		//	lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
 
 	float mov_speed = 0.05f;
-	bool shifting = false;
+	bool shifting	= false;
 
 	void Consol3Game::HandleInput()
 	{
@@ -112,12 +113,12 @@ namespace Game
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)
 		{
-			shifting = true;
+			shifting  = true;
 			mov_speed = 0.001f;
 		}
 		else if (shifting)
 		{
-			shifting = false;
+			shifting  = false;
 			mov_speed = 0.05f;
 		}
 
@@ -139,10 +140,9 @@ namespace Game
 	float i = 0;
 	void Consol3Game::Update()
 	{
-		point_light->SetPosition(Vector3(std::sin(i)*2, 0.5, std::cos(i) * 2));
+		point_light->SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
 		plight_mesh.SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
 
-	
 		i += 0.01f;
 	}
 
@@ -159,25 +159,24 @@ namespace Game
 		{
 			for (int x = 0; x < 200; x++)
 			{
-				float z = dir_light->GetLightDepthBuffer().value().get().GetValue(x, y);
+				float z		= dir_light->GetLightDepthBuffer().value().get().GetValue(x, y);
 				uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
 				uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
 				scene_renderer->DrawPixel(nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
 			}
 		}
 
-		
 		for (int y = 0; y < 200; y++)
 		{
 			for (int x = 0; x < 200; x++)
 			{
-				float z = spot_light->GetLightDepthBuffer().value().get().GetValue(x, y);
-				uint16_t nx = Util::LerpCast<uint16_t>(x/200.0f, 0, 50);
-				uint16_t ny = Util::LerpCast<uint16_t>(y/200.0f, 0, 50);
-				scene_renderer->DrawPixel(50+nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+				float z		= spot_light->GetLightDepthBuffer().value().get().GetValue(x, y);
+				uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
+				uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
+				scene_renderer->DrawPixel(50 + nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
 			}
 		}
-		
+
 		/*
 		for (int y = 0; y < 200; y++)
 		{
@@ -189,8 +188,6 @@ namespace Game
 				scene_renderer->DrawPixel(150+nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
 			}
 		}*/
-
-
 
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
 	}

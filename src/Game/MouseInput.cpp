@@ -4,8 +4,7 @@ namespace Game
 {
 	using namespace Math;
 
-	MouseInput::MouseInput()
-	{};
+	MouseInput::MouseInput() {};
 
 	Point2 MouseInput::GetMousePosition()
 	{
@@ -25,9 +24,8 @@ namespace Game
 		RECT window = { 0, 0, 0, 0 };
 		GetWindowRect(GetConsoleWindow(), &window);
 
-		Point2 center = Point2(
-			(uint16_t)(window.left + ((window.right - window.left) / 2)),
-			(uint16_t)(window.top + ((window.bottom - window.top) / 2)));
+		Point2 center =
+			Point2((uint16_t)(window.left + ((window.right - window.left) / 2)), (uint16_t)(window.top + ((window.bottom - window.top) / 2)));
 
 		Point2 mouse_pos = GetMousePosition();
 
@@ -39,9 +37,8 @@ namespace Game
 		RECT window = { 0, 0, 0, 0 };
 		GetWindowRect(GetConsoleWindow(), &window);
 
-		Point2 center = Point2(
-			(uint16_t)(window.left + ((window.right - window.left) / 2)),
-			(uint16_t)(window.top + ((window.bottom - window.top) / 2)));
+		Point2 center =
+			Point2((uint16_t)(window.left + ((window.right - window.left) / 2)), (uint16_t)(window.top + ((window.bottom - window.top) / 2)));
 
 		SetMousePosition(center);
 	}

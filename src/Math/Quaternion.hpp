@@ -1,8 +1,8 @@
 #ifndef QUATERNION_HPP
 #define QUATERNION_HPP
 
-#include "Vector3.hpp"
 #include "Angle.hpp"
+#include "Vector3.hpp"
 
 #include <cmath>
 
@@ -29,9 +29,9 @@ namespace Math
 			float half_sinw = std::sinf(w / 2.0f);
 			float half_cosw = std::cosf(w / 2.0f);
 
-			x = axis.x * half_sinw;
-			y = axis.y * half_sinw;
-			z = axis.z * half_sinw;
+			x		= axis.x * half_sinw;
+			y		= axis.y * half_sinw;
+			z		= axis.z * half_sinw;
 			this->w = half_cosw;
 		}
 

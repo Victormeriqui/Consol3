@@ -1,13 +1,13 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include "../../Display/RGBColor.hpp"
 #include "../../Display/HSVColor.hpp"
-#include "Model.hpp"
-#include "../../Math/Vector3.hpp"
+#include "../../Display/RGBColor.hpp"
 #include "../../Math/Angle.hpp"
-#include "Transform.hpp"
+#include "../../Math/Vector3.hpp"
+#include "Model.hpp"
 #include "Texture.hpp"
+#include "Transform.hpp"
 
 namespace Engine
 {
@@ -15,7 +15,7 @@ namespace Engine
 	{
 		using namespace Display;
 		using namespace Math;
-		
+
 		class AbstractMesh
 		{
 		protected:
@@ -34,7 +34,6 @@ namespace Engine
 			Vector3 scale;
 
 		public:
-			
 			AbstractMesh();
 			AbstractMesh(const Model& model, const Vector3& position);
 			AbstractMesh(const Model& model, const Vector3& position, const RGBColor& color);

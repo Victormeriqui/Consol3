@@ -2,10 +2,10 @@
 
 #include "../Math/Util/MathUtil.hpp"
 
-#include <utility>
 #include <algorithm>
-#include <map>
 #include <cstdint>
+#include <map>
+#include <utility>
 
 namespace Display
 {
@@ -22,7 +22,7 @@ namespace Display
 
 	std::pair<uint8_t, uint8_t> DitheredGreyscaleRenderer::GetClosestIndexInPalette(uint8_t shade) const
 	{
-		uint8_t low_idx = 0;
+		uint8_t low_idx	 = 0;
 		uint8_t high_idx = 15;
 
 		while (low_idx <= high_idx)
@@ -53,9 +53,9 @@ namespace Display
 			if (closest.first == closest.second)
 				shade_map[shade] = { 32, (WORD)(closest.first * 16) };
 
-			uint8_t low_idx = closest.first;
-			uint8_t low_shade = palette_shades[low_idx];
-			uint8_t high_idx = closest.second;
+			uint8_t low_idx	   = closest.first;
+			uint8_t low_shade  = palette_shades[low_idx];
+			uint8_t high_idx   = closest.second;
 			uint8_t high_shade = palette_shades[high_idx];
 
 			float shade_progress = (float)(shade - low_shade) / (high_shade - low_shade);

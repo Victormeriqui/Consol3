@@ -4,8 +4,8 @@
 #include "Quaternion.hpp"
 #include "Vector3.hpp"
 
-#include <cstdint>
 #include <algorithm>
+#include <cstdint>
 
 namespace Math
 {
@@ -41,11 +41,8 @@ namespace Math
 			{
 				for (uint8_t x = 0; x < 4; x++)
 				{
-					new_values[y][x] =
-						values[y][0] * other.values[0][x] +
-						values[y][1] * other.values[1][x] +
-						values[y][2] * other.values[2][x] +
-						values[y][3] * other.values[3][x];
+					new_values[y][x] = values[y][0] * other.values[0][x] + values[y][1] * other.values[1][x] + values[y][2] * other.values[2][x]
+									   + values[y][3] * other.values[3][x];
 				}
 			}
 

@@ -14,9 +14,15 @@ namespace Math
 		int32_t x;
 		int32_t y;
 
-		constexpr Point2(int32_t x, int32_t y) : x(x), y(y) {}
-		constexpr Point2(const Vector2& vector) : x((int32_t)vector.x), y((int32_t)vector.y) {}
-		constexpr Point2(const Vector3& vector) : x((int32_t)vector.x), y((int32_t)vector.y) {}
+		constexpr Point2(int32_t x, int32_t y) : x(x), y(y)
+		{
+		}
+		constexpr Point2(const Vector2& vector) : x((int32_t)vector.x), y((int32_t)vector.y)
+		{
+		}
+		constexpr Point2(const Vector3& vector) : x((int32_t)vector.x), y((int32_t)vector.y)
+		{
+		}
 
 		constexpr Point2& operator+=(const Point2& other) noexcept
 		{
@@ -84,7 +90,7 @@ namespace Math
 
 		[[nodiscard]] constexpr Point2 operator+(const Point2& other) const noexcept
 		{
-			return  Point2(*this) += other;
+			return Point2(*this) += other;
 		}
 
 		[[nodiscard]] constexpr Point2 operator-(const Point2& other) const noexcept

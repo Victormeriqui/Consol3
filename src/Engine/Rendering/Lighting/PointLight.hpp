@@ -1,12 +1,12 @@
 #ifndef POINTLIGHT_HPP
 #define POINTLIGHT_HPP
 
-#include "ILight.hpp"
-#include "../../../Math/Vector3.hpp"
 #include "../../../Math/Matrix4.hpp"
+#include "../../../Math/Vector3.hpp"
+#include "ILight.hpp"
 
-#include <optional>
 #include <functional>
+#include <optional>
 
 namespace Engine
 {
@@ -19,7 +19,7 @@ namespace Engine
 			private:
 				Vector3 position;
 				Attenuation attenuation;
-				
+
 				float range;
 				float intensity;
 

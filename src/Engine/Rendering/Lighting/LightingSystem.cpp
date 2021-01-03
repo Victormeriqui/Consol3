@@ -1,14 +1,14 @@
 #include "LightingSystem.hpp"
 
-#include "../Vertex.hpp"
-#include "../../../Math/Vector3.hpp"
 #include "../../../Math/Util/MathUtil.hpp"
-#include "../Transform.hpp"
+#include "../../../Math/Vector3.hpp"
 #include "../Model.hpp"
+#include "../Transform.hpp"
+#include "../Vertex.hpp"
 
-#include <vector>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 namespace Engine
 {
@@ -18,9 +18,7 @@ namespace Engine
 		{
 			using namespace Math;
 
-			LightingSystem::LightingSystem() :
-				lights(std::vector<std::shared_ptr<ILight>>()),
-				ambient_light(0.01f)
+			LightingSystem::LightingSystem() : lights(std::vector<std::shared_ptr<ILight>>()), ambient_light(0.01f)
 			{
 			}
 
@@ -60,13 +58,13 @@ namespace Engine
 
 				uint8_t i = 0;
 				for (std::shared_ptr<ILight> light : lights)
-				{					
+				{
 					if (!light->IsShadowCaster())
 					{
 						light_amount += light->GetLightAmountAt(position, normal);
 						continue;
 					}
-			
+
 					const Vector3 position_light = position_lights[i++];
 
 					if (!Util::IsInRange(position_light.x, -1.0f, 1.0f) || !Util::IsInRange(position_light.y, -1.0f, 1.0f))
@@ -74,7 +72,7 @@ namespace Engine
 						light_amount += light->GetLightAmountAt(position, normal);
 						continue;
 					}
-					
+
 					uint16_t depthbuffer_x = (uint16_t)Util::Lerp(position_light.x, -1, 1, 0, 199);
 					uint16_t depthbuffer_y = (uint16_t)Util::Lerp(position_light.y, 1, -1, 0, 199);
 
@@ -82,7 +80,6 @@ namespace Engine
 
 					if (position_light.z < (light_depth + light->GetBias().value()))
 						light_amount += light->GetLightAmountAt(position, normal);
-
 				}
 
 				return light_amount;
