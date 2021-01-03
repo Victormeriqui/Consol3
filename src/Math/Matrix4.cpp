@@ -119,6 +119,19 @@ namespace Math
 		return *this;
 	}
 
+	Matrix4& Matrix4::SetViewportMatrix(uint16_t width, uint16_t height)
+	{
+		float width_h = width / 2.0f;
+		float height_h = height / 2.0f;
+
+		values[0][0] = width_h; values[0][1] = 0;         values[0][2] = 0; values[0][3] = width_h;
+		values[1][0] = 0;       values[1][1] = -height_h; values[1][2] = 0; values[1][3] = height_h;
+		values[2][0] = 0;       values[2][1] = 0;         values[2][2] = 1; values[2][3] = 0;
+		values[3][0] = 0;       values[3][1] = 0;         values[3][2] = 0; values[3][3] = 1;
+
+		return *this;
+	}
+
 	Matrix4& Matrix4::Transpose()
 	{
 		for (uint8_t y = 0; y < 4; y++)
