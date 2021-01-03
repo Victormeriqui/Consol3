@@ -14,6 +14,7 @@
 #include "../Engine/Rendering/Lighting/PointLight.hpp"
 #include "../Engine/Rendering/Lighting/SpotLight.hpp"
 #include "ModelGenerator.hpp"
+#include "../Engine/Rendering/SceneRenderer.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -30,11 +31,11 @@ namespace Game
 	class Consol3Game
 	{
 	private:
-		Rasterizer& rasterizer;
+		std::shared_ptr<SceneRenderer> scene_renderer;
 		std::shared_ptr<LightingSystem> lighting_system;
 		ModelGenerator model_generator;
 
-		Camera camera;
+		std::shared_ptr<Camera> camera;
 
 		StaticMesh mesh;
 		StaticMesh floor;
@@ -47,7 +48,7 @@ namespace Game
 
 	public:
 
-		Consol3Game(Rasterizer& rasterizer);
+		Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer, std::shared_ptr<LightingSystem> lighting_system);
 
 		void HandleInput();
 		void Update();

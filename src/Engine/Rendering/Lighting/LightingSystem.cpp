@@ -3,7 +3,6 @@
 #include "../Vertex.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "../../../Math/Util/MathUtil.hpp"
-#include "LightRenderer.hpp"
 #include "../Transform.hpp"
 #include "../Model.hpp"
 
@@ -21,8 +20,6 @@ namespace Engine
 
 			LightingSystem::LightingSystem() :
 				lights(std::vector<std::shared_ptr<ILight>>()),
-				lights_renderer(std::make_shared<LightRenderer>()),
-				lights_rasterizer(Rasterizer(lights_renderer)),
 				ambient_light(0.01f)
 			{
 			}
@@ -99,21 +96,6 @@ namespace Engine
 						continue;
 
 					light->ClearDepthBuffer();
-				}
-			}
-
-			void LightingSystem::RenderToDepthBuffers(const Model& model, const Transform transform)
-			{
-				for (std::shared_ptr<ILight> light : lights)
-				{
-					if (!light->IsShadowCaster())
-						continue;
-
-					lights_rasterizer.SetProjectionMatrix(light->GetProjectionMatrix().value());
-					lights_rasterizer.SetViewMatrix(light->GetViewMatrix().value());
-
-					// draw the model to the light's depthbuffer
-					model.DrawModelToDepthMap(transform, light->GetLightDepthBuffer().value(), lights_rasterizer);
 				}
 			}
 		}

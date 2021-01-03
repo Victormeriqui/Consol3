@@ -19,9 +19,10 @@ namespace Engine
 	using namespace Rendering;
 
 	Consol3Engine::Consol3Engine(std::shared_ptr<IRenderer> renderer) :
-		renderer(renderer),
-		rasterizer(Rasterizer(renderer)),
-		game(Consol3Game(rasterizer)),
+		renderer(std::move(renderer)),
+		lighting_system(std::make_shared<LightingSystem>()),
+		scene_renderer(std::make_shared<SceneRenderer>(this->renderer, lighting_system)),
+		game(Consol3Game(scene_renderer, lighting_system)),
 		running(false),
 		delta(0)
 	{

@@ -127,12 +127,12 @@ namespace Engine
 		{
 		}
 
-		Model AbstractMesh::GetModel() const
+		const Model& AbstractMesh::GetModel() const
 		{
 			return model;
 		}
 
-		Texture AbstractMesh::GetTexture() const
+		const Texture& AbstractMesh::GetTexture() const
 		{
 			return texture;
 		}
@@ -155,6 +155,16 @@ namespace Engine
 		Vector3 AbstractMesh::GetScale() const
 		{
 			return scale;
+		}
+
+		const Transform& AbstractMesh::GetTransform() const
+		{
+			return transform;
+		}
+
+		bool AbstractMesh::IsTextured() const
+		{
+			return has_texture;
 		}
 
 		AbstractMesh& AbstractMesh::SetModel(const Model& model)

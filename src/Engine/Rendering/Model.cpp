@@ -1,10 +1,6 @@
 #include "Model.hpp"
 
-#include "Transform.hpp"
-#include "Rasterizer.hpp"
-#include "DepthBuffer.hpp"
 #include "../../Math/Vector2.hpp"
-#include "Lighting/LightingSystem.hpp"
 
 #include <string>
 #include <fstream>
@@ -15,9 +11,6 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		using namespace Shaders;
-		using namespace Lighting;
-
 		Model::Model()
 		{
 		}
@@ -130,7 +123,7 @@ namespace Engine
 					std::vector<std::string> face1 = SplitString(line_split[2], '/');
 					std::vector<std::string> face2 = SplitString(line_split[3], '/');
 
-					int slashes = std::count(line_split[1].begin(), line_split[1].end(), '/');
+					uint64_t slashes = std::count(line_split[1].begin(), line_split[1].end(), '/');
 					bool has_empty_mid = line_split[1].find("//") != std::string::npos;
 
 					uint32_t v0 = std::stoul(face0[0]) - 1;
@@ -206,7 +199,7 @@ namespace Engine
 
 		void Model::CalculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 		{
-			for (unsigned int i = 0; i < indices.size() - 3; i += 3)
+			for (uint32_t i = 0; i < indices.size() - 3; i += 3)
 			{
 				Vertex& v0 = vertices[indices[i]];
 				Vertex& v1 = vertices[indices[i + 1]];
@@ -232,46 +225,5 @@ namespace Engine
 		{
 			return vertex_buffer;
 		}
-
-		void Model::DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const HSVColor& color) const
-		{
-			rasterizer.SetModelMatrix(transform);
-
-			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_plaincolor);
-		}
-
-		void Model::DrawShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system, const HSVColor& color) const
-		{
-			rasterizer.SetModelMatrix(transform);
-
-			shader_shadedcolor.SetLightingSystem(lighting_system);
-			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_shadedcolor);
-		}
-
-		void Model::DrawTexturedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const
-		{
-			rasterizer.SetModelMatrix(transform);
-
-			shader_plaintexture.SetTexture(texture);
-			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_plaintexture);
-		}
-
-		void Model::DrawTexturedAndShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system,
-			std::shared_ptr<Texture> texture, const HSVColor& color) const
-		{
-			rasterizer.SetModelMatrix(transform);
-
-			shader_shadedtexture.SetLightingSystem(lighting_system);
-			shader_shadedtexture.SetTexture(texture);
-			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_shadedtexture);
-		}
-
-		void Model::DrawModelToDepthMap(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer) const
-		{
-			rasterizer.SetModelMatrix(transform);
-
-			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, HSVColor(), shader_depthmap);
-		}
-
 	}
 }
