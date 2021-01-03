@@ -25,6 +25,7 @@ namespace Math
 		Matrix4& SetQuaternionRotation(const Quaternion& rotation);
 		Matrix4& SetPerspectiveProjection(uint16_t width, uint16_t height, float znear, float zfar, float fov);
 		Matrix4& SetOrthographicProjection(float left, float right, float up, float down, float near, float far);
+		Matrix4& SetViewportMatrix(uint16_t width, uint16_t height);
 
 		Matrix4& Invert();
 		Matrix4& Transpose();
