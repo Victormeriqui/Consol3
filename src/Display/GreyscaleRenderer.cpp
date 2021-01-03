@@ -12,8 +12,8 @@
 namespace Display
 {
 	GreyscaleRenderer::GreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
-		framebuffer(framebuffer),
-		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 4, 4, palette_greyscale))
+		framebuffer(std::move(framebuffer)),
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_greyscale))
 	{
 		// ensure that every char is a space, that way we can just control the color
 		ClearFrameBuffer();

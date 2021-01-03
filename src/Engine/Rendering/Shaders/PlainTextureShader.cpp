@@ -15,7 +15,7 @@ namespace Engine
 		{
 			void PlainTextureShader::SetTexture(std::shared_ptr<Texture> texture)
 			{
-				this->texture = texture;
+				this->texture = std::move(texture);
 			}
 
 			bool PlainTextureShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)

@@ -17,8 +17,8 @@ namespace Display
 	using namespace Math;
 
 	DitheredGreyscaleRenderer::DitheredGreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
-		framebuffer(framebuffer),
-		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered_greyscale)),
+		framebuffer(std::move(framebuffer)),
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered_greyscale)),
 		shade_map()
 	{
 		ClearFrameBuffer();
