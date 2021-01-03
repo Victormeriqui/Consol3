@@ -2,7 +2,6 @@
 
 #include "../../Math/Vector2.hpp"
 
-#include <string>
 #include <fstream>
 #include <sstream>
 #include <algorithm>

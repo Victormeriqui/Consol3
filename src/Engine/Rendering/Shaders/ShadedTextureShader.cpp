@@ -1,14 +1,6 @@
 #include "ShadedTextureShader.hpp"
 
-#include "../Vertex.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Vector2.hpp"
-#include "../../../Display/HSVColor.hpp"
-#include "../Texture.hpp"
-#include "../Lighting/LightingSystem.hpp"
-
 #include <algorithm>
-#include <string>
 
 namespace Engine
 {

@@ -1,9 +1,5 @@
 #include "VertexBuffer.hpp"
 
-#include "Vertex.hpp"
-
-#include <vector>
-
 namespace Engine
 {
 	namespace Rendering

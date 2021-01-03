@@ -61,6 +61,7 @@
     <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Resources\ResourceManager.hpp" />
     <ClInclude Include="src\Engine\Rendering\SceneRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\IShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\FixedColorShader.hpp" />

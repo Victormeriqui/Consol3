@@ -1,16 +1,6 @@
 #include "ShadedColorShader.hpp"
 
-#include "../Vertex.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Display/HSVColor.hpp"
-#include "../Lighting/LightingSystem.hpp"
-#include "../../../Math/Util/MathUtil.hpp"
-
 #include <algorithm>
-#include <string>
-#include <functional>
-#include <memory>
-#include <cstdint>
 
 namespace Engine
 {

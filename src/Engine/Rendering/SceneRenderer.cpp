@@ -1,16 +1,5 @@
 #include "SceneRenderer.hpp"
 
-#include "../../Display/IRenderer.hpp"
-#include "../../Display/NullRenderer.hpp"
-#include "Rasterizer.hpp"
-#include "AbstractMesh.hpp"
-#include "Lighting/LightingSystem.hpp"
-#include "Camera.hpp"
-
-#include <list>
-#include <functional>
-#include <memory>
-
 namespace Engine
 {
 	namespace Rendering

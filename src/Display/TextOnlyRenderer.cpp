@@ -1,15 +1,6 @@
 #include "TextOnlyRenderer.hpp"
 
-#include "FrameBuffer.hpp"
-#include "HSVColor.hpp"
 #include "../Math/Util/MathUtil.hpp"
-
-// Windows.h overrides std::min
-#define NOMINMAX
-#include <Windows.h>
-#include <cstdint>
-#include <string>
-#include <memory>
 
 namespace Display
 {

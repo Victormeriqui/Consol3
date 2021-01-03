@@ -1,15 +1,5 @@
 #include "ANSIRenderer.hpp"
 
-#include "FrameBuffer.hpp"
-#include "HSVColor.hpp"
-#include "../Math/Util/MathUtil.hpp"
-
-// Windows.h overrides std::min
-#define NOMINMAX
-#include <Windows.h>
-#include <cstdint>
-#include <memory>
-
 #define PIXEL_SIZE_CHARS 20 // how many chars each pixel takes on the framebuffer_string
 #define PIXEL_RED_OFFSET 7 // how many chars away from the start of the pixel string the component is at
 #define PIXEL_GREEN_OFFSET 11 // ^
