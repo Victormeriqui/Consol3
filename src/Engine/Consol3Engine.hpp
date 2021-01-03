@@ -4,8 +4,9 @@
 #include "../Game/Consol3Game.hpp"
 #include "../Display/FrameBuffer.hpp"
 #include "../Display/IRenderer.hpp"
-#include "Rendering/Rasterizer.hpp"
 #include "../Display/ConsoleManager.hpp"
+#include "../Engine/Rendering/Lighting/LightingSystem.hpp"
+#include "Rendering/SceneRenderer.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -23,8 +24,8 @@ namespace Engine
 	{
 	private:
 		std::shared_ptr<IRenderer> renderer;
-
-		Rasterizer rasterizer;
+		std::shared_ptr<LightingSystem> lighting_system;
+		std::shared_ptr<SceneRenderer> scene_renderer;
 
 		Consol3Game game;
 

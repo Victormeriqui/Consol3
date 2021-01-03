@@ -8,7 +8,6 @@
 #include "../Rasterizer.hpp"
 #include "../DepthBuffer.hpp"
 #include "../Transform.hpp"
-#include "LightRenderer.hpp"
 
 #include <vector>
 #include <memory>
@@ -27,10 +26,6 @@ namespace Engine
 				float ambient_light;
 				std::vector<std::shared_ptr<ILight>> lights;
 
-				// a non functioning renderer for the secondary rasterizer
-				std::shared_ptr<LightRenderer> lights_renderer;
-				// a secondary rasterizer that writes to the light's depthbuffer, this is prefered so the main rasterizer doesn't need to be shared around
-				Rasterizer lights_rasterizer;
 			public:
 				LightingSystem();
 
@@ -46,7 +41,6 @@ namespace Engine
 				[[nodiscard]] float GetLightAmountAt(const Vector3& position, const Vector3& normal, const Vector3 position_lights[]) const;
 
 				void ClearDepthBuffers();
-				void RenderToDepthBuffers(const Model& model, const Transform transform);
 			};
 		}
 	}
