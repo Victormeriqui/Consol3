@@ -1,10 +1,10 @@
 #ifndef TEXTONLYRENDERER_HPP
 #define TEXTONLYRENDERER_HPP
 
-#include "IRenderer.hpp"
-#include "HSVColor.hpp"
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
+#include "HSVColor.hpp"
+#include "IRenderer.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -15,12 +15,8 @@
 
 namespace Display
 {
-	static const COLORREF palette_textonly[16] = {
-		0x000000, 0x111111, 0x212121, 0x333333,
-		0x444444, 0x565656, 0x666666, 0x777777,
-		0x898989, 0x999999, 0xAAAAAA, 0xBCBCBC,
-		0xCCCCCC, 0xDDDDDD, 0xEFEFEF, 0xFFFFFF
-	};
+	static const COLORREF palette_textonly[16] = { 0x000000, 0x111111, 0x212121, 0x333333, 0x444444, 0x565656, 0x666666, 0x777777,
+												   0x898989, 0x999999, 0xAAAAAA, 0xBCBCBC, 0xCCCCCC, 0xDDDDDD, 0xEFEFEF, 0xFFFFFF };
 
 	class TextOnlyRenderer : public IRenderer
 	{
@@ -32,7 +28,6 @@ namespace Display
 		const uint8_t shades_count;
 
 	public:
-
 		TextOnlyRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override;

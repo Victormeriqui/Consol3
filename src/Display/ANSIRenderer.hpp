@@ -1,11 +1,11 @@
 #ifndef ANSIRENDERER_HPP
 #define ANSIRENDERER_HPP
 
-#include "IRenderer.hpp"
-#include "HSVColor.hpp"
-#include "RGBColor.hpp"
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
+#include "HSVColor.hpp"
+#include "IRenderer.hpp"
+#include "RGBColor.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -15,12 +15,9 @@
 
 namespace Display
 {
-	static const COLORREF palette_ansi[16] =
-	{
-		0x000000, 0x800000, 0x008000, 0x808000,
-		0x000080, 0x800080, 0x008080, 0xC0C0C0,
-		0x808080, 0xFF0000, 0x00FF00, 0xFFFF00,
-		0x0000FF, 0xFF00FF, 0x00FFFF, 0xFFFFFF
+	static const COLORREF palette_ansi[16] = {
+		0x000000, 0x800000, 0x008000, 0x808000, 0x000080, 0x800080, 0x008080, 0xC0C0C0,
+		0x808080, 0xFF0000, 0x00FF00, 0xFFFF00, 0x0000FF, 0xFF00FF, 0x00FFFF, 0xFFFFFF,
 	};
 
 	class ANSIRenderer : public IRenderer
@@ -35,7 +32,6 @@ namespace Display
 		void TranslateFrameBuffer();
 
 	public:
-
 		ANSIRenderer(std::shared_ptr<FrameBuffer<RGBColor>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override;

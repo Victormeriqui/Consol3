@@ -2,9 +2,9 @@
 
 #include "../../Math/Vector2.hpp"
 
+#include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <algorithm>
 
 namespace Engine
 {
@@ -38,7 +38,6 @@ namespace Engine
 
 		inline uint32_t CountElements(std::ifstream& file_stream, const std::string& startswith)
 		{
-
 			if (!file_stream.is_open())
 				return -1;
 
@@ -74,7 +73,7 @@ namespace Engine
 			std::vector<uint32_t> indices;
 			std::vector<Vector3> normals;
 			std::vector<Vector2> uvs;
-			
+
 			vertices.reserve(CountElements(file_stream, std::string("v ")));
 			indices.reserve(CountElements(file_stream, std::string("f ")) * 3);
 			normals.reserve(CountElements(file_stream, std::string("vn ")));
@@ -84,7 +83,6 @@ namespace Engine
 			{
 				line_split = SplitString(line, ' ');
 
-	
 				if (line_split.size() > 5 || line_split.empty())
 					continue;
 
@@ -101,7 +99,7 @@ namespace Engine
 				{
 					float u = std::stof(line_split[1]);
 					float v = std::stof(line_split[2]);
-					
+
 					uvs.push_back(Math::Vector2(u, v));
 				}
 
@@ -122,55 +120,54 @@ namespace Engine
 					std::vector<std::string> face1 = SplitString(line_split[2], '/');
 					std::vector<std::string> face2 = SplitString(line_split[3], '/');
 
-					uint64_t slashes = std::count(line_split[1].begin(), line_split[1].end(), '/');
+					uint64_t slashes   = std::count(line_split[1].begin(), line_split[1].end(), '/');
 					bool has_empty_mid = line_split[1].find("//") != std::string::npos;
 
 					uint32_t v0 = std::stoul(face0[0]) - 1;
 					uint32_t v1 = std::stoul(face1[0]) - 1;
 					uint32_t v2 = std::stoul(face2[0]) - 1;
 
-					bool has_uv = false;
+					bool has_uv	 = false;
 					uint32_t uv0 = 0;
 					uint32_t uv1 = 0;
 					uint32_t uv2 = 0;
 
 					bool has_normal = false;
-					uint32_t norm0 = 0;
-					uint32_t norm1 = 0;
-					uint32_t norm2 = 0;
+					uint32_t norm0	= 0;
+					uint32_t norm1	= 0;
+					uint32_t norm2	= 0;
 
-					
 					switch (slashes)
 					{
 					case 1:
 						has_uv = true;
-						uv0 = std::stoul(face0[1]) - 1;
-						uv1 = std::stoul(face1[1]) - 1;
-						uv2 = std::stoul(face2[1]) - 1;
+						uv0	   = std::stoul(face0[1]) - 1;
+						uv1	   = std::stoul(face1[1]) - 1;
+						uv2	   = std::stoul(face2[1]) - 1;
 						break;
 					case 2:
 						if (!has_empty_mid)
 						{
 							has_uv = true;
-							uv0 = std::stoul(face0[1]) - 1;
-							uv1 = std::stoul(face1[1]) - 1;
-							uv2 = std::stoul(face2[1]) - 1;
+							uv0	   = std::stoul(face0[1]) - 1;
+							uv1	   = std::stoul(face1[1]) - 1;
+							uv2	   = std::stoul(face2[1]) - 1;
 
 							has_normal = true;
-							norm0 = std::stoul(face0[2]) - 1;
-							norm1 = std::stoul(face1[2]) - 1;
-							norm2 = std::stoul(face2[2]) - 1;
+							norm0	   = std::stoul(face0[2]) - 1;
+							norm1	   = std::stoul(face1[2]) - 1;
+							norm2	   = std::stoul(face2[2]) - 1;
 						}
 						else
 						{
 							has_normal = true;
-							norm0 = std::stoul(face0[1]) - 1;
-							norm1 = std::stoul(face1[1]) - 1;
-							norm2 = std::stoul(face2[1]) - 1;
+							norm0	   = std::stoul(face0[1]) - 1;
+							norm1	   = std::stoul(face1[1]) - 1;
+							norm2	   = std::stoul(face2[1]) - 1;
 						}
 						break;
 					}
-					
+
 					indices.push_back(v0);
 					indices.push_back(v1);
 					indices.push_back(v2);

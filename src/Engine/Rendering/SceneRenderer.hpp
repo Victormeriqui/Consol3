@@ -3,18 +3,18 @@
 
 #include "../../Display/IRenderer.hpp"
 #include "../../Display/NullRenderer.hpp"
-#include "Rasterizer.hpp"
 #include "AbstractMesh.hpp"
-#include "Lighting/LightingSystem.hpp"
 #include "Camera.hpp"
+#include "Lighting/LightingSystem.hpp"
+#include "Rasterizer.hpp"
+#include "Shaders/DepthMapShader.hpp"
 #include "Shaders/PlainColorShader.hpp"
 #include "Shaders/PlainTextureShader.hpp"
 #include "Shaders/ShadedColorShader.hpp"
 #include "Shaders/ShadedTextureShader.hpp"
-#include "Shaders/DepthMapShader.hpp"
 
-#include <list>
 #include <functional>
+#include <list>
 #include <memory>
 
 namespace Engine
@@ -29,7 +29,7 @@ namespace Engine
 			std::shared_ptr<IRenderer> renderer;
 			// a non functioning renderer for the shadowmap rasterizer
 			std::shared_ptr<NullRenderer> null_renderer;
-			
+
 			Rasterizer rasterizer;
 			// a secondary rasterizer that writes to the light's depthbuffer, this is prefered so the main rasterizer doesn't need to be affected
 			Rasterizer shadowmap_rasterizer;

@@ -1,21 +1,21 @@
 #ifndef RASTERIZER_HPP
 #define RASTERIZER_HPP
 
-#include "../../Display/IRenderer.hpp"
-#include "../../Math/Matrix4.hpp"
-#include "Vertex.hpp"
-#include "../../Display/RGBColor.hpp"
 #include "../../Display/HSVColor.hpp"
-#include "Transform.hpp"
+#include "../../Display/IRenderer.hpp"
+#include "../../Display/RGBColor.hpp"
+#include "../../Math/Matrix4.hpp"
 #include "Clipper.hpp"
 #include "DepthBuffer.hpp"
 #include "Shaders/IShader.hpp"
-#include "VertexBuffer.hpp"
+#include "Transform.hpp"
 #include "Triangle.hpp"
+#include "Vertex.hpp"
+#include "VertexBuffer.hpp"
 
 #include <cstdint>
-#include <memory>
 #include <functional>
+#include <memory>
 
 namespace Engine
 {
@@ -40,16 +40,12 @@ namespace Engine
 
 			Clipper clipper;
 
-			inline Vertex& TransformVertexViewProjection(Vertex& vertex);
-			inline Vertex& TransformVertexModel(Vertex& vertex);
 			inline Vertex GetTransformedVertexInverseViewProjection(const Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
 
-			[[nodiscard]] inline bool IsBackface(const Vector3& p0, const Vector3& p1, const Vector3& p2) const;
-			
 			void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader);
 			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, IShader& shader);
-			
+
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
 

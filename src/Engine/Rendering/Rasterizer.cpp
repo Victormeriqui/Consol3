@@ -44,13 +44,7 @@ namespace Engine
 				Vertex v1 = vertex_buffer.GetVertex(i + 1);
 				Vertex v2 = vertex_buffer.GetVertex(i + 2);
 
-				MVPTransform vs_shader_mats =
-				{
-					model_mat,
-					normal_mat,
-					view_mat,
-					projection_mat
-				};
+				MVPTransform vs_shader_mats = { model_mat, normal_mat, view_mat, projection_mat };
 
 				bool should_draw_triangle = shader.VertexShader(v0, v1, v2, vs_shader_mats);
 
@@ -64,15 +58,9 @@ namespace Engine
 					TransformVertexScreenspace(v1);
 					TransformVertexScreenspace(v2);
 
-					Triangle triangle
-					{
+					Triangle triangle {
 						// store view projected W for perspective correct interpolation
-						1.0f / v0.GetW(),
-						1.0f / v1.GetW(),
-						1.0f / v2.GetW(),
-						v0.GetPosition(),
-						v1.GetPosition(),
-						v2.GetPosition(),
+						1.0f / v0.GetW(), 1.0f / v1.GetW(), 1.0f / v2.GetW(), v0.GetPosition(), v1.GetPosition(), v2.GetPosition(),
 					};
 
 					RasterizeTriangle(depthbuffer, triangle, color, shader);
@@ -82,7 +70,7 @@ namespace Engine
 
 				// store the verts in a buffer to clip them
 				std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
-				uint8_t vertices_buffer_count = 3;
+				uint8_t vertices_buffer_count		   = 3;
 
 				bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
 
@@ -100,23 +88,19 @@ namespace Engine
 					TransformVertexScreenspace(clipped_v1);
 					TransformVertexScreenspace(clipped_v2);
 
-					Triangle triangle
-					{
-						// store view projected W for perspective correct interpolation
-						1.0f / clipped_v0.GetW(),
-						1.0f / clipped_v1.GetW(),
-						1.0f / clipped_v2.GetW(),
-						// screen space vertices
-						clipped_v0.GetPosition(),
-						clipped_v1.GetPosition(),
-						clipped_v2.GetPosition()
+					Triangle triangle { // store view projected W for perspective correct interpolation
+										1.0f / clipped_v0.GetW(),
+										1.0f / clipped_v1.GetW(),
+										1.0f / clipped_v2.GetW(),
+										// screen space vertices
+										clipped_v0.GetPosition(),
+										clipped_v1.GetPosition(),
+										clipped_v2.GetPosition()
 					};
 
 					RasterizeTriangle(depthbuffer, triangle, color, shader);
 				}
-
 			}
-
 		}
 
 		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, IShader& shader)
@@ -125,25 +109,22 @@ namespace Engine
 			int32_t bbox_min_y = std::min({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
 			int32_t bbox_max_x = std::max({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
 			int32_t bbox_max_y = std::max({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
-			
+
 			// guaranteed to be outside the camera
 			if (bbox_min_x >= renderer->GetFrameBufferWidth() || bbox_max_x < 0 || bbox_min_y >= renderer->GetFrameBufferHeight() || bbox_max_y < 0)
 				return;
 
-			Point2 bbox_min = Point2(
-				std::max(0, bbox_min_x),
-				std::max(0, bbox_min_y));
+			Point2 bbox_min = Point2(std::max(0, bbox_min_x), std::max(0, bbox_min_y));
 
-			Point2 bbox_max = Point2(
-				std::min(bbox_max_x, (int32_t)renderer->GetFrameBufferWidth() - 1),
-				std::min(bbox_max_y, (int32_t)renderer->GetFrameBufferHeight() - 1));
+			Point2 bbox_max = Point2(std::min(bbox_max_x, (int32_t)renderer->GetFrameBufferWidth() - 1),
+									 std::min(bbox_max_y, (int32_t)renderer->GetFrameBufferHeight() - 1));
 
 			Point2 point = Point2(bbox_min.x, bbox_min.y);
 
 			TriangleEdge edge0 = TriangleEdge(triangle.v1_screen, triangle.v2_screen, point);
 			TriangleEdge edge1 = TriangleEdge(triangle.v2_screen, triangle.v0_screen, point);
 			TriangleEdge edge2 = TriangleEdge(triangle.v0_screen, triangle.v1_screen, point);
-			TriangleEdge area = TriangleEdge(triangle.v0_screen, triangle.v1_screen, triangle.v2_screen);
+			TriangleEdge area  = TriangleEdge(triangle.v0_screen, triangle.v1_screen, triangle.v2_screen);
 
 			// degenerate triangle
 			if (area.edgefunction_res == 0)
@@ -164,9 +145,7 @@ namespace Engine
 						// the sum of the 3 barycentric coords is 1, this avoids a division
 						float barcoord2 = 1.0f - (barcoord0 + barcoord1);
 
-						float z = barcoord0 * triangle.v0_screen.z + 
-								barcoord1 * triangle.v1_screen.z + 
-								barcoord2 * triangle.v2_screen.z;
+						float z = barcoord0 * triangle.v0_screen.z + barcoord1 * triangle.v1_screen.z + barcoord2 * triangle.v2_screen.z;
 
 						if (depthbuffer.GetValue(x, y) > z)
 						{
@@ -187,7 +166,6 @@ namespace Engine
 				edge1.edgefunction_res += edge1.step_delta_y;
 				edge2.edgefunction_res += edge2.step_delta_y;
 			}
-
 		}
 
 		void Rasterizer::DrawPixel(uint16_t x, uint16_t y, const HSVColor& color)
@@ -204,19 +182,19 @@ namespace Engine
 
 		void Rasterizer::SetModelMatrix(const Matrix4& model_matrix)
 		{
-			model_mat = model_matrix;
+			model_mat  = model_matrix;
 			normal_mat = Matrix4(model_mat);
 		}
 
 		void Rasterizer::SetViewMatrix(const Matrix4& view_matrix)
 		{
-			view_mat = view_matrix;
+			view_mat		 = view_matrix;
 			inverse_view_mat = view_mat.GetInverted();
 		}
 
 		void Rasterizer::SetProjectionMatrix(const Matrix4& projection_matrix)
 		{
-			projection_mat = projection_matrix;
+			projection_mat		   = projection_matrix;
 			inverse_projection_mat = projection_mat.GetInverted();
 		}
 

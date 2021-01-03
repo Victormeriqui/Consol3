@@ -1,11 +1,11 @@
 #include "PointLight.hpp"
 
-#include "../../../Math/Vector3.hpp"
 #include "../../../Math/Matrix4.hpp"
+#include "../../../Math/Vector3.hpp"
 
-#include <optional>
 #include <algorithm>
 #include <functional>
+#include <optional>
 
 namespace Engine
 {
@@ -15,7 +15,7 @@ namespace Engine
 		{
 			using namespace Math;
 
-			PointLight::PointLight() : position(Vector3()), range(1.0f), intensity(1.0f), attenuation({ 1.2f, 1, 1})
+			PointLight::PointLight() : position(Vector3()), range(1.0f), intensity(1.0f), attenuation({ 1.2f, 1, 1 })
 			{
 			}
 
@@ -23,7 +23,11 @@ namespace Engine
 			{
 			}
 
-			PointLight::PointLight(const Vector3& position, float range) : position(position), range(range), intensity(1.0f), attenuation({ 1.2f, 1, 1 })
+			PointLight::PointLight(const Vector3& position, float range) :
+				position(position),
+				range(range),
+				intensity(1.0f),
+				attenuation({ 1.2f, 1, 1 })
 			{
 			}
 
@@ -60,7 +64,7 @@ namespace Engine
 			float PointLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
 			{
 				Vector3 light_dir = position - this->position;
-				float light_dist = light_dir.GetLength();
+				float light_dist  = light_dir.GetLength();
 
 				if (light_dist > range)
 					return 0;

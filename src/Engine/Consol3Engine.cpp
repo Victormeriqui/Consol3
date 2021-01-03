@@ -23,7 +23,7 @@ namespace Engine
 	inline int64_t Consol3Engine::GetCurrentTime() const
 	{
 		high_resolution_clock::time_point now_time = high_resolution_clock::now();
-		milliseconds time_span = duration_cast<milliseconds>(now_time - start_time);
+		milliseconds time_span					   = duration_cast<milliseconds>(now_time - start_time);
 		return time_span.count();
 	}
 
@@ -53,10 +53,10 @@ namespace Engine
 
 	void Consol3Engine::RunLoop()
 	{
-		int64_t current_time = GetCurrentTime();
-		int64_t last_time = current_time;
-		int64_t delta = 0;
-		int64_t accumulator = 0;
+		int64_t current_time	  = GetCurrentTime();
+		int64_t last_time		  = current_time;
+		int64_t delta			  = 0;
+		int64_t accumulator		  = 0;
 		int64_t accumulated_delta = 0;
 
 		uint16_t frame_count = 0;
@@ -64,15 +64,15 @@ namespace Engine
 		while (running)
 		{
 			current_time = GetCurrentTime();
-			delta = current_time - last_time;
+			delta		 = current_time - last_time;
 
 			accumulated_delta += delta;
 
 			// accumulated more than 1 second elapsed time
 			if (accumulated_delta > 1000)
 			{
-				//renderer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
-				frame_count = 0;
+				// renderer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
+				frame_count		  = 0;
 				accumulated_delta = 0;
 			}
 

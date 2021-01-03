@@ -1,9 +1,9 @@
 #include "ANSIRenderer.hpp"
 
-#define PIXEL_SIZE_CHARS 20 // how many chars each pixel takes on the framebuffer_string
-#define PIXEL_RED_OFFSET 7 // how many chars away from the start of the pixel string the component is at
-#define PIXEL_GREEN_OFFSET 11 // ^
-#define PIXEL_BLUE_OFFSET 15 // ^
+#define PIXEL_SIZE_CHARS   20	 // how many chars each pixel takes on the framebuffer_string
+#define PIXEL_RED_OFFSET   7	 // how many chars away from the start of the pixel string the component is at
+#define PIXEL_GREEN_OFFSET 11	 // ^
+#define PIXEL_BLUE_OFFSET  15	 // ^
 
 namespace Display
 {
@@ -19,7 +19,8 @@ namespace Display
 	void ANSIRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
 	{
 		// TODO: Calculate the rgb value from the HSVColor
-		// or... refactor so we can make the engine output whatever we want (hsv or rgb) - the main issue here is how the IRenderer interface would look like
+		// or... refactor so we can make the engine output whatever we want (hsv or rgb) - the main issue here is how the IRenderer interface would
+		// look like
 		if (color.value != 0)
 			framebuffer->SetValue(x, y, RGBColor(255, 255, 255));
 		else
@@ -47,18 +48,18 @@ namespace Display
 				const RGBColor& color = framebuffer->GetValue(x, y);
 
 				std::string red_string = std::to_string(color.r);
-				red_string = std::string(3 - red_string.length(), '0') + red_string;
+				red_string			   = std::string(3 - red_string.length(), '0') + red_string;
 
 				std::string green_string = std::to_string(color.g);
-				green_string = std::string(3 - green_string.length(), '0') + green_string;
+				green_string			 = std::string(3 - green_string.length(), '0') + green_string;
 
 				std::string blue_string = std::to_string(color.b);
-				blue_string = std::string(3 - blue_string.length(), '0') + blue_string;
+				blue_string				= std::string(3 - blue_string.length(), '0') + blue_string;
 
-				uint32_t base_offset = (x * PIXEL_SIZE_CHARS) + (y * PIXEL_SIZE_CHARS * framebuffer->GetWidth());
-				uint32_t red_offset = base_offset + PIXEL_RED_OFFSET;
+				uint32_t base_offset  = (x * PIXEL_SIZE_CHARS) + (y * PIXEL_SIZE_CHARS * framebuffer->GetWidth());
+				uint32_t red_offset	  = base_offset + PIXEL_RED_OFFSET;
 				uint32_t green_offset = base_offset + PIXEL_GREEN_OFFSET;
-				uint32_t blue_offset = base_offset + PIXEL_BLUE_OFFSET;
+				uint32_t blue_offset  = base_offset + PIXEL_BLUE_OFFSET;
 
 				red_string.copy(string_data + red_offset, 3);
 				green_string.copy(string_data + green_offset, 3);

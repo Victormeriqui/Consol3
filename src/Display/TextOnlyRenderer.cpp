@@ -7,8 +7,8 @@ namespace Display
 	TextOnlyRenderer::TextOnlyRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Terminal", 4, 4, palette_textonly)),
-		shades({' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219}),
-		//shades(" .:-=+*#%@"),
+		shades({ ' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219 }),
+		// shades(" .:-=+*#%@"),
 		shades_count((uint8_t)shades.length())
 	{
 		ClearFrameBuffer();
@@ -16,11 +16,9 @@ namespace Display
 
 	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
 	{
-
-		uint8_t index = Math::Util::LerpCast<uint8_t>(color.value, 0, shades_count-1);
+		uint8_t index = Math::Util::LerpCast<uint8_t>(color.value, 0, shades_count - 1);
 
 		framebuffer->SetValue(x, y, { (WCHAR)shades[index], 0x0F });
-	
 	}
 
 	void TextOnlyRenderer::DisplayFrame()

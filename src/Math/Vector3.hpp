@@ -151,7 +151,10 @@ namespace Math
 			return Vector3(*this) *= scalar;
 		}
 
-		[[nodiscard]] constexpr Vector3 operator-() const { return Vector3(-x, -y, -z); }
+		[[nodiscard]] constexpr Vector3 operator-() const
+		{
+			return Vector3(-x, -y, -z);
+		}
 
 		[[nodiscard]] constexpr bool operator==(const Vector3& other) const noexcept
 		{

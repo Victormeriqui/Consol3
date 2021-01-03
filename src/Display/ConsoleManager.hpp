@@ -31,7 +31,8 @@ namespace Display
 		short font_weight;
 		short font_family;
 
-		void SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const COLORREF palette[]);
+		void SetConsoleScreenBufferInfo(
+			HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const COLORREF palette[]);
 
 		void StoreOriginalFontInfo();
 		void SetFontInfo(std::wstring name, short width, short height, short weight, short family);

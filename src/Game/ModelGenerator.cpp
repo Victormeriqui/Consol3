@@ -1,10 +1,10 @@
 #include "ModelGenerator.hpp"
 
-#include "../Math/Vector3.hpp"
 #include "../Engine/Rendering/Vertex.hpp"
+#include "../Math/Vector3.hpp"
 
-#include <vector>
 #include <cmath>
+#include <vector>
 
 namespace Game
 {
@@ -22,7 +22,7 @@ namespace Game
 
 		Vector3 plane_normal(0, 1, 0);
 
-		float tile_width = 1.0f / tile_amount_x;
+		float tile_width  = 1.0f / tile_amount_x;
 		float tile_height = 1.0f / tile_amount_y;
 
 		// prevent vertex duplication
@@ -59,7 +59,7 @@ namespace Game
 
 	Model ModelGenerator::GenerateSphere(uint8_t detail)
 	{
-		//TODO: do this
+		// TODO: do this
 		return Model();
 	}
 }

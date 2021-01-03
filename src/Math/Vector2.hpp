@@ -103,7 +103,7 @@ namespace Math
 
 		[[nodiscard]] constexpr Vector2 operator+(const Vector2& other) const noexcept
 		{
-			return  Vector2(*this) += other;
+			return Vector2(*this) += other;
 		}
 
 		[[nodiscard]] constexpr Vector2 operator-(const Vector2& other) const noexcept

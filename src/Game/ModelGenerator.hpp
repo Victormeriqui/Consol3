@@ -18,10 +18,7 @@ namespace Game
 
 		Model GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y);
 		Model GenerateSphere(uint8_t detail);
-
 	};
 }
-
-
 
 #endif

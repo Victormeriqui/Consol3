@@ -1,11 +1,11 @@
 #ifndef CONSOL3ENGINE_HPP
 #define CONSOL3ENGINE_HPP
 
-#include "../Game/Consol3Game.hpp"
+#include "../Display/ConsoleManager.hpp"
 #include "../Display/FrameBuffer.hpp"
 #include "../Display/IRenderer.hpp"
-#include "../Display/ConsoleManager.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
+#include "../Game/Consol3Game.hpp"
 #include "Rendering/SceneRenderer.hpp"
 
 #include <chrono>

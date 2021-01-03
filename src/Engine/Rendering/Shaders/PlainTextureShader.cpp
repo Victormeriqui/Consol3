@@ -26,7 +26,13 @@ namespace Engine
 
 			void PlainTextureShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
-				Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord, vert_v1_texture_coord, vert_v2_texture_coord, triangle, barcoord0, barcoord1, barcoord2);
+				Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord,
+																					vert_v1_texture_coord,
+																					vert_v2_texture_coord,
+																					triangle,
+																					barcoord0,
+																					barcoord1,
+																					barcoord2);
 
 				out_color = HSVColor(texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y));
 			}

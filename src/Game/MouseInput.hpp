@@ -15,7 +15,6 @@ namespace Game
 	class MouseInput
 	{
 	public:
-
 		MouseInput();
 
 		[[nodiscard]] static Point2 GetMousePosition();

@@ -1,8 +1,8 @@
 #include "SpotLight.hpp"
 
-#include "../../../Math/Vector3.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Util/MathUtil.hpp"
+#include "../../../Math/Vector3.hpp"
 #include "../Transform.hpp"
 
 #include <algorithm>
@@ -70,7 +70,7 @@ namespace Engine
 				up.Normalize();
 
 				Matrix4 translation_mat = Matrix4().SetTranslation(translation);
-				Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, up, direction);
+				Matrix4 rotation_mat	= Matrix4().SetDirectionalRotation(right, up, direction);
 
 				view_mat = rotation_mat * translation_mat;
 			}
@@ -131,7 +131,7 @@ namespace Engine
 			float SpotLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
 			{
 				Vector3 light_dir = position - this->position;
-				float light_dist = light_dir.GetLength();
+				float light_dist  = light_dir.GetLength();
 
 				if (light_dist > range)
 					return 0;

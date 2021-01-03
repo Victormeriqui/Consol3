@@ -63,9 +63,9 @@ namespace Math
 
 	Vector3& Vector3::Round()
 	{
-	//	x = std::round(x);
-	//	y = std::round(y);
-	//	z = std::round(z);
+		//	x = std::round(x);
+		//	y = std::round(y);
+		//	z = std::round(z);
 
 		return *this;
 	}
@@ -100,10 +100,7 @@ namespace Math
 
 	Vector3 Vector3::GetCrossProduct(const Vector3& other) const
 	{
-		return Vector3(
-			y * other.z - z * other.y,
-			z * other.x - x * other.z,
-			x * other.y - y * other.x);
+		return Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
 	}
 
 	Vector3 Vector3::GetDirectionalTo(const Vector3& other) const
@@ -125,10 +122,7 @@ namespace Math
 
 	Vector3 Vector3::GetLerped(const Vector3& other, float amount) const
 	{
-		return Vector3(
-			Util::Lerp(amount, x, other.x),
-			Util::Lerp(amount, y, other.y),
-			Util::Lerp(amount, z, other.z));
+		return Vector3(Util::Lerp(amount, x, other.x), Util::Lerp(amount, y, other.y), Util::Lerp(amount, z, other.z));
 	}
 
 	Vector3 Vector3::GetRounded() const

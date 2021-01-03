@@ -3,14 +3,14 @@
 
 #include "ILight.hpp"
 
-#include "../Vertex.hpp"
 #include "../../../Math/Vector3.hpp"
-#include "../Rasterizer.hpp"
 #include "../DepthBuffer.hpp"
+#include "../Rasterizer.hpp"
 #include "../Transform.hpp"
+#include "../Vertex.hpp"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace Engine
 {

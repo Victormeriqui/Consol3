@@ -32,13 +32,13 @@ namespace Engine
 
 		float Clipper::GetLerpAmount(float point1, float point2, float start, float end)
 		{
-			//lerp equation:  lerpedpoint = v1*(1-L) + v2*L, where L = lerp val
-			//solve for lerpedpoint = 1, get lerp val
-			//L = (lerpedpoint-v1) / (lerpedpoint-v1)-(lerpedpoint-v2)
-			//L = (1-v1) / (1-v1)-(1-v2)
-			//lerpedpoint for clipping will be w
+			// lerp equation:  lerpedpoint = v1*(1-L) + v2*L, where L = lerp val
+			// solve for lerpedpoint = 1, get lerp val
+			// L = (lerpedpoint-v1) / (lerpedpoint-v1)-(lerpedpoint-v2)
+			// L = (1-v1) / (1-v1)-(1-v2)
+			// lerpedpoint for clipping will be w
 
-			float numerator = point1 - start;
+			float numerator	  = point1 - start;
 			float denominator = numerator - (point2 - end);
 
 			return numerator / denominator;
@@ -98,12 +98,12 @@ namespace Engine
 				if (cur_point_is_inside)
 					temporary_vertices_buffer[temporary_vertices_buffer_count++] = cur_vert;
 
-				prev_vert = cur_vert;
+				prev_vert			 = cur_vert;
 				prev_point_component = cur_point_component;
 				prev_point_is_inside = cur_point_is_inside;
 			}
 
-			out_vertices_buffer = temporary_vertices_buffer;
+			out_vertices_buffer		   = temporary_vertices_buffer;
 			*out_vertices_buffer_count = temporary_vertices_buffer_count;
 
 			return *out_vertices_buffer_count > 0;

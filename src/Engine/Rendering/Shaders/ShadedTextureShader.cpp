@@ -32,23 +32,16 @@ namespace Engine
 
 				vert_lights_count = 0;
 
-
 				for (std::shared_ptr<ILight> light : lighting_system->GetLights())
 				{
 					if (!light->IsShadowCaster())
 						continue;
 
-					const Matrix4& light_unused_mat = Matrix4().SetIdentity();
-					const Matrix4& light_view_mat = light->GetViewMatrix().value().get();
+					const Matrix4& light_unused_mat		= Matrix4().SetIdentity();
+					const Matrix4& light_view_mat		= light->GetViewMatrix().value().get();
 					const Matrix4& light_projection_mat = light->GetProjectionMatrix().value().get();
 
-					MVPTransform light_mvp_mats =
-					{
-						light_unused_mat,
-						light_unused_mat,
-						light_view_mat,
-						light_projection_mat
-					};
+					MVPTransform light_mvp_mats = { light_unused_mat, light_unused_mat, light_view_mat, light_projection_mat };
 
 					vert_v0_light[vert_lights_count] = v0;
 					vert_v1_light[vert_lights_count] = v1;
@@ -62,7 +55,7 @@ namespace Engine
 					vert_v1_light[vert_lights_count].PerspectiveDivide();
 					vert_v2_light[vert_lights_count].PerspectiveDivide();
 
-					vert_light_depthbuffer[vert_lights_count] = &(light->GetLightDepthBuffer().value().get());
+					vert_light_depthbuffer[vert_lights_count]		 = &(light->GetLightDepthBuffer().value().get());
 					vert_light_islinearprojection[vert_lights_count] = light->IsLinearProjection().value();
 
 					vert_lights_count++;
@@ -78,28 +71,28 @@ namespace Engine
 			void ShadedTextureShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
 				Vector3 frag_position = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetPosition(),
-					vert_v1_model.GetPosition(),
-					vert_v2_model.GetPosition(),
-					triangle,
-					barcoord0,
-					barcoord1,
-					barcoord2);
+																			   vert_v1_model.GetPosition(),
+																			   vert_v2_model.GetPosition(),
+																			   triangle,
+																			   barcoord0,
+																			   barcoord1,
+																			   barcoord2);
 
 				Vector3 frag_normal = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetNormal(),
-					vert_v1_model.GetNormal(),
-					vert_v2_model.GetNormal(),
-					triangle,
-					barcoord0,
-					barcoord1,
-					barcoord2);
+																			 vert_v1_model.GetNormal(),
+																			 vert_v2_model.GetNormal(),
+																			 triangle,
+																			 barcoord0,
+																			 barcoord1,
+																			 barcoord2);
 
 				Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_model.GetTextureCoords(),
-					vert_v1_model.GetTextureCoords(),
-					vert_v2_model.GetTextureCoords(),
-					triangle,
-					barcoord0,
-					barcoord1,
-					barcoord2);
+																					vert_v1_model.GetTextureCoords(),
+																					vert_v2_model.GetTextureCoords(),
+																					triangle,
+																					barcoord0,
+																					barcoord1,
+																					barcoord2);
 
 				for (int i = 0; i < vert_lights_count; i++)
 				{
@@ -111,15 +104,15 @@ namespace Engine
 						frag_position_lights[i] = (v0_position_light * barcoord0) + (v1_position_light * barcoord1) + (v2_position_light * barcoord2);
 					else
 						frag_position_lights[i] = PerspectiveCorrectInterpolate<Vector3>(v0_position_light,
-							v1_position_light,
-							v2_position_light,
-							triangle,
-							barcoord0,
-							barcoord1,
-							barcoord2);
+																						 v1_position_light,
+																						 v2_position_light,
+																						 triangle,
+																						 barcoord0,
+																						 barcoord1,
+																						 barcoord2);
 				}
-				
-				float light_amount = lighting_system->GetLightAmountAt(frag_position, frag_normal, frag_position_lights);
+
+				float light_amount	 = lighting_system->GetLightAmountAt(frag_position, frag_normal, frag_position_lights);
 				float final_lighting = std::min(lighting_system->GetAmbientLight() + light_amount, 1.0f);
 
 				HSVColor texel_hsv = HSVColor(texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y));

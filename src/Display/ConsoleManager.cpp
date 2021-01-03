@@ -4,14 +4,15 @@
 
 namespace Display
 {
-	ConsoleManager::ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height, const COLORREF palette[]) : width(width), height(height)
+	ConsoleManager::ConsoleManager(short width, short height, std::wstring font_name, short font_width, short font_height, const COLORREF palette[]) :
+		width(width),
+		height(height)
 	{
-		consolescreenbuffer = CreateConsoleScreenBuffer(
-			GENERIC_READ | GENERIC_WRITE, // access
-			FILE_SHARE_READ | FILE_SHARE_WRITE, // share mode
-			NULL, // security attributes
-			CONSOLE_TEXTMODE_BUFFER, // mode TODO: check if CONSOLE_GRAPHICS_BUFFER works
-			NULL); // used by CONSOLE_GRAPHICS_BUFFER
+		consolescreenbuffer = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,		   // access
+														FILE_SHARE_READ | FILE_SHARE_WRITE,	   // share mode
+														NULL,								   // security attributes
+														CONSOLE_TEXTMODE_BUFFER,			   // mode TODO: check if CONSOLE_GRAPHICS_BUFFER works
+														NULL);								   // used by CONSOLE_GRAPHICS_BUFFER
 
 		SetConsoleScreenBufferInfo(consolescreenbuffer, width, height, font_width, font_height, palette);
 
@@ -33,14 +34,15 @@ namespace Display
 		EnableCursor();
 	}
 
-	void ConsoleManager::SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const COLORREF palette[])
+	void ConsoleManager::SetConsoleScreenBufferInfo(
+		HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const COLORREF palette[])
 	{
 		CONSOLE_SCREEN_BUFFER_INFOEX info;
 
 		// struct
 		info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 		// resolution, how many chars there are
-		info.dwSize = { width , height }; // the +1 avoids problems when resizing
+		info.dwSize = { width, height };	// the +1 avoids problems when resizing
 		// position of the cursor (irrelevant since we're going to hide it)
 		info.dwCursorPosition = { 0, 0 };
 		// attributes used by preceding writes (irrelevant since we're not going to give input to the console)
@@ -81,8 +83,8 @@ namespace Display
 
 		GetCurrentConsoleFontEx(consolescreenbuffer, false, &font_info);
 
-		original_front_size = font_info.dwFontSize;
-		original_font_name = std::wstring(font_info.FaceName);
+		original_front_size	 = font_info.dwFontSize;
+		original_font_name	 = std::wstring(font_info.FaceName);
 		original_font_weight = font_info.FontWeight;
 		original_font_family = font_info.FontFamily;
 	}
@@ -95,16 +97,16 @@ namespace Display
 		font_info.cbSize = sizeof(font_info);
 
 		font_info.dwFontSize = font_size;
-		this->font_size = font_size;
+		this->font_size		 = font_size;
 
 		wcscpy_s(font_info.FaceName, name.c_str());
 		font_name = name;
 
 		font_info.FontWeight = weight;
-		font_weight = weight;
+		font_weight			 = weight;
 
 		font_info.FontFamily = family;
-		font_family = family;
+		font_family			 = family;
 
 		SetCurrentConsoleFontEx(consolescreenbuffer, false, &font_info);
 
@@ -143,12 +145,11 @@ namespace Display
 
 	void ConsoleManager::FillScreenBuffer(const CHAR_INFO* data)
 	{
-		WriteConsoleOutputA(
-			consolescreenbuffer, // screen buffer to write to
-			data, // data to write
-			{ width, height }, // size of the data to write
-			{ 0, 0 }, // start of the data to write
-			&writeregion); // region to write to
+		WriteConsoleOutputA(consolescreenbuffer,	// screen buffer to write to
+							data,					// data to write
+							{ width, height },		// size of the data to write
+							{ 0, 0 },				// start of the data to write
+							&writeregion);			// region to write to
 	}
 
 	void ConsoleManager::WriteConsoleString(const std::shared_ptr<std::string> string, uint32_t size)

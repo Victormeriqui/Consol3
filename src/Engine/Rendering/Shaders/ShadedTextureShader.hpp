@@ -3,13 +3,13 @@
 
 #include "IShader.hpp"
 
-#include "../Vertex.hpp"
+#include "../../../Display/HSVColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector2.hpp"
 #include "../../../Math/Vector3.hpp"
-#include "../../../Display/HSVColor.hpp"
 #include "../Lighting/LightingSystem.hpp"
 #include "../Texture.hpp"
+#include "../Vertex.hpp"
 
 namespace Engine
 {
@@ -46,9 +46,9 @@ namespace Engine
 				Vector3 frag_position_lights[10];
 
 			public:
-
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
-				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
+				virtual void FragmentShader(
+					HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
 
 				void SetTexture(std::shared_ptr<Texture> texture);
 				void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);

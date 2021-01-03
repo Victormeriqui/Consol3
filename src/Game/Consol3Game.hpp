@@ -1,24 +1,24 @@
 #ifndef CONSOL3GAME_HPP
 #define CONSOL3GAME_HPP
 
-#include "../Engine/Rendering/Rasterizer.hpp"
-#include "../Engine/Rendering/Vertex.hpp"
-#include "../Math/Vector3.hpp"
 #include "../Engine/Rendering/Camera.hpp"
-#include "../Engine/Rendering/Model.hpp"
-#include "../Engine/Rendering/Transform.hpp"
-#include "../Engine/Rendering/StaticMesh.hpp"
-#include "../Engine/Rendering/Lighting/ILight.hpp"
 #include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
+#include "../Engine/Rendering/Lighting/ILight.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 #include "../Engine/Rendering/Lighting/PointLight.hpp"
 #include "../Engine/Rendering/Lighting/SpotLight.hpp"
-#include "ModelGenerator.hpp"
+#include "../Engine/Rendering/Model.hpp"
+#include "../Engine/Rendering/Rasterizer.hpp"
 #include "../Engine/Rendering/SceneRenderer.hpp"
+#include "../Engine/Rendering/StaticMesh.hpp"
+#include "../Engine/Rendering/Transform.hpp"
+#include "../Engine/Rendering/Vertex.hpp"
+#include "../Math/Vector3.hpp"
+#include "ModelGenerator.hpp"
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
-#include <chrono>
 
 namespace Game
 {
@@ -47,7 +47,6 @@ namespace Game
 		StaticMesh plight_mesh;
 
 	public:
-
 		Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer, std::shared_ptr<LightingSystem> lighting_system);
 
 		void HandleInput();
