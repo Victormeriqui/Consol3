@@ -24,7 +24,8 @@
     <ClCompile Include="src\Display\ConsoleManager.cpp" />
     <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
     <ClCompile Include="src\Display\TextOnlyRenderer.cpp" />
-    <ClCompile Include="src\Engine\Rendering\Lighting\LightRenderer.hpp" />
+    <ClCompile Include="src\Display\NullRenderer.hpp" />
+    <ClCompile Include="src\Engine\Rendering\SceneRenderer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainColorShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainTextureShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\ShadedColorShader.cpp" />
@@ -43,7 +44,6 @@
     <ClCompile Include="src\Engine\Rendering\Rasterizer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Camera.cpp" />
     <ClCompile Include="src\Engine\Rendering\Model.cpp" />
-    <ClCompile Include="src\Engine\Rendering\StaticMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Transform.cpp" />
     <ClCompile Include="src\Engine\Rendering\Vertex.cpp" />
     <ClCompile Include="src\Engine\Rendering\VertexBuffer.cpp" />
@@ -61,6 +61,7 @@
     <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
+    <ClInclude Include="src\Engine\Rendering\SceneRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\IShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\FixedColorShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\PlainColorShader.hpp" />

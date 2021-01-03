@@ -18,8 +18,8 @@
 namespace Display
 {
 	ANSIRenderer::ANSIRenderer(std::shared_ptr<FrameBuffer<RGBColor>> framebuffer) :
-		framebuffer(framebuffer),
-		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Consolas", 8, 8, palette_ansi))
+		framebuffer(std::move(framebuffer)),
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 8, 8, palette_ansi))
 	{
 		ClearFrameBuffer();
 		framebuffer_string = std::shared_ptr<std::string>(new std::string());
@@ -80,7 +80,7 @@ namespace Display
 	void ANSIRenderer::DisplayFrame()
 	{
 		TranslateFrameBuffer();
-		console_manager.WriteConsoleString(framebuffer_string, framebuffer_string->length());
+		console_manager.WriteConsoleString(framebuffer_string, (uint32_t)framebuffer_string->length());
 	}
 
 	void ANSIRenderer::ReportInformation(const std::string& info)

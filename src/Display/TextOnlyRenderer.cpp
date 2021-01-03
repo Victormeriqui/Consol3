@@ -14,8 +14,8 @@
 namespace Display
 {
 	TextOnlyRenderer::TextOnlyRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
-		framebuffer(framebuffer),
-		console_manager(ConsoleManager(framebuffer->GetWidth(), framebuffer->GetHeight(), L"Terminal", 4, 4, palette_textonly)),
+		framebuffer(std::move(framebuffer)),
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Terminal", 4, 4, palette_textonly)),
 		shades({' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219}),
 		//shades(" .:-=+*#%@"),
 		shades_count((uint8_t)shades.length())

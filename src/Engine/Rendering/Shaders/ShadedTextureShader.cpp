@@ -20,12 +20,12 @@ namespace Engine
 
 			void ShadedTextureShader::SetTexture(std::shared_ptr<Texture> texture)
 			{
-				this->texture = texture;
+				this->texture = std::move(texture);
 			}
 
 			void ShadedTextureShader::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
 			{
-				this->lighting_system = lighting_system;
+				this->lighting_system = std::move(lighting_system);
 			}
 
 			bool ShadedTextureShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
