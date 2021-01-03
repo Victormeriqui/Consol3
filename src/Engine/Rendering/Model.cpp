@@ -265,5 +265,13 @@ namespace Engine
 			shader_shadedtexture.SetTexture(texture);
 			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, color, shader_shadedtexture);
 		}
+
+		void Model::DrawModelToDepthMap(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer) const
+		{
+			rasterizer.SetModelMatrix(transform);
+
+			rasterizer.DrawVertexBuffer(depthbuffer, vertex_buffer, HSVColor(), shader_depthmap);
+		}
+
 	}
 }

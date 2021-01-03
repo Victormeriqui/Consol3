@@ -43,6 +43,8 @@ namespace Engine
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const override;
 				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;
+				virtual std::optional<float> GetBias() const override;
+				virtual std::optional<bool> IsLinearProjection() const override;
 				virtual void ClearDepthBuffer() override;
 			};
 		}

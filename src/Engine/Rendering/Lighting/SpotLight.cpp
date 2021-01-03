@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <memory>
 
 namespace Engine
 {
@@ -40,8 +41,8 @@ namespace Engine
 				// TODO: calculate width, height and fov with the light's angle
 				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
 			{
-				SetPosition(Vector3());
-				SetDirection(Vector3());
+				SetPosition(position);
+				SetDirection(direction);
 			}
 
 			SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range) :
@@ -54,8 +55,8 @@ namespace Engine
 				// TODO: calculate width, height and fov with the light's angle
 				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
 			{
-				SetPosition(Vector3());
-				SetDirection(Vector3());
+				SetPosition(position);
+				SetDirection(direction);
 			}
 
 			void SpotLight::UpdateViewMatrix()
@@ -158,6 +159,11 @@ namespace Engine
 				return true;
 			}
 
+			std::optional<bool> SpotLight::IsLinearProjection() const
+			{
+				return std::optional(false);
+			}
+
 			std::optional<std::reference_wrapper<const Matrix4>> SpotLight::GetProjectionMatrix() const
 			{
 				return std::optional(std::reference_wrapper(projection_mat));
@@ -170,7 +176,12 @@ namespace Engine
 
 			std::optional<std::reference_wrapper<DepthBuffer>> SpotLight::GetLightDepthBuffer()
 			{
-				return std::optional(std::reference_wrapper(depthbuffer));
+				return std::optional(std::reference_wrapper<DepthBuffer>(depthbuffer));
+			}
+
+			std::optional<float> SpotLight::GetBias() const
+			{
+				return 0.005f;
 			}
 
 			void SpotLight::ClearDepthBuffer()

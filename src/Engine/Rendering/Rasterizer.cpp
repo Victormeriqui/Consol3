@@ -141,7 +141,7 @@ namespace Engine
 
 		}
 
-		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, const IShader& shader)
+		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, IShader& shader)
 		{
 			int32_t bbox_min_x = std::min({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
 			int32_t bbox_min_y = std::min({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
@@ -189,7 +189,7 @@ namespace Engine
 						float z = barcoord0 * triangle.v0_screen.z + 
 								barcoord1 * triangle.v1_screen.z + 
 								barcoord2 * triangle.v2_screen.z;
-					
+
 						if (depthbuffer.GetValue(x, y) > z)
 						{
 							HSVColor out_color = color;

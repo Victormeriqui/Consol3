@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <cstdint>
 
 namespace Engine
 {
@@ -46,7 +47,6 @@ namespace Engine
 
 					return vertex;
 				}
-
 
 				inline Vertex& TransformVertexViewProjection(Vertex& vertex, const MVPTransform& mvp_mats)
 				{
@@ -89,7 +89,7 @@ namespace Engine
 
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) = 0;
-				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const = 0;
+				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) = 0;
 			};
 		}
 	}

@@ -15,11 +15,12 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			float ortho_size = 3;
 			DirectionalLight::DirectionalLight() :
 				intensity(1.0f),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographicProjection(-5, 5, 5, -5, -5, 5))
+				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
 			{
 				// by calling the setter explicitly we also update the view matrix
 				SetDirection(Vector3());
@@ -29,7 +30,7 @@ namespace Engine
 				intensity(1.0f),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographicProjection(-5, 5, 5, -5, -5, 5))
+				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
 			{
 				SetDirection(direction);
 			}
@@ -38,7 +39,7 @@ namespace Engine
 				intensity(intensity),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographicProjection(-5, 5, 5, -5, -5, 5))
+				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
 			{
 				SetDirection(direction);
 			}
@@ -92,6 +93,11 @@ namespace Engine
 				return true;
 			}
 
+			std::optional<bool> DirectionalLight::IsLinearProjection() const
+			{
+				return std::optional(true);
+			}
+
 			std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetProjectionMatrix() const
 			{
 				return std::optional(std::reference_wrapper(projection_mat));
@@ -104,7 +110,12 @@ namespace Engine
 
 			std::optional<std::reference_wrapper<DepthBuffer>> DirectionalLight::GetLightDepthBuffer()
 			{
-				return std::optional(std::reference_wrapper(depthbuffer));
+				return std::optional(std::reference_wrapper<DepthBuffer>(depthbuffer));
+			}
+
+			std::optional<float> DirectionalLight::GetBias() const
+			{
+				return 0.04f;
 			}
 
 			void DirectionalLight::ClearDepthBuffer()

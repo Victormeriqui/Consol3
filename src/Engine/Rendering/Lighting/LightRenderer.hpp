@@ -26,7 +26,6 @@ namespace Engine
 
 				virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override
 				{
-					x = x;
 				}
 
 				virtual void DisplayFrame() override

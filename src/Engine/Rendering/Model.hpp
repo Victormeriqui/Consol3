@@ -13,11 +13,12 @@
 #include "Shaders/PlainTextureShader.hpp"
 #include "Shaders/ShadedColorShader.hpp"
 #include "Shaders/ShadedTextureShader.hpp"
+#include "Shaders/DepthMapShader.hpp"
 
 #include <cstdint>
 #include <string>
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace Engine
 {
@@ -30,6 +31,7 @@ namespace Engine
 		static PlainTextureShader shader_plaintexture;
 		static ShadedColorShader shader_shadedcolor;
 		static ShadedTextureShader shader_shadedtexture;
+		static DepthMapShader shader_depthmap;
 
 		class Model
 		{
@@ -50,8 +52,9 @@ namespace Engine
 			void DrawModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, const HSVColor& color) const;
 			void DrawShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system, const HSVColor& color) const;
 			void DrawTexturedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<Texture> texture, const HSVColor& color) const;
-			void DrawTexturedAndShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system,
-				std::shared_ptr<Texture> texture, const HSVColor& color) const;
+			void DrawTexturedAndShadedModel(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Texture> texture, const HSVColor& color) const;
+
+			void DrawModelToDepthMap(const Transform& transform, DepthBuffer& depthbuffer, Rasterizer& rasterizer) const;
 		};
 	}
 }
