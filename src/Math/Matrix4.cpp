@@ -108,12 +108,12 @@ namespace Math
 	Matrix4& Matrix4::SetOrthographicProjection(float left, float right, float up, float down, float near, float far)
 	{
 		float width = right - left;
-		float height = up - down;
+		float height = down - up;
 		float depth = far - near;
 
 		values[0][0] = 2.0f / width; values[0][1] = 0;             values[0][2] = 0;             values[0][3] = -(right + left) / width;
 		values[1][0] = 0;            values[1][1] = 2.0f / height; values[1][2] = 0;             values[1][3] = -(up + down) / height;
-		values[2][0] = 0;            values[2][1] = 0;             values[2][2] = -2.0f / depth; values[2][3] = -(far + near) / depth;
+		values[2][0] = 0;            values[2][1] = 0;             values[2][2] = 2.0f / depth; values[2][3] = -(far + near) / depth;
 		values[3][0] = 0;            values[3][1] = 0;             values[3][2] = 0;             values[3][3] = 1;
 
 		return *this;
