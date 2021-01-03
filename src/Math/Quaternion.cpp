@@ -1,10 +1,5 @@
 #include "Quaternion.hpp"
 
-#include "Vector3.hpp"
-#include "Matrix4.hpp"
-
-#include <cmath>
-
 namespace Math
 {
 	Quaternion::Quaternion(const Angle& angle)

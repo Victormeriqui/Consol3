@@ -3,7 +3,6 @@
 #include "../Math/Vector3.hpp"
 #include "../Engine/Rendering/Vertex.hpp"
 
-#include <cstdint>
 #include <vector>
 #include <cmath>
 

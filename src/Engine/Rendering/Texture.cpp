@@ -1,12 +1,7 @@
 #include "Texture.hpp"
 
-#include "../../Display/RGBColor.hpp"
-#include "../../Display/Framebuffer.hpp"
-#include "../../Math/Vector2.hpp"
 #include "../../Math/Util/MathUtil.hpp"
 
-#include <cstdint>
-#include <string>
 #include <fstream>
 #include <sstream>
 #include <array>

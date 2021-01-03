@@ -1,14 +1,5 @@
 #include "GreyscaleRenderer.hpp"
 
-#include "FrameBuffer.hpp"
-#include "HSVColor.hpp"
-
-// Windows.h overrides std::min
-#define NOMINMAX
-#include <Windows.h>
-#include <cstdint>
-#include <memory>
-
 namespace Display
 {
 	GreyscaleRenderer::GreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :

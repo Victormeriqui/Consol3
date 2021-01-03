@@ -1,10 +1,7 @@
 #include "Matrix4.hpp"
 
 #include "Util/MathUtil.hpp"
-#include "Quaternion.hpp"
-#include "Vector3.hpp"
 
-#include <algorithm>
 #include <cmath>
 
 namespace Math

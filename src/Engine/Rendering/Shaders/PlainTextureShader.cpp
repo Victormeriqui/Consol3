@@ -1,12 +1,5 @@
 #include "PlainTextureShader.hpp"
 
-#include "../Vertex.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Vector2.hpp"
-#include "../../../Display/HSVColor.hpp"
-#include "../Texture.hpp"
-
-#include <string>
 namespace Engine
 {
 	namespace Rendering

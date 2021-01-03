@@ -1,9 +1,5 @@
 #include "PlainColorShader.hpp"
 
-#include "../Vertex.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Display/HSVColor.hpp"
-
 namespace Engine
 {
 	namespace Rendering

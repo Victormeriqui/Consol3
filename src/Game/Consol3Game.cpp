@@ -1,29 +1,12 @@
 #include "Consol3Game.hpp"
 
-#include "../Engine/Rendering/Rasterizer.hpp"
-#include "../Engine/Rendering/Vertex.hpp"
-#include "../Math/Vector3.hpp"
-#include "../Engine/Rendering/Model.hpp"
-#include "../Display/RGBColor.hpp"
-#include "../Engine/Rendering/Transform.hpp"
-#include "../Math/Point2.hpp"
-#include "../Math/Vector2.hpp"
 #include "MouseInput.hpp"
-#include "../Engine/Rendering/StaticMesh.hpp"
-#include "../Engine/Rendering/Lighting/ILight.hpp"
-#include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
-#include "../Engine/Rendering/Lighting/PointLight.hpp"
-#include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 #include "../Math/Util/MathUtil.hpp"
-#include "../Engine/Rendering/SceneRenderer.hpp"
 
-#include <vector>
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
 #include <cstdint>
-#include <memory>
-#include <chrono>
 
 namespace Game
 {

@@ -1,13 +1,5 @@
 #include "Consol3Engine.hpp"
 
-#include "../Game/Consol3Game.hpp"
-#include "Rendering/Rasterizer.hpp"
-#include "../Display/IRenderer.hpp"
-
-#include <chrono>
-#include <cstdint>
-#include <memory>
-
 #define UPDATE_STEP 10
 
 namespace Engine

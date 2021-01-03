@@ -1,13 +1,6 @@
 #include "ConsoleManager.hpp"
 
-// Windows.h overrides std::min
-#define NOMINMAX
-#include <Windows.h>
-#include <cstdint>
 #include <algorithm>
-#include <string>
-#include <vector>
-#include <memory>
 
 namespace Display
 {

@@ -1,11 +1,5 @@
 #include "Clipper.hpp"
 
-#include "Vertex.hpp"
-#include "../../Math/Vector3.hpp"
-
-#include <cstdint>
-#include <array>
-
 namespace Engine
 {
 	namespace Rendering

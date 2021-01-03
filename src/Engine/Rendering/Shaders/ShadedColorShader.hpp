@@ -11,7 +11,6 @@
 
 #include <memory>
 #include <functional>
-#include <vector>
 #include <cstdint>
 
 namespace Engine

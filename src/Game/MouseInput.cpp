@@ -1,12 +1,5 @@
 #include "MouseInput.hpp"
 
-#include "../Math/Point2.hpp"
-
-#include <cstdint>
-// Windows.h overrides std::min
-#define NOMINMAX
-#include <Windows.h>
-
 namespace Game
 {
 	using namespace Math;

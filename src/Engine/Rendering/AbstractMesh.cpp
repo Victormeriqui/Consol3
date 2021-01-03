@@ -1,9 +1,5 @@
 #include "AbstractMesh.hpp"
 
-#include "../../Display/RGBColor.hpp"
-#include "../../Math/Vector3.hpp"
-#include "../../Math/Angle.hpp"
-
 namespace Engine
 {
 	namespace Rendering

@@ -1,21 +1,8 @@
 #include "Rasterizer.hpp"
 
-#include "../../Display/IRenderer.hpp"
 #include "../../Math/Point2.hpp"
-#include "../../Math/Matrix4.hpp"
-#include "Vertex.hpp"
-#include "../../Display/RGBColor.hpp"
-#include "../../Display/HSVColor.hpp"
-#include "Transform.hpp"
-#include "../../Math/Util/MathUtil.hpp"
-#include "Clipper.hpp"
-#include "DepthBuffer.hpp"
-#include "Shaders/IShader.hpp"
-#include "VertexBuffer.hpp"
-#include "Triangle.hpp"
 
 #include <algorithm>
-#include <cstdint>
 
 namespace Engine
 {
