@@ -7,6 +7,7 @@
 
 #include <optional>
 #include <functional>
+#include <memory>
 
 namespace Engine
 {
@@ -35,6 +36,8 @@ namespace Engine
 				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const = 0;
 				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const = 0;
 				[[nodiscard]] virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() = 0;
+				[[nodiscard]] virtual std::optional<bool> IsLinearProjection() const = 0;
+				[[nodiscard]] virtual std::optional<float> GetBias() const = 0;
 				virtual void ClearDepthBuffer() = 0;
 			};
 		}

@@ -1,14 +1,14 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <cstdint>
-
 #include "../../Math/Vector3.hpp"
 #include "../../Math/Angle.hpp"
 #include "../../Math/Quaternion.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Transform.hpp"
 #include "DepthBuffer.hpp"
+
+#include <cstdint>
 
 namespace Engine
 {

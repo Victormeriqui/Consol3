@@ -7,7 +7,6 @@
 #include "../Texture.hpp"
 
 #include <string>
-
 namespace Engine
 {
 	namespace Rendering
@@ -32,7 +31,7 @@ namespace Engine
 				return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 			}
 
-			void PlainTextureShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const
+			void PlainTextureShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
 				Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord, vert_v1_texture_coord, vert_v2_texture_coord, triangle, barcoord0, barcoord1, barcoord2);
 

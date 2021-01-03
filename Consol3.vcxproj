@@ -29,6 +29,7 @@
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainTextureShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\ShadedColorShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\ShadedTextureShader.cpp" />
+    <ClCompile Include="src\Engine\Rendering\Shaders\DepthMapShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Texture.cpp" />
     <ClCompile Include="src\Display\DitheredRenderer.cpp" />
     <ClCompile Include="src\Display\GreyscaleRenderer.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="src\Engine\Rendering\Shaders\PlainTextureShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\ShadedColorShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\ShadedTextureShader.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Shaders\DepthMapShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Texture.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\DirectionalLight.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\ILight.hpp" />

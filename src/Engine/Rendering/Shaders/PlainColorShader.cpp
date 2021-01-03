@@ -16,10 +16,10 @@ namespace Engine
 				TransformVertexMVP(v1, mvp_mats);
 				TransformVertexMVP(v2, mvp_mats);
 
-				return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
+				return true;// !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 			}
 
-			void PlainColorShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) const
+			void PlainColorShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
 
 			}

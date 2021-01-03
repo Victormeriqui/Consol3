@@ -81,6 +81,11 @@ namespace Engine
 				return false;
 			}
 
+			std::optional<bool> PointLight::IsLinearProjection() const
+			{
+				return std::nullopt;
+			}
+
 			std::optional<std::reference_wrapper<const Matrix4>> PointLight::GetProjectionMatrix() const
 			{
 				return std::nullopt;
@@ -92,6 +97,11 @@ namespace Engine
 			}
 
 			std::optional<std::reference_wrapper<DepthBuffer>> PointLight::GetLightDepthBuffer()
+			{
+				return std::nullopt;
+			}
+
+			std::optional<float> PointLight::GetBias() const
 			{
 				return std::nullopt;
 			}
