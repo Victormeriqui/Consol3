@@ -13,6 +13,7 @@
 #include "../Engine/Rendering/StaticMesh.hpp"
 #include "../Engine/Rendering/Transform.hpp"
 #include "../Engine/Rendering/Vertex.hpp"
+#include "../Engine/Resources/ResourceManager.hpp"
 #include "../Math/Vector3.hpp"
 #include "ModelGenerator.hpp"
 
@@ -27,6 +28,7 @@ namespace Game
 	using namespace Engine::Rendering;
 	using namespace Math;
 	using namespace Lighting;
+	using namespace Resources;
 
 	class Consol3Game
 	{
@@ -34,6 +36,8 @@ namespace Game
 		std::shared_ptr<SceneRenderer> scene_renderer;
 		std::shared_ptr<LightingSystem> lighting_system;
 		ModelGenerator model_generator;
+
+		std::shared_ptr<ResourceManager> resource_manager;
 
 		std::shared_ptr<Camera> camera;
 
@@ -46,8 +50,12 @@ namespace Game
 		std::shared_ptr<SpotLight> spot_light2;
 		StaticMesh plight_mesh;
 
+		void LoadResources();
+
 	public:
-		Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer, std::shared_ptr<LightingSystem> lighting_system);
+		Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer,
+					std::shared_ptr<ResourceManager> resource_manager,
+					std::shared_ptr<LightingSystem> lighting_system);
 
 		void HandleInput();
 		void Update();

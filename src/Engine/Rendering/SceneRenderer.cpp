@@ -4,8 +4,11 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		SceneRenderer::SceneRenderer(std::shared_ptr<IRenderer> renderer, std::shared_ptr<LightingSystem> lighting_system) :
+		SceneRenderer::SceneRenderer(std::shared_ptr<IRenderer> renderer,
+									 std::shared_ptr<ResourceManager> resource_manager,
+									 std::shared_ptr<LightingSystem> lighting_system) :
 			renderer(std::move(renderer)),
+			resource_manager(std::move(resource_manager)),
 			null_renderer(std::make_shared<NullRenderer>()),
 			rasterizer(this->renderer),
 			shadowmap_rasterizer(null_renderer),
@@ -54,7 +57,7 @@ namespace Engine
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
 					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  mesh.get().GetModel().GetVertexBuffer(),
+														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 														  nocolor,
 														  shader_depthmap);
 				}
@@ -63,7 +66,7 @@ namespace Engine
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
 					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  mesh.get().GetModel().GetVertexBuffer(),
+														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 														  nocolor,
 														  shader_depthmap);
 				}
@@ -72,7 +75,7 @@ namespace Engine
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
 					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  mesh.get().GetModel().GetVertexBuffer(),
+														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 														  nocolor,
 														  shader_depthmap);
 				}
@@ -81,7 +84,7 @@ namespace Engine
 				{
 					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
 					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  mesh.get().GetModel().GetVertexBuffer(),
+														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 														  nocolor,
 														  shader_depthmap);
 				}
@@ -101,7 +104,7 @@ namespace Engine
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
 				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											mesh.get().GetModel().GetVertexBuffer(),
+											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 											mesh.get().GetColor(),
 											shader_plaincolor);
 			}
@@ -110,7 +113,7 @@ namespace Engine
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
 				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											mesh.get().GetModel().GetVertexBuffer(),
+											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 											mesh.get().GetColor(),
 											shader_shadedcolor);
 			}
@@ -119,10 +122,10 @@ namespace Engine
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
 
-				// TODO: we need a texture cache to avoid doing this every frame!
-				shader_plaintexture.SetTexture(std::make_shared<Texture>(mesh.get().GetTexture()));
+				shader_plaintexture.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
+
 				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											mesh.get().GetModel().GetVertexBuffer(),
+											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 											mesh.get().GetColor(),
 											shader_plaintexture);
 			}
@@ -131,10 +134,10 @@ namespace Engine
 			{
 				rasterizer.SetModelMatrix(mesh.get().GetTransform());
 
-				// TODO: we need a texture cache to avoid doing this every frame!
-				shader_plaintexture.SetTexture(std::make_shared<Texture>(mesh.get().GetTexture()));
+				shader_plaintexture.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
+
 				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											mesh.get().GetModel().GetVertexBuffer(),
+											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
 											mesh.get().GetColor(),
 											shader_shadedtexture);
 			}

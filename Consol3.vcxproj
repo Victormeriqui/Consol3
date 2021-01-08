@@ -25,6 +25,9 @@
     <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
     <ClCompile Include="src\Display\TextOnlyRenderer.cpp" />
     <ClCompile Include="src\Display\NullRenderer.hpp" />
+    <ClCompile Include="src\Engine\Resources\BmpTextureLoader.cpp" />
+    <ClCompile Include="src\Engine\Resources\ObjModelLoader.cpp" />
+    <ClCompile Include="src\Engine\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Engine\Rendering\SceneRenderer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainColorShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainTextureShader.cpp" />
@@ -61,7 +64,11 @@
     <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
     <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
-    <ClInclude Include="src\Engine\Rendering\Resources\ResourceManager.hpp" />
+    <ClInclude Include="src\Engine\Resources\BmpTextureLoader.hpp" />
+    <ClInclude Include="src\Engine\Resources\IModelLoader.hpp" />
+    <ClInclude Include="src\Engine\Resources\ITextureLoader.hpp" />
+    <ClInclude Include="src\Engine\Resources\ObjModelLoader.hpp" />
+    <ClInclude Include="src\Engine\Resources\ResourceManager.hpp" />
     <ClInclude Include="src\Engine\Rendering\SceneRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\IShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\FixedColorShader.hpp" />
