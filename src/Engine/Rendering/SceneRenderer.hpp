@@ -3,6 +3,7 @@
 
 #include "../../Display/IRenderer.hpp"
 #include "../../Display/NullRenderer.hpp"
+#include "../Resources/ResourceManager.hpp"
 #include "AbstractMesh.hpp"
 #include "Camera.hpp"
 #include "Lighting/LightingSystem.hpp"
@@ -22,6 +23,7 @@ namespace Engine
 	namespace Rendering
 	{
 		using namespace Display;
+		using namespace Resources;
 
 		class SceneRenderer
 		{
@@ -34,8 +36,9 @@ namespace Engine
 			// a secondary rasterizer that writes to the light's depthbuffer, this is prefered so the main rasterizer doesn't need to be affected
 			Rasterizer shadowmap_rasterizer;
 
-			std::shared_ptr<LightingSystem> lighting_system;
+			std::shared_ptr<ResourceManager> resource_manager;
 
+			std::shared_ptr<LightingSystem> lighting_system;
 			std::shared_ptr<Camera> camera;
 
 			std::list<std::reference_wrapper<const AbstractMesh>> render_buffer_plain;
@@ -52,7 +55,9 @@ namespace Engine
 			void RenderShadowMapPass();
 
 		public:
-			SceneRenderer(std::shared_ptr<IRenderer> renderer, std::shared_ptr<LightingSystem> lighting_system);
+			SceneRenderer(std::shared_ptr<IRenderer> renderer,
+						  std::shared_ptr<ResourceManager> resource_manager,
+						  std::shared_ptr<LightingSystem> lighting_system);
 
 			void SetCamera(std::shared_ptr<Camera> camera);
 

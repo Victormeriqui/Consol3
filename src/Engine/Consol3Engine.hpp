@@ -25,6 +25,7 @@ namespace Engine
 	private:
 		std::shared_ptr<IRenderer> renderer;
 		std::shared_ptr<LightingSystem> lighting_system;
+		std::shared_ptr<ResourceManager> resource_manager;
 		std::shared_ptr<SceneRenderer> scene_renderer;
 
 		Consol3Game game;

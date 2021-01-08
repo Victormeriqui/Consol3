@@ -15,21 +15,35 @@ namespace Game
 	using namespace Engine::Rendering;
 	using namespace Math;
 
+	void Consol3Game::LoadResources()
+	{
+		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_DISABLED);
+		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_DISABLED);
+		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50));
+
+		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
+	}
+
 	float rot = 1.33f;
-	Consol3Game::Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer, std::shared_ptr<LightingSystem> lighting_system) :
+	Consol3Game::Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer,
+							 std::shared_ptr<ResourceManager> resource_manager,
+							 std::shared_ptr<LightingSystem> lighting_system) :
 		scene_renderer(std::move(scene_renderer)),
+		resource_manager(std::move(resource_manager)),
 		lighting_system(std::move(lighting_system)),
 		camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f))
 	{
+		LoadResources();
+
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		mesh = StaticMesh(Model("res/monkey.obj"), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh("res/monkey.obj", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
 		//		mesh.SetRotation(Angle(0, 1.33f, 0));
-		plight_mesh = StaticMesh(Model("res/cube.obj"), Vector3(-2, 0, 0), RGBColor(255, 255, 255));
+		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 
-		floor = StaticMesh(model_generator.GeneratePlane(50, 50), Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		floor = StaticMesh("plane50", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(12, 12, 12));
 		floor.SetPosition(Vector3(-6, -2, -6));
 

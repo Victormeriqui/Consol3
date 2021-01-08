@@ -5,9 +5,9 @@
 #include "../../Display/RGBColor.hpp"
 #include "../../Math/Angle.hpp"
 #include "../../Math/Vector3.hpp"
-#include "Model.hpp"
-#include "Texture.hpp"
 #include "Transform.hpp"
+
+#include <string>
 
 namespace Engine
 {
@@ -19,8 +19,8 @@ namespace Engine
 		class AbstractMesh
 		{
 		protected:
-			Model model;
-			Texture texture;
+			std::string model_resource;
+			std::string texture_resource;
 			bool has_texture;
 
 			// rgb color is the one that is actually exposed, hsvcolor is internal for the frambuffer
@@ -35,18 +35,22 @@ namespace Engine
 
 		public:
 			AbstractMesh();
-			AbstractMesh(const Model& model, const Vector3& position);
-			AbstractMesh(const Model& model, const Vector3& position, const RGBColor& color);
-			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation);
-			AbstractMesh(const Model& model, const Vector3& position, const Angle& rotation, const RGBColor& color);
+			AbstractMesh(const std::string& model_resource, const Vector3& position);
+			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color);
+			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation);
+			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color);
 
-			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position);
-			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const RGBColor& color);
-			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const Angle& rotation);
-			AbstractMesh(const Model& model, const Texture& texture, const Vector3& position, const Angle& rotation, const RGBColor& color);
+			AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position);
+			AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position, const RGBColor& color);
+			AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position, const Angle& rotation);
+			AbstractMesh(const std::string& model_resource,
+						 const std::string& texture_resource,
+						 const Vector3& position,
+						 const Angle& rotation,
+						 const RGBColor& color);
 
-			[[nodiscard]] const Model& GetModel() const;
-			[[nodiscard]] const Texture& GetTexture() const;
+			[[nodiscard]] const std::string& GetModelResource() const;
+			[[nodiscard]] const std::string& GetTextureResource() const;
 			[[nodiscard]] RGBColor GetColor() const;
 			[[nodiscard]] Vector3 GetPosition() const;
 			[[nodiscard]] Angle GetRotation() const;
@@ -54,8 +58,8 @@ namespace Engine
 			[[nodiscard]] const Transform& GetTransform() const;
 			[[nodiscard]] bool IsTextured() const;
 
-			AbstractMesh& SetModel(const Model& model);
-			AbstractMesh& SetTexture(const Texture& texture);
+			AbstractMesh& SetModelResource(const std::string& model_resource);
+			AbstractMesh& SetTextureResource(const std::string& texture_resource);
 			AbstractMesh& SetColor(const RGBColor& color);
 			AbstractMesh& SetPosition(const Vector3& position);
 			AbstractMesh& SetRotation(const Angle& rotation);

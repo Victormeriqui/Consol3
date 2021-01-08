@@ -13,8 +13,9 @@ namespace Engine
 	Consol3Engine::Consol3Engine(std::shared_ptr<IRenderer> renderer) :
 		renderer(std::move(renderer)),
 		lighting_system(std::make_shared<LightingSystem>()),
-		scene_renderer(std::make_shared<SceneRenderer>(this->renderer, lighting_system)),
-		game(Consol3Game(scene_renderer, lighting_system)),
+		resource_manager(std::make_shared<ResourceManager>()),
+		scene_renderer(std::make_shared<SceneRenderer>(this->renderer, resource_manager, lighting_system)),
+		game(Consol3Game(scene_renderer, resource_manager, lighting_system)),
 		running(false),
 		delta(0)
 	{
