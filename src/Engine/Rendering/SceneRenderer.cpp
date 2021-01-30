@@ -34,6 +34,9 @@ namespace Engine
 				render_buffer_textured.push_back(std::reference_wrapper(mesh));
 			else
 				render_buffer_plain.push_back(std::reference_wrapper(mesh));
+
+			if (mesh.IsAnimated())
+				updatable_animated_meshes.push_back(std::reference_wrapper(dynamic_cast<AnimatedMesh&>(mesh)));
 		}
 
 		void SceneRenderer::DrawShadedMesh(AbstractMesh& mesh)
@@ -42,6 +45,9 @@ namespace Engine
 				render_buffer_shaded_textured.push_back(std::reference_wrapper(mesh));
 			else
 				render_buffer_shaded.push_back(std::reference_wrapper(mesh));
+
+			if (mesh.IsAnimated())
+				updatable_animated_meshes.push_back(std::reference_wrapper(dynamic_cast<AnimatedMesh&>(mesh)));
 		}
 
 		void SceneRenderer::RenderStaticMesh(
@@ -66,7 +72,7 @@ namespace Engine
 										color,
 										shader);
 
-			animated_mesh.UpdateAnimation(0.01f);
+			animated_mesh.UpdateAnimation();
 		}
 
 		void SceneRenderer::RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color)
@@ -103,7 +109,7 @@ namespace Engine
 			}
 		}
 
-		void SceneRenderer::RenderScene()
+		void SceneRenderer::RenderScene(int64_t delta)
 		{
 			camera->ClearDepthBuffer();
 			lighting_system->ClearDepthBuffers();
@@ -130,10 +136,16 @@ namespace Engine
 				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shadedtexture, mesh.get().GetColor());
 			}
 
+			for (std::reference_wrapper<AnimatedMesh> mesh : updatable_animated_meshes)
+			{
+				mesh.get().UpdateAnimation();
+			}
+
 			render_buffer_plain.clear();
 			render_buffer_shaded.clear();
 			render_buffer_textured.clear();
 			render_buffer_shaded_textured.clear();
+			updatable_animated_meshes.clear();
 		}
 
 		void SceneRenderer::DrawPixel(uint16_t x, uint16_t y, const HSVColor& color)

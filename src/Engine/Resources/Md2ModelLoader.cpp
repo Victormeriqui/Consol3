@@ -209,7 +209,7 @@ namespace Engine
 
 					if (i != 0)
 					{
-						Animation animation = { start_frame, end_frame, 0 };
+						Animation animation = { start_frame, end_frame };
 
 						out_animations.insert_or_assign(example_name, animation);
 					}

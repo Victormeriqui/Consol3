@@ -23,7 +23,6 @@ namespace Engine
 		{
 			uint32_t start_frame;
 			uint32_t end_frame;
-			uint16_t fps;
 		};
 	}
 }

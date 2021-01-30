@@ -5,6 +5,7 @@
 #include "../../Display/NullRenderer.hpp"
 #include "../Resources/ResourceManager.hpp"
 #include "AbstractMesh.hpp"
+#include "AnimatedMesh.hpp"
 #include "Camera.hpp"
 #include "Lighting/LightingSystem.hpp"
 #include "Rasterizer.hpp"
@@ -46,6 +47,8 @@ namespace Engine
 			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_textured;
 			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_shaded_textured;
 
+			std::list<std::reference_wrapper<AnimatedMesh>> updatable_animated_meshes;
+
 			PlainColorShader shader_plaincolor;
 			PlainTextureShader shader_plaintexture;
 			ShadedColorShader shader_shadedcolor;
@@ -69,7 +72,7 @@ namespace Engine
 			void DrawShadedMesh(AbstractMesh& mesh);
 			void DrawPixel(uint16_t x, uint16_t y, const HSVColor& color);
 
-			void RenderScene();
+			void RenderScene(int64_t delta);
 		};
 	}
 }

@@ -28,6 +28,8 @@ namespace Engine
 			AnimatedModel();
 			AnimatedModel(const std::vector<Frame>& frames, const std::vector<uint32_t>& indices, const std::map<std::string, Animation>& animations);
 
+			[[nodiscard]] const Animation& GetAnimation(const std::string& name) const;
+
 			VertexBuffer GetVertexBuffer(const std::string& animation_name, float interpolation);
 		};
 	}
