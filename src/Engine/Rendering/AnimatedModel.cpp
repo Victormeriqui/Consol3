@@ -23,6 +23,11 @@ namespace Engine
 			*this->indices.get() = indices;
 		}
 
+		const Animation& AnimatedModel::GetAnimation(const std::string& name) const
+		{
+			return animations.at(name);
+		}
+
 		VertexBuffer AnimatedModel::GetVertexBuffer(const std::string& animation_name, float interpolation)
 		{
 			if (animations.find(animation_name) == animations.end())

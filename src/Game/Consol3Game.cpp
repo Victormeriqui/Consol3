@@ -21,8 +21,14 @@ namespace Game
 		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_DISABLED);
 		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50));
 
-		resource_manager->LoadModel("res/warrior.md2", NormalGenerationOptions::GENERATE_DISABLED);
+		resource_manager->LoadModel("res/alien.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/marvin.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/buggy.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/scarlet.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/warrior.md2", NormalGenerationOptions::GENERATE_FORCED);
 
+		resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
 	}
 
@@ -40,8 +46,8 @@ namespace Game
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		anim_mesh = AnimatedMesh("res/warrior.md2", "res/text.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		anim_mesh.SetPosition(Vector3(0.0f, -1.9f, 0.0f));
+		anim_mesh = AnimatedMesh("res/scarlet.md2", "res/tnt.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		anim_mesh.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
 		anim_mesh.SetRotation(Angle(-90, 0, 0));
 
@@ -73,7 +79,7 @@ namespace Game
 		this->lighting_system->SetAmbientLight(0.02f);
 		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
-		this->lighting_system->AddLight(spot_light);
+		//	this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -134,7 +140,7 @@ namespace Game
 
 		if (GetKeyState(VK_NUMPAD2) & 0x8000)
 		{
-			anim_mesh.PlayAnimation("attack");
+			anim_mesh.PlayAnimation("attack", 0.4f);
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)
@@ -180,7 +186,7 @@ namespace Game
 		// scene_renderer->DrawShadedMesh(mesh);
 		scene_renderer->DrawShadedMesh(anim_mesh);
 
-		scene_renderer->RenderScene();
+		scene_renderer->RenderScene(delta);
 		/*
 		for (int y = 0; y < 200; y++)
 		{
