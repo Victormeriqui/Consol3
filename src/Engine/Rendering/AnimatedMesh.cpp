@@ -56,7 +56,6 @@ namespace Engine
 		{
 			is_animating = true;
 
-			anim_current_name;
 			anim_current_progress = 0;
 
 			anim_current_name = animation;
@@ -85,7 +84,11 @@ namespace Engine
 			anim_current_progress += progress;
 
 			if (anim_current_progress >= 1.0f)
-				is_animating = false;
+			{
+				anim_current_progress = 1.0f;
+				is_animating		  = false;
+				PlayAnimation("attack");
+			}
 		}
 	}
 }

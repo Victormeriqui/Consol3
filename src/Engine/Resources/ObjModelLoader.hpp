@@ -1,10 +1,12 @@
 #ifndef OBJMODELLOADER_HPP
 #define OBJMODELLOADER_HPP
 
+#include "../Rendering/Animation.h"
 #include "../Rendering/Vertex.hpp"
 #include "IModelLoader.hpp"
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -27,8 +29,9 @@ namespace Engine
 										 NormalGenerationOptions options) override;
 
 			virtual bool LoadAnimatedModel(const std::string& filename,
-										   std::vector<Vertex>& out_vertices,
+										   std::vector<Frame>& out_frames,
 										   std::vector<uint32_t>& out_indices,
+										   std::map<std::string, Animation>& out_animations,
 										   NormalGenerationOptions options) override;
 		};
 	}

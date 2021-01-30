@@ -1,6 +1,7 @@
 #ifndef CONSOL3GAME_HPP
 #define CONSOL3GAME_HPP
 
+#include "../Engine/Rendering/AnimatedMesh.hpp"
 #include "../Engine/Rendering/Camera.hpp"
 #include "../Engine/Rendering/Lighting/DirectionalLight.hpp"
 #include "../Engine/Rendering/Lighting/ILight.hpp"
@@ -41,6 +42,7 @@ namespace Game
 		std::shared_ptr<Camera> camera;
 
 		StaticMesh mesh;
+		AnimatedMesh anim_mesh;
 		StaticMesh floor;
 
 		std::shared_ptr<DirectionalLight> dir_light;

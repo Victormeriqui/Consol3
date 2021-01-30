@@ -147,7 +147,7 @@ namespace Engine
 		AbstractMesh& AbstractMesh::SetRotation(const Angle& rotation)
 		{
 			this->rotation = Angle(rotation);
-			transform.SetRotation(rotation);
+			transform.SetRotation(rotation.GetInRadians());
 
 			return *this;
 		}

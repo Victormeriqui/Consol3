@@ -48,6 +48,7 @@ namespace Engine
 
 			std::shared_ptr<Texture> GetLoadedTexture(const std::string& resource_name);
 			std::shared_ptr<StaticModel> GetLoadedStaticModel(const std::string& resource_name);
+			std::shared_ptr<AnimatedModel> GetLoadedAnimatedModel(const std::string& resource_name);
 		};
 	}
 }

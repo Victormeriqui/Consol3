@@ -41,10 +41,10 @@ namespace Engine
 			std::shared_ptr<LightingSystem> lighting_system;
 			std::shared_ptr<Camera> camera;
 
-			std::list<std::reference_wrapper<const AbstractMesh>> render_buffer_plain;
-			std::list<std::reference_wrapper<const AbstractMesh>> render_buffer_shaded;
-			std::list<std::reference_wrapper<const AbstractMesh>> render_buffer_textured;
-			std::list<std::reference_wrapper<const AbstractMesh>> render_buffer_shaded_textured;
+			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_plain;
+			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_shaded;
+			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_textured;
+			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_shaded_textured;
 
 			PlainColorShader shader_plaincolor;
 			PlainTextureShader shader_plaintexture;
@@ -53,9 +53,10 @@ namespace Engine
 			DepthMapShader shader_depthmap;
 
 			void RenderShadowMapPass();
-			void RenderStaticMesh(Rasterizer& rasterizer, const AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
-			void RenderAnimatedMesh(
-				Rasterizer& rasterizer, const AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
+			void RenderStaticMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
+			void RenderAnimatedMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
+
+			void RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
 
 		public:
 			SceneRenderer(std::shared_ptr<IRenderer> renderer,
@@ -64,8 +65,8 @@ namespace Engine
 
 			void SetCamera(std::shared_ptr<Camera> camera);
 
-			void DrawMesh(const AbstractMesh& mesh);
-			void DrawShadedMesh(const AbstractMesh& mesh);
+			void DrawMesh(AbstractMesh& mesh);
+			void DrawShadedMesh(AbstractMesh& mesh);
 			void DrawPixel(uint16_t x, uint16_t y, const HSVColor& color);
 
 			void RenderScene();

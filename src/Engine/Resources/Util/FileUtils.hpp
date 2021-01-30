@@ -16,13 +16,13 @@ namespace Engine
 		{
 			using namespace Rendering;
 
-			inline void CalculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+			inline void CalculateNormals(std::vector<Vertex>& out_vertices, std::vector<uint32_t>& out_indices)
 			{
-				for (uint32_t i = 0; i < indices.size() - 3; i += 3)
+				for (uint32_t i = 0; i < out_indices.size() - 3; i += 3)
 				{
-					Vertex& v0 = vertices[indices[i]];
-					Vertex& v1 = vertices[indices[i + 1]];
-					Vertex& v2 = vertices[indices[i + 2]];
+					Vertex& v0 = out_vertices[out_indices[i]];
+					Vertex& v1 = out_vertices[out_indices[i + 1]];
+					Vertex& v2 = out_vertices[out_indices[i + 2]];
 
 					Vector3 edge0 = v1.GetPosition() - v0.GetPosition();
 					Vector3 edge1 = v2.GetPosition() - v0.GetPosition();
@@ -36,7 +36,7 @@ namespace Engine
 					v2.SetNormal(v2.GetNormal() + normal);
 				}
 
-				for (Vertex& vert : vertices)
+				for (Vertex& vert : out_vertices)
 					vert.SetNormal(vert.GetNormal().GetNormalized());
 			}
 

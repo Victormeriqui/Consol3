@@ -70,7 +70,9 @@
     <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
     <ClInclude Include="src\Engine\Rendering\AnimatedMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\AnimatedModel.hpp" />
+    <ClInclude Include="src\Engine\Rendering\Animation.h" />
     <ClInclude Include="src\Engine\Resources\BmpTextureLoader.hpp" />
+    <ClInclude Include="src\Engine\Resources\Md2Normals.hpp" />
     <ClInclude Include="src\Engine\Resources\Util\FileUtils.hpp" />
     <ClInclude Include="src\Engine\Resources\IModelLoader.hpp" />
     <ClInclude Include="src\Engine\Resources\ITextureLoader.hpp" />
