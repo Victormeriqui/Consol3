@@ -1,5 +1,7 @@
 #include "SceneRenderer.hpp"
 
+#include "AnimatedMesh.hpp"
+
 namespace Engine
 {
 	namespace Rendering
@@ -42,6 +44,28 @@ namespace Engine
 				render_buffer_shaded.push_back(std::reference_wrapper(mesh));
 		}
 
+		void SceneRenderer::RenderStaticMesh(
+			Rasterizer& rasterizer, const AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color)
+		{
+			rasterizer.SetModelMatrix(mesh.GetTransform());
+			rasterizer.DrawVertexBuffer(depthbuffer,
+										resource_manager->GetLoadedStaticModel(mesh.GetModelResource())->GetVertexBuffer(),
+										color,
+										shader);
+		}
+
+		void SceneRenderer::RenderAnimatedMesh(
+			Rasterizer& rasterizer, const AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color)
+		{
+			const AnimatedMesh& animated_mesh = dynamic_cast<const AnimatedMesh&>(mesh);
+
+			rasterizer.SetModelMatrix(mesh.GetTransform());
+			rasterizer.DrawVertexBuffer(depthbuffer,
+										resource_manager->GetLoadedStaticModel(mesh.GetModelResource())->GetVertexBuffer(),
+										color,
+										shader);
+		}
+
 		void SceneRenderer::RenderShadowMapPass()
 		{
 			for (std::shared_ptr<ILight> light : lighting_system->GetLights())
@@ -53,41 +77,18 @@ namespace Engine
 				shadowmap_rasterizer.SetViewMatrix(light->GetViewMatrix().value());
 
 				HSVColor nocolor;
+
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_plain)
-				{
-					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-														  nocolor,
-														  shader_depthmap);
-				}
+					RenderStaticMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
 
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded)
-				{
-					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-														  nocolor,
-														  shader_depthmap);
-				}
+					RenderStaticMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
 
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_textured)
-				{
-					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-														  nocolor,
-														  shader_depthmap);
-				}
+					RenderStaticMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
 
 				for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded_textured)
-				{
-					shadowmap_rasterizer.SetModelMatrix(mesh.get().GetTransform());
-					shadowmap_rasterizer.DrawVertexBuffer(light->GetLightDepthBuffer().value(),
-														  resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-														  nocolor,
-														  shader_depthmap);
-				}
+					RenderStaticMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
 			}
 		}
 
@@ -101,46 +102,16 @@ namespace Engine
 			rasterizer.SetViewMatrix(camera->GetViewMatrix());
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_plain)
-			{
-				rasterizer.SetModelMatrix(mesh.get().GetTransform());
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-											mesh.get().GetColor(),
-											shader_plaincolor);
-			}
+				RenderStaticMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plaincolor, mesh.get().GetColor());
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded)
-			{
-				rasterizer.SetModelMatrix(mesh.get().GetTransform());
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-											mesh.get().GetColor(),
-											shader_shadedcolor);
-			}
+				RenderStaticMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shadedcolor, mesh.get().GetColor());
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_textured)
-			{
-				rasterizer.SetModelMatrix(mesh.get().GetTransform());
-
-				shader_plaintexture.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
-
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-											mesh.get().GetColor(),
-											shader_plaintexture);
-			}
+				RenderStaticMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plaintexture, mesh.get().GetColor());
 
 			for (std::reference_wrapper<const AbstractMesh> mesh : render_buffer_shaded_textured)
-			{
-				rasterizer.SetModelMatrix(mesh.get().GetTransform());
-
-				shader_plaintexture.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
-
-				rasterizer.DrawVertexBuffer(camera->GetDepthBuffer(),
-											resource_manager->GetLoadedModel(mesh.get().GetModelResource())->GetVertexBuffer(),
-											mesh.get().GetColor(),
-											shader_shadedtexture);
-			}
+				RenderStaticMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shadedtexture, mesh.get().GetColor());
 
 			render_buffer_plain.clear();
 			render_buffer_shaded.clear();

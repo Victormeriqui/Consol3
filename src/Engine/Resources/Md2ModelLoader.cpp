@@ -1,4 +1,4 @@
-#include "ObjModelLoader.hpp"
+#include "Md2ModelLoader.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -8,7 +8,7 @@ namespace Engine
 {
 	namespace Resources
 	{
-		void ObjModelLoader::CalculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+		void Md2ModelLoader::CalculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 		{
 			for (uint32_t i = 0; i < indices.size() - 3; i += 3)
 			{
@@ -32,7 +32,7 @@ namespace Engine
 				vert.SetNormal(vert.GetNormal().GetNormalized());
 		}
 
-		inline std::vector<std::string> ObjModelLoader::SplitString(std::string string, char delimiter) const
+		inline std::vector<std::string> Md2ModelLoader::SplitString(std::string string, char delimiter) const
 		{
 			std::vector<std::string> str_split;
 			std::istringstream str_stream = std::istringstream(string);
@@ -50,7 +50,7 @@ namespace Engine
 			return str_split;
 		}
 
-		inline uint32_t ObjModelLoader::CountElements(std::ifstream& file_stream, const std::string& startswith) const
+		inline uint32_t Md2ModelLoader::CountElements(std::ifstream& file_stream, const std::string& startswith) const
 		{
 			if (!file_stream.is_open())
 				return -1;
@@ -70,7 +70,7 @@ namespace Engine
 			return count;
 		}
 
-		bool ObjModelLoader::LoadStaticModel(const std::string& filename,
+		bool Md2ModelLoader::LoadStaticModel(const std::string& filename,
 											 std::vector<Vertex>& out_vertices,
 											 std::vector<uint32_t>& out_indices,
 											 NormalGenerationOptions options)

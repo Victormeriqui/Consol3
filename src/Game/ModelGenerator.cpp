@@ -15,7 +15,7 @@ namespace Game
 	{
 	}
 
-	Model ModelGenerator::GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y)
+	StaticModel ModelGenerator::GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
@@ -54,12 +54,12 @@ namespace Game
 			indices.push_back(i + 1);
 		}
 
-		return Model(vertices, indices);
+		return StaticModel(vertices, indices);
 	}
 
-	Model ModelGenerator::GenerateSphere(uint8_t detail)
+	StaticModel ModelGenerator::GenerateSphere(uint8_t detail)
 	{
 		// TODO: do this
-		return Model();
+		return StaticModel();
 	}
 }

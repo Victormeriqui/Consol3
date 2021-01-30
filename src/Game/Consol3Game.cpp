@@ -64,10 +64,10 @@ namespace Game
 		spot_light2->SetIntensity(6.0f);
 
 		this->lighting_system->SetAmbientLight(0.02f);
-		// lighting_system->AddLight(dir_light);
-		// lighting_system->AddLight(point_light);
+		// this->lighting_system->AddLight(dir_light);
+		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
-		//	lighting_system->AddLight(spot_light2);
+		// this->lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -168,7 +168,7 @@ namespace Game
 		scene_renderer->DrawShadedMesh(mesh);
 
 		scene_renderer->RenderScene();
-
+		/*
 		for (int y = 0; y < 200; y++)
 		{
 			for (int x = 0; x < 200; x++)
@@ -191,7 +191,7 @@ namespace Game
 			}
 		}
 
-		/*
+
 		for (int y = 0; y < 200; y++)
 		{
 			for (int x = 0; x < 200; x++)

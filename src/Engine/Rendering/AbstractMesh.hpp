@@ -35,19 +35,20 @@ namespace Engine
 
 		public:
 			AbstractMesh();
-			AbstractMesh(const std::string& model_resource, const Vector3& position);
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color);
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation);
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color);
+			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color = RGBColor());
 
-			AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position);
-			AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position, const RGBColor& color);
-			AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position, const Angle& rotation);
+			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color = RGBColor());
+
 			AbstractMesh(const std::string& model_resource,
 						 const std::string& texture_resource,
 						 const Vector3& position,
-						 const Angle& rotation,
-						 const RGBColor& color);
+						 const RGBColor& color = RGBColor());
+
+			AbstractMesh(const std::string& model_resource,
+						 const std::string& texture_resource,
+						 const Vector3& position,
+						 const Angle& rotation = Angle(),
+						 const RGBColor& color = RGBColor());
 
 			[[nodiscard]] const std::string& GetModelResource() const;
 			[[nodiscard]] const std::string& GetTextureResource() const;
@@ -57,6 +58,8 @@ namespace Engine
 			[[nodiscard]] Vector3 GetScale() const;
 			[[nodiscard]] const Transform& GetTransform() const;
 			[[nodiscard]] bool IsTextured() const;
+
+			[[nodiscard]] virtual bool IsAnimated() const = 0;
 
 			AbstractMesh& SetModelResource(const std::string& model_resource);
 			AbstractMesh& SetTextureResource(const std::string& texture_resource);

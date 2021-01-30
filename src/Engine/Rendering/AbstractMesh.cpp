@@ -17,18 +17,6 @@ namespace Engine
 		{
 		}
 
-		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position) :
-			model_resource(model_resource),
-			has_texture(false),
-			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
-			rgbcolor(RGBColor(255, 255, 255)),
-			transform(Transform()),
-			position(position),
-			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
 		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color) :
 			model_resource(model_resource),
 			has_texture(false),
@@ -37,18 +25,6 @@ namespace Engine
 			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
-		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation) :
-			model_resource(model_resource),
-			has_texture(false),
-			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
-			rgbcolor(RGBColor(255, 255, 255)),
-			transform(Transform()),
-			position(position),
-			rotation(rotation),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
 		{
 		}
@@ -65,19 +41,6 @@ namespace Engine
 		{
 		}
 
-		AbstractMesh::AbstractMesh(const std::string& model_resource, const std::string& texture_resource, const Vector3& position) :
-			model_resource(model_resource),
-			texture_resource(texture_resource),
-			has_texture(true),
-			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
-			rgbcolor(RGBColor(255, 255, 255)),
-			transform(Transform()),
-			position(position),
-			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
 		AbstractMesh::AbstractMesh(const std::string& model_resource,
 								   const std::string& texture_resource,
 								   const Vector3& position,
@@ -90,22 +53,6 @@ namespace Engine
 			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
-		AbstractMesh::AbstractMesh(const std::string& model_resource,
-								   const std::string& texture_resource,
-								   const Vector3& position,
-								   const Angle& rotation) :
-			model_resource(model_resource),
-			texture_resource(texture_resource),
-			has_texture(true),
-			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
-			rgbcolor(RGBColor(255, 255, 255)),
-			transform(Transform()),
-			position(position),
-			rotation(rotation),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
 		{
 		}

@@ -8,25 +8,25 @@ namespace Engine
 		{
 		}
 
-		VertexBuffer::VertexBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+		VertexBuffer::VertexBuffer(std::shared_ptr<std::vector<Vertex>> vertices, std::shared_ptr<std::vector<uint32_t>> indices) :
+			vertices(std::move(vertices)),
+			indices(std::move(indices))
 		{
-			this->vertices = vertices;
-			this->indices  = indices;
 		}
 
 		const Vertex& VertexBuffer::GetVertex(int index) const
 		{
-			return vertices[indices[index]];
+			return vertices->at(indices->at(index));
 		}
 
 		const std::vector<Vertex>& VertexBuffer::GetVertices() const
 		{
-			return vertices;
+			return *vertices.get();
 		}
 
 		const std::vector<uint32_t>& VertexBuffer::GetIndices() const
 		{
-			return indices;
+			return *indices.get();
 		}
 	}
 }
