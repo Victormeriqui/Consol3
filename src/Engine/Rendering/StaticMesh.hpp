@@ -2,7 +2,6 @@
 #define STATICMESH_HPP
 
 #include "AbstractMesh.hpp"
-#include "Camera.hpp"
 
 #include <memory>
 
@@ -14,6 +13,8 @@ namespace Engine
 		{
 		public:
 			using AbstractMesh::AbstractMesh;
+
+			virtual bool IsAnimated() const override;
 		};
 	}
 }

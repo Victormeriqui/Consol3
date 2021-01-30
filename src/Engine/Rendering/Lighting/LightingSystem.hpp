@@ -16,8 +16,6 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		class Model;
-
 		namespace Lighting
 		{
 			class LightingSystem

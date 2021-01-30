@@ -1,5 +1,5 @@
-#ifndef OBJMODELLOADER_HPP
-#define OBJMODELLOADER_HPP
+#ifndef MD2MODELLOADER_HPP
+#define MD2MODELLOADER_HPP
 
 #include "../Rendering/Vertex.hpp"
 #include "IModelLoader.hpp"
@@ -14,7 +14,7 @@ namespace Engine
 	{
 		using namespace Rendering;
 
-		class ObjModelLoader : public IModelLoader
+		class Md2ModelLoader : public IModelLoader
 		{
 		private:
 			inline std::vector<std::string> SplitString(std::string string, char delimiter) const;
@@ -23,7 +23,7 @@ namespace Engine
 			void CalculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 
 		public:
-			ObjModelLoader()
+			Md2ModelLoader()
 			{
 			}
 

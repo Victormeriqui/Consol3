@@ -1,7 +1,7 @@
 #ifndef MODELGENERATOR_HPP
 #define MODELGENERATOR_HPP
 
-#include "../Engine/Rendering/Model.hpp"
+#include "../Engine/Rendering/StaticModel.hpp"
 
 #include <cstdint>
 #include <map>
@@ -16,8 +16,8 @@ namespace Game
 	public:
 		ModelGenerator();
 
-		Model GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y);
-		Model GenerateSphere(uint8_t detail);
+		StaticModel GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y);
+		StaticModel GenerateSphere(uint8_t detail);
 	};
 }
 

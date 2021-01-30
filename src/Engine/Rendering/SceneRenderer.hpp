@@ -53,6 +53,9 @@ namespace Engine
 			DepthMapShader shader_depthmap;
 
 			void RenderShadowMapPass();
+			void RenderStaticMesh(Rasterizer& rasterizer, const AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
+			void RenderAnimatedMesh(
+				Rasterizer& rasterizer, const AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
 
 		public:
 			SceneRenderer(std::shared_ptr<IRenderer> renderer,

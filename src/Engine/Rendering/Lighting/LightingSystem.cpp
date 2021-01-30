@@ -2,7 +2,6 @@
 
 #include "../../../Math/Util/MathUtil.hpp"
 #include "../../../Math/Vector3.hpp"
-#include "../Model.hpp"
 #include "../Transform.hpp"
 #include "../Vertex.hpp"
 

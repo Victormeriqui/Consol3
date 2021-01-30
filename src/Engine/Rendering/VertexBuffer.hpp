@@ -3,6 +3,7 @@
 
 #include "Vertex.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace Engine
@@ -12,12 +13,12 @@ namespace Engine
 		class VertexBuffer
 		{
 		private:
-			std::vector<Vertex> vertices;
-			std::vector<uint32_t> indices;
+			std::shared_ptr<std::vector<Vertex>> vertices;
+			std::shared_ptr<std::vector<uint32_t>> indices;
 
 		public:
 			VertexBuffer();
-			VertexBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+			VertexBuffer(std::shared_ptr<std::vector<Vertex>> vertices, std::shared_ptr<std::vector<uint32_t>> indices);
 
 			[[nodiscard]] const Vertex& GetVertex(int index) const;
 

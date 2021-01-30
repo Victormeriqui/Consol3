@@ -7,7 +7,6 @@
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 #include "../Engine/Rendering/Lighting/PointLight.hpp"
 #include "../Engine/Rendering/Lighting/SpotLight.hpp"
-#include "../Engine/Rendering/Model.hpp"
 #include "../Engine/Rendering/Rasterizer.hpp"
 #include "../Engine/Rendering/SceneRenderer.hpp"
 #include "../Engine/Rendering/StaticMesh.hpp"

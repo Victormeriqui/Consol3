@@ -28,10 +28,10 @@ namespace Engine
 			}
 
 		public:
-			[[nodiscard]] virtual bool LoadModel(const std::string& filename,
-												 std::vector<Vertex>& out_vertices,
-												 std::vector<uint32_t>& out_indices,
-												 NormalGenerationOptions options) = 0;
+			[[nodiscard]] virtual bool LoadStaticModel(const std::string& filename,
+													   std::vector<Vertex>& out_vertices,
+													   std::vector<uint32_t>& out_indices,
+													   NormalGenerationOptions options) = 0;
 		};
 	}
 }
