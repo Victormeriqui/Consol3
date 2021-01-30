@@ -26,10 +26,16 @@ namespace Game
 		resource_manager->LoadModel("res/buggy.md2", NormalGenerationOptions::GENERATE_FORCED);
 		resource_manager->LoadModel("res/scarlet.md2", NormalGenerationOptions::GENERATE_FORCED);
 		resource_manager->LoadModel("res/warrior.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/raptor.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/penguin.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/centaur.md2", NormalGenerationOptions::GENERATE_FORCED);
 
 		resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
+		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
+		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::DEFAULT);
 	}
 
 	float rot = 1.33f;
@@ -46,8 +52,8 @@ namespace Game
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		anim_mesh = AnimatedMesh("res/scarlet.md2", "res/tnt.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		anim_mesh.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+		anim_mesh = AnimatedMesh("res/raptor.md2", "res/raptor.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		anim_mesh.SetPosition(Vector3(0.0f, -0.9f, 0.0f));
 		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
 		anim_mesh.SetRotation(Angle(-90, 0, 0));
 
@@ -79,7 +85,7 @@ namespace Game
 		this->lighting_system->SetAmbientLight(0.02f);
 		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
-		//	this->lighting_system->AddLight(spot_light);
+		this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -140,7 +146,7 @@ namespace Game
 
 		if (GetKeyState(VK_NUMPAD2) & 0x8000)
 		{
-			anim_mesh.PlayAnimation("attack", 0.4f);
+			anim_mesh.PlayAnimation("run", 1.0f);
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)

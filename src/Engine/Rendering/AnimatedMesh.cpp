@@ -110,7 +110,7 @@ namespace Engine
 			{
 				anim_current_progress = 1.0f;
 				is_animating		  = false;
-				PlayAnimation("attack", 0.4f);
+				PlayAnimation("run", anim_current_fps);
 			}
 
 			last_update = std::chrono::high_resolution_clock::now();
