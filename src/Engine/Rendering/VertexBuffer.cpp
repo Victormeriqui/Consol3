@@ -14,14 +14,26 @@ namespace Engine
 		{
 		}
 
+		VertexBuffer::VertexBuffer(const std::vector<Vertex>& vertices, std::shared_ptr<std::vector<uint32_t>> indices) :
+			selfstored_vertices(vertices),
+			indices(std::move(indices))
+		{
+		}
+
 		const Vertex& VertexBuffer::GetVertex(int index) const
 		{
-			return vertices->at(indices->at(index));
+			if (selfstored_vertices.empty())
+				return vertices->at(indices->at(index));
+
+			return selfstored_vertices.at(indices->at(index));
 		}
 
 		const std::vector<Vertex>& VertexBuffer::GetVertices() const
 		{
-			return *vertices.get();
+			if (selfstored_vertices.empty())
+				return *vertices.get();
+
+			return selfstored_vertices;
 		}
 
 		const std::vector<uint32_t>& VertexBuffer::GetIndices() const

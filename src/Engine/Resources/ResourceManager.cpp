@@ -1,5 +1,8 @@
 #include "ResourceManager.hpp"
+#include "../Rendering/Animation.h"
 #include "../Rendering/StaticModel.hpp"
+
+#include <map>
 
 namespace Engine
 {
@@ -57,8 +60,6 @@ namespace Engine
 			if (static_model_cache.find(filename) != static_model_cache.end() && animated_model_cache.find(filename) != animated_model_cache.end())
 				return true;
 
-			std::vector<Vertex> vertices;
-			std::vector<uint32_t> indices;
 			bool success = false;
 
 			std::string extension = GetFileExtension(filename);
@@ -68,23 +69,30 @@ namespace Engine
 
 			if (extension == "obj")
 			{
-				success = model_loader_obj.LoadStaticModel(filename, vertices, indices, options);
+				std::vector<Vertex> obj_vertices;
+				std::vector<uint32_t> obj_indices;
+
+				success = model_loader_obj.LoadStaticModel(filename, obj_vertices, obj_indices, options);
 
 				if (!success)
 					return false;
 
-				static_model_cache.emplace(filename, std::move(std::make_shared<StaticModel>(vertices, indices)));
+				static_model_cache.emplace(filename, std::move(std::make_shared<StaticModel>(obj_vertices, obj_indices)));
 
 				return true;
 			}
 			else if (extension == "md2")
 			{
-				success = model_loader_md2.LoadStaticModel(filename, vertices, indices, options);
+				std::vector<Frame> md2_frames;
+				std::vector<uint32_t> md2_indices;
+				std::map<std::string, Animation> md2_animations;
+
+				success = model_loader_md2.LoadAnimatedModel(filename, md2_frames, md2_indices, md2_animations, options);
 
 				if (!success)
 					return false;
 
-				animated_model_cache.emplace(filename, std::move(std::make_shared<AnimatedModel>()));
+				animated_model_cache.emplace(filename, std::move(std::make_shared<AnimatedModel>(md2_frames, md2_indices, md2_animations)));
 
 				return true;
 			}
@@ -121,6 +129,14 @@ namespace Engine
 				return static_model_cache.at("null");
 
 			return static_model_cache.at(resource_name);
+		}
+
+		std::shared_ptr<AnimatedModel> ResourceManager::GetLoadedAnimatedModel(const std::string& resource_name)
+		{
+			if (animated_model_cache.find(resource_name) == animated_model_cache.end())
+				return animated_model_cache.at("null");
+
+			return animated_model_cache.at(resource_name);
 		}
 
 	}
