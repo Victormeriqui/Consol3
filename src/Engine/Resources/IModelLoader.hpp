@@ -32,6 +32,11 @@ namespace Engine
 													   std::vector<Vertex>& out_vertices,
 													   std::vector<uint32_t>& out_indices,
 													   NormalGenerationOptions options) = 0;
+
+			[[nodiscard]] virtual bool LoadAnimatedModel(const std::string& filename,
+														 std::vector<Vertex>& out_vertices,
+														 std::vector<uint32_t>& out_indices,
+														 NormalGenerationOptions options) = 0;
 		};
 	}
 }
