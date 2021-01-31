@@ -2,6 +2,7 @@
 
 #include "../Engine/Rendering/Vertex.hpp"
 #include "../Math/Vector3.hpp"
+#include "NoiseGenerator.hpp"
 
 #include <cmath>
 #include <vector>
@@ -15,7 +16,7 @@ namespace Game
 	{
 	}
 
-	StaticModel ModelGenerator::GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y)
+	StaticModel ModelGenerator::GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y, float noise_amount)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
@@ -25,11 +26,26 @@ namespace Game
 		float tile_width  = 1.0f / tile_amount_x;
 		float tile_height = 1.0f / tile_amount_y;
 
+		float noise_x = 0.0f;
+		float noise_y = 0.0f;
+
 		// prevent vertex duplication
 		for (uint32_t y = 0; y < (tile_amount_y + 1); y++)
 		{
-			for (uint32_t x = 0; x < tile_amount_x + 1; x++)
-				vertices.push_back(std::move(Vertex(Vector3(x * tile_width, 0, y * tile_height), plane_normal)));
+			for (uint32_t x = 0; x < (tile_amount_x + 1); x++)
+			{
+				float noise = GetPerlinNoise(Vector2(noise_x, noise_y));
+
+				Vector2 texture_coordinates(Util::Lerp((float)x, 0, (float)(tile_amount_x + 1), 0.0f, 1.0f),
+											Util::Lerp((float)y, 0, (float)(tile_amount_y + 1), 0.0f, 1.0f));
+
+				vertices.push_back(
+					std::move(Vertex(Vector3(x * tile_width, noise * (0.01f * noise_amount), y * tile_height), plane_normal, texture_coordinates)));
+
+				noise_x += 0.1f;
+			}
+
+			noise_y += 0.1f;
 		}
 
 		// only go until the second last row
@@ -53,6 +69,8 @@ namespace Game
 			indices.push_back(next_y + 1);
 			indices.push_back(i + 1);
 		}
+
+		Vertex::CalculateNormals(vertices, indices);
 
 		return StaticModel(vertices, indices);
 	}

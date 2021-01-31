@@ -5,6 +5,8 @@
 #include "../../Math/Vector2.hpp"
 #include "../../Math/Vector3.hpp"
 
+#include <vector>
+
 namespace Engine
 {
 	using namespace Math;
@@ -59,6 +61,30 @@ namespace Engine
 			Vertex& Lerp(const Vertex& other, float amount);
 
 			Vertex& TransformNormals(const Matrix4& normal_mat);
+
+			inline void static CalculateNormals(std::vector<Vertex>& out_vertices, std::vector<uint32_t>& out_indices)
+			{
+				for (uint32_t i = 0; i < out_indices.size() - 3; i += 3)
+				{
+					Vertex& v0 = out_vertices[out_indices[i]];
+					Vertex& v1 = out_vertices[out_indices[i + 1]];
+					Vertex& v2 = out_vertices[out_indices[i + 2]];
+
+					Vector3 edge0 = v1.GetPosition() - v0.GetPosition();
+					Vector3 edge1 = v2.GetPosition() - v0.GetPosition();
+
+					Vector3 normal = edge0.GetCrossProduct(edge1);
+					normal.Normalize();
+
+					// each adjacent face to each vertex contributes to the vertex normal
+					v0.SetNormal(v0.GetNormal() + normal);
+					v1.SetNormal(v1.GetNormal() + normal);
+					v2.SetNormal(v2.GetNormal() + normal);
+				}
+
+				for (Vertex& vert : out_vertices)
+					vert.SetNormal(vert.GetNormal().GetNormalized());
+			}
 
 			constexpr Vertex& operator*=(const Matrix4& mat) noexcept
 			{

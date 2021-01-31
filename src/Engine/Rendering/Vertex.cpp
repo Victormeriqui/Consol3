@@ -108,5 +108,6 @@ namespace Engine
 		{
 			return Vertex(*this).Lerp(other, amount);
 		}
+
 	}
 }
