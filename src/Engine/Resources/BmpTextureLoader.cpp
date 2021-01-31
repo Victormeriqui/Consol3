@@ -33,9 +33,10 @@ namespace Engine
 
 			out_imagebuffer = FrameBuffer<RGBColor>(width, height);
 
-			uint32_t data_size = width * height * 3;
+			uint64_t data_size = width * height * 3;
 			std::vector<unsigned char> data(data_size);
-			file_stream.read((char*)data.data(), data.size());
+			data.resize(data_size);
+			file_stream.read((char*)data.data(), sizeof(unsigned char) * data_size);
 
 			bool flip_x = options == TextureLoadingOptions::FLIP_X || options == TextureLoadingOptions::FLIP_XY;
 			bool flip_y = options == TextureLoadingOptions::FLIP_Y || options == TextureLoadingOptions::FLIP_XY;
@@ -43,7 +44,7 @@ namespace Engine
 			uint16_t x = flip_x ? width - 1 : 0;
 			uint16_t y = flip_y ? height - 1 : 0;
 
-			for (uint32_t i = 0; i < data.size(); i += 3)
+			for (uint64_t i = 0; i < data_size; i += 3)
 			{
 				unsigned char b = data[i];
 				unsigned char g = data[i + 1];
@@ -51,24 +52,24 @@ namespace Engine
 
 				out_imagebuffer.SetValue(x, y, RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b));
 
-				x += flip_x ? -1 : 1;
-
 				if (flip_x)
 				{
 					if (x == 0)
 					{
 						y += flip_y ? -1 : 1;
-						x = width - 1;
+						x = width;
 					}
 				}
 				else
 				{
-					if (x >= width)
+					if (x == width - 1)
 					{
 						y += flip_y ? -1 : 1;
-						x = 0;
+						x = -1;
 					}
 				}
+
+				x += flip_x ? -1 : 1;
 			}
 
 			file_stream.close();

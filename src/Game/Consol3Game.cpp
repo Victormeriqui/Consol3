@@ -36,7 +36,7 @@ namespace Game
 		resource_manager->LoadTexture("res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
-		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
 	}
 
 	float rot = 1.33f;
@@ -53,7 +53,7 @@ namespace Game
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		anim_mesh = AnimatedMesh("res/raptor.md2", "res/raptor.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		anim_mesh = AnimatedMesh("res/penguin.md2", "res/penguin.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		anim_mesh.SetPosition(Vector3(0.0f, -0.9f, 0.0f));
 		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
 		anim_mesh.SetRotation(Angle(-90, 0, 0));
@@ -68,7 +68,7 @@ namespace Game
 		floor.SetPosition(Vector3(-6, -2, -6));
 
 		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
-		dir_light->SetIntensity(0.5f);
+		dir_light->SetIntensity(0.9f);
 
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
 		point_light->SetRange(15.0f);
@@ -84,7 +84,7 @@ namespace Game
 		spot_light2->SetIntensity(6.0f);
 
 		this->lighting_system->SetAmbientLight(0.02f);
-		// this->lighting_system->AddLight(dir_light);
+		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);
