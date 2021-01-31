@@ -86,7 +86,7 @@ namespace Engine
 				uint16_t texturecoord_x = *reinterpret_cast<uint16_t*>(&texturecoords_chunk[offset]);
 				uint16_t texturecoord_y = *reinterpret_cast<uint16_t*>(&texturecoords_chunk[offset + sizeof(uint16_t)]);
 
-				texturecoords.push_back(Vector2((float)texturecoord_x / header.skinwidth, (float)texturecoord_y / header.skinheight));
+				texturecoords.push_back(Vector2((float)texturecoord_x / (float)header.skinwidth, (float)texturecoord_y / (float)header.skinheight));
 			}
 
 			/*
