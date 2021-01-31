@@ -146,12 +146,12 @@ namespace Engine
 			switch (options)
 			{
 			case NormalGenerationOptions::GENERATE_FORCED:
-				Util::CalculateNormals(out_vertices, out_indices);
+				Vertex::CalculateNormals(out_vertices, out_indices);
 				break;
 
 			case NormalGenerationOptions::GENERATE_IF_MISSING:
 				if (normals.empty())
-					Util::CalculateNormals(out_vertices, out_indices);
+					Vertex::CalculateNormals(out_vertices, out_indices);
 				break;
 
 			case NormalGenerationOptions::GENERATE_DISABLED:

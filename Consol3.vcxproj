@@ -114,6 +114,7 @@
     <ClInclude Include="src\Game\Consol3Game.hpp" />
     <ClInclude Include="src\Game\ModelGenerator.hpp" />
     <ClInclude Include="src\Game\MouseInput.hpp" />
+    <ClInclude Include="src\Game\NoiseGenerator.hpp" />
     <ClInclude Include="src\Math\Angle.hpp" />
     <ClInclude Include="src\Math\Matrix4.hpp" />
     <ClInclude Include="src\Math\Point2.hpp" />

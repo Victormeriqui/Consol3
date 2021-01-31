@@ -16,7 +16,7 @@ namespace Game
 	public:
 		ModelGenerator();
 
-		StaticModel GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y);
+		StaticModel GeneratePlane(uint32_t tile_amount_x, uint32_t tile_amount_y, float noise_amount);
 		StaticModel GenerateSphere(uint8_t detail);
 	};
 }

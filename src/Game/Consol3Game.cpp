@@ -19,7 +19,7 @@ namespace Game
 	{
 		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_DISABLED);
 		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50));
+		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.5f));
 
 		resource_manager->LoadModel("res/alien.md2", NormalGenerationOptions::GENERATE_FORCED);
 		resource_manager->LoadModel("res/marvin.md2", NormalGenerationOptions::GENERATE_FORCED);
@@ -33,6 +33,7 @@ namespace Game
 		resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::DEFAULT);
@@ -62,7 +63,7 @@ namespace Game
 		//		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 
-		floor = StaticMesh("plane50", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		floor = StaticMesh("plane50", "res/tiles.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(12, 12, 12));
 		floor.SetPosition(Vector3(-6, -2, -6));
 
@@ -83,7 +84,7 @@ namespace Game
 		spot_light2->SetIntensity(6.0f);
 
 		this->lighting_system->SetAmbientLight(0.02f);
-		this->lighting_system->AddLight(dir_light);
+		// this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);

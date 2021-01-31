@@ -222,7 +222,7 @@ namespace Engine
 			if (options == NormalGenerationOptions::GENERATE_FORCED)
 			{
 				for (Frame& frame : out_frames)
-					Util::CalculateNormals(*frame.vertices.get(), out_indices);
+					Vertex::CalculateNormals(*frame.vertices.get(), out_indices);
 			}
 
 			return true;
