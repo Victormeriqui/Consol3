@@ -40,7 +40,9 @@ namespace Engine
 		public:
 			ResourceManager();
 
-			bool LoadTexture(const std::string& filename, TextureLoadingOptions options);
+			bool LoadTexture(const std::string& filename,
+							 TextureLoadingOptions load_options,
+							 TextureWrapOptions wrap_options = TextureWrapOptions::BORDER);
 			bool LoadModel(const std::string& filename, NormalGenerationOptions options);
 			void LoadTexture(const std::string& resource_name, const Texture& texture);
 			void LoadModel(const std::string& resource_name, const StaticModel& model);

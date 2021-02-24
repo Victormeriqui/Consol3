@@ -27,7 +27,7 @@ namespace Engine
 			return filename.substr(idx + 1);
 		}
 
-		bool ResourceManager::LoadTexture(const std::string& filename, TextureLoadingOptions options)
+		bool ResourceManager::LoadTexture(const std::string& filename, TextureLoadingOptions load_options, TextureWrapOptions wrap_options)
 		{
 			if (texture_cache.find(filename) != texture_cache.end())
 				return true;
@@ -42,12 +42,12 @@ namespace Engine
 
 			if (extension == "bmp")
 			{
-				success = texture_loader_bmp.LoadTexture(filename, imagebuffer, options);
+				success = texture_loader_bmp.LoadTexture(filename, imagebuffer, load_options);
 
 				if (!success)
 					return false;
 
-				texture_cache.emplace(filename, std::move(std::make_shared<Texture>(imagebuffer)));
+				texture_cache.emplace(filename, std::move(std::make_shared<Texture>(imagebuffer, wrap_options)));
 
 				return true;
 			}
