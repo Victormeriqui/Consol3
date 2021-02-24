@@ -23,8 +23,11 @@ No external dependencies will ever be used in this engine, the goal is to do eve
 ###### OBJ file loading  
 <img src="images/obj.png" width="200" height="200">  
 
+###### MD2 file loading  
+<img src="images/md2.png" width="200" height="200">  
+
 ###### Directional lights  
-<img src="images/dirlight.png" width="200" height="200">  
+<img src="images/directionallight.png" width="200" height="200">  
 
 ###### Point lights  
 <img src="images/pointlight.gif" width="200" height="200">  
@@ -32,45 +35,72 @@ No external dependencies will ever be used in this engine, the goal is to do eve
 ###### Spot lights  
 <img src="images/spotlight.png" width="200" height="200">  
 
-###### Diffuse shading  
-
-###### Custom "Renderers"  
-
 ###### Textures  
-<img src="images/texture.gif" width="200" height="200">    
+<img src="images/textures.gif" width="200" height="200">  
 
-###### Fragment Shaders  
-<img src="images/fragshader.png" width="400" height="400">  
+###### Shadow maps  
+<img src="images/shadows.png" width="200" height="200">  
 
+###### Shadows from multiple sources
+<img src="images/multishadows.png" width="200" height="200">  
+
+###### MD2 Animations
+<img src="images/animation1.gif" width="200" height="200"><img src="images/animation2.gif" width="200" height="200">  
+
+###### Ico-sphere generation
+<img src="images/sphere.gif" width="200" height="200">  
 
 ### Existing Renderers  
+Different renderers for the same scene can be used, these components basically decide how each pixel should be drawn to the console
+
 ###### Greyscale  
 Overrides the palette with 16 shades from black to white  
-<img src="images/greyscale.gif" width="200" height="200">  
+<img src="images/greyscale.png" width="200" height="200">  
 
 ###### Dithered Greyscale 
 Similar to the previous one, but also takes advantage of the dithering block characters (░▒▓) to dither different combinations of the 16 shades, expands the original 16 to 80 shades  
-<img src="images/dithergreyscale.gif" width="200" height="200">  
-
+<img src="images/ditheredgreyscale.png" width="200" height="200">  
 
 ###### Dithered  
 Uses the same mechanism from the previous renderer but with the default pallette, giving more depth to the default colors (11 shades per color)  
-<img src="images/shadeddither.gif" width="200" height="200">  
-
+<img src="images/dithered.png" width="200" height="200">  
 
 ###### Text Only  
 Does not use any attribute change, thus the only color is white, the lightness of each pixel is controlled through the character in the cell  
 
 Due to the way the Windows Console renders the character cells, this is currently the fastest renderer (although the one with the least detail), the current characters used are: " ·;%░≡¥▒▓█"  
-<img src="images/textonly.gif" width="200" height="200">  
+<img src="images/ascii.png" width="200" height="200">  
+
+
+### Shaders
+Vertex and Fragment shaders can be created, they are basically classes that implement a vertex and fragment stage in the pipeline, and can pass data around via the class members
+
+A simple shader:
+```
+bool PlainTextureShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
+{
+	TransformVertexMVP(v0, mvp_mats);
+	TransformVertexMVP(v1, mvp_mats);
+	TransformVertexMVP(v2, mvp_mats);
+
+	vert_v0_texture_coord = v0.GetTextureCoords();
+	vert_v1_texture_coord = v1.GetTextureCoords();
+	vert_v2_texture_coord = v2.GetTextureCoords();
+
+	return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
+}
+
+void PlainTextureShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+{
+	Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord, vert_v1_texture_coord, vert_v2_texture_coord, triangle, barcoord0, barcoord1, barcoord2);
+
+	out_color = HSVColor(texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y));
+}
+```
 
 ### Planned Features  
 
 * Faster vertex transformations with SIMD  
 * ANSI Escape sequence renderer  
-* Vertex shaders  
 * Faster rasterizer with multipixel filling  
 * Faster rasterizer with binning  
-* Shadow maps  
-* Animations  
-
