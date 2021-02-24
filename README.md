@@ -45,7 +45,7 @@ No external dependencies will ever be used in this engine, the goal is to do eve
 <img src="images/multishadows.png" width="200" height="200">  
 
 ###### MD2 Animations
-<img src="images/animation1.gif" width="200" height="200"><img src="images/animation2.gif" width="200" height="200">  
+<img src="images/animation1.gif" width="200" height="200">  <img src="images/animation2.gif" width="200" height="200">  
 
 ###### Ico-sphere generation
 <img src="images/sphere.gif" width="200" height="200">  
