@@ -76,7 +76,7 @@ Due to the way the Windows Console renders the character cells, this is currentl
 Vertex and Fragment shaders can be created, they are basically classes that implement a vertex and fragment stage in the pipeline, and can pass data around via the class members
 
 A simple shader:
-```
+```cpp
 bool PlainTextureShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
 {
 	TransformVertexMVP(v0, mvp_mats);
