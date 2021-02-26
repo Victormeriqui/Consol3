@@ -5,6 +5,7 @@
 #include "NoiseGenerator.hpp"
 
 #include <cmath>
+#include <map>
 #include <vector>
 
 namespace Game
@@ -119,109 +120,148 @@ namespace Game
 
 	StaticModel ModelGenerator::GenerateSphere(uint8_t iterations)
 	{
-		uint32_t vertex_count = CalculateVertexCount_Icosahedron(iterations);
-		uint32_t index_count  = CalculateIndexCount_Icosahedron(iterations);
-
 		std::vector<SphereEdge> edges;
+		std::vector<SphereTriangle> triangles;
 		std::vector<uint32_t> indices;
 		std::vector<Vertex> vertices;
 
 		for (const Vector3& pos : icosahedron_verts)
 			vertices.push_back(std::move(Vertex(pos.GetNormalized(), pos.GetNormalized(), GetSphereTextureCoords(pos.GetNormalized()))));
 
-		for (uint32_t index : icosahedron_indices)
-			indices.push_back(index);
+		for (const SphereTriangle& triangle : icosahedron_triangles)
+			triangles.push_back(triangle);
 
-		for (uint8_t i = 0; i < iterations; i++)
+		for (uint8_t it = 0; it < iterations; it++)
 		{
-			std::vector<uint32_t> new_indices;
+			std::vector<SphereTriangle> new_triangles;
 
-			for (uint32_t idx = 0; idx < indices.size(); idx += 3)
+			for (uint32_t i = 0; i < triangles.size(); i++)
 			{
-				uint32_t vert0_idx = indices[idx];
-				uint32_t vert1_idx = indices[idx + 1];
-				uint32_t vert2_idx = indices[idx + 2];
+				const SphereTriangle& triangle = triangles[i];
 
-				uint32_t mid0 = GetOrAddSubdividedVertex(vertices, edges, vert0_idx, vert1_idx);
-				uint32_t mid1 = GetOrAddSubdividedVertex(vertices, edges, vert1_idx, vert2_idx);
-				uint32_t mid2 = GetOrAddSubdividedVertex(vertices, edges, vert2_idx, vert0_idx);
+				uint32_t mid0 = GetOrAddSubdividedVertex(vertices, edges, triangle.vert0_idx, triangle.vert1_idx);
+				uint32_t mid1 = GetOrAddSubdividedVertex(vertices, edges, triangle.vert1_idx, triangle.vert2_idx);
+				uint32_t mid2 = GetOrAddSubdividedVertex(vertices, edges, triangle.vert2_idx, triangle.vert0_idx);
 
-				new_indices.push_back(vert0_idx);
-				new_indices.push_back(mid0);
-				new_indices.push_back(mid2);
+				new_triangles.push_back({ triangle.vert0_idx, mid0, mid2 });
+				new_triangles.push_back({ triangle.vert1_idx, mid1, mid0 });
+				new_triangles.push_back({ triangle.vert2_idx, mid2, mid1 });
+				new_triangles.push_back({ mid0, mid1, mid2 });
 
-				new_indices.push_back(vert1_idx);
-				new_indices.push_back(mid1);
-				new_indices.push_back(mid0);
-
-				new_indices.push_back(vert2_idx);
-				new_indices.push_back(mid2);
-				new_indices.push_back(mid1);
-
-				new_indices.push_back(mid0);
-				new_indices.push_back(mid1);
-				new_indices.push_back(mid2);
-
-				// remove original face, since it can now be represented by the new sub triangles
-				indices.erase(indices.begin() + idx, indices.begin() + idx + 3);
-
-				idx -= 3;
+				// remove the old triangle since it's now represented by the new subtriangles
+				triangles.erase(triangles.begin() + i, triangles.begin() + i + 1);
+				i--;
 			}
 
 			// add the new sub triangles
-			for (uint32_t new_index : new_indices)
-				indices.push_back(new_index);
+			for (const SphereTriangle& triangle : new_triangles)
+				triangles.push_back(triangle);
 		}
 
-		/*// fixes texture overlap
-		for (uint32_t idx = 0; idx < indices.size(); idx += 3)
+		//	CalculateWrappedUVIndices(vertices, triangles);
+
+		for (const SphereTriangle& triangle : triangles)
 		{
-			Vertex& vert0 = vertices[indices[idx]];
-			Vertex& vert1 = vertices[indices[idx + 1]];
-			Vertex& vert2 = vertices[indices[idx + 2]];
-
-			const Vector2& vert0_texturecoords = vert0.GetTextureCoords();
-			const Vector2& vert1_texturecoords = vert1.GetTextureCoords();
-			const Vector2& vert2_texturecoords = vert2.GetTextureCoords();
-
-			if (vert1_texturecoords.x < 0.75 && vert0_texturecoords.x > 0.75)
-				vert1.SetTextureCoords(Vector2(vert1_texturecoords.x + 1.0f, vert1_texturecoords.y));
-			else if (vert1_texturecoords.x > 0.75 && vert0_texturecoords.x < 0.75)
-				vert1.SetTextureCoords(Vector2(vert1_texturecoords.x - 1.0f, vert1_texturecoords.y));
-
-			if (vert2_texturecoords.x < 0.75 && vert0_texturecoords.x > 0.75)
-				vert2.SetTextureCoords(Vector2(vert2_texturecoords.x + 1.0f, vert2_texturecoords.y));
-			else if (vert2_texturecoords.x > 0.75 && vert0_texturecoords.x < 0.75)
-				vert2.SetTextureCoords(Vector2(vert2_texturecoords.x - 1.0f, vert2_texturecoords.y));
-		}*/
+			indices.push_back(triangle.vert0_idx);
+			indices.push_back(triangle.vert1_idx);
+			indices.push_back(triangle.vert2_idx);
+		}
 
 		return StaticModel(vertices, indices);
 	}
 
-	uint32_t ModelGenerator::CalculateVertexCount_Icosahedron(int iterations) const
-	{
-		if (iterations == 0)
-			return 12;
-
-		return 4 * CalculateVertexCount_Icosahedron(iterations - 1);
-	}
-
-	uint32_t ModelGenerator::CalculateIndexCount_Icosahedron(int iterations) const
-	{
-		if (iterations == 0)
-			return 60;
-
-		return 4 * CalculateIndexCount_Icosahedron(iterations - 1);
-	}
-
 	Vector2 ModelGenerator::GetSphereTextureCoords(const Vector3& normal) const
 	{
-		// float u = std::atan2(normal.x, normal.z) / (2.0f * 3.1415926f) + 0.5f;
-		// float v = normal.y * 0.5f + 0.5f;
+		float u = std::atan2(normal.x, normal.z) / (2.0f * 3.1415926f) + 0.5f;
 
-		float u = (std::atan2(normal.z, normal.x) / (2.0f * 3.1415926f)) + 0.5f;
-		float v = (std::asin(normal.y) / 3.1415926f) + 0.5f;
+		float v = normal.y * 0.5f + 0.5f;
+
+		//	float u = (std::atan2(normal.z, normal.x) / (2.0f * 3.1415926f)) + 0.5f;
+		// float v = (std::asin(normal.y) / 3.1415926f) + 0.5f;
 
 		return Vector2(u, v);
+	}
+
+	void ModelGenerator::CalculateWrappedUVIndices(std::vector<Vertex>& vertices, std::vector<SphereTriangle>& triangles)
+	{
+		// index of the wrapped triangles in the triangle vector (NOT vertex indices)
+		std::vector<uint32_t> wrapped_triangles_indices;
+
+		for (uint32_t i = 0; i < triangles.size(); i++)
+		{
+			const SphereTriangle& triangle = triangles[i];
+
+			const Vertex& vert0 = vertices[triangle.vert0_idx];
+			const Vertex& vert1 = vertices[triangle.vert1_idx];
+			const Vertex& vert2 = vertices[triangle.vert2_idx];
+
+			const Vector3 vert0_uv = Vector3(vert0.GetTextureCoords().x, vert0.GetTextureCoords().y, 0);
+			const Vector3 vert1_uv = Vector3(vert1.GetTextureCoords().x, vert1.GetTextureCoords().y, 0);
+			const Vector3 vert2_uv = Vector3(vert2.GetTextureCoords().x, vert2.GetTextureCoords().y, 0);
+
+			const Vector3 edge_uv0 = vert1_uv - vert0_uv;
+			const Vector3 edge_uv1 = vert2_uv - vert0_uv;
+
+			if (edge_uv0.GetCrossProduct(edge_uv1).z > 0.0f)
+				wrapped_triangles_indices.push_back(i);
+		}
+
+		std::map<uint32_t, uint32_t> visited;
+
+		for (int i = 0; i < wrapped_triangles_indices.size(); i++)
+		{
+			SphereTriangle& triangle = triangles[i];
+
+			uint32_t vert0_idx = triangle.vert0_idx;
+			uint32_t vert1_idx = triangle.vert1_idx;
+			uint32_t vert2_idx = triangle.vert2_idx;
+
+			Vertex& vert0 = vertices[vert0_idx];
+			Vertex& vert1 = vertices[vert1_idx];
+			Vertex& vert2 = vertices[vert2_idx];
+
+			if (vert0.GetTextureCoords().x < 0.05f)
+			{
+				if (visited.find(vert0_idx) == visited.end())
+				{
+					// vert0.SetPosition(vert0.GetPosition() * 2);
+
+					Vertex vert_new = Vertex(vert0.GetPosition(), vert0.GetNormal(), vert0.GetTextureCoords() + Vector2(5.0f, 0.0f));
+
+					visited.insert_or_assign(vert0_idx, (uint32_t)vertices.size());
+					triangle.vert0_idx = (uint32_t)vertices.size();
+
+					vertices.push_back(vert_new);
+				}
+			}
+
+			if (vert1.GetTextureCoords().x < 0.05f)
+			{
+				if (visited.find(vert1_idx) == visited.end())
+				{
+					// vert1.SetPosition(vert1.GetPosition() * 2);
+					Vertex vert_new = Vertex(vert1.GetPosition(), vert1.GetNormal(), vert1.GetTextureCoords() + Vector2(5.0f, 0.0f));
+
+					visited.insert_or_assign(vert1_idx, (uint32_t)vertices.size());
+					triangle.vert1_idx = (uint32_t)vertices.size();
+
+					vertices.push_back(vert_new);
+				}
+			}
+
+			if (vert2.GetTextureCoords().x < 0.05f)
+			{
+				if (visited.find(vert2_idx) == visited.end())
+				{
+					// vert2.SetPosition(vert2.GetPosition() * 2);
+					Vertex vert_new = Vertex(vert2.GetPosition(), vert2.GetNormal(), vert2.GetTextureCoords() + Vector2(5.0f, 0.0f));
+
+					visited.insert_or_assign(vert2_idx, (uint32_t)vertices.size());
+					triangle.vert2_idx = (uint32_t)vertices.size();
+
+					vertices.push_back(vert_new);
+				}
+			}
+		}
 	}
 }

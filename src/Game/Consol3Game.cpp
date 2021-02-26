@@ -17,10 +17,12 @@ namespace Game
 
 	void Consol3Game::LoadResources()
 	{
-		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.5f));
-		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
+		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_IF_MISSING);
+		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_IF_MISSING);
+		resource_manager->LoadModel("res/bunny.obj", NormalGenerationOptions::GENERATE_IF_MISSING);
+		resource_manager->LoadModel("res/face.obj", NormalGenerationOptions::GENERATE_IF_MISSING);
+		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
+		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(5));
 
 		resource_manager->LoadModel("res/alien.md2", NormalGenerationOptions::GENERATE_FORCED);
 		resource_manager->LoadModel("res/marvin.md2", NormalGenerationOptions::GENERATE_FORCED);
@@ -38,7 +40,8 @@ namespace Game
 		resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
-		resource_manager->LoadTexture("res/earth.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/earth.bmp", TextureLoadingOptions::DEFAULT, TextureWrapOptions::BORDER);
+		resource_manager->LoadTexture("res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
 	}
 
 	float rot = 1.33f;
@@ -55,22 +58,22 @@ namespace Game
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		anim_mesh = AnimatedMesh("res/penguin.md2", "res/penguin.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		anim_mesh = AnimatedMesh("res/scarlet.md2", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		anim_mesh.SetPosition(Vector3(0.0f, -0.9f, 0.0f));
 		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
-		anim_mesh.SetRotation(Angle(-90, 0, 0));
+		anim_mesh.SetRotation(Angle(-3.14159f / 2, 0, 0));
 
-		mesh = StaticMesh("sphere1", "res/earth.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		mesh.SetScale(Vector3(1, 1, 1));
+		mesh = StaticMesh("res/bunny.obj", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh.SetScale(Vector3(6, 6, 6));
 		//		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 
-		floor = StaticMesh("plane50", "res/tiles.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		floor = StaticMesh("plane50", "res/bricks.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		floor.SetScale(Vector3(12, 12, 12));
 		floor.SetPosition(Vector3(-6, -2, -6));
 
 		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
-		dir_light->SetIntensity(0.9f);
+		dir_light->SetIntensity(0.5f);
 
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
 		point_light->SetRange(15.0f);
@@ -85,7 +88,7 @@ namespace Game
 		spot_light2->SetAngle(20.0f);
 		spot_light2->SetIntensity(6.0f);
 
-		this->lighting_system->SetAmbientLight(0.2f);
+		this->lighting_system->SetAmbientLight(0.05f);
 		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
@@ -149,7 +152,7 @@ namespace Game
 
 		if (GetKeyState(VK_NUMPAD2) & 0x8000)
 		{
-			anim_mesh.PlayAnimation("run", 1.0f);
+			anim_mesh.PlayAnimation("taunt", 0.6f);
 		}
 
 		if (GetKeyState(VK_SHIFT) & 0x8000)

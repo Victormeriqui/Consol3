@@ -14,6 +14,20 @@ namespace Game
 	using namespace Engine;
 	using namespace Rendering;
 
+	struct SphereEdge
+	{
+		uint32_t vert0_idx;
+		uint32_t vert1_idx;
+		uint32_t vert_mid_idx;
+	};
+
+	struct SphereTriangle
+	{
+		uint32_t vert0_idx;
+		uint32_t vert1_idx;
+		uint32_t vert2_idx;
+	};
+
 	static Vector3 icosahedron_verts[12] = { Vector3(-1, 0, 1), Vector3(1, 0, 1),  Vector3(-1, 0, -1), Vector3(1, 0, -1),
 											 Vector3(0, 1, 1),	Vector3(0, 1, -1), Vector3(0, -1, 1),  Vector3(0, -1, -1),
 											 Vector3(1, 1, 0),	Vector3(-1, 1, 0), Vector3(1, -1, 0),  Vector3(-1, -1, 0) };
@@ -23,22 +37,14 @@ namespace Game
 		3, 10, 7, 10, 6, 7, 6, 11, 7, 6, 0, 11, 6, 1, 0, 10, 1,	 6, 11, 0, 9, 2, 11, 9, 5, 2, 9, 11, 2, 7,
 	};
 
-	struct SphereEdge
-	{
-		uint32_t vert0_idx;
-		uint32_t vert1_idx;
-		uint32_t vert_mid_idx;
+	static SphereTriangle icosahedron_triangles[20] = {
+		{ 1, 4, 0 },  { 4, 9, 0 },	{ 4, 5, 9 },  { 8, 5, 4 },	{ 1, 8, 4 }, { 1, 10, 8 }, { 10, 3, 8 }, { 8, 3, 5 },  { 3, 2, 5 }, { 3, 7, 2 },
+		{ 3, 10, 7 }, { 10, 6, 7 }, { 6, 11, 7 }, { 6, 0, 11 }, { 6, 1, 0 }, { 10, 1, 6 }, { 11, 0, 9 }, { 2, 11, 9 }, { 5, 2, 9 }, { 11, 2, 7 },
 	};
 
 	class ModelGenerator
 	{
 	private:
-		// 12, 42, 320, 642, 2562, 10242, 40962, 163842
-		[[nodiscard]] inline uint32_t CalculateVertexCount_Icosahedron(int iterations) const;
-		// https://www.wolframalpha.com/input/?i=60,+240,+3840,+15360,+61440,+245760,+983040
-		// 60, 240, 960, 3840, 15360, 61440, 245760, 983040
-		[[nodiscard]] inline uint32_t CalculateIndexCount_Icosahedron(int iterations) const;
-
 		[[nodiscard]] inline std::optional<SphereEdge> GetExistingSphereEdge(const std::vector<SphereEdge>& edges,
 																			 uint32_t vert0_idx,
 																			 uint32_t vert1_idx) const;
@@ -49,6 +55,8 @@ namespace Game
 															   uint32_t vert1_idx);
 
 		[[nodiscard]] Vector2 GetSphereTextureCoords(const Vector3& normal) const;
+
+		[[nodiscard]] void CalculateWrappedUVIndices(std::vector<Vertex>& vertices, std::vector<SphereTriangle>& triangles);
 
 	public:
 		ModelGenerator();
