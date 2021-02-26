@@ -5,7 +5,7 @@ A C++ graphics engine that executes entirely on the CPU
 ### Intro
 
 ###### Software Rendering
-Consol3 is a 3d graphics engine that doesn't use the GPU to render any frame, instead the same calculations that would typically be made by the GPU hardware is done in sofware, every single vertex transformation, matrix calculation, etc is programmed on the CPU
+Consol3 is a 3d graphics engine that doesn't use the GPU to render any frame, instead the same calculations that would typically be made by the GPU hardware is done in software, every single vertex transformation, matrix calculation, etc is programmed on the CPU
 
 ###### Windows Console
 Consol3 as it stands today is a Windows console application, it uses the console as it's output display, by taking advantage of the console API available in Windows
