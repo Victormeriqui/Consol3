@@ -121,7 +121,7 @@ namespace Engine
 				float final_lighting = std::min(lighting_system->GetAmbientLight() + light_amount, 1.0f);
 
 				RGBColor texture_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
-				texture_color *= color;
+				texture_color.BlendMultiply(color);
 				HSVColor color_hsv = HSVColor(texture_color);
 
 				return HSVColor(color_hsv.hue, color_hsv.saturation, color_hsv.value * final_lighting);
