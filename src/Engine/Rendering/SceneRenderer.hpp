@@ -3,6 +3,7 @@
 
 #include "../../Display/IRenderer.hpp"
 #include "../../Display/NullRenderer.hpp"
+#include "../../Display/RGBColor.hpp"
 #include "../Resources/ResourceManager.hpp"
 #include "AbstractMesh.hpp"
 #include "AnimatedMesh.hpp"
@@ -10,10 +11,8 @@
 #include "Lighting/LightingSystem.hpp"
 #include "Rasterizer.hpp"
 #include "Shaders/DepthMapShader.hpp"
-#include "Shaders/PlainColorShader.hpp"
-#include "Shaders/PlainTextureShader.hpp"
-#include "Shaders/ShadedColorShader.hpp"
-#include "Shaders/ShadedTextureShader.hpp"
+#include "Shaders/PlainShader.hpp"
+#include "Shaders/ShadedShader.hpp"
 
 #include <functional>
 #include <list>
@@ -49,17 +48,15 @@ namespace Engine
 
 			std::list<std::reference_wrapper<AnimatedMesh>> updatable_animated_meshes;
 
-			PlainColorShader shader_plaincolor;
-			PlainTextureShader shader_plaintexture;
-			ShadedColorShader shader_shadedcolor;
-			ShadedTextureShader shader_shadedtexture;
+			PlainShader shader_plain;
+			ShadedShader shader_shaded;
 			DepthMapShader shader_depthmap;
 
 			void RenderShadowMapPass();
-			void RenderStaticMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
-			void RenderAnimatedMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
+			void RenderStaticMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color);
+			void RenderAnimatedMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color);
 
-			void RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color);
+			void RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color);
 
 		public:
 			SceneRenderer(std::shared_ptr<IRenderer> renderer,
@@ -70,7 +67,7 @@ namespace Engine
 
 			void DrawMesh(AbstractMesh& mesh);
 			void DrawShadedMesh(AbstractMesh& mesh);
-			void DrawPixel(uint16_t x, uint16_t y, const HSVColor& color);
+			void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 
 			void RenderScene(int64_t delta);
 		};

@@ -17,8 +17,7 @@ namespace Engine
 			lighting_system(std::move(lighting_system)),
 			camera(std::make_shared<Camera>())
 		{
-			shader_shadedcolor.SetLightingSystem(this->lighting_system);
-			shader_shadedtexture.SetLightingSystem(this->lighting_system);
+			shader_shaded.SetLightingSystem(this->lighting_system);
 		}
 
 		void SceneRenderer::SetCamera(std::shared_ptr<Camera> camera)
@@ -51,7 +50,7 @@ namespace Engine
 		}
 
 		void SceneRenderer::RenderStaticMesh(
-			Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color)
+			Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
 		{
 			rasterizer.SetModelMatrix(mesh.GetTransform());
 			rasterizer.DrawVertexBuffer(depthbuffer,
@@ -61,7 +60,7 @@ namespace Engine
 		}
 
 		void SceneRenderer::RenderAnimatedMesh(
-			Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color)
+			Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
 		{
 			AnimatedMesh& animated_mesh = dynamic_cast<AnimatedMesh&>(mesh);
 
@@ -75,7 +74,7 @@ namespace Engine
 			animated_mesh.UpdateAnimation();
 		}
 
-		void SceneRenderer::RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const HSVColor& color)
+		void SceneRenderer::RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
 		{
 			if (mesh.IsAnimated())
 				RenderAnimatedMesh(rasterizer, mesh, depthbuffer, shader, color);
@@ -93,7 +92,7 @@ namespace Engine
 				shadowmap_rasterizer.SetProjectionMatrix(light->GetProjectionMatrix().value());
 				shadowmap_rasterizer.SetViewMatrix(light->GetViewMatrix().value());
 
-				HSVColor nocolor;
+				static const RGBColor nocolor;
 
 				for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_plain)
 					RenderMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
@@ -119,21 +118,27 @@ namespace Engine
 			rasterizer.SetViewMatrix(camera->GetViewMatrix());
 
 			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_plain)
-				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plaincolor, mesh.get().GetColor());
+			{
+				shader_plain.SetTexture(nullptr);
+				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plain, mesh.get().GetColor());
+			}
 
 			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_shaded)
-				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shadedcolor, mesh.get().GetColor());
+			{
+				shader_shaded.SetTexture(nullptr);
+				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shaded, mesh.get().GetColor());
+			}
 
 			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_textured)
 			{
-				shader_plaintexture.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
-				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plaintexture, mesh.get().GetColor());
+				shader_plain.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
+				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plain, mesh.get().GetColor());
 			}
 
 			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_shaded_textured)
 			{
-				shader_shadedtexture.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
-				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shadedtexture, mesh.get().GetColor());
+				shader_shaded.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
+				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shaded, mesh.get().GetColor());
 			}
 
 			for (std::reference_wrapper<AnimatedMesh> mesh : updatable_animated_meshes)
@@ -148,7 +153,7 @@ namespace Engine
 			updatable_animated_meshes.clear();
 		}
 
-		void SceneRenderer::DrawPixel(uint16_t x, uint16_t y, const HSVColor& color)
+		void SceneRenderer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
 		{
 			rasterizer.DrawPixel(x, y, color);
 		}
