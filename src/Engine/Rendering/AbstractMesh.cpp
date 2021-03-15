@@ -8,8 +8,7 @@ namespace Engine
 
 		AbstractMesh::AbstractMesh() :
 			has_texture(false),
-			hsvcolor(HSVColor(0.0f, 0.0f, 1.0f)),
-			rgbcolor(RGBColor(255, 255, 255)),
+			color(RGBColor(255, 255, 255)),
 			transform(Transform()),
 			position(Vector3(0.0f, 0.0f, 0.0f)),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
@@ -20,8 +19,7 @@ namespace Engine
 		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color) :
 			model_resource(model_resource),
 			has_texture(false),
-			hsvcolor(HSVColor(color)),
-			rgbcolor(color),
+			color(color),
 			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
@@ -32,8 +30,7 @@ namespace Engine
 		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color) :
 			model_resource(model_resource),
 			has_texture(false),
-			hsvcolor(HSVColor(color)),
-			rgbcolor(color),
+			color(color),
 			transform(Transform()),
 			position(position),
 			rotation(rotation),
@@ -48,8 +45,7 @@ namespace Engine
 			model_resource(model_resource),
 			texture_resource(texture_resource),
 			has_texture(true),
-			hsvcolor(HSVColor(color)),
-			rgbcolor(color),
+			color(color),
 			transform(Transform()),
 			position(position),
 			rotation(Angle(0.0f, 0.0f, 0.0f)),
@@ -65,8 +61,7 @@ namespace Engine
 			model_resource(model_resource),
 			texture_resource(texture_resource),
 			has_texture(true),
-			hsvcolor(HSVColor(color)),
-			rgbcolor(color),
+			color(color),
 			transform(Transform()),
 			position(position),
 			rotation(rotation),
@@ -86,7 +81,7 @@ namespace Engine
 
 		RGBColor AbstractMesh::GetColor() const
 		{
-			return rgbcolor;
+			return color;
 		}
 
 		Vector3 AbstractMesh::GetPosition() const
@@ -130,8 +125,7 @@ namespace Engine
 
 		AbstractMesh& AbstractMesh::SetColor(const RGBColor& color)
 		{
-			rgbcolor = RGBColor(color);
-			hsvcolor = HSVColor(color);
+			this->color = color;
 
 			return *this;
 		}

@@ -3,6 +3,7 @@
 
 #include "../../Display/HSVColor.hpp"
 #include "../../Display/RGBColor.hpp"
+#include "../../Display/RGBColorConstants.hpp"
 #include "../../Math/Angle.hpp"
 #include "../../Math/Vector3.hpp"
 #include "Transform.hpp"
@@ -23,9 +24,7 @@ namespace Engine
 			std::string texture_resource;
 			bool has_texture;
 
-			// rgb color is the one that is actually exposed, hsvcolor is internal for the frambuffer
-			RGBColor rgbcolor;
-			HSVColor hsvcolor;
+			RGBColor color;
 
 			Transform transform;
 			// these fields are just for useful getters, the real values that are used in the transform are encoded in the matrices
@@ -35,20 +34,23 @@ namespace Engine
 
 		public:
 			AbstractMesh();
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color = RGBColor());
+			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color = RGBConstants::White());
 
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color = RGBColor());
+			AbstractMesh(const std::string& model_resource,
+						 const Vector3& position,
+						 const Angle& rotation,
+						 const RGBColor& color = RGBConstants::White());
 
 			AbstractMesh(const std::string& model_resource,
 						 const std::string& texture_resource,
 						 const Vector3& position,
-						 const RGBColor& color = RGBColor());
+						 const RGBColor& color = RGBConstants::White());
 
 			AbstractMesh(const std::string& model_resource,
 						 const std::string& texture_resource,
 						 const Vector3& position,
 						 const Angle& rotation = Angle(),
-						 const RGBColor& color = RGBColor());
+						 const RGBColor& color = RGBConstants::White());
 
 			[[nodiscard]] const std::string& GetModelResource() const;
 			[[nodiscard]] const std::string& GetTextureResource() const;

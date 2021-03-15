@@ -1,4 +1,6 @@
-#include "ShadedColorShader.hpp"
+#include "ShadedShader.hpp"
+
+#include "../TextureConstants.hpp"
 
 #include <algorithm>
 
@@ -10,12 +12,20 @@ namespace Engine
 		{
 			using namespace Lighting;
 
-			void ShadedColorShader::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
+			void ShadedShader::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
 			{
 				this->lighting_system = std::move(lighting_system);
 			}
 
-			bool ShadedColorShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
+			void ShadedShader::SetTexture(std::shared_ptr<Texture> texture)
+			{
+				if (texture == nullptr)
+					this->texture = TextureConstants::White();
+				else
+					this->texture = std::move(texture);
+			}
+
+			bool ShadedShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
 			{
 				TransformVertexModel(v0, mvp_mats);
 				TransformVertexModel(v1, mvp_mats);
@@ -63,7 +73,7 @@ namespace Engine
 				return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 			}
 
-			void ShadedColorShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+			HSVColor ShadedShader::FragmentShader(const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
 				Vector3 frag_position = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetPosition(),
 																			   vert_v1_model.GetPosition(),
@@ -80,6 +90,14 @@ namespace Engine
 																			 barcoord0,
 																			 barcoord1,
 																			 barcoord2);
+
+				Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_model.GetTextureCoords(),
+																					vert_v1_model.GetTextureCoords(),
+																					vert_v2_model.GetTextureCoords(),
+																					triangle,
+																					barcoord0,
+																					barcoord1,
+																					barcoord2);
 
 				for (int i = 0; i < vert_lights_count; i++)
 				{
@@ -99,11 +117,14 @@ namespace Engine
 																						 barcoord2);
 				}
 
-				float light_amount = lighting_system->GetLightAmountAt(frag_position, frag_normal, frag_position_lights);
-
+				float light_amount	 = lighting_system->GetLightAmountAt(frag_position, frag_normal, frag_position_lights);
 				float final_lighting = std::min(lighting_system->GetAmbientLight() + light_amount, 1.0f);
 
-				out_color = HSVColor(out_color.hue, out_color.saturation, final_lighting);
+				RGBColor texture_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
+				texture_color *= color;
+				HSVColor color_hsv = HSVColor(texture_color);
+
+				return HSVColor(color_hsv.hue, color_hsv.saturation, color_hsv.value * final_lighting);
 			}
 		}
 	}

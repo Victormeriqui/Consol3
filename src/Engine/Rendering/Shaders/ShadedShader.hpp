@@ -1,12 +1,14 @@
-#ifndef SHADEDCOLORSHADER_HPP
-#define SHADEDCOLORSHADER_HPP
+#ifndef SHADEDSHADER_HPP
+#define SHADEDSHADER_HPP
 
 #include "IShader.hpp"
 
 #include "../../../Display/HSVColor.hpp"
+#include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../DepthBuffer.hpp"
 #include "../Lighting/LightingSystem.hpp"
+#include "../Texture.hpp"
 #include "../Vertex.hpp"
 
 #include <cstdint>
@@ -22,10 +24,12 @@ namespace Engine
 			using namespace Display;
 			using namespace Lighting;
 
-			class ShadedColorShader : public IShader
+			class ShadedShader : public IShader
 			{
 			private:
 				std::shared_ptr<LightingSystem> lighting_system;
+
+				std::shared_ptr<Texture> texture;
 
 				// set by the vertex shader for the fragment shader
 				Vertex vert_v0_model;
@@ -48,13 +52,15 @@ namespace Engine
 
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
-				virtual void FragmentShader(
-					HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
+				virtual HSVColor FragmentShader(
+					const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
 
 				void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
-			};
 
+				void SetTexture(std::shared_ptr<Texture> texture);
+			};
 		}
 	}
 }
+
 #endif

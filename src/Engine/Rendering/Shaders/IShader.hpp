@@ -91,8 +91,9 @@ namespace Engine
 				}
 
 			public:
-				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)									  = 0;
-				virtual void FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) = 0;
+				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) = 0;
+				virtual HSVColor FragmentShader(
+					const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) = 0;
 			};
 		}
 	}

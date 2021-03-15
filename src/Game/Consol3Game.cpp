@@ -18,8 +18,8 @@ namespace Game
 	void Consol3Game::LoadResources()
 	{
 		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.5f));
+		resource_manager->LoadModel("res/face.obj", NormalGenerationOptions::GENERATE_DISABLED);
+		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
 		resource_manager->LoadModel("res/alien.md2", NormalGenerationOptions::GENERATE_FORCED);
@@ -39,6 +39,7 @@ namespace Game
 		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/earth.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
 	}
 
 	float rot = 1.33f;
@@ -60,7 +61,7 @@ namespace Game
 		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
 		anim_mesh.SetRotation(Angle(-90, 0, 0));
 
-		mesh = StaticMesh("sphere1", "res/earth.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh("res/face.obj", "res/normalmap.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
 		//		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));

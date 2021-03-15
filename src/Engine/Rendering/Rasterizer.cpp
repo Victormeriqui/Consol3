@@ -31,12 +31,12 @@ namespace Engine
 			return vertex;
 		}
 
-		void Rasterizer::DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader)
+		void Rasterizer::DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader)
 		{
 			ClipAndRasterize(depthbuffer, vertex_buffer, color, shader);
 		}
 
-		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader)
+		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader)
 		{
 			for (uint32_t i = 0; i < vertex_buffer.GetIndices().size(); i += 3)
 			{
@@ -103,7 +103,7 @@ namespace Engine
 			}
 		}
 
-		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, IShader& shader)
+		void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader)
 		{
 			int32_t bbox_min_x = std::min({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
 			int32_t bbox_min_y = std::min({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
@@ -149,8 +149,7 @@ namespace Engine
 
 						if (depthbuffer.GetValue(x, y) > z)
 						{
-							HSVColor out_color = color;
-							shader.FragmentShader(out_color, triangle, barcoord0, barcoord1, barcoord2);
+							HSVColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2);
 
 							depthbuffer.SetValue(x, y, z);
 							renderer->SetPixel(x, y, out_color);
@@ -168,7 +167,7 @@ namespace Engine
 			}
 		}
 
-		void Rasterizer::DrawPixel(uint16_t x, uint16_t y, const HSVColor& color)
+		void Rasterizer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
 		{
 			renderer->SetPixel(x, y, color);
 		}
