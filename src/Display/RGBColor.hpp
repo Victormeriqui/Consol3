@@ -51,6 +51,53 @@ namespace Display
 		{
 			return 0.3f * (color >> 16) + 0.59f * (color >> 8 & 0xFF) + 0.11f * (color & 0xFF);
 		}
+
+		constexpr RGBColor operator+(RGBColor other)
+		{
+			return RGBColor(other.r + r, other.g + g, other.b + b);
+		}
+
+		constexpr RGBColor operator-(RGBColor other)
+		{
+			return RGBColor(other.r - r, other.g - g, other.b - b);
+		}
+
+		constexpr RGBColor operator*(RGBColor other)
+		{
+			return RGBColor(other.r * r, other.g * g, other.b * b);
+		}
+
+		constexpr RGBColor operator/(RGBColor other)
+		{
+			return RGBColor(other.r / r, other.g / g, other.b / b);
+		}
+
+		constexpr RGBColor& operator+=(RGBColor other)
+		{
+			r += other.r;
+			g += other.g;
+			b += other.b;
+
+			return *this;
+		}
+
+		constexpr RGBColor& operator-=(RGBColor other)
+		{
+			r -= other.r;
+			g -= other.g;
+			b -= other.b;
+
+			return *this;
+		}
+
+		constexpr RGBColor& operator*=(RGBColor other)
+		{
+			r = (uint8_t)((r * other.r + 0xFF) >> 8);
+			g = (uint8_t)((g * other.g + 0xFF) >> 8);
+			b = (uint8_t)((b * other.b + 0xFF) >> 8);
+
+			return *this;
+		}
 	};
 }
 
