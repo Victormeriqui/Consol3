@@ -63,7 +63,6 @@ namespace Game
 
 		mesh = StaticMesh("res/face.obj", "res/normalmap.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
 		mesh.SetScale(Vector3(1, 1, 1));
-		//		mesh.SetRotation(Angle(0, 1.33f, 0));
 		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));
 
 		floor = StaticMesh("plane50", "res/tiles.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
