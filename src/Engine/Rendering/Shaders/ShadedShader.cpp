@@ -25,6 +25,14 @@ namespace Engine
 					this->texture = std::move(texture);
 			}
 
+			void ShadedShader::SetNormalMap(std::shared_ptr<Texture> normal_map)
+			{
+				if (normal_map == nullptr)
+					this->normal_map = TextureConstants::FlatNormalMap();
+				else
+					this->normal_map = std::move(texture);
+			}
+
 			bool ShadedShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
 			{
 				TransformVertexModel(v0, mvp_mats);

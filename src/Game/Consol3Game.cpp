@@ -56,18 +56,21 @@ namespace Game
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		anim_mesh = AnimatedMesh("res/penguin.md2", "res/penguin.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		anim_mesh.SetPosition(Vector3(0.0f, -0.9f, 0.0f));
-		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
-		anim_mesh.SetRotation(Angle(-90, 0, 0));
+		anim_mesh = AnimatedMesh();
+		anim_mesh.SetModelResource("res/penguin.md2")
+			.SetTextureResource("res/penguin.bmp")
+			.SetPosition(Vector3(0.0f, -0.9f, 0.0f))
+			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
+			.SetRotation(Angle(-90, 0, 0));
 
-		mesh = StaticMesh("res/face.obj", "res/normalmap.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		mesh.SetScale(Vector3(1, 1, 1));
-		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh();
+		mesh.SetModelResource("res/face.obj").SetTextureResource("res/normalmap.bmp");
 
-		floor = StaticMesh("plane50", "res/tiles.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		floor.SetScale(Vector3(12, 12, 12));
-		floor.SetPosition(Vector3(-6, -2, -6));
+		plight_mesh = StaticMesh();
+		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
+
+		floor = StaticMesh();
+		floor.SetModelResource("plane50").SetTextureResource("res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -2, -6));
 
 		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
 		dir_light->SetIntensity(0.9f);
