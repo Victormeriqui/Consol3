@@ -30,6 +30,7 @@ namespace Engine
 				std::shared_ptr<LightingSystem> lighting_system;
 
 				std::shared_ptr<Texture> texture;
+				std::shared_ptr<Texture> normal_map;
 
 				// set by the vertex shader for the fragment shader
 				Vertex vert_v0_model;
@@ -58,6 +59,7 @@ namespace Engine
 				void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
 
 				void SetTexture(std::shared_ptr<Texture> texture);
+				void SetNormalMap(std::shared_ptr<Texture> normal_map);
 			};
 		}
 	}

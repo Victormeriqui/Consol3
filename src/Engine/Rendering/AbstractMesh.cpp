@@ -7,64 +7,10 @@ namespace Engine
 		using namespace Math;
 
 		AbstractMesh::AbstractMesh() :
-			has_texture(false),
 			color(RGBColor(255, 255, 255)),
 			transform(Transform()),
-			position(Vector3(0.0f, 0.0f, 0.0f)),
-			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
-		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color) :
-			model_resource(model_resource),
-			has_texture(false),
-			color(color),
-			transform(Transform()),
-			position(position),
-			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
-		AbstractMesh::AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color) :
-			model_resource(model_resource),
-			has_texture(false),
-			color(color),
-			transform(Transform()),
-			position(position),
-			rotation(rotation),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
-		AbstractMesh::AbstractMesh(const std::string& model_resource,
-								   const std::string& texture_resource,
-								   const Vector3& position,
-								   const RGBColor& color) :
-			model_resource(model_resource),
-			texture_resource(texture_resource),
-			has_texture(true),
-			color(color),
-			transform(Transform()),
-			position(position),
-			rotation(Angle(0.0f, 0.0f, 0.0f)),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
-		{
-		}
-
-		AbstractMesh::AbstractMesh(const std::string& model_resource,
-								   const std::string& texture_resource,
-								   const Vector3& position,
-								   const Angle& rotation,
-								   const RGBColor& color) :
-			model_resource(model_resource),
-			texture_resource(texture_resource),
-			has_texture(true),
-			color(color),
-			transform(Transform()),
-			position(position),
-			rotation(rotation),
+			position(Vector3()),
+			rotation(Angle()),
 			scale(Vector3(1.0f, 1.0f, 1.0f))
 		{
 		}
@@ -77,6 +23,11 @@ namespace Engine
 		const std::string& AbstractMesh::GetTextureResource() const
 		{
 			return texture_resource;
+		}
+
+		const std::string& AbstractMesh::GetNormalMapResource() const
+		{
+			return normal_map_resource;
 		}
 
 		RGBColor AbstractMesh::GetColor() const
@@ -106,7 +57,12 @@ namespace Engine
 
 		bool AbstractMesh::IsTextured() const
 		{
-			return has_texture;
+			return !texture_resource.empty();
+		}
+
+		bool AbstractMesh::IsNormalMapped() const
+		{
+			return !normal_map_resource.empty();
 		}
 
 		AbstractMesh& AbstractMesh::SetModelResource(const std::string& model_resource)
@@ -119,6 +75,13 @@ namespace Engine
 		AbstractMesh& AbstractMesh::SetTextureResource(const std::string& texture_resource)
 		{
 			this->texture_resource = texture_resource;
+
+			return *this;
+		}
+
+		AbstractMesh& AbstractMesh::SetNormalMapResource(const std::string& normal_map_resource)
+		{
+			this->normal_map_resource = normal_map_resource;
 
 			return *this;
 		}

@@ -16,49 +16,6 @@ namespace Engine
 		{
 		}
 
-		AnimatedMesh::AnimatedMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color) :
-			AbstractMesh(model_resource, position, color),
-			anim_current_name("null"),
-			anim_current_progress(0.0f),
-			anim_current_fps(0.0f),
-			is_animating(false)
-		{
-		}
-
-		AnimatedMesh::AnimatedMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color) :
-			AbstractMesh(model_resource, position, rotation, color),
-			anim_current_name("null"),
-			anim_current_progress(0.0f),
-			anim_current_fps(0.0f),
-			is_animating(false)
-		{
-		}
-
-		AnimatedMesh::AnimatedMesh(const std::string& model_resource,
-								   const std::string& texture_resource,
-								   const Vector3& position,
-								   const RGBColor& color) :
-			AbstractMesh(model_resource, texture_resource, position, color),
-			anim_current_name("null"),
-			anim_current_progress(0.0f),
-			anim_current_fps(0.0f),
-			is_animating(false)
-		{
-		}
-
-		AnimatedMesh::AnimatedMesh(const std::string& model_resource,
-								   const std::string& texture_resource,
-								   const Vector3& position,
-								   const Angle& rotation,
-								   const RGBColor& color) :
-			AbstractMesh(model_resource, texture_resource, position, rotation, color),
-			anim_current_name("null"),
-			anim_current_progress(0.0f),
-			anim_current_fps(0.0f),
-			is_animating(false)
-		{
-		}
-
 		bool AnimatedMesh::IsAnimated() const
 		{
 			return true;

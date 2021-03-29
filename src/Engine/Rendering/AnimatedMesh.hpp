@@ -26,24 +26,6 @@ namespace Engine
 		public:
 			AnimatedMesh();
 
-			AnimatedMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color = RGBColor());
-
-			AnimatedMesh(const std::string& model_resource,
-						 const Vector3& position,
-						 const Angle& rotation = Angle(),
-						 const RGBColor& color = RGBColor());
-
-			AnimatedMesh(const std::string& model_resource,
-						 const std::string& texture_resource,
-						 const Vector3& position,
-						 const RGBColor& color = RGBColor());
-
-			AnimatedMesh(const std::string& model_resource,
-						 const std::string& texture_resource,
-						 const Vector3& position,
-						 const Angle& rotation = Angle(),
-						 const RGBColor& color = RGBColor());
-
 			virtual bool IsAnimated() const override;
 
 			void PlayAnimation(const std::string& animation, float fps);

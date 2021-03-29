@@ -22,7 +22,7 @@ namespace Engine
 		protected:
 			std::string model_resource;
 			std::string texture_resource;
-			bool has_texture;
+			std::string normal_map_resource;
 
 			RGBColor color;
 
@@ -34,37 +34,23 @@ namespace Engine
 
 		public:
 			AbstractMesh();
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color = RGBConstants::White());
-
-			AbstractMesh(const std::string& model_resource,
-						 const Vector3& position,
-						 const Angle& rotation,
-						 const RGBColor& color = RGBConstants::White());
-
-			AbstractMesh(const std::string& model_resource,
-						 const std::string& texture_resource,
-						 const Vector3& position,
-						 const RGBColor& color = RGBConstants::White());
-
-			AbstractMesh(const std::string& model_resource,
-						 const std::string& texture_resource,
-						 const Vector3& position,
-						 const Angle& rotation = Angle(),
-						 const RGBColor& color = RGBConstants::White());
 
 			[[nodiscard]] const std::string& GetModelResource() const;
 			[[nodiscard]] const std::string& GetTextureResource() const;
+			[[nodiscard]] const std::string& GetNormalMapResource() const;
 			[[nodiscard]] RGBColor GetColor() const;
 			[[nodiscard]] Vector3 GetPosition() const;
 			[[nodiscard]] Angle GetRotation() const;
 			[[nodiscard]] Vector3 GetScale() const;
 			[[nodiscard]] const Transform& GetTransform() const;
 			[[nodiscard]] bool IsTextured() const;
+			[[nodiscard]] bool IsNormalMapped() const;
 
 			[[nodiscard]] virtual bool IsAnimated() const = 0;
 
 			AbstractMesh& SetModelResource(const std::string& model_resource);
 			AbstractMesh& SetTextureResource(const std::string& texture_resource);
+			AbstractMesh& SetNormalMapResource(const std::string& normal_map_resource);
 			AbstractMesh& SetColor(const RGBColor& color);
 			AbstractMesh& SetPosition(const Vector3& position);
 			AbstractMesh& SetRotation(const Angle& rotation);
