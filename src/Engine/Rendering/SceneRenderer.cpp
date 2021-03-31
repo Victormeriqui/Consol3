@@ -1,6 +1,7 @@
 #include "SceneRenderer.hpp"
 
 #include "AnimatedMesh.hpp"
+#include "TextureConstants.hpp"
 
 namespace Engine
 {
@@ -29,10 +30,7 @@ namespace Engine
 
 		void SceneRenderer::DrawMesh(AbstractMesh& mesh)
 		{
-			if (mesh.IsTextured())
-				render_buffer_textured.push_back(std::reference_wrapper(mesh));
-			else
-				render_buffer_plain.push_back(std::reference_wrapper(mesh));
+			render_buffer_plain.push_back(std::reference_wrapper(mesh));
 
 			if (mesh.IsAnimated())
 				updatable_animated_meshes.push_back(std::reference_wrapper(dynamic_cast<AnimatedMesh&>(mesh)));
@@ -40,10 +38,7 @@ namespace Engine
 
 		void SceneRenderer::DrawShadedMesh(AbstractMesh& mesh)
 		{
-			if (mesh.IsTextured())
-				render_buffer_shaded_textured.push_back(std::reference_wrapper(mesh));
-			else
-				render_buffer_shaded.push_back(std::reference_wrapper(mesh));
+			render_buffer_shaded.push_back(std::reference_wrapper(mesh));
 
 			if (mesh.IsAnimated())
 				updatable_animated_meshes.push_back(std::reference_wrapper(dynamic_cast<AnimatedMesh&>(mesh)));
@@ -54,7 +49,7 @@ namespace Engine
 		{
 			rasterizer.SetModelMatrix(mesh.GetTransform());
 			rasterizer.DrawVertexBuffer(depthbuffer,
-										resource_manager->GetLoadedStaticModel(mesh.GetModelResource())->GetVertexBuffer(),
+										resource_manager->GetLoadedStaticModel(mesh.GetModelResource()).value()->GetVertexBuffer(),
 										color,
 										shader);
 		}
@@ -67,6 +62,7 @@ namespace Engine
 			rasterizer.SetModelMatrix(mesh.GetTransform());
 			rasterizer.DrawVertexBuffer(depthbuffer,
 										resource_manager->GetLoadedAnimatedModel(mesh.GetModelResource())
+											.value()
 											->GetVertexBuffer(animated_mesh.GetCurrentAnimationName(), animated_mesh.GetCurrentAnimationProgress()),
 										color,
 										shader);
@@ -99,12 +95,6 @@ namespace Engine
 
 				for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_shaded)
 					RenderMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
-
-				for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_textured)
-					RenderMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
-
-				for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_shaded_textured)
-					RenderMesh(shadowmap_rasterizer, mesh.get(), light->GetLightDepthBuffer().value(), shader_depthmap, nocolor);
 			}
 		}
 
@@ -119,25 +109,25 @@ namespace Engine
 
 			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_plain)
 			{
-				shader_plain.SetTexture(nullptr);
+				std::optional<std::shared_ptr<Texture>> texture = resource_manager->GetLoadedTexture(mesh.get().GetTextureResource());
+
+				shader_plain.SetTexture(texture.value_or(TextureConstants::White()));
+
 				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plain, mesh.get().GetColor());
 			}
 
 			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_shaded)
 			{
-				shader_shaded.SetTexture(nullptr);
-				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shaded, mesh.get().GetColor());
-			}
+				std::optional<std::shared_ptr<Texture>> texture	   = resource_manager->GetLoadedTexture(mesh.get().GetTextureResource());
+				std::optional<std::shared_ptr<Texture>> normal_map = resource_manager->GetLoadedTexture(mesh.get().GetNormalMapResource());
 
-			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_textured)
-			{
-				shader_plain.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
-				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_plain, mesh.get().GetColor());
-			}
+				shader_shaded.SetTexture(texture.value_or(TextureConstants::White()));
 
-			for (std::reference_wrapper<AbstractMesh> mesh : render_buffer_shaded_textured)
-			{
-				shader_shaded.SetTexture(resource_manager->GetLoadedTexture(mesh.get().GetTextureResource()));
+				if (normal_map.has_value())
+					shader_shaded.SetNormalMap(normal_map.value());
+				else
+					shader_shaded.DisableNormalMap();
+
 				RenderMesh(rasterizer, mesh.get(), camera->GetDepthBuffer(), shader_shaded, mesh.get().GetColor());
 			}
 
@@ -148,8 +138,6 @@ namespace Engine
 
 			render_buffer_plain.clear();
 			render_buffer_shaded.clear();
-			render_buffer_textured.clear();
-			render_buffer_shaded_textured.clear();
 			updatable_animated_meshes.clear();
 		}
 

@@ -51,6 +51,8 @@ namespace Engine
 
 				Vector3 frag_position_lights[10];
 
+				bool has_normal_map;
+
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
 				virtual HSVColor FragmentShader(
@@ -60,6 +62,7 @@ namespace Engine
 
 				void SetTexture(std::shared_ptr<Texture> texture);
 				void SetNormalMap(std::shared_ptr<Texture> normal_map);
+				void DisableNormalMap();
 			};
 		}
 	}

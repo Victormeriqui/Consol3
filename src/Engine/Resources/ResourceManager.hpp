@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 
 namespace Engine
@@ -48,9 +49,9 @@ namespace Engine
 			void LoadModel(const std::string& resource_name, const StaticModel& model);
 			void LoadModel(const std::string& resource_name, const AnimatedModel& model);
 
-			std::shared_ptr<Texture> GetLoadedTexture(const std::string& resource_name);
-			std::shared_ptr<StaticModel> GetLoadedStaticModel(const std::string& resource_name);
-			std::shared_ptr<AnimatedModel> GetLoadedAnimatedModel(const std::string& resource_name);
+			std::optional<std::shared_ptr<Texture>> GetLoadedTexture(const std::string& resource_name);
+			std::optional<std::shared_ptr<StaticModel>> GetLoadedStaticModel(const std::string& resource_name);
+			std::optional<std::shared_ptr<AnimatedModel>> GetLoadedAnimatedModel(const std::string& resource_name);
 		};
 	}
 }

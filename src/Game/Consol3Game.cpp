@@ -64,7 +64,17 @@ namespace Game
 			.SetRotation(Angle(-90, 0, 0));
 
 		mesh = StaticMesh();
-		mesh.SetModelResource("res/face.obj").SetTextureResource("res/normalmap.bmp");
+		mesh.SetModelResource("res/face.obj")
+			.SetTextureResource("res/normalmap.bmp")
+			.SetNormalMapResource("res/normalmap.bmp")
+			.SetPosition(Vector3(-1, 0, 0))
+			.SetRotation(Angle(0, 3.14159f / 2 * 2, 0));
+
+		mesh2 = StaticMesh();
+		mesh2.SetModelResource("res/face.obj")
+			.SetTextureResource("res/normalmap.bmp")
+			.SetPosition(Vector3(1, 0, 0))
+			.SetRotation(Angle(0, 3.14159f / 2 * 2, 0));
 
 		plight_mesh = StaticMesh();
 		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
@@ -89,7 +99,7 @@ namespace Game
 		spot_light2->SetIntensity(6.0f);
 
 		this->lighting_system->SetAmbientLight(0.2f);
-		this->lighting_system->AddLight(dir_light);
+		// this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);
@@ -196,6 +206,7 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 		scene_renderer->DrawShadedMesh(mesh);
+		scene_renderer->DrawShadedMesh(mesh2);
 		// scene_renderer->DrawShadedMesh(anim_mesh);
 
 		scene_renderer->RenderScene(delta);

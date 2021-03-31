@@ -1,6 +1,6 @@
 #include "ShadedShader.hpp"
 
-#include "../TextureConstants.hpp"
+#include "../../../Math/Util/MathUtil.hpp"
 
 #include <algorithm>
 
@@ -11,6 +11,7 @@ namespace Engine
 		namespace Shaders
 		{
 			using namespace Lighting;
+			using namespace Math;
 
 			void ShadedShader::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
 			{
@@ -19,18 +20,18 @@ namespace Engine
 
 			void ShadedShader::SetTexture(std::shared_ptr<Texture> texture)
 			{
-				if (texture == nullptr)
-					this->texture = TextureConstants::White();
-				else
-					this->texture = std::move(texture);
+				this->texture = std::move(texture);
 			}
 
 			void ShadedShader::SetNormalMap(std::shared_ptr<Texture> normal_map)
 			{
-				if (normal_map == nullptr)
-					this->normal_map = TextureConstants::FlatNormalMap();
-				else
-					this->normal_map = std::move(texture);
+				this->normal_map = std::move(normal_map);
+				has_normal_map	 = true;
+			}
+
+			void ShadedShader::DisableNormalMap()
+			{
+				has_normal_map = false;
 			}
 
 			bool ShadedShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
@@ -91,14 +92,6 @@ namespace Engine
 																			   barcoord1,
 																			   barcoord2);
 
-				Vector3 frag_normal = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetNormal(),
-																			 vert_v1_model.GetNormal(),
-																			 vert_v2_model.GetNormal(),
-																			 triangle,
-																			 barcoord0,
-																			 barcoord1,
-																			 barcoord2);
-
 				Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_model.GetTextureCoords(),
 																					vert_v1_model.GetTextureCoords(),
 																					vert_v2_model.GetTextureCoords(),
@@ -107,6 +100,23 @@ namespace Engine
 																					barcoord1,
 																					barcoord2);
 
+				Vector3 frag_normal;
+
+				if (!has_normal_map)
+					frag_normal = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetNormal(),
+																		 vert_v1_model.GetNormal(),
+																		 vert_v2_model.GetNormal(),
+																		 triangle,
+																		 barcoord0,
+																		 barcoord1,
+																		 barcoord2);
+				else
+				{
+					RGBColor frag_normal_color = normal_map->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
+					frag_normal				   = Vector3(Util::Lerp((float)frag_normal_color.r, 0.0f, 255.0f, -1.0f, 1.0f),
+											 Util::Lerp((float)frag_normal_color.g, 0.0f, 255.0f, -1.0f, 1.0f),
+											 Util::Lerp((float)frag_normal_color.b, 0.0f, 255.0f, -1.0f, 1.0f));
+				}
 				for (int i = 0; i < vert_lights_count; i++)
 				{
 					const Vector3& v0_position_light = vert_v0_light[i].GetPosition();

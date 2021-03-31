@@ -43,8 +43,6 @@ namespace Engine
 
 			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_plain;
 			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_shaded;
-			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_textured;
-			std::list<std::reference_wrapper<AbstractMesh>> render_buffer_shaded_textured;
 
 			std::list<std::reference_wrapper<AnimatedMesh>> updatable_animated_meshes;
 

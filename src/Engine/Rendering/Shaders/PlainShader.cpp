@@ -1,7 +1,5 @@
 #include "PlainShader.hpp"
 
-#include "../TextureConstants.hpp"
-
 namespace Engine
 {
 	namespace Rendering
@@ -10,10 +8,7 @@ namespace Engine
 		{
 			void PlainShader::SetTexture(std::shared_ptr<Texture> texture)
 			{
-				if (texture == nullptr)
-					this->texture = TextureConstants::White();
-				else
-					this->texture = std::move(texture);
+				this->texture = std::move(texture);
 			}
 
 			bool PlainShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
