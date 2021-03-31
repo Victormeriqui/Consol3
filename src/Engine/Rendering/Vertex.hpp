@@ -21,6 +21,10 @@ namespace Engine
 			float w;
 
 			Vector3 normal;
+
+			Vector3 tangent;
+			Vector3 bitangent;
+
 			Vector2 texture_coords;
 
 		public:
@@ -46,6 +50,12 @@ namespace Engine
 			[[nodiscard]] Vector3 GetNormal() const;
 			Vertex& SetNormal(const Vector3& normal);
 
+			[[nodiscard]] Vector3 GetTangent() const;
+			Vertex& SetTangent(const Vector3& tangent);
+
+			[[nodiscard]] Vector3 GetBitangent() const;
+			Vertex& SetBitangent(const Vector3& bitangent);
+
 			[[nodiscard]] float GetW() const;
 			Vertex& SetW(float w);
 
@@ -60,7 +70,9 @@ namespace Engine
 			[[nodiscard]] Vertex GetLerped(const Vertex& other, float amount) const;
 			Vertex& Lerp(const Vertex& other, float amount);
 
-			Vertex& TransformNormals(const Matrix4& normal_mat);
+			Vertex& TransformNormal(const Matrix4& normal_mat);
+			Vertex& TransformTangent(const Matrix4& normal_mat);
+			Vertex& TransformBitangent(const Matrix4& normal_mat);
 
 			inline void static CalculateNormals(std::vector<Vertex>& out_vertices, std::vector<uint32_t>& out_indices)
 			{
@@ -73,8 +85,7 @@ namespace Engine
 					Vector3 edge0 = v1.GetPosition() - v0.GetPosition();
 					Vector3 edge1 = v2.GetPosition() - v0.GetPosition();
 
-					Vector3 normal = edge0.GetCrossProduct(edge1);
-					normal.Normalize();
+					Vector3 normal = edge0.GetCrossProduct(edge1).GetNormalized();
 
 					// each adjacent face to each vertex contributes to the vertex normal
 					v0.SetNormal(v0.GetNormal() + normal);
@@ -84,6 +95,44 @@ namespace Engine
 
 				for (Vertex& vert : out_vertices)
 					vert.SetNormal(vert.GetNormal().GetNormalized());
+			}
+
+			inline void static CalculateTangents(std::vector<Vertex>& out_vertices, std::vector<uint32_t>& out_indices)
+			{
+				for (uint32_t i = 0; i < out_indices.size() - 3; i += 3)
+				{
+					Vertex& v0 = out_vertices[out_indices[i]];
+					Vertex& v1 = out_vertices[out_indices[i + 1]];
+					Vertex& v2 = out_vertices[out_indices[i + 2]];
+
+					Vector3 edge0 = v1.GetPosition() - v0.GetPosition();
+					Vector3 edge1 = v2.GetPosition() - v0.GetPosition();
+
+					Vector2 texture_edge0 = v1.GetTextureCoords() - v0.GetTextureCoords();
+					Vector2 texture_edge1 = v2.GetTextureCoords() - v0.GetTextureCoords();
+
+					float f = 1.0f / (texture_edge0.x * texture_edge1.y - texture_edge1.x * texture_edge0.y);
+
+					// the bitangent could just be the cross product of the tangent and the normal, but since this is done only once on load, we don't
+					// really care if that would be a little faster
+					Vector3 tangent	  = (Vector3(edge0 * texture_edge1.y - edge1 * texture_edge0.y) * f).GetNormalized();
+					Vector3 bitangent = (Vector3(edge1 * texture_edge0.x - edge0 * texture_edge1.x) * f).GetNormalized();
+
+					// each adjacent face to each vertex contributes to the vertex tangent
+					v0.SetTangent(v0.GetTangent() + tangent);
+					v1.SetTangent(v1.GetTangent() + tangent);
+					v2.SetTangent(v2.GetTangent() + tangent);
+
+					v0.SetBitangent(v0.GetBitangent() + bitangent);
+					v1.SetBitangent(v1.GetBitangent() + bitangent);
+					v2.SetBitangent(v2.GetBitangent() + bitangent);
+				}
+
+				for (Vertex& vert : out_vertices)
+				{
+					vert.SetTangent(vert.GetTangent().GetNormalized());
+					vert.SetBitangent(vert.GetBitangent().GetNormalized());
+				}
 			}
 
 			constexpr Vertex& operator*=(const Matrix4& mat) noexcept

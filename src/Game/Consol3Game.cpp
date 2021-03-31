@@ -17,19 +17,21 @@ namespace Game
 
 	void Consol3Game::LoadResources()
 	{
-		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("res/face.obj", NormalGenerationOptions::GENERATE_DISABLED);
+		ModelLoadingOptions model_options;
+
+		resource_manager->LoadModel("res/monkey.obj", model_options);
+		resource_manager->LoadModel("res/face.obj", model_options);
 		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
-		resource_manager->LoadModel("res/alien.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/marvin.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/buggy.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/scarlet.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/warrior.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/raptor.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/penguin.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/centaur.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/alien.md2", model_options);
+		resource_manager->LoadModel("res/marvin.md2", model_options);
+		resource_manager->LoadModel("res/buggy.md2", model_options);
+		resource_manager->LoadModel("res/scarlet.md2", model_options);
+		resource_manager->LoadModel("res/warrior.md2", model_options);
+		resource_manager->LoadModel("res/raptor.md2", model_options);
+		resource_manager->LoadModel("res/penguin.md2", model_options);
+		resource_manager->LoadModel("res/centaur.md2", model_options);
 
 		resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);

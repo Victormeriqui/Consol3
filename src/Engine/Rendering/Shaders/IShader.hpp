@@ -33,7 +33,7 @@ namespace Engine
 				inline Vertex& TransformVertexMVP(Vertex& vertex, const MVPTransform& mvp_mats)
 				{
 					vertex *= mvp_mats.model_mat;
-					vertex.TransformNormals(mvp_mats.normal_mat);
+					vertex.TransformNormal(mvp_mats.normal_mat);
 					vertex *= mvp_mats.view_mat;
 					vertex *= mvp_mats.projection_mat;
 
@@ -43,7 +43,7 @@ namespace Engine
 				inline Vertex& TransformVertexModel(Vertex& vertex, const MVPTransform& mvp_mats)
 				{
 					vertex *= mvp_mats.model_mat;
-					vertex.TransformNormals(mvp_mats.normal_mat);
+					vertex.TransformNormal(mvp_mats.normal_mat);
 
 					return vertex;
 				}
