@@ -15,11 +15,21 @@ namespace Engine
 	{
 		using namespace Rendering;
 
-		enum class NormalGenerationOptions
+		enum class GenerationCondition
 		{
-			GENERATE_DISABLED,
-			GENERATE_IF_MISSING,
-			GENERATE_FORCED
+			NEVER,
+			IF_MISSING,
+			ALWAYS
+		};
+
+		struct ModelLoadingOptions
+		{
+			GenerationCondition normal_options;
+			GenerationCondition tangent_options;
+
+			ModelLoadingOptions() : normal_options(GenerationCondition::IF_MISSING), tangent_options(GenerationCondition::IF_MISSING)
+			{
+			}
 		};
 
 		class IModelLoader
@@ -33,13 +43,13 @@ namespace Engine
 			[[nodiscard]] virtual bool LoadStaticModel(const std::string& filename,
 													   std::vector<Vertex>& out_vertices,
 													   std::vector<uint32_t>& out_indices,
-													   NormalGenerationOptions options) = 0;
+													   ModelLoadingOptions options) = 0;
 
 			[[nodiscard]] virtual bool LoadAnimatedModel(const std::string& filename,
 														 std::vector<Frame>& out_frames,
 														 std::vector<uint32_t>& out_indices,
 														 std::map<std::string, Animation>& out_animations,
-														 NormalGenerationOptions options) = 0;
+														 ModelLoadingOptions options) = 0;
 		};
 	}
 }

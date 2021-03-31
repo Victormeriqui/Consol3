@@ -34,6 +34,30 @@ namespace Engine
 			return *this;
 		}
 
+		Vector3 Vertex::GetTangent() const
+		{
+			return tangent;
+		}
+
+		Vertex& Vertex::SetTangent(const Vector3& tangent)
+		{
+			this->tangent = tangent;
+
+			return *this;
+		}
+
+		Vector3 Vertex::GetBitangent() const
+		{
+			return bitangent;
+		}
+
+		Vertex& Vertex::SetBitangent(const Vector3& bitangent)
+		{
+			this->bitangent = bitangent;
+
+			return *this;
+		}
+
 		float Vertex::GetW() const
 		{
 			return w;
@@ -58,7 +82,7 @@ namespace Engine
 			return *this;
 		}
 
-		Vertex& Vertex::TransformNormals(const Matrix4& normal_mat)
+		Vertex& Vertex::TransformNormal(const Matrix4& normal_mat)
 		{
 			float norm_x_new = normal_mat.values[0][0] * normal.x + normal_mat.values[0][1] * normal.y + normal_mat.values[0][2] * normal.z;
 			float norm_y_new = normal_mat.values[1][0] * normal.x + normal_mat.values[1][1] * normal.y + normal_mat.values[1][2] * normal.z;
@@ -70,6 +94,42 @@ namespace Engine
 			normal.z = norm_z_new;
 
 			normal.Normalize();
+
+			return *this;
+		}
+
+		Vertex& Vertex::TransformTangent(const Matrix4& normal_mat)
+		{
+			float tang_x_new = normal_mat.values[0][0] * tangent.x + normal_mat.values[0][1] * tangent.y + normal_mat.values[0][2] * tangent.z;
+			float tang_y_new = normal_mat.values[1][0] * tangent.x + normal_mat.values[1][1] * tangent.y + normal_mat.values[1][2] * tangent.z;
+			float tang_z_new = normal_mat.values[2][0] * tangent.x + normal_mat.values[2][1] * tangent.y + normal_mat.values[2][2] * tangent.z;
+			float tang_w_new = normal_mat.values[3][0] * tangent.x + normal_mat.values[3][1] * tangent.y + normal_mat.values[3][2] * tangent.z;
+
+			tangent.x = tang_x_new;
+			tangent.y = tang_y_new;
+			tangent.z = tang_z_new;
+
+			tangent.Normalize();
+
+			return *this;
+		}
+
+		Vertex& Vertex::TransformBitangent(const Matrix4& normal_mat)
+		{
+			float bitang_x_new =
+				normal_mat.values[0][0] * bitangent.x + normal_mat.values[0][1] * bitangent.y + normal_mat.values[0][2] * bitangent.z;
+			float bitang_y_new =
+				normal_mat.values[1][0] * bitangent.x + normal_mat.values[1][1] * bitangent.y + normal_mat.values[1][2] * bitangent.z;
+			float bitang_z_new =
+				normal_mat.values[2][0] * bitangent.x + normal_mat.values[2][1] * bitangent.y + normal_mat.values[2][2] * bitangent.z;
+			float bitang_w_new =
+				normal_mat.values[3][0] * bitangent.x + normal_mat.values[3][1] * bitangent.y + normal_mat.values[3][2] * bitangent.z;
+
+			bitangent.x = bitang_x_new;
+			bitangent.y = bitang_y_new;
+			bitangent.z = bitang_z_new;
+
+			bitangent.Normalize();
 
 			return *this;
 		}

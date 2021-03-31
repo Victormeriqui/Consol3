@@ -52,7 +52,7 @@ namespace Engine
 			return false;
 		}
 
-		bool ResourceManager::LoadModel(const std::string& filename, NormalGenerationOptions options)
+		bool ResourceManager::LoadModel(const std::string& filename, ModelLoadingOptions options)
 		{
 			if (static_model_cache.find(filename) != static_model_cache.end() && animated_model_cache.find(filename) != animated_model_cache.end())
 				return true;
