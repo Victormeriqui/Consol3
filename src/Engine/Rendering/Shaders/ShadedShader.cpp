@@ -128,16 +128,16 @@ namespace Engine
 
 					RGBColor frag_normal_color = normal_map->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 
+					// tangent bitangent normal matrix to translate normal to world space
+					Matrix4 tbn_mat = Matrix4().SetTBNMatrix(frag_tangent, frag_bitangent, frag_normal);
+
 					frag_normal = Vector3(Util::Lerp((float)frag_normal_color.r, 0.0f, 255.0f, -1.0f, 1.0f),
 										  Util::Lerp((float)frag_normal_color.g, 0.0f, 255.0f, -1.0f, 1.0f),
 										  Util::Lerp((float)frag_normal_color.b, 0.0f, 255.0f, -1.0f, 1.0f));
 
-					// tangent bitangent normal matrix to translate normal to world space
-					Matrix4 tbn_mat = Matrix4().SetTBNMatrix(frag_tangent, frag_bitangent, frag_normal);
-
 					frag_normal *= tbn_mat;
 
-					// frag_normal.Normalize();
+					frag_normal.Normalize();
 				}
 
 				for (int i = 0; i < vert_lights_count; i++)

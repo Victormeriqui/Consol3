@@ -1,5 +1,5 @@
-#ifndef MATRIX_HPP
-#define MATRIX_HPP
+#ifndef MATRIX4_HPP
+#define MATRIX4_HPP
 
 #include <algorithm>
 #include <cstdint>
