@@ -34,6 +34,8 @@ namespace Engine
 				{
 					vertex *= mvp_mats.model_mat;
 					vertex.TransformNormal(mvp_mats.normal_mat);
+					vertex.TransformTangent(mvp_mats.model_mat);
+					vertex.TransformBitangent(mvp_mats.model_mat);
 					vertex *= mvp_mats.view_mat;
 					vertex *= mvp_mats.projection_mat;
 
@@ -44,6 +46,8 @@ namespace Engine
 				{
 					vertex *= mvp_mats.model_mat;
 					vertex.TransformNormal(mvp_mats.normal_mat);
+					vertex.TransformTangent(mvp_mats.model_mat);
+					vertex.TransformBitangent(mvp_mats.model_mat);
 
 					return vertex;
 				}

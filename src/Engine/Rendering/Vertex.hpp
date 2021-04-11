@@ -99,7 +99,7 @@ namespace Engine
 
 			inline void static CalculateTangents(std::vector<Vertex>& out_vertices, std::vector<uint32_t>& out_indices)
 			{
-				for (uint32_t i = 0; i < out_indices.size() - 3; i += 3)
+				for (uint32_t i = 0; i <= out_indices.size() - 3; i += 3)
 				{
 					Vertex& v0 = out_vertices[out_indices[i]];
 					Vertex& v1 = out_vertices[out_indices[i + 1]];
