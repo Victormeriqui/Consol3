@@ -4,6 +4,7 @@
 #include "../Math/Util/MathUtil.hpp"
 #include "../Math/Vector2.hpp"
 
+#include <cmath>
 #include <cstdint>
 
 /*

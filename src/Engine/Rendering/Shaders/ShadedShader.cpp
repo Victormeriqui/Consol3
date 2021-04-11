@@ -100,23 +100,46 @@ namespace Engine
 																					barcoord1,
 																					barcoord2);
 
-				Vector3 frag_normal;
+				Vector3 frag_normal = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetNormal(),
+																			 vert_v1_model.GetNormal(),
+																			 vert_v2_model.GetNormal(),
+																			 triangle,
+																			 barcoord0,
+																			 barcoord1,
+																			 barcoord2);
 
-				if (!has_normal_map)
-					frag_normal = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetNormal(),
-																		 vert_v1_model.GetNormal(),
-																		 vert_v2_model.GetNormal(),
-																		 triangle,
-																		 barcoord0,
-																		 barcoord1,
-																		 barcoord2);
-				else
+				if (has_normal_map)
 				{
+					Vector3 frag_tangent = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetTangent(),
+																				  vert_v1_model.GetTangent(),
+																				  vert_v2_model.GetTangent(),
+																				  triangle,
+																				  barcoord0,
+																				  barcoord1,
+																				  barcoord2);
+
+					Vector3 frag_bitangent = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetBitangent(),
+																					vert_v1_model.GetBitangent(),
+																					vert_v2_model.GetBitangent(),
+																					triangle,
+																					barcoord0,
+																					barcoord1,
+																					barcoord2);
+
 					RGBColor frag_normal_color = normal_map->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
-					frag_normal				   = Vector3(Util::Lerp((float)frag_normal_color.r, 0.0f, 255.0f, -1.0f, 1.0f),
-											 Util::Lerp((float)frag_normal_color.g, 0.0f, 255.0f, -1.0f, 1.0f),
-											 Util::Lerp((float)frag_normal_color.b, 0.0f, 255.0f, -1.0f, 1.0f));
+
+					frag_normal = Vector3(Util::Lerp((float)frag_normal_color.r, 0.0f, 255.0f, -1.0f, 1.0f),
+										  Util::Lerp((float)frag_normal_color.g, 0.0f, 255.0f, -1.0f, 1.0f),
+										  Util::Lerp((float)frag_normal_color.b, 0.0f, 255.0f, -1.0f, 1.0f));
+
+					// tangent bitangent normal matrix to translate normal to world space
+					Matrix4 tbn_mat = Matrix4().SetTBNMatrix(frag_tangent, frag_bitangent, frag_normal);
+
+					frag_normal *= tbn_mat;
+
+					// frag_normal.Normalize();
 				}
+
 				for (int i = 0; i < vert_lights_count; i++)
 				{
 					const Vector3& v0_position_light = vert_v0_light[i].GetPosition();

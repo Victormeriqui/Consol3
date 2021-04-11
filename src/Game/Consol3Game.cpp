@@ -70,13 +70,13 @@ namespace Game
 			.SetTextureResource("res/normalmap.bmp")
 			.SetNormalMapResource("res/normalmap.bmp")
 			.SetPosition(Vector3(-1, 0, 0))
-			.SetRotation(Angle(0, 3.14159f / 2 * 2, 0));
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		mesh2 = StaticMesh();
 		mesh2.SetModelResource("res/face.obj")
 			.SetTextureResource("res/normalmap.bmp")
 			.SetPosition(Vector3(1, 0, 0))
-			.SetRotation(Angle(0, 3.14159f / 2 * 2, 0));
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		plight_mesh = StaticMesh();
 		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
