@@ -37,6 +37,7 @@ namespace Game
 		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
+		resource_manager->LoadTexture("res/bricks_norm.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
@@ -101,9 +102,9 @@ namespace Game
 		spot_light2->SetIntensity(6.0f);
 
 		this->lighting_system->SetAmbientLight(0.2f);
-		// this->lighting_system->AddLight(dir_light);
+		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
-		this->lighting_system->AddLight(spot_light);
+		// this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -159,6 +160,7 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
+			mesh2.SetRotation(Angle(0, rot, 0));
 			rot += 0.01f;
 		}
 
