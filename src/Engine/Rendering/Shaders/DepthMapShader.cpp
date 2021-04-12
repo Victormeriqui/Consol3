@@ -15,8 +15,10 @@ namespace Engine
 				return true;	// IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 			}
 
-			void DepthMapShader::FragmentShader(HSVColor& out_color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+			HSVColor DepthMapShader::FragmentShader(
+				const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
+				return HSVColor();
 			}
 		}
 	}

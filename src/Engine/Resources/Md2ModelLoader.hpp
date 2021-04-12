@@ -53,13 +53,13 @@ namespace Engine
 			virtual bool LoadStaticModel(const std::string& filename,
 										 std::vector<Vertex>& out_vertices,
 										 std::vector<uint32_t>& out_indices,
-										 NormalGenerationOptions options) override;
+										 ModelLoadingOptions options) override;
 
 			virtual bool LoadAnimatedModel(const std::string& filename,
 										   std::vector<Frame>& out_frames,
 										   std::vector<uint32_t>& out_indices,
 										   std::map<std::string, Animation>& out_animations,
-										   NormalGenerationOptions options) override;
+										   ModelLoadingOptions options) override;
 		};
 	}
 }

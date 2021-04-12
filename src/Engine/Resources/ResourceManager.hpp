@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 
 namespace Engine
@@ -43,14 +44,14 @@ namespace Engine
 			bool LoadTexture(const std::string& filename,
 							 TextureLoadingOptions load_options,
 							 TextureWrapOptions wrap_options = TextureWrapOptions::BORDER);
-			bool LoadModel(const std::string& filename, NormalGenerationOptions options);
+			bool LoadModel(const std::string& filename, ModelLoadingOptions options);
 			void LoadTexture(const std::string& resource_name, const Texture& texture);
 			void LoadModel(const std::string& resource_name, const StaticModel& model);
 			void LoadModel(const std::string& resource_name, const AnimatedModel& model);
 
-			std::shared_ptr<Texture> GetLoadedTexture(const std::string& resource_name);
-			std::shared_ptr<StaticModel> GetLoadedStaticModel(const std::string& resource_name);
-			std::shared_ptr<AnimatedModel> GetLoadedAnimatedModel(const std::string& resource_name);
+			[[nodiscard]] std::optional<std::shared_ptr<Texture>> GetLoadedTexture(const std::string& resource_name);
+			[[nodiscard]] std::optional<std::shared_ptr<StaticModel>> GetLoadedStaticModel(const std::string& resource_name);
+			[[nodiscard]] std::optional<std::shared_ptr<AnimatedModel>> GetLoadedAnimatedModel(const std::string& resource_name);
 		};
 	}
 }

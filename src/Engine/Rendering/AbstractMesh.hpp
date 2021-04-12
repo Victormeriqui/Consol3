@@ -3,6 +3,7 @@
 
 #include "../../Display/HSVColor.hpp"
 #include "../../Display/RGBColor.hpp"
+#include "../../Display/RGBColorConstants.hpp"
 #include "../../Math/Angle.hpp"
 #include "../../Math/Vector3.hpp"
 #include "Transform.hpp"
@@ -21,11 +22,9 @@ namespace Engine
 		protected:
 			std::string model_resource;
 			std::string texture_resource;
-			bool has_texture;
+			std::string normal_map_resource;
 
-			// rgb color is the one that is actually exposed, hsvcolor is internal for the frambuffer
-			RGBColor rgbcolor;
-			HSVColor hsvcolor;
+			RGBColor color;
 
 			Transform transform;
 			// these fields are just for useful getters, the real values that are used in the transform are encoded in the matrices
@@ -35,34 +34,23 @@ namespace Engine
 
 		public:
 			AbstractMesh();
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const RGBColor& color = RGBColor());
-
-			AbstractMesh(const std::string& model_resource, const Vector3& position, const Angle& rotation, const RGBColor& color = RGBColor());
-
-			AbstractMesh(const std::string& model_resource,
-						 const std::string& texture_resource,
-						 const Vector3& position,
-						 const RGBColor& color = RGBColor());
-
-			AbstractMesh(const std::string& model_resource,
-						 const std::string& texture_resource,
-						 const Vector3& position,
-						 const Angle& rotation = Angle(),
-						 const RGBColor& color = RGBColor());
 
 			[[nodiscard]] const std::string& GetModelResource() const;
 			[[nodiscard]] const std::string& GetTextureResource() const;
+			[[nodiscard]] const std::string& GetNormalMapResource() const;
 			[[nodiscard]] RGBColor GetColor() const;
 			[[nodiscard]] Vector3 GetPosition() const;
 			[[nodiscard]] Angle GetRotation() const;
 			[[nodiscard]] Vector3 GetScale() const;
 			[[nodiscard]] const Transform& GetTransform() const;
 			[[nodiscard]] bool IsTextured() const;
+			[[nodiscard]] bool IsNormalMapped() const;
 
 			[[nodiscard]] virtual bool IsAnimated() const = 0;
 
 			AbstractMesh& SetModelResource(const std::string& model_resource);
 			AbstractMesh& SetTextureResource(const std::string& texture_resource);
+			AbstractMesh& SetNormalMapResource(const std::string& normal_map_resource);
 			AbstractMesh& SetColor(const RGBColor& color);
 			AbstractMesh& SetPosition(const Vector3& position);
 			AbstractMesh& SetRotation(const Angle& rotation);

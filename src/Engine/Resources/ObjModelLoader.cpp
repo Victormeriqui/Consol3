@@ -12,7 +12,7 @@ namespace Engine
 		bool ObjModelLoader::LoadStaticModel(const std::string& filename,
 											 std::vector<Vertex>& out_vertices,
 											 std::vector<uint32_t>& out_indices,
-											 NormalGenerationOptions options)
+											 ModelLoadingOptions options)
 		{
 			std::ifstream file_stream;
 
@@ -143,21 +143,25 @@ namespace Engine
 
 			file_stream.close();
 
-			switch (options)
+			switch (options.normal_options)
 			{
-			case NormalGenerationOptions::GENERATE_FORCED:
+			case GenerationCondition::ALWAYS:
 				Vertex::CalculateNormals(out_vertices, out_indices);
 				break;
 
-			case NormalGenerationOptions::GENERATE_IF_MISSING:
+			case GenerationCondition::IF_MISSING:
 				if (normals.empty())
 					Vertex::CalculateNormals(out_vertices, out_indices);
 				break;
 
-			case NormalGenerationOptions::GENERATE_DISABLED:
+			case GenerationCondition::NEVER:
 			default:
 				break;
 			}
+
+			// obj does not support tangents
+			if (options.tangent_options == GenerationCondition::ALWAYS || options.tangent_options == GenerationCondition::IF_MISSING)
+				Vertex::CalculateTangents(out_vertices, out_indices);
 
 			return true;
 		}
@@ -166,7 +170,7 @@ namespace Engine
 											   std::vector<Frame>& out_frames,
 											   std::vector<uint32_t>& out_indices,
 											   std::map<std::string, Animation>& out_animations,
-											   NormalGenerationOptions options)
+											   ModelLoadingOptions options)
 		{
 			return false;
 		}

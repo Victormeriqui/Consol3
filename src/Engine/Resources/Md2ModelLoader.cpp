@@ -35,7 +35,7 @@ namespace Engine
 		bool Md2ModelLoader::LoadStaticModel(const std::string& filename,
 											 std::vector<Vertex>& out_vertices,
 											 std::vector<uint32_t>& out_indices,
-											 NormalGenerationOptions options)
+											 ModelLoadingOptions options)
 		{
 			// TODO load only one frame's vertices
 			return false;
@@ -45,7 +45,7 @@ namespace Engine
 											   std::vector<Frame>& out_frames,
 											   std::vector<uint32_t>& out_indices,
 											   std::map<std::string, Animation>& out_animations,
-											   NormalGenerationOptions options)
+											   ModelLoadingOptions options)
 		{
 			std::ifstream file_stream;
 
@@ -175,7 +175,7 @@ namespace Engine
 												   ((float)pos_z * scale.z) + translation.z),
 										   texturecoord);
 
-					if (options == NormalGenerationOptions::GENERATE_DISABLED || options == NormalGenerationOptions::GENERATE_IF_MISSING)
+					if (options.normal_options == GenerationCondition::NEVER || options.normal_options == GenerationCondition::IF_MISSING)
 						vertex.SetNormal(md2_normals[normal_index]);
 
 					vertices.push_back(vertex);
@@ -219,10 +219,14 @@ namespace Engine
 				}
 			}
 
-			if (options == NormalGenerationOptions::GENERATE_FORCED)
+			for (Frame& frame : out_frames)
 			{
-				for (Frame& frame : out_frames)
+				if (options.normal_options == GenerationCondition::ALWAYS)
 					Vertex::CalculateNormals(*frame.vertices.get(), out_indices);
+
+				// md2 does not support tangents
+				if (options.tangent_options == GenerationCondition::ALWAYS || options.tangent_options == GenerationCondition::IF_MISSING)
+					Vertex::CalculateTangents(*frame.vertices.get(), out_indices);
 			}
 
 			return true;

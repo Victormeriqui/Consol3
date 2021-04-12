@@ -1,4 +1,6 @@
 #include "Matrix4.hpp"
+#include "Quaternion.hpp"
+#include "Vector3.hpp"
 
 #include "Util/MathUtil.hpp"
 
@@ -221,6 +223,45 @@ namespace Math
 		values[3][1] = 0;
 		values[3][2] = 0;
 		values[3][3] = 1;
+
+		return *this;
+	}
+
+	Matrix4& Matrix4::SetTBNMatrix(const Vector3& tangent, const Vector3& bitangent, const Vector3 normal)
+	{
+		values[0][0] = tangent.x;
+		values[0][1] = tangent.y;
+		values[0][2] = tangent.z;
+		values[0][3] = 0;
+		values[1][0] = bitangent.x;
+		values[1][1] = bitangent.y;
+		values[1][2] = bitangent.z;
+		values[1][3] = 0;
+		values[2][0] = normal.x;
+		values[2][1] = normal.y;
+		values[2][2] = normal.z;
+		values[2][3] = 0;
+		values[3][0] = 0;
+		values[3][1] = 0;
+		values[3][2] = 0;
+		values[3][3] = 1;
+
+		// values[0][0] = tangent.x;
+		// values[1][0] = tangent.y;
+		// values[2][0] = tangent.z;
+		// values[3][0] = 0;
+		// values[0][1] = bitangent.x;
+		// values[1][1] = bitangent.y;
+		// values[2][1] = bitangent.z;
+		// values[3][1] = 0;
+		// values[0][2] = normal.x;
+		// values[1][2] = normal.y;
+		// values[2][2] = normal.z;
+		// values[3][2] = 0;
+		// values[0][3] = 0;
+		// values[1][3] = 0;
+		// values[2][3] = 0;
+		// values[3][3] = 1;
 
 		return *this;
 	}
