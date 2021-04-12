@@ -17,28 +17,32 @@ namespace Game
 
 	void Consol3Game::LoadResources()
 	{
-		resource_manager->LoadModel("res/monkey.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("res/cube.obj", NormalGenerationOptions::GENERATE_DISABLED);
-		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.5f));
+		ModelLoadingOptions model_options;
+
+		resource_manager->LoadModel("res/monkey.obj", model_options);
+		resource_manager->LoadModel("res/face.obj", model_options);
+		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
-		resource_manager->LoadModel("res/alien.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/marvin.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/buggy.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/scarlet.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/warrior.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/raptor.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/penguin.md2", NormalGenerationOptions::GENERATE_FORCED);
-		resource_manager->LoadModel("res/centaur.md2", NormalGenerationOptions::GENERATE_FORCED);
+		resource_manager->LoadModel("res/alien.md2", model_options);
+		resource_manager->LoadModel("res/marvin.md2", model_options);
+		resource_manager->LoadModel("res/buggy.md2", model_options);
+		resource_manager->LoadModel("res/scarlet.md2", model_options);
+		resource_manager->LoadModel("res/warrior.md2", model_options);
+		resource_manager->LoadModel("res/raptor.md2", model_options);
+		resource_manager->LoadModel("res/penguin.md2", model_options);
+		resource_manager->LoadModel("res/centaur.md2", model_options);
 
 		resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
+		resource_manager->LoadTexture("res/bricks_norm.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
 		resource_manager->LoadTexture("res/earth.bmp", TextureLoadingOptions::DEFAULT);
+		resource_manager->LoadTexture("res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
 	}
 
 	float rot = 1.33f;
@@ -55,19 +59,31 @@ namespace Game
 		camera->SetPosition(Vector3(0, 0.1f, -1.155f));
 		this->scene_renderer->SetCamera(camera);
 
-		anim_mesh = AnimatedMesh("res/penguin.md2", "res/penguin.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		anim_mesh.SetPosition(Vector3(0.0f, -0.9f, 0.0f));
-		anim_mesh.SetScale(Vector3(0.05f, 0.05f, 0.05f));
-		anim_mesh.SetRotation(Angle(-90, 0, 0));
+		anim_mesh = AnimatedMesh();
+		anim_mesh.SetModelResource("res/penguin.md2")
+			.SetTextureResource("res/penguin.bmp")
+			.SetPosition(Vector3(0.0f, -0.9f, 0.0f))
+			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
+			.SetRotation(Angle(-90, 0, 0));
 
-		mesh = StaticMesh("sphere1", "res/earth.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		mesh.SetScale(Vector3(1, 1, 1));
-		//		mesh.SetRotation(Angle(0, 1.33f, 0));
-		plight_mesh = StaticMesh("res/cube.obj", Vector3(-2, 0, 0), RGBColor(255, 255, 255));
+		mesh = StaticMesh();
+		mesh.SetModelResource("res/face.obj")
+			.SetTextureResource("res/normalmap.bmp")
+			.SetNormalMapResource("res/normalmap.bmp")
+			.SetPosition(Vector3(-1, 0, 0))
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
-		floor = StaticMesh("plane50", "res/tiles.bmp", Vector3(0, 0, 0), RGBColor(255, 255, 255));
-		floor.SetScale(Vector3(12, 12, 12));
-		floor.SetPosition(Vector3(-6, -2, -6));
+		mesh2 = StaticMesh();
+		mesh2.SetModelResource("res/face.obj")
+			.SetTextureResource("res/normalmap.bmp")
+			.SetPosition(Vector3(1, 0, 0))
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
+
+		plight_mesh = StaticMesh();
+		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
+
+		floor = StaticMesh();
+		floor.SetModelResource("plane50").SetTextureResource("res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -2, -6));
 
 		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
 		dir_light->SetIntensity(0.9f);
@@ -88,7 +104,7 @@ namespace Game
 		this->lighting_system->SetAmbientLight(0.2f);
 		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
-		this->lighting_system->AddLight(spot_light);
+		// this->lighting_system->AddLight(spot_light);
 		// this->lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -144,6 +160,7 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
+			mesh2.SetRotation(Angle(0, rot, 0));
 			rot += 0.01f;
 		}
 
@@ -193,6 +210,7 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 		scene_renderer->DrawShadedMesh(mesh);
+		scene_renderer->DrawShadedMesh(mesh2);
 		// scene_renderer->DrawShadedMesh(anim_mesh);
 
 		scene_renderer->RenderScene(delta);

@@ -1,6 +1,8 @@
 #ifndef VECTOR3_HPP
 #define VECTOR3_HPP
 
+#include "Matrix4.hpp"
+
 namespace Math
 {
 	class Quaternion;
@@ -154,6 +156,24 @@ namespace Math
 		[[nodiscard]] constexpr Vector3 operator-() const
 		{
 			return Vector3(-x, -y, -z);
+		}
+
+		constexpr Vector3 operator*=(const Matrix4& mat) noexcept
+		{
+			float x_new = mat.values[0][0] * x + mat.values[0][1] * y + mat.values[0][2] * z + mat.values[0][3] * 1;
+			float y_new = mat.values[1][0] * x + mat.values[1][1] * y + mat.values[1][2] * z + mat.values[1][3] * 1;
+			float z_new = mat.values[2][0] * x + mat.values[2][1] * y + mat.values[2][2] * z + mat.values[2][3] * 1;
+
+			x = x_new;
+			y = y_new;
+			z = z_new;
+
+			return *this;
+		}
+
+		[[nodiscard]] constexpr Vector3 operator*(const Matrix4& mat) const noexcept
+		{
+			return Vector3(*this) *= mat;
 		}
 
 		[[nodiscard]] constexpr bool operator==(const Vector3& other) const noexcept

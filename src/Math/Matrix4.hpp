@@ -1,14 +1,14 @@
-#ifndef MATRIX_HPP
-#define MATRIX_HPP
-
-#include "Quaternion.hpp"
-#include "Vector3.hpp"
+#ifndef MATRIX4_HPP
+#define MATRIX4_HPP
 
 #include <algorithm>
 #include <cstdint>
 
 namespace Math
 {
+	class Quaternion;
+	class Vector3;
+
 	class Matrix4
 	{
 	public:
@@ -26,6 +26,7 @@ namespace Math
 		Matrix4& SetPerspectiveProjection(uint16_t width, uint16_t height, float znear, float zfar, float fov);
 		Matrix4& SetOrthographicProjection(float left, float right, float up, float down, float near, float far);
 		Matrix4& SetViewportMatrix(uint16_t width, uint16_t height);
+		Matrix4& SetTBNMatrix(const Vector3& tangent, const Vector3& bitangent, const Vector3 normal);
 
 		Matrix4& Invert();
 		Matrix4& Transpose();

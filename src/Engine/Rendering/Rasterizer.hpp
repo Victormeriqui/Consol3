@@ -1,7 +1,6 @@
 #ifndef RASTERIZER_HPP
 #define RASTERIZER_HPP
 
-#include "../../Display/HSVColor.hpp"
 #include "../../Display/IRenderer.hpp"
 #include "../../Display/RGBColor.hpp"
 #include "../../Math/Matrix4.hpp"
@@ -43,8 +42,8 @@ namespace Engine
 			inline Vertex GetTransformedVertexInverseViewProjection(const Vertex& vertex);
 			inline Vertex& TransformVertexScreenspace(Vertex& vertex);
 
-			void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader);
-			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const HSVColor& color, IShader& shader);
+			void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader);
+			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader);
 
 		public:
 			Rasterizer(std::shared_ptr<IRenderer> renderer);
@@ -55,8 +54,8 @@ namespace Engine
 			void SetProjectionMatrix(const Matrix4& projection_matrix);
 			void SetViewportMatrix(const Matrix4& viewport_matrix);
 
-			void DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const HSVColor& color, IShader& shader);
-			void DrawPixel(uint16_t x, uint16_t y, const HSVColor& color);
+			void DrawVertexBuffer(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader);
+			void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 		};
 	}
 }

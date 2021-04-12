@@ -51,6 +51,20 @@ namespace Display
 		{
 			return 0.3f * (color >> 16) + 0.59f * (color >> 8 & 0xFF) + 0.11f * (color & 0xFF);
 		}
+
+		constexpr RGBColor& BlendMultiply(RGBColor other)
+		{
+			r = (uint8_t)((r * other.r + 0xFF) >> 8);
+			g = (uint8_t)((g * other.g + 0xFF) >> 8);
+			b = (uint8_t)((b * other.b + 0xFF) >> 8);
+
+			return *this;
+		}
+
+		constexpr RGBColor GetBlendMultiplied(RGBColor other)
+		{
+			return RGBColor(*this).BlendMultiply(other);
+		}
 	};
 }
 

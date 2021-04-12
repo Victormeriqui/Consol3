@@ -10,9 +10,6 @@ namespace Engine
 	{
 		ResourceManager::ResourceManager()
 		{
-			texture_cache.emplace("null", std::move(std::make_shared<Texture>()));
-			static_model_cache.emplace("null", std::move(std::make_shared<StaticModel>()));
-			animated_model_cache.emplace("null", std::move(std::make_shared<AnimatedModel>()));
 		}
 
 		std::string ResourceManager::GetFileExtension(const std::string& filename) const
@@ -55,7 +52,7 @@ namespace Engine
 			return false;
 		}
 
-		bool ResourceManager::LoadModel(const std::string& filename, NormalGenerationOptions options)
+		bool ResourceManager::LoadModel(const std::string& filename, ModelLoadingOptions options)
 		{
 			if (static_model_cache.find(filename) != static_model_cache.end() && animated_model_cache.find(filename) != animated_model_cache.end())
 				return true;
@@ -115,26 +112,26 @@ namespace Engine
 			animated_model_cache.emplace(resource_name, std::move(std::make_shared<AnimatedModel>(model)));
 		}
 
-		std::shared_ptr<Texture> ResourceManager::GetLoadedTexture(const std::string& resource_name)
+		std::optional<std::shared_ptr<Texture>> ResourceManager::GetLoadedTexture(const std::string& resource_name)
 		{
 			if (texture_cache.find(resource_name) == texture_cache.end())
-				return texture_cache.at("null");
+				return std::nullopt;
 
 			return texture_cache.at(resource_name);
 		}
 
-		std::shared_ptr<StaticModel> ResourceManager::GetLoadedStaticModel(const std::string& resource_name)
+		std::optional<std::shared_ptr<StaticModel>> ResourceManager::GetLoadedStaticModel(const std::string& resource_name)
 		{
 			if (static_model_cache.find(resource_name) == static_model_cache.end())
-				return static_model_cache.at("null");
+				return std::nullopt;
 
 			return static_model_cache.at(resource_name);
 		}
 
-		std::shared_ptr<AnimatedModel> ResourceManager::GetLoadedAnimatedModel(const std::string& resource_name)
+		std::optional<std::shared_ptr<AnimatedModel>> ResourceManager::GetLoadedAnimatedModel(const std::string& resource_name)
 		{
 			if (animated_model_cache.find(resource_name) == animated_model_cache.end())
-				return animated_model_cache.at("null");
+				return std::nullopt;
 
 			return animated_model_cache.at(resource_name);
 		}
