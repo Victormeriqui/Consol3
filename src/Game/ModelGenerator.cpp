@@ -71,6 +71,7 @@ namespace Game
 		}
 
 		Vertex::CalculateNormals(vertices, indices);
+		Vertex::CalculateTangents(vertices, indices);
 
 		return StaticModel(vertices, indices);
 	}
