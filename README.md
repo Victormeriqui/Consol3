@@ -53,6 +53,9 @@ No external dependencies will ever be used in this engine, the goal is to do eve
 ###### Normal maps
 <img src="images/normal_map.png" width="200" height="200">  <img src="images/normal_map.gif" width="200" height="200">  
 
+###### Specular highlights
+<img src="images/specular.gif" width="200" height="200">
+
 ### Existing Renderers  
 Different renderers for the same scene can be used, these components basically decide how each pixel should be drawn to the console
 
