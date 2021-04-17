@@ -46,12 +46,19 @@ namespace Engine
 				return ambient_light;
 			}
 
-			float LightingSystem::GetLightAmountAt(const Vertex& vertex, const Vector3 vertex_position_lights[]) const
+			float LightingSystem::GetLightAmountAt(const Vertex& vertex,
+												   const Vector3& cam_pos,
+												   const Vector3 vertex_position_lights[],
+												   const MaterialProperties& material_properties) const
 			{
-				return GetLightAmountAt(vertex.GetPosition(), vertex.GetNormal(), vertex_position_lights);
+				return GetLightAmountAt(vertex.GetPosition(), vertex.GetNormal(), cam_pos, vertex_position_lights, material_properties);
 			}
 
-			float LightingSystem::GetLightAmountAt(const Vector3& position, const Vector3& normal, const Vector3 position_lights[]) const
+			float LightingSystem::GetLightAmountAt(const Vector3& position,
+												   const Vector3& normal,
+												   const Vector3& cam_pos,
+												   const Vector3 position_lights[],
+												   const MaterialProperties& material_properties) const
 			{
 				float light_amount = 0.0f;
 
@@ -60,7 +67,7 @@ namespace Engine
 				{
 					if (!light->IsShadowCaster())
 					{
-						light_amount += light->GetLightAmountAt(position, normal);
+						light_amount += light->GetLightAmountAt(position, normal, cam_pos, material_properties);
 						continue;
 					}
 
@@ -68,7 +75,7 @@ namespace Engine
 
 					if (!Util::IsInRange(position_light.x, -1.0f, 1.0f) || !Util::IsInRange(position_light.y, -1.0f, 1.0f))
 					{
-						light_amount += light->GetLightAmountAt(position, normal);
+						light_amount += light->GetLightAmountAt(position, normal, cam_pos, material_properties);
 						continue;
 					}
 
@@ -78,7 +85,7 @@ namespace Engine
 					float light_depth = light->GetLightDepthBuffer().value().get().GetValue(depthbuffer_x, depthbuffer_y);
 
 					if (position_light.z < (light_depth + light->GetBias().value()))
-						light_amount += light->GetLightAmountAt(position, normal);
+						light_amount += light->GetLightAmountAt(position, normal, cam_pos, material_properties);
 				}
 
 				return light_amount;

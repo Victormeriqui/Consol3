@@ -8,6 +8,7 @@
 #include "../Rasterizer.hpp"
 #include "../Transform.hpp"
 #include "../Vertex.hpp"
+#include "MaterialProperties.hpp"
 
 #include <memory>
 #include <vector>
@@ -35,8 +36,15 @@ namespace Engine
 
 				const std::vector<std::shared_ptr<ILight>> GetLights() const;
 
-				[[nodiscard]] float GetLightAmountAt(const Vertex& vertex, const Vector3 vertex_position_lights[]) const;
-				[[nodiscard]] float GetLightAmountAt(const Vector3& position, const Vector3& normal, const Vector3 position_lights[]) const;
+				[[nodiscard]] float GetLightAmountAt(const Vertex& vertex,
+													 const Vector3& cam_pos,
+													 const Vector3 vertex_position_lights[],
+													 const MaterialProperties& material_properties) const;
+				[[nodiscard]] float GetLightAmountAt(const Vector3& position,
+													 const Vector3& normal,
+													 const Vector3& cam_pos,
+													 const Vector3 position_lights[],
+													 const MaterialProperties& material_properties) const;
 
 				void ClearDepthBuffers();
 			};
