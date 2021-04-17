@@ -79,13 +79,7 @@ namespace Engine
 				float amount = normal.GetDotProduct(-light_dir);
 
 				amount = (amount * intensity) / attenuation_amount;
-
-				Vector3 view_dir = cam_pos - position;
-				Vector3 half_dir = (view_dir - light_dir).GetNormalized();
-				float specular	 = half_dir.GetDotProduct(normal);
-				specular		 = std::pow(specular, material_properties.specular_factor);
-
-				amount += (specular * material_properties.specular_intensity);
+				amount += GetSpecularHighlightAt(position, normal, cam_pos, light_dir, material_properties);
 
 				return std::max(0.0f, amount);
 			}
