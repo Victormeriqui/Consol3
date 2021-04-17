@@ -11,7 +11,8 @@ namespace Engine
 			transform(Transform()),
 			position(Vector3()),
 			rotation(Angle()),
-			scale(Vector3(1.0f, 1.0f, 1.0f))
+			scale(Vector3(1.0f, 1.0f, 1.0f)),
+			material_properties(MaterialProperties())
 		{
 		}
 
@@ -48,6 +49,11 @@ namespace Engine
 		Vector3 AbstractMesh::GetScale() const
 		{
 			return scale;
+		}
+
+		MaterialProperties AbstractMesh::GetMaterialProperties()
+		{
+			return material_properties;
 		}
 
 		const Transform& AbstractMesh::GetTransform() const
@@ -113,6 +119,12 @@ namespace Engine
 		{
 			this->scale = Vector3(scale);
 			transform.SetScale(scale);
+
+			return *this;
+		}
+		AbstractMesh& AbstractMesh::SetMaterialProperties(const MaterialProperties& material_properties)
+		{
+			this->material_properties = material_properties;
 
 			return *this;
 		}

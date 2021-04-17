@@ -70,6 +70,7 @@
     <ClInclude Include="src\Engine\Rendering\AnimatedMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\AnimatedModel.hpp" />
     <ClInclude Include="src\Engine\Rendering\Animation.h" />
+    <ClInclude Include="src\Engine\Rendering\Lighting\MaterialProperties.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\PlainShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\Shaders\ShadedShader.hpp" />
     <ClInclude Include="src\Engine\Rendering\TextureConstants.hpp" />

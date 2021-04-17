@@ -6,6 +6,7 @@
 #include "../../Display/RGBColorConstants.hpp"
 #include "../../Math/Angle.hpp"
 #include "../../Math/Vector3.hpp"
+#include "Lighting/MaterialProperties.hpp"
 #include "Transform.hpp"
 
 #include <string>
@@ -16,6 +17,7 @@ namespace Engine
 	{
 		using namespace Display;
 		using namespace Math;
+		using namespace Lighting;
 
 		class AbstractMesh
 		{
@@ -32,6 +34,8 @@ namespace Engine
 			Angle rotation;
 			Vector3 scale;
 
+			MaterialProperties material_properties;
+
 		public:
 			AbstractMesh();
 
@@ -42,6 +46,7 @@ namespace Engine
 			[[nodiscard]] Vector3 GetPosition() const;
 			[[nodiscard]] Angle GetRotation() const;
 			[[nodiscard]] Vector3 GetScale() const;
+			[[nodiscard]] MaterialProperties GetMaterialProperties();
 			[[nodiscard]] const Transform& GetTransform() const;
 			[[nodiscard]] bool IsTextured() const;
 			[[nodiscard]] bool IsNormalMapped() const;
@@ -55,6 +60,7 @@ namespace Engine
 			AbstractMesh& SetPosition(const Vector3& position);
 			AbstractMesh& SetRotation(const Angle& rotation);
 			AbstractMesh& SetScale(const Vector3& scale);
+			AbstractMesh& SetMaterialProperties(const MaterialProperties& material_properties);
 		};
 	}
 }

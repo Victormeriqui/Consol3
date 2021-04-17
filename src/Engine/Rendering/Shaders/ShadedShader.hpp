@@ -8,6 +8,7 @@
 #include "../../../Math/Matrix4.hpp"
 #include "../DepthBuffer.hpp"
 #include "../Lighting/LightingSystem.hpp"
+#include "../Lighting/MaterialProperties.hpp"
 #include "../Texture.hpp"
 #include "../Vertex.hpp"
 
@@ -28,6 +29,7 @@ namespace Engine
 			{
 			private:
 				std::shared_ptr<LightingSystem> lighting_system;
+				Vector3 camera_position;
 
 				std::shared_ptr<Texture> texture;
 				std::shared_ptr<Texture> normal_map;
@@ -52,6 +54,7 @@ namespace Engine
 				Vector3 frag_position_lights[10];
 
 				bool has_normal_map;
+				MaterialProperties material_properties;
 
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
@@ -63,6 +66,8 @@ namespace Engine
 				void SetTexture(std::shared_ptr<Texture> texture);
 				void SetNormalMap(std::shared_ptr<Texture> normal_map);
 				void DisableNormalMap();
+				void SetCameraPosition(const Vector3& cam_pos);
+				void SetMaterialProperties(const MaterialProperties& material_properties);
 			};
 		}
 	}
