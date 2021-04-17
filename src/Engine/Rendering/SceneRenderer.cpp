@@ -122,7 +122,8 @@ namespace Engine
 				std::optional<std::shared_ptr<Texture>> normal_map = resource_manager->GetLoadedTexture(mesh.get().GetNormalMapResource());
 
 				shader_shaded.SetTexture(texture.value_or(TextureConstants::White()));
-
+				shader_shaded.SetCameraPosition(camera->GetPosition());
+				shader_shaded.SetMaterialProperties(mesh.get().GetMaterialProperties());
 				if (normal_map.has_value())
 					shader_shaded.SetNormalMap(normal_map.value());
 				else

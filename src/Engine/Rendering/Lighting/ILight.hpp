@@ -4,6 +4,7 @@
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "../DepthBuffer.hpp"
+#include "MaterialProperties.hpp"
 
 #include <functional>
 #include <memory>
@@ -32,7 +33,10 @@ namespace Engine
 				}
 
 			public:
-				[[nodiscard]] virtual float GetLightAmountAt(const Vector3& position, const Vector3& normal) const = 0;
+				[[nodiscard]] virtual float GetLightAmountAt(const Vector3& position,
+															 const Vector3& normal,
+															 const Vector3& cam_pos,
+															 const MaterialProperties& material_properties) const = 0;
 
 				[[nodiscard]] virtual bool IsShadowCaster() const = 0;
 				// i dislike the need for the referece_wrapper here, but C++ optionals don't allow references
