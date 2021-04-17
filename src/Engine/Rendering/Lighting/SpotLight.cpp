@@ -128,7 +128,10 @@ namespace Engine
 				this->intensity = intensity;
 			}
 
-			float SpotLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
+			float SpotLight::GetLightAmountAt(const Vector3& position,
+											  const Vector3& normal,
+											  const Vector3& cam_pos,
+											  const MaterialProperties& material_properties) const
 			{
 				Vector3 light_dir = position - this->position;
 				float light_dist  = light_dir.GetLength();
@@ -150,6 +153,13 @@ namespace Engine
 				float amount = normal.GetDotProduct(-light_dir);
 
 				amount = (amount * intensity) / attenuation_amount;
+
+				Vector3 view_dir = cam_pos - position;
+				Vector3 half_dir = (view_dir - light_dir).GetNormalized();
+				float specular	 = half_dir.GetDotProduct(normal);
+				specular		 = std::pow(specular, material_properties.specular_factor);
+
+				amount += (specular * material_properties.specular_intensity);
 
 				return std::max(0.0f, amount);
 			}

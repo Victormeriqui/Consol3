@@ -37,7 +37,10 @@ namespace Engine
 				[[nodiscard]] float GetIntensity() const;
 				void SetIntensity(float intensity);
 
-				virtual float GetLightAmountAt(const Vector3& position, const Vector3& normal) const override;
+				virtual float GetLightAmountAt(const Vector3& position,
+											   const Vector3& normal,
+											   const Vector3& cam_pos,
+											   const MaterialProperties& material_properties) const override;
 
 				virtual bool IsShadowCaster() const override;
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;

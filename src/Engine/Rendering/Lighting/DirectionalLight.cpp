@@ -79,11 +79,21 @@ namespace Engine
 				this->intensity = intensity;
 			}
 
-			float DirectionalLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
+			float DirectionalLight::GetLightAmountAt(const Vector3& position,
+													 const Vector3& normal,
+													 const Vector3& cam_pos,
+													 const MaterialProperties& material_properties) const
 			{
 				float amount = normal.GetDotProduct(-direction);
 
 				amount *= intensity;
+
+				Vector3 view_dir = cam_pos - position;
+				Vector3 half_dir = (view_dir - direction).GetNormalized();
+				float specular	 = half_dir.GetDotProduct(normal);
+				specular		 = std::pow(specular, material_properties.specular_factor);
+
+				amount += (specular * material_properties.specular_intensity);
 
 				return std::max(0.0f, amount);
 			}
