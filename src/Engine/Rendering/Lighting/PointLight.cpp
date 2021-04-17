@@ -61,7 +61,10 @@ namespace Engine
 				this->intensity = intensity;
 			}
 
-			float PointLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
+			float PointLight::GetLightAmountAt(const Vector3& position,
+											   const Vector3& normal,
+											   const Vector3& cam_pos,
+											   const MaterialProperties& material_properties) const
 			{
 				Vector3 light_dir = position - this->position;
 				float light_dist  = light_dir.GetLength();
@@ -76,6 +79,7 @@ namespace Engine
 				float amount = normal.GetDotProduct(-light_dir);
 
 				amount = (amount * intensity) / attenuation_amount;
+				amount += GetSpecularHighlightAt(position, normal, cam_pos, light_dir, material_properties);
 
 				return std::max(0.0f, amount);
 			}

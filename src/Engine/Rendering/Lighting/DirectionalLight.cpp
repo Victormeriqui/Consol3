@@ -79,11 +79,16 @@ namespace Engine
 				this->intensity = intensity;
 			}
 
-			float DirectionalLight::GetLightAmountAt(const Vector3& position, const Vector3& normal) const
+			float DirectionalLight::GetLightAmountAt(const Vector3& position,
+													 const Vector3& normal,
+													 const Vector3& cam_pos,
+													 const MaterialProperties& material_properties) const
 			{
 				float amount = normal.GetDotProduct(-direction);
 
 				amount *= intensity;
+
+				amount += GetSpecularHighlightAt(position, normal, cam_pos, direction, material_properties);
 
 				return std::max(0.0f, amount);
 			}
