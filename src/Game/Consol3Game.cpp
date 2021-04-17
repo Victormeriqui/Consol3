@@ -21,6 +21,7 @@ namespace Game
 
 		resource_manager->LoadModel("res/monkey.obj", model_options);
 		resource_manager->LoadModel("res/face.obj", model_options);
+		resource_manager->LoadModel("res/cube.obj", model_options);
 		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
@@ -64,20 +65,14 @@ namespace Game
 			.SetTextureResource("res/penguin.bmp")
 			.SetPosition(Vector3(0.0f, -0.9f, 0.0f))
 			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
-			.SetRotation(Angle(-90, 0, 0));
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		mesh = StaticMesh();
-		mesh.SetModelResource("res/face.obj")
-			.SetTextureResource("res/normalmap.bmp")
-			.SetNormalMapResource("res/normalmap.bmp")
-			.SetPosition(Vector3(-1, 0, 0))
-			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
-
-		mesh2 = StaticMesh();
-		mesh2.SetModelResource("res/face.obj")
-			.SetTextureResource("res/normalmap.bmp")
-			.SetPosition(Vector3(1, 0, 0))
-			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
+		mesh.SetModelResource("res/monkey.obj")
+			.SetPosition(Vector3(0, 1, 0))
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
+			.SetScale(Vector3(1.1f, 1.1f, 1.1f))
+			.SetMaterialProperties(MaterialProperties(5.0f, 1.6f));
 
 		plight_mesh = StaticMesh();
 		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
@@ -86,26 +81,21 @@ namespace Game
 		floor.SetModelResource("plane50").SetTextureResource("res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -2, -6));
 
 		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
-		dir_light->SetIntensity(0.9f);
+		dir_light->SetIntensity(0.4f);
 
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
-		point_light->SetRange(15.0f);
+		point_light->SetRange(25.0f);
+		point_light->SetIntensity(2.0f);
 
 		spot_light = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
 		spot_light->SetRange(15.0f);
 		spot_light->SetAngle(20.0f);
 		spot_light->SetIntensity(6.0f);
 
-		spot_light2 = std::make_shared<SpotLight>(Vector3(0, 0.1f, -2.0f), Vector3(0, 0, 1));
-		spot_light2->SetRange(15.0f);
-		spot_light2->SetAngle(20.0f);
-		spot_light2->SetIntensity(6.0f);
-
 		this->lighting_system->SetAmbientLight(0.2f);
 		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		// this->lighting_system->AddLight(spot_light);
-		// this->lighting_system->AddLight(spot_light2);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -159,8 +149,7 @@ namespace Game
 
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
-			mesh.SetRotation(Angle(0, rot, 0));
-			mesh2.SetRotation(Angle(0, rot, 0));
+			// mesh.SetRotation(Angle(0, rot, 0));
 			rot += 0.01f;
 		}
 
@@ -181,7 +170,11 @@ namespace Game
 		}
 
 		if (GetKeyState(VK_MBUTTON) & 0X8000)
+		{
 			dir_light->SetDirection(camera->GetLookDirection());
+			point_light->SetPosition(camera->GetPosition());
+			plight_mesh.SetPosition(camera->GetPosition());
+		}
 
 		if (GetKeyState(VK_RBUTTON) & 0X8000)
 		{
@@ -190,16 +183,14 @@ namespace Game
 		}
 		if (GetKeyState(VK_LBUTTON) & 0X8000)
 		{
-			spot_light2->SetPosition(camera->GetPosition());
-			spot_light2->SetDirection(camera->GetLookDirection());
 		}
 	}
 
 	float i = 0;
 	void Consol3Game::Update()
 	{
-		point_light->SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
-		plight_mesh.SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
+		// point_light->SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
+		// plight_mesh.SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
 
 		i += 0.01f;
 	}
@@ -209,9 +200,12 @@ namespace Game
 		auto time = std::chrono::high_resolution_clock::now();
 
 		scene_renderer->DrawShadedMesh(floor);
+
 		scene_renderer->DrawShadedMesh(mesh);
-		scene_renderer->DrawShadedMesh(mesh2);
-		// scene_renderer->DrawShadedMesh(anim_mesh);
+
+		scene_renderer->DrawMesh(plight_mesh);
+
+		//	scene_renderer->DrawShadedMesh(anim_mesh);
 
 		scene_renderer->RenderScene(delta);
 		/*
