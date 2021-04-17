@@ -20,7 +20,7 @@ namespace Game
 		ModelLoadingOptions model_options;
 
 		resource_manager->LoadModel("res/monkey.obj", model_options);
-		resource_manager->LoadModel("res/face.obj", model_options);
+		resource_manager->LoadModel("res/bunny.obj", model_options);
 		resource_manager->LoadModel("res/cube.obj", model_options);
 		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
@@ -68,11 +68,18 @@ namespace Game
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		mesh = StaticMesh();
-		mesh.SetModelResource("res/monkey.obj")
-			.SetPosition(Vector3(0, 1, 0))
+		mesh.SetModelResource("res/bunny.obj")
+			.SetPosition(Vector3(2, 1, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
-			.SetScale(Vector3(1.1f, 1.1f, 1.1f))
-			.SetMaterialProperties(MaterialProperties(5.0f, 1.6f));
+			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
+			.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
+
+		mesh2 = StaticMesh();
+		mesh2.SetModelResource("res/bunny.obj")
+			.SetPosition(Vector3(-2, 1, 0))
+			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
+			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
+			.SetMaterialProperties(MaterialProperties(0.0f, 0.0f));
 
 		plight_mesh = StaticMesh();
 		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
@@ -85,16 +92,16 @@ namespace Game
 
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
 		point_light->SetRange(25.0f);
-		point_light->SetIntensity(2.0f);
+		point_light->SetIntensity(5.0f);
 
 		spot_light = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
 		spot_light->SetRange(15.0f);
 		spot_light->SetAngle(20.0f);
 		spot_light->SetIntensity(6.0f);
 
-		this->lighting_system->SetAmbientLight(0.2f);
-		this->lighting_system->AddLight(dir_light);
-		// this->lighting_system->AddLight(point_light);
+		this->lighting_system->SetAmbientLight(0.02f);
+		// this->lighting_system->AddLight(dir_light);
+		this->lighting_system->AddLight(point_light);
 		// this->lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -149,7 +156,8 @@ namespace Game
 
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
-			// mesh.SetRotation(Angle(0, rot, 0));
+			mesh.SetRotation(Angle(0, rot, 0));
+			mesh2.SetRotation(Angle(0, rot, 0));
 			rot += 0.01f;
 		}
 
@@ -202,6 +210,7 @@ namespace Game
 		scene_renderer->DrawShadedMesh(floor);
 
 		scene_renderer->DrawShadedMesh(mesh);
+		scene_renderer->DrawShadedMesh(mesh2);
 
 		scene_renderer->DrawMesh(plight_mesh);
 
