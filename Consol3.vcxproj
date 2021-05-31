@@ -58,6 +58,7 @@
     <ClCompile Include="src\Math\Angle.cpp" />
     <ClCompile Include="src\Math\Matrix4.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
+    <ClCompile Include="src\Math\SIMDVector3.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
   </ItemGroup>
@@ -118,6 +119,7 @@
     <ClInclude Include="src\Math\Matrix4.hpp" />
     <ClInclude Include="src\Math\Point2.hpp" />
     <ClInclude Include="src\Math\Quaternion.hpp" />
+    <ClInclude Include="src\Math\SIMDVector3.hpp" />
     <ClInclude Include="src\Math\Util\MathUtil.hpp" />
     <ClInclude Include="src\Math\Vector2.hpp" />
     <ClInclude Include="src\Math\Vector3.hpp" />

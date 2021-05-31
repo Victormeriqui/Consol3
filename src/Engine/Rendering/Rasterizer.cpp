@@ -3,6 +3,7 @@
 #include "../../Math/Point2.hpp"
 
 #include <algorithm>
+#include <immintrin.h>
 
 namespace Engine
 {
@@ -121,49 +122,67 @@ namespace Engine
 
 			Point2 point = Point2(bbox_min.x, bbox_min.y);
 
-			TriangleEdge edge0 = TriangleEdge(triangle.v1_screen, triangle.v2_screen, point);
-			TriangleEdge edge1 = TriangleEdge(triangle.v2_screen, triangle.v0_screen, point);
-			TriangleEdge edge2 = TriangleEdge(triangle.v0_screen, triangle.v1_screen, point);
-			TriangleEdge area  = TriangleEdge(triangle.v0_screen, triangle.v1_screen, triangle.v2_screen);
+			SIMDTriangleEdge edge0 = SIMDTriangleEdge(triangle.v1_screen, triangle.v2_screen, point);
+			SIMDTriangleEdge edge1 = SIMDTriangleEdge(triangle.v2_screen, triangle.v0_screen, point);
+			SIMDTriangleEdge edge2 = SIMDTriangleEdge(triangle.v0_screen, triangle.v1_screen, point);
+
+			TriangleEdge area = TriangleEdge(triangle.v0_screen, triangle.v1_screen, triangle.v2_screen);
 
 			// degenerate triangle
-			if (area.edgefunction_res == 0)
+			if (area.edgefunction_result == 0)
 				return;
-
 			for (uint16_t y = bbox_min.y; y <= bbox_max.y; y++)
 			{
-				int32_t edge0_mag_xy = edge0.edgefunction_res;
-				int32_t edge1_mag_xy = edge1.edgefunction_res;
-				int32_t edge2_mag_xy = edge2.edgefunction_res;
+				__m128i edge0_mags_xy = edge0.edgefunction_results;
+				__m128i edge1_mags_xy = edge1.edgefunction_results;
+				__m128i edge2_mags_xy = edge2.edgefunction_results;
 
-				for (uint16_t x = bbox_min.x; x <= bbox_max.x; x++)
+				for (uint16_t x = bbox_min.x; x < bbox_max.x; x += 4)
 				{
-					if ((edge0_mag_xy | edge1_mag_xy | edge2_mag_xy) >= 0)
+					// OR the magnitudes for each edge on all parallel pixels
+					__m128i joint_magnitudes = _mm_or_si128(_mm_or_si128(edge0_mags_xy, edge1_mags_xy), edge2_mags_xy);
+					// 0 or !0 if the join magnitude is greater or equal 0, for each pixel
+					__m128i are_inside_triangle = _mm_cmplt_epi32(_mm_set1_epi32(0), joint_magnitudes);
+
+					// if any pixel is inside the triangle
+					uint32_t should_draw = _mm_movemask_epi8(are_inside_triangle);
+
+					if (should_draw)
 					{
-						float barcoord0 = edge0_mag_xy / (float)area.edgefunction_res;
-						float barcoord1 = edge1_mag_xy / (float)area.edgefunction_res;
+						__m128 barcoords0 = _mm_div_ps(_mm_cvtepi32_ps(edge0_mags_xy), _mm_set1_ps((float)area.edgefunction_result));
+						__m128 barcoords1 = _mm_div_ps(_mm_cvtepi32_ps(edge1_mags_xy), _mm_set1_ps((float)area.edgefunction_result));
 						// the sum of the 3 barycentric coords is 1, this avoids a division
-						float barcoord2 = 1.0f - (barcoord0 + barcoord1);
+						__m128 barcoords2 = _mm_sub_ps(_mm_set1_ps(1.0f), _mm_add_ps(barcoords0, barcoords1));
 
-						float z = barcoord0 * triangle.v0_screen.z + barcoord1 * triangle.v1_screen.z + barcoord2 * triangle.v2_screen.z;
+						// z = barcoord0 * triangle.v0_screen.z + barcoord1 * triangle.v1_screen.z + barcoord2 * triangle.v2_screen.z;
+						__m128 z_values = _mm_add_ps(_mm_add_ps(_mm_mul_ps(barcoords0, _mm_set1_ps(triangle.v0_screen.z)),
+																_mm_mul_ps(barcoords1, _mm_set1_ps(triangle.v1_screen.z))),
+													 _mm_mul_ps(barcoords2, _mm_set1_ps(triangle.v2_screen.z)));
 
-						if (depthbuffer.GetValue(x, y) > z)
-						{
-							HSVColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2);
+						__m128 depth_values = depthbuffer.GetValueRow(x, y).xyzw;
 
-							depthbuffer.SetValue(x, y, z);
-							renderer->SetPixel(x, y, out_color);
-						}
+						// 0 or !0 if the depth test passed, for each pixel
+						__m128i are_not_occluded = _mm_castps_si128(_mm_cmplt_ps(z_values, depth_values));
+
+						__m128i out_mask = _mm_and_si128(are_not_occluded, are_inside_triangle);
+
+						renderer->SetPixel(x, y, HSVColor(color));
+
+						renderer->SetPixel(x + 1, y, HSVColor(color));
+
+						renderer->SetPixel(x + 2, y, HSVColor(color));
+
+						renderer->SetPixel(x + 3, y, HSVColor(color));
 					}
 
-					edge0_mag_xy += edge0.step_delta_x;
-					edge1_mag_xy += edge1.step_delta_x;
-					edge2_mag_xy += edge2.step_delta_x;
+					edge0_mags_xy = _mm_add_epi32(edge0_mags_xy, edge0.steps_delta_x);
+					edge1_mags_xy = _mm_add_epi32(edge1_mags_xy, edge1.steps_delta_x);
+					edge2_mags_xy = _mm_add_epi32(edge2_mags_xy, edge2.steps_delta_x);
 				}
 
-				edge0.edgefunction_res += edge0.step_delta_y;
-				edge1.edgefunction_res += edge1.step_delta_y;
-				edge2.edgefunction_res += edge2.step_delta_y;
+				edge0.edgefunction_results = _mm_add_epi32(edge0.edgefunction_results, edge0.steps_delta_y);
+				edge1.edgefunction_results = _mm_add_epi32(edge1.edgefunction_results, edge1.steps_delta_y);
+				edge2.edgefunction_results = _mm_add_epi32(edge2.edgefunction_results, edge2.steps_delta_y);
 			}
 		}
 
