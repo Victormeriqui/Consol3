@@ -6,12 +6,13 @@
 #include "Vertex.hpp"
 
 #include <cstdint>
+#include <emmintrin.h>
+#include <smmintrin.h>
 
 namespace Engine
 {
 	namespace Rendering
 	{
-		// a triangle edge for rasterization, initializes with the edge function value for the given point
 		struct TriangleEdge
 		{
 			// the x component step of the edge function for each pixel to the right
@@ -21,7 +22,7 @@ namespace Engine
 
 			// the value of the edge function will be initialized with the result for the starting
 			// pixel, remaining values can be stepped with the deltas
-			int32_t edgefunction_res;
+			int32_t edgefunction_result;
 
 			// calculates the edge function for a specific point (starting point), and fills in the step deltas taken from the function's components
 			TriangleEdge(const Point2& v0, const Point2& v1, const Point2& start_point)
@@ -40,7 +41,49 @@ namespace Engine
 				step_delta_y = comp2;
 
 				// calculate the whole edge function for the point
-				edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
+				edgefunction_result = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
+			}
+		};
+
+		static const uint8_t step_x_size = 4;
+		static const uint8_t step_y_size = 1;
+
+		// a triangle edge for rasterization, initializes with the edge function value for the given point
+		struct SIMDTriangleEdge
+		{
+			// the x component step of the edge function for each pixel to the right, spread on a vector for parallel stepping
+			__m128i steps_delta_x;
+			// the y component step of the edge function for each pixel down, spread on  a vector for parallel stepping
+			__m128i steps_delta_y;
+
+			// the value of the edge function will be initialized with the results for the starting
+			// pixels, remaining values can be stepped with the deltas
+			__m128i edgefunction_results;
+
+			// calculates the edge function for a specific point (starting point), and fills in the step deltas taken from the function's components
+			SIMDTriangleEdge(const Point2& v0, const Point2& v1, const Point2& start_point)
+			{
+				// edge function: F(p) = (v0.y - v1.y)*start_point.x + (v1.x - v0.x)*start_point.y + (v0.x * v1.y - v0.y * v0.x)
+				// this will have one sign if the point is to the left of the edge (v0 -> v1), and another sign if it is to the right
+				// the actual sign will depend if the edges are defined clockwise or counter-clockwise
+
+				// calculate each component without the point
+				int32_t comp1 = v0.y - v1.y;
+				int32_t comp2 = v1.x - v0.x;
+				int32_t comp3 = v0.x * v1.y - v0.y * v1.x;
+
+				// step deltas, spread in a vector
+				steps_delta_x = _mm_set1_epi32(comp1 * step_x_size);
+				steps_delta_y = _mm_set1_epi32(comp2 * step_y_size);
+
+				__m128i start_points_x = _mm_add_epi32(_mm_set1_epi32(start_point.x), _mm_set_epi32(3, 2, 1, 0));
+				__m128i start_points_y = _mm_set1_epi32(start_point.y);
+
+				// calculate the whole edge function for the point
+				// edgefunction_res = (comp1 * start_point.x) + (comp2 * start_point.y) + comp3;
+				edgefunction_results = _mm_add_epi32(
+					_mm_add_epi32(_mm_mullo_epi32(_mm_set1_epi32(comp1), start_points_x), _mm_mullo_epi32(_mm_set1_epi32(comp2), start_points_y)),
+					_mm_set1_epi32(comp3));
 			}
 		};
 

@@ -20,20 +20,22 @@ namespace Game
 		ModelLoadingOptions model_options;
 
 		resource_manager->LoadModel("res/monkey.obj", model_options);
-		resource_manager->LoadModel("res/bunny.obj", model_options);
+		// resource_manager->LoadModel("res/bunny.obj", model_options);
 		resource_manager->LoadModel("res/cube.obj", model_options);
+		resource_manager->LoadModel("res/face.obj", model_options);
 		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
-		resource_manager->LoadModel("res/alien.md2", model_options);
+		/*resource_manager->LoadModel("res/alien.md2", model_options);
 		resource_manager->LoadModel("res/marvin.md2", model_options);
 		resource_manager->LoadModel("res/buggy.md2", model_options);
 		resource_manager->LoadModel("res/scarlet.md2", model_options);
 		resource_manager->LoadModel("res/warrior.md2", model_options);
 		resource_manager->LoadModel("res/raptor.md2", model_options);
-		resource_manager->LoadModel("res/penguin.md2", model_options);
-		resource_manager->LoadModel("res/centaur.md2", model_options);
 
+		resource_manager->LoadModel("res/centaur.md2", model_options);
+		*/
+		resource_manager->LoadModel("res/penguin.md2", model_options);
 		resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
 		resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
@@ -53,7 +55,7 @@ namespace Game
 		scene_renderer(std::move(scene_renderer)),
 		resource_manager(std::move(resource_manager)),
 		lighting_system(std::move(lighting_system)),
-		camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f))
+		camera(std::make_shared<Camera>(400, 400, 0.001f, 100.0f, 90.0f))
 	{
 		LoadResources();
 
@@ -68,18 +70,11 @@ namespace Game
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		mesh = StaticMesh();
-		mesh.SetModelResource("res/bunny.obj")
-			.SetPosition(Vector3(2, 1, 0))
+		mesh.SetModelResource("res/monkey.obj")
+			.SetPosition(Vector3(0, 1, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
-			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
-			.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
-
-		mesh2 = StaticMesh();
-		mesh2.SetModelResource("res/bunny.obj")
-			.SetPosition(Vector3(-2, 1, 0))
-			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
-			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
-			.SetMaterialProperties(MaterialProperties(0.0f, 0.0f));
+			.SetScale(Vector3(1.0f, 1.0f, 1.0f));
+		//.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
 
 		plight_mesh = StaticMesh();
 		plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
@@ -99,10 +94,10 @@ namespace Game
 		spot_light->SetAngle(20.0f);
 		spot_light->SetIntensity(6.0f);
 
-		this->lighting_system->SetAmbientLight(0.02f);
+		this->lighting_system->SetAmbientLight(0.1f);
 		// this->lighting_system->AddLight(dir_light);
-		this->lighting_system->AddLight(point_light);
-		// this->lighting_system->AddLight(spot_light);
+		//		this->lighting_system->AddLight(point_light);
+		this->lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -157,7 +152,6 @@ namespace Game
 		if (GetKeyState(VK_NUMPAD1) & 0x8000)
 		{
 			mesh.SetRotation(Angle(0, rot, 0));
-			mesh2.SetRotation(Angle(0, rot, 0));
 			rot += 0.01f;
 		}
 
@@ -207,12 +201,10 @@ namespace Game
 	{
 		auto time = std::chrono::high_resolution_clock::now();
 
-		scene_renderer->DrawShadedMesh(floor);
+		// scene_renderer->DrawShadedMesh(floor);
 
-		scene_renderer->DrawShadedMesh(mesh);
-		scene_renderer->DrawShadedMesh(mesh2);
-
-		scene_renderer->DrawMesh(plight_mesh);
+		scene_renderer->DrawMesh(mesh);
+		// scene_renderer->DrawMesh(plight_mesh);
 
 		//	scene_renderer->DrawShadedMesh(anim_mesh);
 

@@ -42,7 +42,6 @@ namespace Game
 		std::shared_ptr<Camera> camera;
 
 		StaticMesh mesh;
-		StaticMesh mesh2;
 
 		AnimatedMesh anim_mesh;
 		StaticMesh floor;
