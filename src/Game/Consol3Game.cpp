@@ -20,7 +20,7 @@ namespace Game
 		ModelLoadingOptions model_options;
 
 		resource_manager->LoadModel("res/monkey.obj", model_options);
-		// resource_manager->LoadModel("res/bunny.obj", model_options);
+		resource_manager->LoadModel("res/bunny.obj", model_options);
 		resource_manager->LoadModel("res/cube.obj", model_options);
 		resource_manager->LoadModel("res/face.obj", model_options);
 		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
@@ -70,7 +70,7 @@ namespace Game
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		mesh = StaticMesh();
-		mesh.SetModelResource("res/monkey.obj")
+		mesh.SetModelResource("res/face.obj")
 			.SetPosition(Vector3(0, 1, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
 			.SetScale(Vector3(1.0f, 1.0f, 1.0f));

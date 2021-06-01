@@ -133,56 +133,137 @@ namespace Engine
 				return;
 			for (uint16_t y = bbox_min.y; y <= bbox_max.y; y++)
 			{
-				__m128i edge0_mags_xy = edge0.edgefunction_results;
-				__m128i edge1_mags_xy = edge1.edgefunction_results;
-				__m128i edge2_mags_xy = edge2.edgefunction_results;
+				__m256i edge0_mags_xy = edge0.edgefunction_results;
+				__m256i edge1_mags_xy = edge1.edgefunction_results;
+				__m256i edge2_mags_xy = edge2.edgefunction_results;
 
-				for (uint16_t x = bbox_min.x; x < bbox_max.x; x += 4)
+				for (uint16_t x = bbox_min.x; x < bbox_max.x; x += 8)
 				{
 					// OR the magnitudes for each edge on all parallel pixels
-					__m128i joint_magnitudes = _mm_or_si128(_mm_or_si128(edge0_mags_xy, edge1_mags_xy), edge2_mags_xy);
+					__m256i joint_magnitudes = _mm256_or_si256(_mm256_or_si256(edge0_mags_xy, edge1_mags_xy), edge2_mags_xy);
 					// 0 or !0 if the join magnitude is greater or equal 0, for each pixel
-					__m128i are_inside_triangle = _mm_cmplt_epi32(_mm_set1_epi32(0), joint_magnitudes);
+					__m256i are_inside_triangle = _mm256_cmpgt_epi32(joint_magnitudes, _mm256_set1_epi32(-1));
 
 					// if any pixel is inside the triangle
-					uint32_t should_draw = _mm_movemask_epi8(are_inside_triangle);
+					uint32_t should_draw = _mm256_movemask_epi8(are_inside_triangle);
 
 					if (should_draw)
 					{
-						__m128 barcoords0 = _mm_div_ps(_mm_cvtepi32_ps(edge0_mags_xy), _mm_set1_ps((float)area.edgefunction_result));
-						__m128 barcoords1 = _mm_div_ps(_mm_cvtepi32_ps(edge1_mags_xy), _mm_set1_ps((float)area.edgefunction_result));
+						__m256 barcoords0 = _mm256_div_ps(_mm256_cvtepi32_ps(edge0_mags_xy), _mm256_set1_ps((float)area.edgefunction_result));
+						__m256 barcoords1 = _mm256_div_ps(_mm256_cvtepi32_ps(edge1_mags_xy), _mm256_set1_ps((float)area.edgefunction_result));
 						// the sum of the 3 barycentric coords is 1, this avoids a division
-						__m128 barcoords2 = _mm_sub_ps(_mm_set1_ps(1.0f), _mm_add_ps(barcoords0, barcoords1));
+						__m256 barcoords2 = _mm256_sub_ps(_mm256_set1_ps(1.0f), _mm256_add_ps(barcoords0, barcoords1));
 
 						// z = barcoord0 * triangle.v0_screen.z + barcoord1 * triangle.v1_screen.z + barcoord2 * triangle.v2_screen.z;
-						__m128 z_values = _mm_add_ps(_mm_add_ps(_mm_mul_ps(barcoords0, _mm_set1_ps(triangle.v0_screen.z)),
-																_mm_mul_ps(barcoords1, _mm_set1_ps(triangle.v1_screen.z))),
-													 _mm_mul_ps(barcoords2, _mm_set1_ps(triangle.v2_screen.z)));
+						__m256 z_values = _mm256_add_ps(_mm256_add_ps(_mm256_mul_ps(barcoords0, _mm256_set1_ps(triangle.v0_screen.z)),
+																	  _mm256_mul_ps(barcoords1, _mm256_set1_ps(triangle.v1_screen.z))),
+														_mm256_mul_ps(barcoords2, _mm256_set1_ps(triangle.v2_screen.z)));
 
-						__m128 depth_values = depthbuffer.GetValueRow(x, y).xyzw;
+						__m256 depth_values = depthbuffer.GetValueRow(x, y).row;
 
 						// 0 or !0 if the depth test passed, for each pixel
-						__m128i are_not_occluded = _mm_castps_si128(_mm_cmplt_ps(z_values, depth_values));
+						__m256i are_not_occluded = _mm256_castps_si256(_mm256_cmp_ps(z_values, depth_values, _CMP_LT_OS));
 
-						__m128i out_mask = _mm_and_si128(are_not_occluded, are_inside_triangle);
+						__m256i out_mask = _mm256_and_si256(are_not_occluded, are_inside_triangle);
 
-						renderer->SetPixel(x, y, HSVColor(color));
+						if (_mm256_extract_epi32(out_mask, 0))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 0)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 0)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 0)));
 
-						renderer->SetPixel(x + 1, y, HSVColor(color));
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 0)));
 
-						renderer->SetPixel(x + 2, y, HSVColor(color));
+							depthbuffer.SetValue(x, y, z);
+							renderer->SetPixel(x, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 1))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 1)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 1)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 1)));
 
-						renderer->SetPixel(x + 3, y, HSVColor(color));
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 1)));
+
+							depthbuffer.SetValue(x + 1, y, z);
+							renderer->SetPixel(x + 1, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 2))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 2)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 2)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 2)));
+
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 2)));
+
+							depthbuffer.SetValue(x + 2, y, z);
+							renderer->SetPixel(x + 2, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 3))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 3)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 3)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 3)));
+
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 3)));
+
+							depthbuffer.SetValue(x + 3, y, z);
+							renderer->SetPixel(x + 3, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 4))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 4)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 4)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 4)));
+
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 4)));
+
+							depthbuffer.SetValue(x + 4, y, z);
+							renderer->SetPixel(x + 4, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 5))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 5)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 5)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 5)));
+
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 5)));
+
+							depthbuffer.SetValue(x + 5, y, z);
+							renderer->SetPixel(x + 5, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 6))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 6)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 6)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 6)));
+
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 6)));
+
+							depthbuffer.SetValue(x + 6, y, z);
+							renderer->SetPixel(x + 6, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
+						if (_mm256_extract_epi32(out_mask, 7))
+						{
+							float barcoord0 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords0, barcoords0, _MM_SHUFFLE(0, 0, 0, 7)));
+							float barcoord1 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords1, barcoords1, _MM_SHUFFLE(0, 0, 0, 7)));
+							float barcoord2 = _mm256_cvtss_f32(_mm256_shuffle_ps(barcoords2, barcoords2, _MM_SHUFFLE(0, 0, 0, 7)));
+
+							float z = _mm256_cvtss_f32(_mm256_shuffle_ps(z_values, z_values, _MM_SHUFFLE(0, 0, 0, 7)));
+
+							depthbuffer.SetValue(x + 7, y, z);
+							renderer->SetPixel(x + 7, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
+						}
 					}
 
-					edge0_mags_xy = _mm_add_epi32(edge0_mags_xy, edge0.steps_delta_x);
-					edge1_mags_xy = _mm_add_epi32(edge1_mags_xy, edge1.steps_delta_x);
-					edge2_mags_xy = _mm_add_epi32(edge2_mags_xy, edge2.steps_delta_x);
+					edge0_mags_xy = _mm256_add_epi32(edge0_mags_xy, edge0.steps_delta_x);
+					edge1_mags_xy = _mm256_add_epi32(edge1_mags_xy, edge1.steps_delta_x);
+					edge2_mags_xy = _mm256_add_epi32(edge2_mags_xy, edge2.steps_delta_x);
 				}
 
-				edge0.edgefunction_results = _mm_add_epi32(edge0.edgefunction_results, edge0.steps_delta_y);
-				edge1.edgefunction_results = _mm_add_epi32(edge1.edgefunction_results, edge1.steps_delta_y);
-				edge2.edgefunction_results = _mm_add_epi32(edge2.edgefunction_results, edge2.steps_delta_y);
+				edge0.edgefunction_results = _mm256_add_epi32(edge0.edgefunction_results, edge0.steps_delta_y);
+				edge1.edgefunction_results = _mm256_add_epi32(edge1.edgefunction_results, edge1.steps_delta_y);
+				edge2.edgefunction_results = _mm256_add_epi32(edge2.edgefunction_results, edge2.steps_delta_y);
 			}
 		}
 
