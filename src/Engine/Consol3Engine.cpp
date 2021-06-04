@@ -92,11 +92,16 @@ namespace Engine
 		}
 	}
 
+	int time   = 0;
+	int time_c = 0;
+
 	inline void Consol3Engine::DrawFrame(int64_t delta)
 	{
 		renderer->ClearFrameBuffer();
+		time += game.Render(delta).count();
+		time_c++;
 
-		renderer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(game.Render(delta).count()));
+		renderer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(time / (float)time_c));
 
 		renderer->DisplayFrame();
 	}

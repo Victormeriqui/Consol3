@@ -60,7 +60,7 @@ namespace Game
 
 		void HandleInput();
 		void Update();
-		std::chrono::milliseconds Render(int64_t delta);
+		std::chrono::microseconds Render(int64_t delta);
 	};
 }
 

@@ -71,7 +71,7 @@ namespace Game
 
 		mesh = StaticMesh();
 		mesh.SetModelResource("res/face.obj")
-			.SetPosition(Vector3(0, 1, 0))
+			.SetPosition(Vector3(0, 0, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
 			.SetScale(Vector3(1.0f, 1.0f, 1.0f));
 		//.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
@@ -197,7 +197,7 @@ namespace Game
 		i += 0.01f;
 	}
 
-	std::chrono::milliseconds Consol3Game::Render(int64_t delta)
+	std::chrono::microseconds Consol3Game::Render(int64_t delta)
 	{
 		auto time = std::chrono::high_resolution_clock::now();
 
@@ -244,6 +244,6 @@ namespace Game
 			}
 		}*/
 
-		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
+		return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - time);
 	}
 }
