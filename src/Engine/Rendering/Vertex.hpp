@@ -6,6 +6,7 @@
 #include "../../Math/Vector3.hpp"
 
 #include <vector>
+#include <xmmintrin.h>
 
 namespace Engine
 {
@@ -135,7 +136,7 @@ namespace Engine
 				}
 			}
 
-			constexpr Vertex& operator*=(const Matrix4& mat) noexcept
+			Vertex& operator*=(const Matrix4& mat) noexcept
 			{
 				float x_new = mat.values[0][0] * position.x + mat.values[0][1] * position.y + mat.values[0][2] * position.z + mat.values[0][3] * w;
 				float y_new = mat.values[1][0] * position.x + mat.values[1][1] * position.y + mat.values[1][2] * position.z + mat.values[1][3] * w;
@@ -146,11 +147,50 @@ namespace Engine
 				position.y = y_new;
 				position.z = z_new;
 				w		   = w_new;
-
 				return *this;
+				/*
+				__m128 acc = _mm_setzero_ps();
+				__m128 vec = _mm_set_ps(position.x, position.y, position.z, w);
+
+				__m128 mat0 = _mm_set_ps(mat.values[0][0], mat.values[0][1], mat.values[0][2], mat.values[0][3]);
+				__m128 mat1 = _mm_set_ps(mat.values[1][0], mat.values[1][1], mat.values[1][2], mat.values[1][3]);
+				__m128 mat2 = _mm_set_ps(mat.values[2][0], mat.values[2][1], mat.values[2][2], mat.values[2][3]);
+				__m128 mat3 = _mm_set_ps(mat.values[3][0], mat.values[3][1], mat.values[3][2], mat.values[3][3]);
+
+				__m128 x_new = _mm_mul_ps(mat0, vec);
+				__m128 y_new = _mm_mul_ps(mat1, vec);
+				__m128 z_new = _mm_mul_ps(mat2, vec);
+				__m128 w_new = _mm_mul_ps(mat3, vec);
+
+				__m128 x_shuf = _mm_movehdup_ps(x_new);
+				__m128 x_sum  = _mm_add_ps(x_new, x_shuf);
+				x_shuf		  = _mm_movehl_ps(x_shuf, x_sum);
+				x_sum		  = _mm_add_ss(x_sum, x_shuf);
+
+				__m128 y_shuf = _mm_movehdup_ps(y_new);
+				__m128 y_sum  = _mm_add_ps(y_new, y_shuf);
+				y_shuf		  = _mm_movehl_ps(y_shuf, y_sum);
+				y_sum		  = _mm_add_ss(y_sum, y_shuf);
+
+				__m128 z_shuf = _mm_movehdup_ps(z_new);
+				__m128 z_sum  = _mm_add_ps(z_new, z_shuf);
+				z_shuf		  = _mm_movehl_ps(z_shuf, z_sum);
+				z_sum		  = _mm_add_ss(z_sum, z_shuf);
+
+				__m128 w_shuf = _mm_movehdup_ps(w_new);
+				__m128 w_sum  = _mm_add_ps(w_new, w_shuf);
+				w_shuf		  = _mm_movehl_ps(w_shuf, w_sum);
+				w_sum		  = _mm_add_ss(w_sum, w_shuf);
+
+				position.x = _mm_cvtss_f32(x_sum);
+				position.y = _mm_cvtss_f32(y_sum);
+				position.z = _mm_cvtss_f32(z_sum);
+				w		   = _mm_cvtss_f32(w_sum);
+
+				return *this;*/
 			}
 
-			[[nodiscard]] constexpr Vertex operator*(const Matrix4& mat) const noexcept
+			[[nodiscard]] Vertex operator*(const Matrix4& mat) const noexcept
 			{
 				return Vertex(*this) *= mat;
 			}

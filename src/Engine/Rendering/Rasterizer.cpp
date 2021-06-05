@@ -144,6 +144,11 @@ namespace Engine
 					// 0 or !0 if the join magnitude is greater or equal 0, for each pixel
 					__m256i are_inside_triangle = _mm256_cmpgt_epi32(joint_magnitudes, _mm256_set1_epi32(-1));
 
+					__m256i are_inside_bbox =
+						_mm256_cmpgt_epi32(_mm256_set1_epi32(bbox_max.x), _mm256_set_epi32(x + 7, x + 6, x + 5, x + 4, x + 3, x + 2, x + 1, x));
+
+					are_inside_triangle = _mm256_and_si256(are_inside_triangle, are_inside_bbox);
+
 					// if any pixel is inside the triangle
 					uint32_t should_draw = _mm256_movemask_epi8(are_inside_triangle);
 
@@ -254,6 +259,7 @@ namespace Engine
 							depthbuffer.SetValue(x + 7, y, z);
 							renderer->SetPixel(x + 7, y, shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2));
 						}
+						//	renderer->DisplayFrame();
 					}
 
 					edge0_mags_xy = _mm256_add_epi32(edge0_mags_xy, edge0.steps_delta_x);
