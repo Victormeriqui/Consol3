@@ -70,7 +70,7 @@ namespace Game
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
 
 		mesh = StaticMesh();
-		mesh.SetModelResource("res/face.obj")
+		mesh.SetModelResource("res/bunny.obj")
 			.SetPosition(Vector3(0, 0, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
 			.SetScale(Vector3(1.0f, 1.0f, 1.0f));

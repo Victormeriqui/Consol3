@@ -32,12 +32,14 @@ namespace Engine
 			protected:
 				inline Vertex& TransformVertexMVP(Vertex& vertex, const MVPTransform& mvp_mats)
 				{
-					vertex *= mvp_mats.model_mat;
+					Matrix4 mat = mvp_mats.projection_mat * mvp_mats.view_mat * mvp_mats.model_mat;
+					vertex *= mat;
+					// vertex *= mvp_mats.model_mat;
 					vertex.TransformNormal(mvp_mats.normal_mat);
 					vertex.TransformTangent(mvp_mats.model_mat);
 					vertex.TransformBitangent(mvp_mats.model_mat);
-					vertex *= mvp_mats.view_mat;
-					vertex *= mvp_mats.projection_mat;
+					// vertex *= mvp_mats.view_mat;
+					// vertex *= mvp_mats.projection_mat;
 
 					return vertex;
 				}

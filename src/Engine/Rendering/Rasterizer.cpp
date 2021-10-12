@@ -39,13 +39,13 @@ namespace Engine
 
 		void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader)
 		{
+			MVPTransform vs_shader_mats = { model_mat, normal_mat, view_mat, projection_mat };
+
 			for (uint32_t i = 0; i < vertex_buffer.GetIndices().size(); i += 3)
 			{
 				Vertex v0 = vertex_buffer.GetVertex(i);
 				Vertex v1 = vertex_buffer.GetVertex(i + 1);
 				Vertex v2 = vertex_buffer.GetVertex(i + 2);
-
-				MVPTransform vs_shader_mats = { model_mat, normal_mat, view_mat, projection_mat };
 
 				bool should_draw_triangle = shader.VertexShader(v0, v1, v2, vs_shader_mats);
 

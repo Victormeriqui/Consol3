@@ -118,6 +118,7 @@
     <ClInclude Include="src\Math\Matrix4.hpp" />
     <ClInclude Include="src\Math\Point2.hpp" />
     <ClInclude Include="src\Math\Quaternion.hpp" />
+    <ClInclude Include="src\Math\SIMDMatrix4.hpp" />
     <ClInclude Include="src\Math\Util\MathUtil.hpp" />
     <ClInclude Include="src\Math\Vector2.hpp" />
     <ClInclude Include="src\Math\Vector3.hpp" />
