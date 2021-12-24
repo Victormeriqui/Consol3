@@ -18,7 +18,7 @@ namespace Display
 		{
 		}
 
-		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override
+		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override
 		{
 		}
 

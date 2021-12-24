@@ -16,15 +16,9 @@ namespace Display
 		CreateFrameBufferString();
 	}
 
-	void ANSIRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
+	void ANSIRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		// TODO: Calculate the rgb value from the HSVColor
-		// or... refactor so we can make the engine output whatever we want (hsv or rgb) - the main issue here is how the IRenderer interface would
-		// look like
-		if (color.value != 0)
-			framebuffer->SetValue(x, y, RGBColor(255, 255, 255));
-		else
-			framebuffer->SetValue(x, y, RGBColor());
+		framebuffer->SetValue(x, y, color);
 	}
 
 	void ANSIRenderer::CreateFrameBufferString()

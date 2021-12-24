@@ -18,7 +18,7 @@ namespace Display
 		}
 
 	public:
-		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) = 0;
+		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) = 0;
 
 		virtual void ClearFrameBuffer() = 0;
 		virtual void DisplayFrame()		= 0;
