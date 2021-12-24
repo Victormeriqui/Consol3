@@ -61,9 +61,23 @@ namespace Display
 			return *this;
 		}
 
+		constexpr RGBColor& BlendMultiply(float value)
+		{
+			r = (uint8_t)((r * (uint8_t)(255 * value) + 0xFF) >> 8);
+			g = (uint8_t)((g * (uint8_t)(255 * value) + 0xFF) >> 8);
+			b = (uint8_t)((b * (uint8_t)(255 * value) + 0xFF) >> 8);
+
+			return *this;
+		}
+
 		constexpr RGBColor GetBlendMultiplied(RGBColor other)
 		{
 			return RGBColor(*this).BlendMultiply(other);
+		}
+
+		constexpr RGBColor GetBlendMultiplied(float value)
+		{
+			return RGBColor(*this).BlendMultiply(value);
 		}
 	};
 }
