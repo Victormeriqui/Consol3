@@ -70,9 +70,10 @@ namespace Game
 		mesh = StaticMesh();
 		mesh.SetModelResource("res/bunny.obj")
 			.SetPosition(Vector3(2, 1, 0))
+			.SetColor(RGBColor(0, 0, 200))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
-			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
-			.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
+			.SetScale(Vector3(10.0f, 10.0f, 10.0f));
+		//.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
 
 		mesh2 = StaticMesh();
 		mesh2.SetModelResource("res/bunny.obj")
@@ -210,7 +211,7 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 
-		// scene_renderer->DrawShadedMesh(mesh);
+		scene_renderer->DrawMesh(mesh);
 		scene_renderer->DrawShadedMesh(mesh2);
 
 		//	scene_renderer->DrawMesh(plight_mesh);

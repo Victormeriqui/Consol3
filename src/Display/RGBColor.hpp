@@ -52,6 +52,11 @@ namespace Display
 			return 0.3f * (color >> 16) + 0.59f * (color >> 8 & 0xFF) + 0.11f * (color & 0xFF);
 		}
 
+		[[nodiscard]] inline constexpr float GetLuminance()
+		{
+			return ((r + g + b) / 3.0f) / 255.0f;
+		}
+
 		constexpr RGBColor& BlendMultiply(RGBColor other)
 		{
 			r = (uint8_t)((r * other.r + 0xFF) >> 8);
@@ -70,12 +75,12 @@ namespace Display
 			return *this;
 		}
 
-		constexpr RGBColor GetBlendMultiplied(RGBColor other)
+		[[nodiscard]] constexpr RGBColor GetBlendMultiplied(RGBColor other)
 		{
 			return RGBColor(*this).BlendMultiply(other);
 		}
 
-		constexpr RGBColor GetBlendMultiplied(float value)
+		[[nodiscard]] constexpr RGBColor GetBlendMultiplied(float value)
 		{
 			return RGBColor(*this).BlendMultiply(value);
 		}

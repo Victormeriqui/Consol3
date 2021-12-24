@@ -10,10 +10,12 @@ namespace Display
 		ClearFrameBuffer();
 	}
 
-	void GreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
+	void GreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
+		float luminance = color.GetLuminance();
+
 		// map it to a 0-15 palette index
-		uint8_t index			 = 16 + (uint8_t)((15.0f * color.value));
+		uint8_t index			 = 16 + (uint8_t)((15.0f * luminance));
 		uint8_t background_index = index * 16;
 
 		// in greyscale all pixels are a space and we control the color through the background

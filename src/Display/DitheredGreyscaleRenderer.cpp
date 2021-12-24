@@ -78,9 +78,11 @@ namespace Display
 		}
 	}
 
-	void DitheredGreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
+	void DitheredGreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		uint8_t shade = Util::LerpCast<uint8_t>(color.value, 0, 255);
+		float luminance = color.GetLuminance();
+
+		uint8_t shade = Util::LerpCast<uint8_t>(luminance, 0, 255);
 		framebuffer->SetValue(x, y, shade_map[shade]);
 	}
 
