@@ -77,6 +77,7 @@ namespace Game
 		mesh2 = StaticMesh();
 		mesh2.SetModelResource("res/bunny.obj")
 			.SetPosition(Vector3(-2, 1, 0))
+			.SetColor(RGBColor(255, 0, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
 			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
 			.SetMaterialProperties(MaterialProperties(0.0f, 0.0f));
@@ -99,10 +100,10 @@ namespace Game
 		spot_light->SetAngle(20.0f);
 		spot_light->SetIntensity(6.0f);
 
-		this->lighting_system->SetAmbientLight(0.02f);
+		this->lighting_system->SetAmbientLight(0.12f);
 		// this->lighting_system->AddLight(dir_light);
-		this->lighting_system->AddLight(point_light);
-		// this->lighting_system->AddLight(spot_light);
+		// this->lighting_system->AddLight(point_light);
+		this->lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -184,12 +185,12 @@ namespace Game
 			plight_mesh.SetPosition(camera->GetPosition());
 		}
 
-		if (GetKeyState(VK_RBUTTON) & 0X8000)
+		if (GetKeyState(VK_LBUTTON) & 0X8000)
 		{
 			spot_light->SetPosition(camera->GetPosition());
 			spot_light->SetDirection(camera->GetLookDirection());
 		}
-		if (GetKeyState(VK_LBUTTON) & 0X8000)
+		if (GetKeyState(VK_RBUTTON) & 0X8000)
 		{
 		}
 	}
@@ -209,10 +210,10 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 
-		scene_renderer->DrawShadedMesh(mesh);
+		// scene_renderer->DrawShadedMesh(mesh);
 		scene_renderer->DrawShadedMesh(mesh2);
 
-		scene_renderer->DrawMesh(plight_mesh);
+		//	scene_renderer->DrawMesh(plight_mesh);
 
 		//	scene_renderer->DrawShadedMesh(anim_mesh);
 

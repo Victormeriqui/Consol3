@@ -174,9 +174,11 @@ namespace Engine
 
 				RGBColor texture_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 				texture_color.BlendMultiply(color);
+				texture_color.BlendMultiply(final_lighting);
+
 				HSVColor color_hsv = HSVColor(texture_color);
 
-				return HSVColor(color_hsv.hue, color_hsv.saturation, color_hsv.value * final_lighting);
+				return color_hsv;
 			}
 		}
 	}
