@@ -3,7 +3,6 @@
 
 #include "IShader.hpp"
 
-#include "../../../Display/HSVColor.hpp"
 #include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../DepthBuffer.hpp"
@@ -58,8 +57,7 @@ namespace Engine
 
 			public:
 				virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
-				virtual HSVColor FragmentShader(
-					const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
+				virtual RGBColor FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
 
 				void SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system);
 

@@ -24,6 +24,7 @@ namespace Display
 		SetFontInfo(font_name, font_width, font_height, 0, 0);
 
 		DisableCursor();
+		// SetConsoleMode(consolescreenbuffer, ENABLE_WRAP_AT_EOL_OUTPUT);
 	}
 
 	ConsoleManager::~ConsoleManager()
@@ -42,7 +43,7 @@ namespace Display
 		// struct
 		info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 		// resolution, how many chars there are
-		info.dwSize = { width, height };	// the +1 avoids problems when resizing
+		info.dwSize = { width, height + 1 };	// the +1 avoids problems when resizing
 		// position of the cursor (irrelevant since we're going to hide it)
 		info.dwCursorPosition = { 0, 0 };
 		// attributes used by preceding writes (irrelevant since we're not going to give input to the console)
@@ -152,12 +153,12 @@ namespace Display
 							&writeregion);			// region to write to
 	}
 
-	void ConsoleManager::WriteConsoleString(const std::shared_ptr<std::string> string, uint32_t size)
+	void ConsoleManager::WriteConsoleString(const std::string& string, uint64_t size)
 	{
 		DWORD written_count;
 
 		SetConsoleCursorPosition(consolescreenbuffer, { 0, 0 });
 
-		WriteConsoleA(consolescreenbuffer, string->c_str(), size, &written_count, nullptr);
+		WriteFile(consolescreenbuffer, string.c_str(), (DWORD)size, &written_count, nullptr);
 	}
 }

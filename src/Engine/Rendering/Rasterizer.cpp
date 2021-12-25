@@ -149,7 +149,7 @@ namespace Engine
 
 						if (depthbuffer.GetValue(x, y) > z)
 						{
-							HSVColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2);
+							RGBColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2);
 
 							depthbuffer.SetValue(x, y, z);
 							renderer->SetPixel(x, y, out_color);

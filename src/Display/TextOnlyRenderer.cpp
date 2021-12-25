@@ -14,9 +14,11 @@ namespace Display
 		ClearFrameBuffer();
 	}
 
-	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
+	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		uint8_t index = Math::Util::LerpCast<uint8_t>(color.value, 0, shades_count - 1);
+		float luminance = color.GetColorNormal();
+
+		uint8_t index = Math::Util::LerpCast<uint8_t>(luminance, 0, shades_count - 1);
 
 		framebuffer->SetValue(x, y, { (WCHAR)shades[index], 0x0F });
 	}

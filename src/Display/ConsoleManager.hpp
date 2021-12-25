@@ -48,7 +48,7 @@ namespace Display
 		void SetTitle(const std::string& title);
 
 		void FillScreenBuffer(const CHAR_INFO* data);
-		void WriteConsoleString(const std::shared_ptr<std::string> string, uint32_t size);
+		void WriteConsoleString(const std::string& string, uint64_t size);
 	};
 }
 
