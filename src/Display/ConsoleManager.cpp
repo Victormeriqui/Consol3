@@ -159,9 +159,6 @@ namespace Display
 
 		SetConsoleCursorPosition(consolescreenbuffer, { 0, 0 });
 
-		char arr[] = "AA\x1b[48;2;255;000;000mAA\x1b[48;2;000;255;000mAA";
-		// string->data()[36] = '\0';
-		// WriteConsoleA(consolescreenbuffer, arr, 46, &written_count, nullptr);
-		WriteConsoleA(consolescreenbuffer, string.c_str(), (DWORD)size, &written_count, nullptr);
+		WriteFile(consolescreenbuffer, string.c_str(), (DWORD)size, &written_count, nullptr);
 	}
 }
