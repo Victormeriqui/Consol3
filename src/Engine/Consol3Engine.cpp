@@ -94,10 +94,11 @@ namespace Engine
 
 	inline void Consol3Engine::DrawFrame(int64_t delta)
 	{
+		auto time = this->GetCurrentTime();
 		renderer->ClearFrameBuffer();
-
-		renderer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(game.Render(delta).count()));
-
+		game.Render(delta);
 		renderer->DisplayFrame();
+
+		renderer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(this->GetCurrentTime() - time));
 	}
 }

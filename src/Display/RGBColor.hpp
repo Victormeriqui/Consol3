@@ -39,7 +39,7 @@ namespace Display
 		/**
 		 * Returns a 0-255 float value representing the lightness of the color based on luminosity
 		 */
-		[[nodiscard]] inline constexpr float ToGreyscale()
+		[[nodiscard]] inline constexpr float GetGreyscale() const
 		{
 			return 0.3f * r + 0.59f * g + 0.11f * b;
 		}
@@ -47,12 +47,13 @@ namespace Display
 		/**
 		 * Returns a 0-255 float value representing the brightness of the color based on luminosity
 		 */
-		[[nodiscard]] static inline constexpr float HexToGreyscale(uint32_t color)
+		[[nodiscard]] static inline constexpr float GetGreyscaleFromHex(uint32_t color)
 		{
 			return 0.3f * (color >> 16) + 0.59f * (color >> 8 & 0xFF) + 0.11f * (color & 0xFF);
 		}
 
-		[[nodiscard]] inline constexpr float GetLuminance()
+		// avoids converting to HSV to get the value
+		[[nodiscard]] inline constexpr float GetColorNormal() const
 		{
 			return ((r + g + b) / 3.0f) / 255.0f;
 		}

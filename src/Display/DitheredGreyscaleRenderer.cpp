@@ -80,7 +80,7 @@ namespace Display
 
 	void DitheredGreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		float luminance = color.GetLuminance();
+		float luminance = color.GetColorNormal();
 
 		uint8_t shade = Util::LerpCast<uint8_t>(luminance, 0, 255);
 		framebuffer->SetValue(x, y, shade_map[shade]);
