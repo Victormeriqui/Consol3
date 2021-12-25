@@ -16,7 +16,7 @@ namespace Display
 
 	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		float luminance = color.GetLuminance();
+		float luminance = color.GetColorNormal();
 
 		uint8_t index = Math::Util::LerpCast<uint8_t>(luminance, 0, shades_count - 1);
 

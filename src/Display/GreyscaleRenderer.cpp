@@ -12,7 +12,7 @@ namespace Display
 
 	void GreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		float luminance = color.GetLuminance();
+		float luminance = color.GetColorNormal();
 
 		// map it to a 0-15 palette index
 		uint8_t index			 = 16 + (uint8_t)((15.0f * luminance));

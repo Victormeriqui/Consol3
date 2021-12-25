@@ -43,8 +43,11 @@ namespace Game
 
 		StaticMesh mesh;
 		StaticMesh mesh2;
+		StaticMesh mesh3;
 
 		AnimatedMesh anim_mesh;
+		AnimatedMesh anim_mesh2;
+		AnimatedMesh anim_mesh3;
 		StaticMesh floor;
 
 		std::shared_ptr<DirectionalLight> dir_light;
