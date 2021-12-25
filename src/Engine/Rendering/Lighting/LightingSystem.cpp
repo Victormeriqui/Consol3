@@ -17,7 +17,10 @@ namespace Engine
 		{
 			using namespace Math;
 
-			LightingSystem::LightingSystem() : lights(std::vector<std::shared_ptr<ILight>>()), ambient_light(0.01f)
+			LightingSystem::LightingSystem() :
+				lights(std::vector<std::shared_ptr<ILight>>()),
+				ambient_light_intensity(0.01f),
+				ambient_light_color(RGBColor(255, 255, 255))
 			{
 			}
 
@@ -36,38 +39,44 @@ namespace Engine
 				return lights;
 			}
 
-			void LightingSystem::SetAmbientLight(float ambient_light)
+			void LightingSystem::SetAmbientLightColor(RGBColor ambient_light_color)
 			{
-				this->ambient_light = ambient_light;
+				this->ambient_light_color = ambient_light_color;
 			}
 
-			float LightingSystem::GetAmbientLight() const
+			void LightingSystem::SetAmbientLightIntensity(float ambient_light_intensity)
 			{
-				return ambient_light;
+				this->ambient_light_intensity = ambient_light_intensity;
 			}
 
-			float LightingSystem::GetLightAmountAt(const Vertex& vertex,
+			RGBColor LightingSystem::GetAmbientLitColor() const
+			{
+				return ambient_light_color.GetBlendMultiplied(ambient_light_intensity);
+			}
+
+			RGBColor LightingSystem::GetLitColorAt(const Vertex& vertex,
 												   const Vector3& cam_pos,
 												   const Vector3 vertex_position_lights[],
 												   const MaterialProperties& material_properties) const
 			{
-				return GetLightAmountAt(vertex.GetPosition(), vertex.GetNormal(), cam_pos, vertex_position_lights, material_properties);
+				return GetLitColorAt(vertex.GetPosition(), vertex.GetNormal(), cam_pos, vertex_position_lights, material_properties);
 			}
 
-			float LightingSystem::GetLightAmountAt(const Vector3& position,
+			RGBColor LightingSystem::GetLitColorAt(const Vector3& position,
 												   const Vector3& normal,
 												   const Vector3& cam_pos,
 												   const Vector3 position_lights[],
 												   const MaterialProperties& material_properties) const
 			{
-				float light_amount = 0.0f;
+				RGBColor final_color;
 
 				uint8_t i = 0;
 				for (std::shared_ptr<ILight> light : lights)
 				{
 					if (!light->IsShadowCaster())
 					{
-						light_amount += light->GetLightAmountAt(position, normal, cam_pos, material_properties);
+						final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
+
 						continue;
 					}
 
@@ -75,7 +84,8 @@ namespace Engine
 
 					if (!Util::IsInRange(position_light.x, -1.0f, 1.0f) || !Util::IsInRange(position_light.y, -1.0f, 1.0f))
 					{
-						light_amount += light->GetLightAmountAt(position, normal, cam_pos, material_properties);
+						final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
+
 						continue;
 					}
 
@@ -85,10 +95,10 @@ namespace Engine
 					float light_depth = light->GetLightDepthBuffer().value().get().GetValue(depthbuffer_x, depthbuffer_y);
 
 					if (position_light.z < (light_depth + light->GetBias().value()))
-						light_amount += light->GetLightAmountAt(position, normal, cam_pos, material_properties);
+						final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
 				}
 
-				return light_amount;
+				return final_color;
 			}
 
 			void LightingSystem::ClearDepthBuffers()

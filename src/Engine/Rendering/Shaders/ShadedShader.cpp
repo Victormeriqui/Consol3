@@ -168,14 +168,15 @@ namespace Engine
 																						 barcoord2);
 				}
 
-				float light_amount =
-					lighting_system->GetLightAmountAt(frag_position, frag_normal, camera_position, frag_position_lights, material_properties);
-				float final_lighting = std::min(lighting_system->GetAmbientLight() + light_amount, 1.0f);
+				RGBColor lit_color =
+					lighting_system->GetLitColorAt(frag_position, frag_normal, camera_position, frag_position_lights, material_properties);
+
+				lit_color += lighting_system->GetAmbientLitColor();
 
 				RGBColor final_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 
 				final_color.BlendMultiply(color);
-				final_color.BlendMultiply(final_lighting);
+				final_color.BlendMultiply(lit_color);
 
 				return final_color;
 			}

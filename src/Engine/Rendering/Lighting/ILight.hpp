@@ -1,6 +1,7 @@
 #ifndef ILIGHT_HPP
 #define ILIGHT_HPP
 
+#include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "../DepthBuffer.hpp"
@@ -17,6 +18,7 @@ namespace Engine
 		namespace Lighting
 		{
 			using namespace Math;
+			using namespace Display;
 
 			struct Attenuation
 			{
@@ -47,12 +49,15 @@ namespace Engine
 				}
 
 			public:
-				[[nodiscard]] virtual float GetLightAmountAt(const Vector3& position,
-															 const Vector3& normal,
-															 const Vector3& cam_pos,
-															 const MaterialProperties& material_properties) const = 0;
+				[[nodiscard]] virtual RGBColor GetColorAt(const Vector3& position,
+														  const Vector3& normal,
+														  const Vector3& cam_pos,
+														  const MaterialProperties& material_properties) const = 0;
 
 				[[nodiscard]] virtual bool IsShadowCaster() const = 0;
+				[[nodiscard]] virtual RGBColor GetColor() const	  = 0;
+				virtual void SetColor(RGBColor color)			  = 0;
+
 				// i dislike the need for the referece_wrapper here, but C++ optionals don't allow references
 				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const = 0;
 				[[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const	   = 0;
