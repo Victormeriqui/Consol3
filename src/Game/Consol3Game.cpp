@@ -61,22 +61,44 @@ namespace Game
 		this->scene_renderer->SetCamera(camera);
 
 		anim_mesh = AnimatedMesh();
-		anim_mesh.SetModelResource("res/penguin.md2")
-			.SetTextureResource("res/penguin.bmp")
-			.SetPosition(Vector3(0.0f, -0.9f, 0.0f))
+		anim_mesh
+			.SetModelResource("res/marvin.md2")
+			//.SetTextureResource("res/text.bmp")
+			.SetPosition(Vector3(1.0f, -0.9f, 0.0f))
 			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
-			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0));
+			.SetRotation(Angle(-1.7, 0, 0))
+			.SetColor(RGBColor(255, 0, 0));
+
+		anim_mesh2 = AnimatedMesh();
+		anim_mesh2
+			.SetModelResource("res/marvin.md2")
+			//.SetTextureResource("res/text.bmp")
+			.SetPosition(Vector3(-1.0f, -0.9f, 0.0f))
+			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
+			.SetRotation(Angle(-1.7, 0, 0))
+			.SetColor(RGBColor(0, 255, 0));
+
+		anim_mesh3 = AnimatedMesh();
+		anim_mesh3
+			.SetModelResource("res/marvin.md2")
+			//.SetTextureResource("res/text.bmp")
+			.SetPosition(Vector3(0.0f, -0.9f, 1.0f))
+			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
+			.SetRotation(Angle(-1.7, 0, 0))
+			.SetColor(RGBColor(0, 0, 255));
 
 		mesh = StaticMesh();
 		mesh.SetModelResource("res/bunny.obj")
 			.SetPosition(Vector3(2, 1, 0))
+			.SetColor(RGBColor(0, 0, 200))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
-			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
-			.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
+			.SetScale(Vector3(10.0f, 10.0f, 10.0f));
+		//.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
 
 		mesh2 = StaticMesh();
 		mesh2.SetModelResource("res/bunny.obj")
 			.SetPosition(Vector3(-2, 1, 0))
+			.SetColor(RGBColor(255, 0, 0))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
 			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
 			.SetMaterialProperties(MaterialProperties(0.0f, 0.0f));
@@ -99,9 +121,9 @@ namespace Game
 		spot_light->SetAngle(20.0f);
 		spot_light->SetIntensity(6.0f);
 
-		this->lighting_system->SetAmbientLight(0.02f);
-		// this->lighting_system->AddLight(dir_light);
-		this->lighting_system->AddLight(point_light);
+		this->lighting_system->SetAmbientLight(0.12f);
+		this->lighting_system->AddLight(dir_light);
+		// this->lighting_system->AddLight(point_light);
 		// this->lighting_system->AddLight(spot_light);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -184,12 +206,12 @@ namespace Game
 			plight_mesh.SetPosition(camera->GetPosition());
 		}
 
-		if (GetKeyState(VK_RBUTTON) & 0X8000)
+		if (GetKeyState(VK_LBUTTON) & 0X8000)
 		{
 			spot_light->SetPosition(camera->GetPosition());
 			spot_light->SetDirection(camera->GetLookDirection());
 		}
-		if (GetKeyState(VK_LBUTTON) & 0X8000)
+		if (GetKeyState(VK_RBUTTON) & 0X8000)
 		{
 		}
 	}
@@ -199,6 +221,9 @@ namespace Game
 	{
 		// point_light->SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
 		// plight_mesh.SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
+		anim_mesh.SetPosition(Vector3(std::sin(i) * 2, -0.9f, std::cos(i) * 2));
+		anim_mesh2.SetPosition(Vector3(std::sin(i + 2) * 2, -0.9f, std::cos(i + 2) * 2));
+		anim_mesh3.SetPosition(Vector3(std::sin(i + 4) * 2, -0.9f, std::cos(i + 4) * 2));
 
 		i += 0.01f;
 	}
@@ -209,12 +234,14 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 
-		scene_renderer->DrawShadedMesh(mesh);
-		scene_renderer->DrawShadedMesh(mesh2);
+		// scene_renderer->DrawShadedMesh(mesh);
+		// scene_renderer->DrawShadedMesh(mesh2);
 
-		scene_renderer->DrawMesh(plight_mesh);
+		//	scene_renderer->DrawMesh(plight_mesh);
 
-		//	scene_renderer->DrawShadedMesh(anim_mesh);
+		scene_renderer->DrawShadedMesh(anim_mesh);
+		scene_renderer->DrawShadedMesh(anim_mesh2);
+		scene_renderer->DrawShadedMesh(anim_mesh3);
 
 		scene_renderer->RenderScene(delta);
 		/*

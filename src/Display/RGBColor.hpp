@@ -39,7 +39,7 @@ namespace Display
 		/**
 		 * Returns a 0-255 float value representing the lightness of the color based on luminosity
 		 */
-		[[nodiscard]] inline constexpr float ToGreyscale()
+		[[nodiscard]] inline constexpr float GetGreyscale() const
 		{
 			return 0.3f * r + 0.59f * g + 0.11f * b;
 		}
@@ -47,9 +47,15 @@ namespace Display
 		/**
 		 * Returns a 0-255 float value representing the brightness of the color based on luminosity
 		 */
-		[[nodiscard]] static inline constexpr float HexToGreyscale(uint32_t color)
+		[[nodiscard]] static inline constexpr float GetGreyscaleFromHex(uint32_t color)
 		{
 			return 0.3f * (color >> 16) + 0.59f * (color >> 8 & 0xFF) + 0.11f * (color & 0xFF);
+		}
+
+		// avoids converting to HSV to get the value
+		[[nodiscard]] inline constexpr float GetColorNormal() const
+		{
+			return ((r + g + b) / 3.0f) / 255.0f;
 		}
 
 		constexpr RGBColor& BlendMultiply(RGBColor other)
@@ -61,9 +67,23 @@ namespace Display
 			return *this;
 		}
 
-		constexpr RGBColor GetBlendMultiplied(RGBColor other)
+		constexpr RGBColor& BlendMultiply(float value)
+		{
+			r = (uint8_t)((r * (uint8_t)(255 * value) + 0xFF) >> 8);
+			g = (uint8_t)((g * (uint8_t)(255 * value) + 0xFF) >> 8);
+			b = (uint8_t)((b * (uint8_t)(255 * value) + 0xFF) >> 8);
+
+			return *this;
+		}
+
+		[[nodiscard]] constexpr RGBColor GetBlendMultiplied(RGBColor other)
 		{
 			return RGBColor(*this).BlendMultiply(other);
+		}
+
+		[[nodiscard]] constexpr RGBColor GetBlendMultiplied(float value)
+		{
+			return RGBColor(*this).BlendMultiply(value);
 		}
 	};
 }

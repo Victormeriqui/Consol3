@@ -1,77 +1,80 @@
 #include "ANSIRenderer.hpp"
 
-#define PIXEL_SIZE_CHARS   20	 // how many chars each pixel takes on the framebuffer_string
-#define PIXEL_RED_OFFSET   7	 // how many chars away from the start of the pixel string the component is at
-#define PIXEL_GREEN_OFFSET 11	 // ^
-#define PIXEL_BLUE_OFFSET  15	 // ^
-
 namespace Display
 {
-	ANSIRenderer::ANSIRenderer(std::shared_ptr<FrameBuffer<RGBColor>> framebuffer) :
+	ANSIRenderer::ANSIRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
-		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 8, 8, palette_ansi))
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_ansi))
 	{
 		ClearFrameBuffer();
-		framebuffer_string = std::shared_ptr<std::string>(new std::string());
-		CreateFrameBufferString();
+
+		framebuffer_string	   = std::string(this->framebuffer->GetWidth() * this->framebuffer->GetHeight() * 20, ' ');
+		framebuffer_string_len = 0;
 	}
 
-	void ANSIRenderer::SetPixel(uint16_t x, uint16_t y, const HSVColor& color)
+	void ANSIRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		// TODO: Calculate the rgb value from the HSVColor
-		// or... refactor so we can make the engine output whatever we want (hsv or rgb) - the main issue here is how the IRenderer interface would
-		// look like
-		if (color.value != 0)
-			framebuffer->SetValue(x, y, RGBColor(255, 255, 255));
-		else
-			framebuffer->SetValue(x, y, RGBColor());
-	}
-
-	void ANSIRenderer::CreateFrameBufferString()
-	{
-		// create the stringified framebuffer with all black pixels
-		for (uint16_t y = 0; y < framebuffer->GetHeight(); y++)
-		{
-			for (uint16_t x = 0; x < framebuffer->GetWidth(); x++)
-				framebuffer_string->append("\x1b[48;2;000;000;000m ");
-		}
+		framebuffer->SetValue(x, y, color.GetHexValues());
 	}
 
 	void ANSIRenderer::TranslateFrameBuffer()
 	{
-		char* string_data = framebuffer_string->data();
+		uint32_t last_color			  = 0x000000;
+		uint64_t current_string_index = 0;
 
 		for (uint16_t y = 0; y < framebuffer->GetHeight(); y++)
 		{
 			for (uint16_t x = 0; x < framebuffer->GetWidth(); x++)
 			{
-				const RGBColor& color = framebuffer->GetValue(x, y);
+				uint32_t current_color = framebuffer->GetValue(x, y);
 
-				std::string red_string = std::to_string(color.r);
-				red_string			   = std::string(3 - red_string.length(), '0') + red_string;
+				// always set color on the first pixel
+				if (current_color != last_color || (y == 0 && x == 0))
+				{
+					RGBColor rgbcurrent_color = RGBColor(current_color);
 
-				std::string green_string = std::to_string(color.g);
-				green_string			 = std::string(3 - green_string.length(), '0') + green_string;
+					std::string red_string = std::to_string(rgbcurrent_color.r) + ";";
+					uint8_t red_string_len = (uint8_t)red_string.length();
 
-				std::string blue_string = std::to_string(color.b);
-				blue_string				= std::string(3 - blue_string.length(), '0') + blue_string;
+					std::string green_string = std::to_string(rgbcurrent_color.g) + ";";
+					uint8_t green_string_len = (uint8_t)green_string.length();
 
-				uint32_t base_offset  = (x * PIXEL_SIZE_CHARS) + (y * PIXEL_SIZE_CHARS * framebuffer->GetWidth());
-				uint32_t red_offset	  = base_offset + PIXEL_RED_OFFSET;
-				uint32_t green_offset = base_offset + PIXEL_GREEN_OFFSET;
-				uint32_t blue_offset  = base_offset + PIXEL_BLUE_OFFSET;
+					std::string blue_string = std::to_string(rgbcurrent_color.b);
+					uint8_t blue_string_len = (uint8_t)blue_string.length();
 
-				red_string.copy(string_data + red_offset, 3);
-				green_string.copy(string_data + green_offset, 3);
-				blue_string.copy(string_data + blue_offset, 3);
+					esc_sequence_start.copy(framebuffer_string.data() + current_string_index, esc_sequence_start_len, 0);
+					current_string_index += esc_sequence_start_len;
+
+					red_string.copy(framebuffer_string.data() + current_string_index, red_string_len, 0);
+					current_string_index += red_string_len;
+
+					green_string.copy(framebuffer_string.data() + current_string_index, green_string_len, 0);
+					current_string_index += green_string_len;
+
+					blue_string.copy(framebuffer_string.data() + current_string_index, blue_string_len, 0);
+					current_string_index += blue_string_len;
+
+					esc_sequence_end.copy(framebuffer_string.data() + current_string_index, esc_sequence_len, 0);
+					current_string_index += esc_sequence_len;
+
+					last_color = current_color;
+				}
+
+				framebuffer_string.data()[current_string_index++] = ' ';
 			}
+
+			framebuffer_string.data()[current_string_index++] = '\n';
 		}
+
+		framebuffer_string.data()[current_string_index++] = '\0';
+
+		framebuffer_string_len = current_string_index;
 	}
 
 	void ANSIRenderer::DisplayFrame()
 	{
 		TranslateFrameBuffer();
-		console_manager.WriteConsoleString(framebuffer_string, (uint32_t)framebuffer_string->length());
+		console_manager.WriteConsoleString(framebuffer_string, framebuffer_string_len);
 	}
 
 	void ANSIRenderer::ReportInformation(const std::string& info)
@@ -81,7 +84,7 @@ namespace Display
 
 	void ANSIRenderer::ClearFrameBuffer()
 	{
-		this->framebuffer->FillBuffer(RGBColor());
+		this->framebuffer->FillBuffer(0x000000);
 	}
 
 	const uint16_t ANSIRenderer::GetFrameBufferWidth() const

@@ -92,7 +92,7 @@ namespace Engine
 				return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 			}
 
-			HSVColor ShadedShader::FragmentShader(const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+			RGBColor ShadedShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 			{
 				Vector3 frag_position = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetPosition(),
 																			   vert_v1_model.GetPosition(),
@@ -172,11 +172,12 @@ namespace Engine
 					lighting_system->GetLightAmountAt(frag_position, frag_normal, camera_position, frag_position_lights, material_properties);
 				float final_lighting = std::min(lighting_system->GetAmbientLight() + light_amount, 1.0f);
 
-				RGBColor texture_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
-				texture_color.BlendMultiply(color);
-				HSVColor color_hsv = HSVColor(texture_color);
+				RGBColor final_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 
-				return HSVColor(color_hsv.hue, color_hsv.saturation, color_hsv.value * final_lighting);
+				final_color.BlendMultiply(color);
+				final_color.BlendMultiply(final_lighting);
+
+				return final_color;
 			}
 		}
 	}

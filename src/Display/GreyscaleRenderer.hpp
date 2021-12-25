@@ -26,7 +26,7 @@ namespace Display
 	public:
 		GreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 
-		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override;
+		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 
 		virtual void DisplayFrame() override;
 

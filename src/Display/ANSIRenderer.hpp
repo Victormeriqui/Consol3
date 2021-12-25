@@ -1,3 +1,5 @@
+
+
 #ifndef ANSIRENDERER_HPP
 #define ANSIRENDERER_HPP
 
@@ -12,6 +14,7 @@
 #include <Windows.h>
 #include <cstdint>
 #include <memory>
+#include <string>
 
 namespace Display
 {
@@ -23,18 +26,23 @@ namespace Display
 	class ANSIRenderer : public IRenderer
 	{
 	private:
-		std::shared_ptr<FrameBuffer<RGBColor>> framebuffer;
+		std::shared_ptr<FrameBuffer<uint32_t>> framebuffer;
 		ConsoleManager console_manager;
 
-		std::shared_ptr<std::string> framebuffer_string;
+		std::string framebuffer_string;
+		uint64_t framebuffer_string_len;
 
-		void CreateFrameBufferString();
+		const std::string esc_sequence_start = "\x1b[48;2;";
+		const uint8_t esc_sequence_start_len = (uint8_t)esc_sequence_start.length();
+		const std::string esc_sequence_end	 = "m";
+		const uint8_t esc_sequence_len		 = (uint8_t)esc_sequence_end.length();
+
 		void TranslateFrameBuffer();
 
 	public:
-		ANSIRenderer(std::shared_ptr<FrameBuffer<RGBColor>> framebuffer);
+		ANSIRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer);
 
-		virtual void SetPixel(uint16_t x, uint16_t y, const HSVColor& color) override;
+		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 
 		virtual void DisplayFrame() override;
 
