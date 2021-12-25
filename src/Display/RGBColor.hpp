@@ -1,6 +1,7 @@
 #ifndef RGBCOLOR_HPP
 #define RGBCOLOR_HPP
 
+#include <algorithm>
 #include <cstdint>
 
 namespace Display
@@ -76,14 +77,32 @@ namespace Display
 			return *this;
 		}
 
-		[[nodiscard]] constexpr RGBColor GetBlendMultiplied(RGBColor other)
+		[[nodiscard]] RGBColor GetBlendMultiplied(RGBColor other) const
 		{
 			return RGBColor(*this).BlendMultiply(other);
 		}
 
-		[[nodiscard]] constexpr RGBColor GetBlendMultiplied(float value)
+		[[nodiscard]] RGBColor GetBlendMultiplied(float value) const
 		{
 			return RGBColor(*this).BlendMultiply(value);
+		}
+
+		constexpr RGBColor& operator+=(RGBColor other) noexcept
+		{
+			uint32_t red   = r + other.r;
+			uint32_t green = g + other.g;
+			uint32_t blue  = b + other.b;
+
+			r = (uint8_t)std::min((uint32_t)255, red);
+			g = (uint8_t)std::min((uint32_t)255, green);
+			b = (uint8_t)std::min((uint32_t)255, blue);
+
+			return *this;
+		}
+
+		[[nodiscard]] constexpr RGBColor operator+(RGBColor other) const noexcept
+		{
+			return RGBColor(*this) += other;
 		}
 	};
 }

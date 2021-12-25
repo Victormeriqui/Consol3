@@ -1,6 +1,7 @@
 #ifndef SPOTLIGHT_HPP
 #define SPOTLIGHT_HPP
 
+#include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "../DepthBuffer.hpp"
@@ -16,6 +17,8 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			using namespace Display;
+
 			class SpotLight : public ILight
 			{
 			private:
@@ -26,6 +29,7 @@ namespace Engine
 
 				float range;
 				float intensity;
+				RGBColor color;
 
 				DepthBuffer depthbuffer;
 
@@ -35,9 +39,11 @@ namespace Engine
 				void UpdateViewMatrix();
 
 			public:
-				SpotLight();
-				SpotLight(const Vector3& position, const Vector3& direction);
-				SpotLight(const Vector3& position, const Vector3& direction, float range);
+				SpotLight(const Vector3& position  = Vector3(),
+						  const Vector3& direction = Vector3(),
+						  float range			   = 1.0f,
+						  float intensity		   = 1.0f,
+						  RGBColor color		   = RGBColor());
 
 				[[nodiscard]] Vector3 GetPosition() const;
 				void SetPosition(const Vector3& position);
@@ -54,12 +60,16 @@ namespace Engine
 				[[nodiscard]] float GetIntensity() const;
 				void SetIntensity(float intensity);
 
-				virtual float GetLightAmountAt(const Vector3& position,
-											   const Vector3& normal,
-											   const Vector3& cam_pos,
-											   const MaterialProperties& material_properties) const override;
+				virtual RGBColor GetColorAt(const Vector3& position,
+											const Vector3& normal,
+											const Vector3& cam_pos,
+											const MaterialProperties& material_properties) const override;
 
 				virtual bool IsShadowCaster() const override;
+
+				virtual RGBColor GetColor() const override;
+				virtual void SetColor(RGBColor color) override;
+
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const override;
 				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;

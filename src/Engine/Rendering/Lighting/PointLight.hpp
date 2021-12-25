@@ -1,6 +1,7 @@
 #ifndef POINTLIGHT_HPP
 #define POINTLIGHT_HPP
 
+#include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "ILight.hpp"
@@ -14,6 +15,8 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			using namespace Display;
+
 			class PointLight : public ILight
 			{
 			private:
@@ -22,11 +25,10 @@ namespace Engine
 
 				float range;
 				float intensity;
+				RGBColor color;
 
 			public:
-				PointLight();
-				PointLight(const Vector3& position);
-				PointLight(const Vector3& position, float range);
+				PointLight(const Vector3& position = Vector3(), float range = 1.0f, float intensity = 1.0f, RGBColor color = RGBColor());
 
 				[[nodiscard]] Vector3 GetPosition() const;
 				void SetPosition(const Vector3& position);
@@ -37,12 +39,16 @@ namespace Engine
 				[[nodiscard]] float GetIntensity() const;
 				void SetIntensity(float intensity);
 
-				virtual float GetLightAmountAt(const Vector3& position,
-											   const Vector3& normal,
-											   const Vector3& cam_pos,
-											   const MaterialProperties& material_properties) const override;
+				virtual RGBColor GetColorAt(const Vector3& position,
+											const Vector3& normal,
+											const Vector3& cam_pos,
+											const MaterialProperties& material_properties) const override;
 
 				virtual bool IsShadowCaster() const override;
+
+				virtual RGBColor GetColor() const override;
+				virtual void SetColor(RGBColor color) override;
+
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const override;
 				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;
