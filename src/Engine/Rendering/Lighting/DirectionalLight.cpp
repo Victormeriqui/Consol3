@@ -16,27 +16,9 @@ namespace Engine
 		namespace Lighting
 		{
 			float ortho_size = 3;
-			DirectionalLight::DirectionalLight() :
-				intensity(1.0f),
-				// TODO: figure out the best value for this
-				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
-			{
-				// by calling the setter explicitly we also update the view matrix
-				SetDirection(Vector3());
-			}
 
-			DirectionalLight::DirectionalLight(const Vector3& direction) :
-				intensity(1.0f),
-				// TODO: figure out the best value for this
-				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
-			{
-				SetDirection(direction);
-			}
-
-			DirectionalLight::DirectionalLight(const Vector3& direction, float intensity) :
-				intensity(intensity),
+			DirectionalLight::DirectionalLight(const Vector3& direction, RGBColor color) :
+				color(RGBColor()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
@@ -69,33 +51,33 @@ namespace Engine
 				UpdateViewMatrix();
 			}
 
-			float DirectionalLight::GetIntensity() const
-			{
-				return intensity;
-			}
-
-			void DirectionalLight::SetIntensity(float intensity)
-			{
-				this->intensity = intensity;
-			}
-
-			float DirectionalLight::GetLightAmountAt(const Vector3& position,
-													 const Vector3& normal,
-													 const Vector3& cam_pos,
-													 const MaterialProperties& material_properties) const
+			RGBColor DirectionalLight::GetColorAt(const Vector3& position,
+												  const Vector3& normal,
+												  const Vector3& cam_pos,
+												  const MaterialProperties& material_properties) const
 			{
 				float amount = normal.GetDotProduct(-direction);
 
-				amount *= intensity;
-
 				amount += GetSpecularHighlightAt(position, normal, cam_pos, direction, material_properties);
 
-				return std::max(0.0f, amount);
+				amount = std::clamp(amount, 0.0f, 1.0f);
+
+				return color.GetBlendMultiplied(amount);
 			}
 
 			bool DirectionalLight::IsShadowCaster() const
 			{
 				return true;
+			}
+
+			RGBColor DirectionalLight::GetColor() const
+			{
+				return color;
+			}
+
+			void DirectionalLight::SetColor(RGBColor color)
+			{
+				this->color = color;
 			}
 
 			std::optional<bool> DirectionalLight::IsLinearProjection() const

@@ -15,19 +15,11 @@ namespace Engine
 		{
 			using namespace Math;
 
-			PointLight::PointLight() : position(Vector3()), range(1.0f), intensity(1.0f), attenuation({ 1.2f, 1, 1 })
-			{
-			}
-
-			PointLight::PointLight(const Vector3& position) : position(position), range(1.0f), intensity(1.0f), attenuation({ 1.2f, 1, 1 })
-			{
-			}
-
-			PointLight::PointLight(const Vector3& position, float range) :
+			PointLight::PointLight(const Vector3& position, float range, RGBColor color) :
 				position(position),
 				range(range),
-				intensity(1.0f),
-				attenuation({ 1.2f, 1, 1 })
+				color(color),
+				attenuation({ 0.1f, 0.1f, 1.0f })
 			{
 			}
 
@@ -51,26 +43,26 @@ namespace Engine
 				this->range = range;
 			}
 
-			float PointLight::GetIntensity() const
+			RGBColor PointLight::GetColor() const
 			{
-				return intensity;
+				return color;
 			}
 
-			void PointLight::SetIntensity(float intensity)
+			void PointLight::SetColor(RGBColor color)
 			{
-				this->intensity = intensity;
+				this->color = color;
 			}
 
-			float PointLight::GetLightAmountAt(const Vector3& position,
-											   const Vector3& normal,
-											   const Vector3& cam_pos,
-											   const MaterialProperties& material_properties) const
+			RGBColor PointLight::GetColorAt(const Vector3& position,
+											const Vector3& normal,
+											const Vector3& cam_pos,
+											const MaterialProperties& material_properties) const
 			{
 				Vector3 light_dir = position - this->position;
 				float light_dist  = light_dir.GetLength();
 
 				if (light_dist > range)
-					return 0;
+					return RGBColor(0, 0, 0);
 
 				light_dir.Normalize();
 
@@ -78,10 +70,11 @@ namespace Engine
 
 				float amount = normal.GetDotProduct(-light_dir);
 
-				amount = (amount * intensity) / attenuation_amount;
+				amount /= attenuation_amount;
 				amount += GetSpecularHighlightAt(position, normal, cam_pos, light_dir, material_properties);
+				amount = std::clamp(amount, 0.0f, 1.0f);
 
-				return std::max(0.0f, amount);
+				return color.GetBlendMultiplied(amount);
 			}
 
 			bool PointLight::IsShadowCaster() const
