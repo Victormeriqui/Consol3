@@ -16,12 +16,11 @@ namespace Engine
 	{
 		namespace Lighting
 		{
-			SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range, float intensity, RGBColor color) :
+			SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range, RGBColor color) :
 				angle(90),
 				range(range),
-				intensity(intensity),
 				color(color),
-				attenuation({ 1.2f, 1, 1 }),
+				attenuation({ 0.01f, 0.01f, 1.0f }),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				// TODO: calculate width, height and fov with the light's angle
@@ -90,16 +89,6 @@ namespace Engine
 				this->range = range;
 			}
 
-			float SpotLight::GetIntensity() const
-			{
-				return intensity;
-			}
-
-			void SpotLight::SetIntensity(float intensity)
-			{
-				this->intensity = intensity;
-			}
-
 			RGBColor SpotLight::GetColor() const
 			{
 				return color;
@@ -134,7 +123,7 @@ namespace Engine
 
 				float amount = normal.GetDotProduct(-light_dir);
 
-				amount = (amount * intensity) / attenuation_amount;
+				amount /= attenuation_amount;
 				amount += GetSpecularHighlightAt(position, normal, cam_pos, light_dir, material_properties);
 				amount = std::clamp(amount, 0.0f, 1.0f);
 

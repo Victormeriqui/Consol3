@@ -25,7 +25,6 @@ namespace Engine
 			class LightingSystem
 			{
 			private:
-				float ambient_light_intensity;
 				RGBColor ambient_light_color;
 				std::vector<std::shared_ptr<ILight>> lights;
 
@@ -36,9 +35,8 @@ namespace Engine
 				void RemoveLight(int index);
 
 				void SetAmbientLightColor(RGBColor color);
-				void SetAmbientLightIntensity(float ambient_light_intensity);
 
-				[[nodiscard]] RGBColor GetAmbientLitColor() const;
+				[[nodiscard]] RGBColor GetAmbientLightColor() const;
 
 				const std::vector<std::shared_ptr<ILight>> GetLights() const;
 

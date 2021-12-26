@@ -171,7 +171,7 @@ namespace Engine
 				RGBColor lit_color =
 					lighting_system->GetLitColorAt(frag_position, frag_normal, camera_position, frag_position_lights, material_properties);
 
-				lit_color += lighting_system->GetAmbientLitColor();
+				lit_color += lighting_system->GetAmbientLightColor();
 
 				RGBColor final_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 

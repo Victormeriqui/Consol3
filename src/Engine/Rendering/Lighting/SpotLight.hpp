@@ -28,7 +28,6 @@ namespace Engine
 				Attenuation attenuation;
 
 				float range;
-				float intensity;
 				RGBColor color;
 
 				DepthBuffer depthbuffer;
@@ -39,11 +38,7 @@ namespace Engine
 				void UpdateViewMatrix();
 
 			public:
-				SpotLight(const Vector3& position  = Vector3(),
-						  const Vector3& direction = Vector3(),
-						  float range			   = 1.0f,
-						  float intensity		   = 1.0f,
-						  RGBColor color		   = RGBColor());
+				SpotLight(const Vector3& position = Vector3(), const Vector3& direction = Vector3(), float range = 1.0f, RGBColor color = RGBColor());
 
 				[[nodiscard]] Vector3 GetPosition() const;
 				void SetPosition(const Vector3& position);
@@ -56,9 +51,6 @@ namespace Engine
 
 				[[nodiscard]] float GetAngle() const;
 				void SetAngle(float angle);
-
-				[[nodiscard]] float GetIntensity() const;
-				void SetIntensity(float intensity);
 
 				virtual RGBColor GetColorAt(const Vector3& position,
 											const Vector3& normal,

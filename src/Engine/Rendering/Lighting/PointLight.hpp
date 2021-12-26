@@ -24,20 +24,16 @@ namespace Engine
 				Attenuation attenuation;
 
 				float range;
-				float intensity;
 				RGBColor color;
 
 			public:
-				PointLight(const Vector3& position = Vector3(), float range = 1.0f, float intensity = 1.0f, RGBColor color = RGBColor());
+				PointLight(const Vector3& position = Vector3(), float range = 1.0f, RGBColor color = RGBColor());
 
 				[[nodiscard]] Vector3 GetPosition() const;
 				void SetPosition(const Vector3& position);
 
 				[[nodiscard]] float GetRange() const;
 				void SetRange(float range);
-
-				[[nodiscard]] float GetIntensity() const;
-				void SetIntensity(float intensity);
 
 				virtual RGBColor GetColorAt(const Vector3& position,
 											const Vector3& normal,

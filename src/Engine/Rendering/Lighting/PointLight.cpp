@@ -15,12 +15,11 @@ namespace Engine
 		{
 			using namespace Math;
 
-			PointLight::PointLight(const Vector3& position, float range, float intensity, RGBColor color) :
+			PointLight::PointLight(const Vector3& position, float range, RGBColor color) :
 				position(position),
 				range(range),
-				intensity(intensity),
 				color(color),
-				attenuation({ 1.2f, 1, 1 })
+				attenuation({ 0.1f, 0.1f, 1.0f })
 			{
 			}
 
@@ -42,16 +41,6 @@ namespace Engine
 			void PointLight::SetRange(float range)
 			{
 				this->range = range;
-			}
-
-			float PointLight::GetIntensity() const
-			{
-				return intensity;
-			}
-
-			void PointLight::SetIntensity(float intensity)
-			{
-				this->intensity = intensity;
 			}
 
 			RGBColor PointLight::GetColor() const
@@ -81,7 +70,7 @@ namespace Engine
 
 				float amount = normal.GetDotProduct(-light_dir);
 
-				amount = (amount * intensity) / attenuation_amount;
+				amount /= attenuation_amount;
 				amount += GetSpecularHighlightAt(position, normal, cam_pos, light_dir, material_properties);
 				amount = std::clamp(amount, 0.0f, 1.0f);
 

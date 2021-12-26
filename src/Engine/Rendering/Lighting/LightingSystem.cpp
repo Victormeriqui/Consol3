@@ -17,10 +17,7 @@ namespace Engine
 		{
 			using namespace Math;
 
-			LightingSystem::LightingSystem() :
-				lights(std::vector<std::shared_ptr<ILight>>()),
-				ambient_light_intensity(0.01f),
-				ambient_light_color(RGBColor(255, 255, 255))
+			LightingSystem::LightingSystem() : lights(std::vector<std::shared_ptr<ILight>>()), ambient_light_color(RGBColor(255, 255, 255))
 			{
 			}
 
@@ -44,14 +41,9 @@ namespace Engine
 				this->ambient_light_color = ambient_light_color;
 			}
 
-			void LightingSystem::SetAmbientLightIntensity(float ambient_light_intensity)
+			RGBColor LightingSystem::GetAmbientLightColor() const
 			{
-				this->ambient_light_intensity = ambient_light_intensity;
-			}
-
-			RGBColor LightingSystem::GetAmbientLitColor() const
-			{
-				return ambient_light_color.GetBlendMultiplied(ambient_light_intensity);
+				return ambient_light_color;
 			}
 
 			RGBColor LightingSystem::GetLitColorAt(const Vertex& vertex,
