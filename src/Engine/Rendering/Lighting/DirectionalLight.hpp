@@ -23,7 +23,6 @@ namespace Engine
 			{
 			private:
 				Vector3 direction;
-				float intensity;
 				RGBColor color;
 
 				DepthBuffer depthbuffer;
@@ -34,13 +33,10 @@ namespace Engine
 				void UpdateViewMatrix();
 
 			public:
-				DirectionalLight(const Vector3& direction = Vector3(), float intensity = 1.0f, RGBColor color = RGBColor());
+				DirectionalLight(const Vector3& direction = Vector3(), RGBColor color = RGBColor());
 
 				[[nodiscard]] Vector3 GetDirection() const;
 				void SetDirection(const Vector3& direction);
-
-				[[nodiscard]] float GetIntensity() const;
-				void SetIntensity(float intensity);
 
 				virtual RGBColor GetColorAt(const Vector3& position,
 											const Vector3& normal,

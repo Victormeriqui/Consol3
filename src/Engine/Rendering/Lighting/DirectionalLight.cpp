@@ -17,8 +17,7 @@ namespace Engine
 		{
 			float ortho_size = 3;
 
-			DirectionalLight::DirectionalLight(const Vector3& direction, float intensity, RGBColor color) :
-				intensity(intensity),
+			DirectionalLight::DirectionalLight(const Vector3& direction, RGBColor color) :
 				color(RGBColor()),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
@@ -52,16 +51,6 @@ namespace Engine
 				UpdateViewMatrix();
 			}
 
-			float DirectionalLight::GetIntensity() const
-			{
-				return intensity;
-			}
-
-			void DirectionalLight::SetIntensity(float intensity)
-			{
-				this->intensity = intensity;
-			}
-
 			RGBColor DirectionalLight::GetColorAt(const Vector3& position,
 												  const Vector3& normal,
 												  const Vector3& cam_pos,
@@ -69,9 +58,8 @@ namespace Engine
 			{
 				float amount = normal.GetDotProduct(-direction);
 
-				amount *= intensity;
-
 				amount += GetSpecularHighlightAt(position, normal, cam_pos, direction, material_properties);
+
 				amount = std::clamp(amount, 0.0f, 1.0f);
 
 				return color.GetBlendMultiplied(amount);

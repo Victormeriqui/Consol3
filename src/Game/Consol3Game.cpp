@@ -90,10 +90,10 @@ namespace Game
 		mesh = StaticMesh();
 		mesh.SetModelResource("res/bunny.obj")
 			.SetPosition(Vector3(2, 1, 0))
-			.SetColor(RGBColor(0, 0, 200))
+			//.SetColor(RGBColor(0, 0, 200))
 			.SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
-			.SetScale(Vector3(10.0f, 10.0f, 10.0f));
-		//.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
+			.SetScale(Vector3(10.0f, 10.0f, 10.0f))
+			.SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
 
 		mesh2 = StaticMesh();
 		mesh2.SetModelResource("res/bunny.obj")
@@ -110,38 +110,33 @@ namespace Game
 		floor.SetModelResource("plane50").SetTextureResource("res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -2, -6));
 
 		dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
-		dir_light->SetIntensity(0.4f);
-		dir_light->SetColor(RGBColor(255, 0, 0));
+		dir_light->SetColor(RGBColor(255, 255, 255));
 
 		point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
 		point_light->SetRange(25.0f);
-		point_light->SetIntensity(5.0f);
 		point_light->SetColor(RGBColor(255, 0, 0));
 
 		spot_light = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
-		spot_light->SetRange(15.0f);
+		spot_light->SetRange(25.0f);
 		spot_light->SetAngle(20.0f);
-		spot_light->SetIntensity(6.0f);
-		spot_light->SetColor(RGBColor(0, 0, 255));
+		spot_light->SetColor(RGBColor(255, 0, 0));
 
 		spot_light2 = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
 		spot_light2->SetRange(15.0f);
 		spot_light2->SetAngle(20.0f);
-		spot_light2->SetIntensity(6.0f);
 		spot_light2->SetColor(RGBColor(0, 255, 0));
 
 		spot_light3 = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
 		spot_light3->SetRange(15.0f);
 		spot_light3->SetAngle(20.0f);
-		spot_light3->SetIntensity(6.0f);
-		spot_light3->SetColor(RGBColor(255, 0, 0));
+		spot_light3->SetColor(RGBColor(0, 0, 255));
 
-		this->lighting_system->SetAmbientLightIntensity(0.12f);
-		this->lighting_system->AddLight(dir_light);
+		this->lighting_system->SetAmbientLightColor(RGBColor(10, 10, 10));
+		//	this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
-		// this->lighting_system->AddLight(spot_light2);
-		// this->lighting_system->AddLight(spot_light3);
+		this->lighting_system->AddLight(spot_light2);
+		this->lighting_system->AddLight(spot_light3);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -256,7 +251,7 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 
-		// scene_renderer->DrawShadedMesh(mesh);
+		scene_renderer->DrawShadedMesh(mesh);
 		scene_renderer->DrawShadedMesh(mesh2);
 
 		//	scene_renderer->DrawMesh(plight_mesh);
