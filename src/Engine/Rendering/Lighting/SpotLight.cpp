@@ -16,40 +16,11 @@ namespace Engine
 	{
 		namespace Lighting
 		{
-			SpotLight::SpotLight() :
-				angle(90),
-				range(1.0f),
-				intensity(1.0f),
-				attenuation({ 1.2f, 1, 1 }),
-				// TODO: figure out the best value for this
-				depthbuffer(DepthBuffer(200, 200)),
-				// TODO: calculate width, height and fov with the light's angle
-				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
-			{
-				// by calling the setters explicitly we also update the light matrix
-				SetPosition(Vector3());
-				SetDirection(Vector3());
-			}
-
-			SpotLight::SpotLight(const Vector3& position, const Vector3& direction) :
-				angle(90),
-				range(1.0f),
-				intensity(1.0f),
-				attenuation({ 1.2f, 1, 1 }),
-				// TODO: figure out the best value for this
-				depthbuffer(DepthBuffer(200, 200)),
-				// TODO: calculate width, height and fov with the light's angle
-				projection_mat(Matrix4().SetPerspectiveProjection(200, 200, 0.1f, 100.0f, 50))
-			{
-				SetPosition(position);
-				SetDirection(direction);
-			}
-
-			SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range) :
+			SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range, RGBColor color) :
 				angle(90),
 				range(range),
-				intensity(1.0f),
-				attenuation({ 1.2f, 1, 1 }),
+				color(color),
+				attenuation({ 0.01f, 0.01f, 1.0f }),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				// TODO: calculate width, height and fov with the light's angle
@@ -118,26 +89,26 @@ namespace Engine
 				this->range = range;
 			}
 
-			float SpotLight::GetIntensity() const
+			RGBColor SpotLight::GetColor() const
 			{
-				return intensity;
+				return color;
 			}
 
-			void SpotLight::SetIntensity(float intensity)
+			void SpotLight::SetColor(RGBColor color)
 			{
-				this->intensity = intensity;
+				this->color = color;
 			}
 
-			float SpotLight::GetLightAmountAt(const Vector3& position,
-											  const Vector3& normal,
-											  const Vector3& cam_pos,
-											  const MaterialProperties& material_properties) const
+			RGBColor SpotLight::GetColorAt(const Vector3& position,
+										   const Vector3& normal,
+										   const Vector3& cam_pos,
+										   const MaterialProperties& material_properties) const
 			{
 				Vector3 light_dir = position - this->position;
 				float light_dist  = light_dir.GetLength();
 
 				if (light_dist > range)
-					return 0;
+					return RGBColor(0, 0, 0);
 
 				light_dir.Normalize();
 
@@ -146,16 +117,17 @@ namespace Engine
 				float ang = Math::Util::ToDegrees(std::acosf(spotfactor));
 
 				if (ang > angle)
-					return 0;
+					return RGBColor(0, 0, 0);
 
 				float attenuation_amount = attenuation.c + attenuation.b * light_dist + attenuation.a * light_dist * light_dist + 0.0001f;
 
 				float amount = normal.GetDotProduct(-light_dir);
 
-				amount = (amount * intensity) / attenuation_amount;
+				amount /= attenuation_amount;
 				amount += GetSpecularHighlightAt(position, normal, cam_pos, light_dir, material_properties);
+				amount = std::clamp(amount, 0.0f, 1.0f);
 
-				return std::max(0.0f, amount);
+				return color.GetBlendMultiplied(amount);
 			}
 
 			bool SpotLight::IsShadowCaster() const

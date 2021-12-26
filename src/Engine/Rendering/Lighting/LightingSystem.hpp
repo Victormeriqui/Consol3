@@ -3,6 +3,7 @@
 
 #include "ILight.hpp"
 
+#include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "../DepthBuffer.hpp"
 #include "../Rasterizer.hpp"
@@ -19,10 +20,12 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			using namespace Display;
+
 			class LightingSystem
 			{
 			private:
-				float ambient_light;
+				RGBColor ambient_light_color;
 				std::vector<std::shared_ptr<ILight>> lights;
 
 			public:
@@ -31,16 +34,17 @@ namespace Engine
 				void AddLight(std::shared_ptr<ILight> light);
 				void RemoveLight(int index);
 
-				void SetAmbientLight(float ambient_light);
-				[[nodiscard]] float GetAmbientLight() const;
+				void SetAmbientLightColor(RGBColor color);
+
+				[[nodiscard]] RGBColor GetAmbientLightColor() const;
 
 				const std::vector<std::shared_ptr<ILight>> GetLights() const;
 
-				[[nodiscard]] float GetLightAmountAt(const Vertex& vertex,
+				[[nodiscard]] RGBColor GetLitColorAt(const Vertex& vertex,
 													 const Vector3& cam_pos,
 													 const Vector3 vertex_position_lights[],
 													 const MaterialProperties& material_properties) const;
-				[[nodiscard]] float GetLightAmountAt(const Vector3& position,
+				[[nodiscard]] RGBColor GetLitColorAt(const Vector3& position,
 													 const Vector3& normal,
 													 const Vector3& cam_pos,
 													 const Vector3 position_lights[],

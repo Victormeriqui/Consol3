@@ -1,6 +1,7 @@
 #ifndef DIRECTIONALLIGHT_HPP
 #define DIRECTIONALLIGHT_HPP
 
+#include "../../../Display/RGBColor.hpp"
 #include "../../../Math/Matrix4.hpp"
 #include "../../../Math/Vector3.hpp"
 #include "../DepthBuffer.hpp"
@@ -16,11 +17,13 @@ namespace Engine
 	{
 		namespace Lighting
 		{
+			using namespace Display;
+
 			class DirectionalLight : public ILight
 			{
 			private:
 				Vector3 direction;
-				float intensity;
+				RGBColor color;
 
 				DepthBuffer depthbuffer;
 
@@ -30,22 +33,21 @@ namespace Engine
 				void UpdateViewMatrix();
 
 			public:
-				DirectionalLight();
-				DirectionalLight(const Vector3& direction);
-				DirectionalLight(const Vector3& direction, float intensity);
+				DirectionalLight(const Vector3& direction = Vector3(), RGBColor color = RGBColor());
 
 				[[nodiscard]] Vector3 GetDirection() const;
 				void SetDirection(const Vector3& direction);
 
-				[[nodiscard]] float GetIntensity() const;
-				void SetIntensity(float intensity);
-
-				virtual float GetLightAmountAt(const Vector3& position,
-											   const Vector3& normal,
-											   const Vector3& cam_pos,
-											   const MaterialProperties& material_properties) const override;
+				virtual RGBColor GetColorAt(const Vector3& position,
+											const Vector3& normal,
+											const Vector3& cam_pos,
+											const MaterialProperties& material_properties) const override;
 
 				virtual bool IsShadowCaster() const override;
+
+				virtual RGBColor GetColor() const override;
+				virtual void SetColor(RGBColor color) override;
+
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const override;
 				virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const override;
 				virtual std::optional<std::reference_wrapper<DepthBuffer>> GetLightDepthBuffer() override;
