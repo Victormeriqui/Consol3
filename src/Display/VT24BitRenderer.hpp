@@ -1,7 +1,7 @@
 
 
-#ifndef ANSIRENDERER_HPP
-#define ANSIRENDERER_HPP
+#ifndef VT24BITRENDERER_HPP
+#define VT24BITRENDERER_HPP
 
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
@@ -23,7 +23,7 @@ namespace Display
 		0x808080, 0xFF0000, 0x00FF00, 0xFFFF00, 0x0000FF, 0xFF00FF, 0x00FFFF, 0xFFFFFF,
 	};
 
-	class ANSIRenderer : public IRenderer
+	class VT24BitRenderer : public IRenderer
 	{
 	private:
 		std::shared_ptr<FrameBuffer<uint32_t>> framebuffer;
@@ -40,7 +40,7 @@ namespace Display
 		void TranslateFrameBuffer();
 
 	public:
-		ANSIRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer);
+		VT24BitRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 

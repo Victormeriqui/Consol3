@@ -2,6 +2,7 @@
 #define RGBCOLOR_HPP
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 
 namespace Display
@@ -85,6 +86,19 @@ namespace Display
 		[[nodiscard]] RGBColor GetBlendMultiplied(float value) const
 		{
 			return RGBColor(*this).BlendMultiply(value);
+		}
+
+		[[nodiscard]] float GetColorDistance(RGBColor color) const
+		{
+			int16_t red	  = color.r - r;
+			int16_t green = color.g - g;
+			int16_t blue  = color.b - b;
+
+			red	  = std::abs(red);
+			green = std::abs(green);
+			blue  = std::abs(blue);
+
+			return std::sqrtf((float)red * (float)red + (float)green * (float)green + (float)blue * (float)blue);
 		}
 
 		constexpr RGBColor& operator+=(RGBColor other) noexcept

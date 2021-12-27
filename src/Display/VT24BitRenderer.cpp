@@ -1,8 +1,8 @@
-#include "ANSIRenderer.hpp"
+#include "VT24BitRenderer.hpp"
 
 namespace Display
 {
-	ANSIRenderer::ANSIRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer) :
+	VT24BitRenderer::VT24BitRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_ansi))
 	{
@@ -12,12 +12,12 @@ namespace Display
 		framebuffer_string_len = 0;
 	}
 
-	void ANSIRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
+	void VT24BitRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		framebuffer->SetValue(x, y, color.GetHexValues());
 	}
 
-	void ANSIRenderer::TranslateFrameBuffer()
+	void VT24BitRenderer::TranslateFrameBuffer()
 	{
 		uint32_t last_color			  = 0x000000;
 		uint64_t current_string_index = 0;
@@ -71,28 +71,28 @@ namespace Display
 		framebuffer_string_len = current_string_index;
 	}
 
-	void ANSIRenderer::DisplayFrame()
+	void VT24BitRenderer::DisplayFrame()
 	{
 		TranslateFrameBuffer();
 		console_manager.WriteConsoleString(framebuffer_string, framebuffer_string_len);
 	}
 
-	void ANSIRenderer::ReportInformation(const std::string& info)
+	void VT24BitRenderer::ReportInformation(const std::string& info)
 	{
 		console_manager.SetTitle(info);
 	}
 
-	void ANSIRenderer::ClearFrameBuffer()
+	void VT24BitRenderer::ClearFrameBuffer()
 	{
 		this->framebuffer->FillBuffer(0x000000);
 	}
 
-	const uint16_t ANSIRenderer::GetFrameBufferWidth() const
+	const uint16_t VT24BitRenderer::GetFrameBufferWidth() const
 	{
 		return framebuffer->GetWidth();
 	}
 
-	const uint16_t ANSIRenderer::GetFrameBufferHeight() const
+	const uint16_t VT24BitRenderer::GetFrameBufferHeight() const
 	{
 		return framebuffer->GetHeight();
 	}

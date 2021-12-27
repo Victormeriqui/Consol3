@@ -22,7 +22,7 @@ namespace Game
 		resource_manager->LoadModel("res/monkey.obj", model_options);
 		resource_manager->LoadModel("res/bunny.obj", model_options);
 		resource_manager->LoadModel("res/cube.obj", model_options);
-		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.1f));
+		resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
 		resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
 		resource_manager->LoadModel("res/alien.md2", model_options);
