@@ -11,38 +11,48 @@ namespace Display
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered))
 	{
 		ClearFrameBuffer();
+		GenerateLookupTable();
+	}
+
+	void DitheredRenderer::GenerateLookupTable()
+	{
+		for (uint16_t b = 0; b < 256; b++)
+		{
+			for (uint16_t g = 0; g < 256; g++)
+			{
+				for (uint16_t r = 0; r < 256; r++)
+				{
+					RGBColor color = RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b);
+
+					float closest_dist	= 999;
+					uint8_t closest_idx = 0;
+
+					for (uint8_t i = 0; i < dithered_colors_len; i++)
+					{
+						float dist = color.GetColorDistance(dithered_colors[i].real_color);
+
+						if (dist < closest_dist)
+						{
+							closest_dist = dist;
+							closest_idx	 = i;
+
+							if (dist == 0)
+								break;
+						}
+					}
+
+					uint32_t real_color_hex			   = color.GetHexValues();
+					color_lookup_table[real_color_hex] = closest_idx;
+				}
+			}
+		}
 	}
 
 	void DitheredRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		HSVColor hsvcolor = HSVColor(color);
+		uint32_t real_color_hex = color.GetHexValues();
 
-		// white/black
-		if (hsvcolor.saturation <= 0.25f)
-		{
-			uint8_t shade_index = Util::LerpCast<uint8_t>(hsvcolor.value, 0, 15);
-
-			framebuffer->SetValue(x, y, dithered_white[shade_index]);
-			return;
-		}
-
-		// TODO: this shouldn't be a linear interpolation as the shade_indexes are not linear
-		// the shade amount should be pre calculated and this should be made into a binary search
-		uint8_t shade_index = Util::LerpCast<uint8_t>(hsvcolor.value, 0, 10);
-
-		// special red case because it wraps over the 360 mark
-		if (hsvcolor.hue >= dithered_red.min_hue || hsvcolor.hue <= dithered_red.max_hue)
-			framebuffer->SetValue(x, y, dithered_red.color_shades[shade_index]);
-
-		// select color by hue
-		for (const DitheredColor& dithered_color : sequential_dithered_colors)
-		{
-			if (dithered_color.min_hue <= hsvcolor.hue && hsvcolor.hue <= dithered_color.max_hue)
-			{
-				framebuffer->SetValue(x, y, dithered_color.color_shades[shade_index]);
-				break;
-			}
-		}
+		framebuffer->SetValue(x, y, dithered_colors[color_lookup_table[real_color_hex]].console_color);
 	}
 
 	void DitheredRenderer::DisplayFrame()
