@@ -4,7 +4,7 @@ namespace Display
 {
 	VT8BitRenderer::VT8BitRenderer(std::shared_ptr<FrameBuffer<uint8_t>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
-		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_ansi1))
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
 		ClearFrameBuffer();
 		GenerateLookupTable();
