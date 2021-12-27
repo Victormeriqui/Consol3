@@ -4,7 +4,7 @@ namespace Display
 {
 	VT24BitRenderer::VT24BitRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
-		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_ansi))
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
 		ClearFrameBuffer();
 
