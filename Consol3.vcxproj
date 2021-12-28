@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\ColorMapping.hpp" />
-    <ClInclude Include="src\Display\DitheredColorMap.hpp" />
     <ClInclude Include="src\Display\VT24BitRenderer.hpp" />
     <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
     <ClInclude Include="src\Display\IRenderer.hpp" />
