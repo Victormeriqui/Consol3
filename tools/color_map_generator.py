@@ -1,7 +1,6 @@
 import sys
 import os
 import math
-import multiprocessing
 
 input_filename = ""
 output_filename = ""
