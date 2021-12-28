@@ -2,6 +2,7 @@
 #define RGBCOLOR_HPP
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 
 namespace Display

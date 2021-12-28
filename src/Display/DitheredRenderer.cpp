@@ -1,6 +1,7 @@
 #include "DitheredRenderer.hpp"
 
 #include "../Math/Util/MathUtil.hpp"
+#include "ColorMapping.hpp"
 
 namespace Display
 {
@@ -8,41 +9,16 @@ namespace Display
 
 	DitheredRenderer::DitheredRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
-		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered))
+		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
 		ClearFrameBuffer();
 	}
 
 	void DitheredRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
-		HSVColor hsvcolor = HSVColor(color);
+		uint32_t real_color_hex = color.GetHexValues();
 
-		// white/black
-		if (hsvcolor.saturation <= 0.25f)
-		{
-			uint8_t shade_index = Util::LerpCast<uint8_t>(hsvcolor.value, 0, 15);
-
-			framebuffer->SetValue(x, y, dithered_white[shade_index]);
-			return;
-		}
-
-		// TODO: this shouldn't be a linear interpolation as the shade_indexes are not linear
-		// the shade amount should be pre calculated and this should be made into a binary search
-		uint8_t shade_index = Util::LerpCast<uint8_t>(hsvcolor.value, 0, 10);
-
-		// special red case because it wraps over the 360 mark
-		if (hsvcolor.hue >= dithered_red.min_hue || hsvcolor.hue <= dithered_red.max_hue)
-			framebuffer->SetValue(x, y, dithered_red.color_shades[shade_index]);
-
-		// select color by hue
-		for (const DitheredColor& dithered_color : sequential_dithered_colors)
-		{
-			if (dithered_color.min_hue <= hsvcolor.hue && hsvcolor.hue <= dithered_color.max_hue)
-			{
-				framebuffer->SetValue(x, y, dithered_color.color_shades[shade_index]);
-				break;
-			}
-		}
+		framebuffer->SetValue(x, y, dithered_colors[dithered_color_mapping[real_color_hex]].console_color);
 	}
 
 	void DitheredRenderer::DisplayFrame()
