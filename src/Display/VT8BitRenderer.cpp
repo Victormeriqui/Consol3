@@ -1,5 +1,7 @@
 #include "VT8BitRenderer.hpp"
 
+#include "ColorMapping.hpp"
+
 namespace Display
 {
 	VT8BitRenderer::VT8BitRenderer(std::shared_ptr<FrameBuffer<uint8_t>> framebuffer) :
@@ -7,50 +9,16 @@ namespace Display
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
 		ClearFrameBuffer();
-		GenerateLookupTable();
 
 		framebuffer_string	   = std::string(this->framebuffer->GetWidth() * this->framebuffer->GetHeight() * 20, ' ');
 		framebuffer_string_len = 0;
 	}
 
-	void VT8BitRenderer::GenerateLookupTable()
-	{
-		for (uint16_t b = 0; b < 256; b++)
-		{
-			for (uint16_t g = 0; g < 256; g++)
-			{
-				for (uint16_t r = 0; r < 256; r++)
-				{
-					RGBColor color = RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b);
-
-					float closest_dist	= 999;
-					uint8_t closest_idx = 0;
-
-					for (uint8_t i = 0; i < indexed_colors_len; i++)
-					{
-						float dist = color.GetColorDistance(indexed_colors[i].real_color);
-
-						if (dist < closest_dist)
-						{
-							closest_dist = dist;
-							closest_idx	 = i;
-
-							if (dist == 0)
-								break;
-						}
-					}
-
-					uint32_t real_color_hex			   = color.GetHexValues();
-					color_lookup_table[real_color_hex] = closest_idx;
-				}
-			}
-		}
-	}
-
 	void VT8BitRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		uint32_t real_color_hex = color.GetHexValues();
-		framebuffer->SetValue(x, y, indexed_colors[color_lookup_table[real_color_hex]].console_color_index);
+
+		framebuffer->SetValue(x, y, indexed_colors[vt8bit_color_mappting[real_color_hex]].console_color_index);
 	}
 
 	void VT8BitRenderer::TranslateFrameBuffer()

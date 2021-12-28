@@ -88,19 +88,6 @@ namespace Display
 			return RGBColor(*this).BlendMultiply(value);
 		}
 
-		[[nodiscard]] float GetColorDistance(RGBColor color) const
-		{
-			int16_t red	  = color.r - r;
-			int16_t green = color.g - g;
-			int16_t blue  = color.b - b;
-
-			red	  = std::abs(red);
-			green = std::abs(green);
-			blue  = std::abs(blue);
-
-			return std::sqrtf((float)red * (float)red + (float)green * (float)green + (float)blue * (float)blue);
-		}
-
 		constexpr RGBColor& operator+=(RGBColor other) noexcept
 		{
 			uint32_t red   = r + other.r;

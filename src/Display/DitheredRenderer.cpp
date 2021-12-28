@@ -1,6 +1,7 @@
 #include "DitheredRenderer.hpp"
 
 #include "../Math/Util/MathUtil.hpp"
+#include "ColorMapping.hpp"
 
 namespace Display
 {
@@ -11,48 +12,13 @@ namespace Display
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
 		ClearFrameBuffer();
-		GenerateLookupTable();
-	}
-
-	void DitheredRenderer::GenerateLookupTable()
-	{
-		for (uint16_t b = 0; b < 256; b++)
-		{
-			for (uint16_t g = 0; g < 256; g++)
-			{
-				for (uint16_t r = 0; r < 256; r++)
-				{
-					RGBColor color = RGBColor((uint8_t)r, (uint8_t)g, (uint8_t)b);
-
-					float closest_dist	= 999;
-					uint8_t closest_idx = 0;
-
-					for (uint8_t i = 0; i < dithered_colors_len; i++)
-					{
-						float dist = color.GetColorDistance(dithered_colors[i].real_color);
-
-						if (dist < closest_dist)
-						{
-							closest_dist = dist;
-							closest_idx	 = i;
-
-							if (dist == 0)
-								break;
-						}
-					}
-
-					uint32_t real_color_hex			   = color.GetHexValues();
-					color_lookup_table[real_color_hex] = closest_idx;
-				}
-			}
-		}
 	}
 
 	void DitheredRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		uint32_t real_color_hex = color.GetHexValues();
 
-		framebuffer->SetValue(x, y, dithered_colors[color_lookup_table[real_color_hex]].console_color);
+		framebuffer->SetValue(x, y, dithered_colors[dithered_color_mapping[real_color_hex]].console_color);
 	}
 
 	void DitheredRenderer::DisplayFrame()

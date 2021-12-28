@@ -99,8 +99,6 @@ namespace Display
 		std::shared_ptr<FrameBuffer<uint8_t>> framebuffer;
 		ConsoleManager console_manager;
 
-		std::map<uint32_t, uint8_t> color_lookup_table;
-
 		std::string framebuffer_string;
 		uint64_t framebuffer_string_len;
 

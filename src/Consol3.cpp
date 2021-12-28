@@ -29,7 +29,7 @@ int main()
 	// std::shared_ptr<VT24BitRenderer> renderer			   = std::make_shared<VT24BitRenderer>(framebuffer);
 
 	// std::shared_ptr<FrameBuffer<uint8_t>> framebuffer = std::make_shared<FrameBuffer<uint8_t>>(width, height);
-	//	std::shared_ptr<VT8BitRenderer> renderer		  = std::make_shared<VT8BitRenderer>(framebuffer);
+	// std::shared_ptr<VT8BitRenderer> renderer		  = std::make_shared<VT8BitRenderer>(framebuffer);
 
 	// std::shared_ptr<GreyscaleRenderer> renderer = std::make_shared<GreyscaleRenderer>(framebuffer);
 

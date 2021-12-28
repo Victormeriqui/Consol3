@@ -72,12 +72,7 @@ namespace Display
 	constexpr WORD white_fg_grey_bg	 = 0x7F;
 	constexpr WORD grey_fg_white_bg	 = 0xF7;
 
-	static const DitheredColor dithered_test[] = {
-		{ { dither_0, 0x23 }, RGBColor() },
-	};
-
 	static const DitheredColor dithered_colors[] = {
-		// static const DitheredColor dithered_red[] = {
 		{ { dither_25, darkred_fg_black_bg }, RGBColor(23, 0, 0) },
 		{ { dither_50, darkred_fg_black_bg }, RGBColor(38, 0, 0) },
 		{ { dither_50, black_fg_darkred_bg }, RGBColor(102, 0, 0) },
@@ -88,9 +83,6 @@ namespace Display
 		{ { dither_50, darkred_fg_red_bg }, RGBColor(225, 0, 0) },
 		{ { dither_25, darkred_fg_red_bg }, RGBColor(238, 0, 0) },
 		{ { dither_0, darkred_fg_red_bg }, RGBColor(255, 0, 0) },
-		//	};
-
-		//	static const DitheredColor dithered_green[] = {
 		{ { dither_25, darkgreen_fg_black_bg }, RGBColor(0, 23, 0) },
 		{ { dither_50, darkgreen_fg_black_bg }, RGBColor(0, 38, 0) },
 		{ { dither_50, black_fg_darkgreen_bg }, RGBColor(0, 102, 0) },
@@ -101,9 +93,6 @@ namespace Display
 		{ { dither_50, darkgreen_fg_green_bg }, RGBColor(0, 225, 0) },
 		{ { dither_25, darkgreen_fg_green_bg }, RGBColor(0, 238, 0) },
 		{ { dither_0, darkgreen_fg_green_bg }, RGBColor(0, 255, 0) },
-		//	};
-
-		//	static const DitheredColor dithered_blue[] = {
 		{ { dither_25, darkblue_fg_black_bg }, RGBColor(0, 0, 23) },
 		{ { dither_50, darkblue_fg_black_bg }, RGBColor(0, 0, 38) },
 		{ { dither_50, black_fg_darkblue_bg }, RGBColor(0, 0, 102) },
@@ -114,9 +103,6 @@ namespace Display
 		{ { dither_50, darkblue_fg_blue_bg }, RGBColor(0, 0, 225) },
 		{ { dither_25, darkblue_fg_blue_bg }, RGBColor(0, 0, 238) },
 		{ { dither_0, darkblue_fg_blue_bg }, RGBColor(0, 0, 255) },
-		//	};
-
-		//	static const DitheredColor dithered_cyan[] = {
 		{ { dither_25, darkcyan_fg_black_bg }, RGBColor(0, 23, 23) },
 		{ { dither_50, darkcyan_fg_black_bg }, RGBColor(0, 38, 38) },
 		{ { dither_50, black_fg_darkcyan_bg }, RGBColor(0, 102, 102) },
@@ -127,9 +113,6 @@ namespace Display
 		{ { dither_50, darkcyan_fg_cyan_bg }, RGBColor(0, 225, 225) },
 		{ { dither_25, darkcyan_fg_cyan_bg }, RGBColor(0, 238, 238) },
 		{ { dither_0, darkcyan_fg_cyan_bg }, RGBColor(0, 255, 255) },
-		//	};
-
-		//	static const DitheredColor dithered_magenta[] = {
 		{ { dither_25, darkmagenta_fg_black_bg }, RGBColor(23, 0, 23) },
 		{ { dither_50, darkmagenta_fg_black_bg }, RGBColor(38, 0, 38) },
 		{ { dither_50, black_fg_darkmagenta_bg }, RGBColor(102, 0, 102) },
@@ -140,9 +123,6 @@ namespace Display
 		{ { dither_50, darkmagenta_fg_magenta_bg }, RGBColor(225, 0, 225) },
 		{ { dither_25, darkmagenta_fg_magenta_bg }, RGBColor(238, 0, 238) },
 		{ { dither_0, darkmagenta_fg_magenta_bg }, RGBColor(255, 0, 255) },
-		//	};
-
-		//	static const DitheredColor dithered_yellow[] = {
 		{ { dither_25, darkyellow_fg_black_bg }, RGBColor(23, 23, 0) },
 		{ { dither_50, darkyellow_fg_black_bg }, RGBColor(38, 38, 0) },
 		{ { dither_50, black_fg_darkyellow_bg }, RGBColor(102, 102, 0) },
@@ -153,9 +133,6 @@ namespace Display
 		{ { dither_50, darkyellow_fg_yellow_bg }, RGBColor(225, 225, 0) },
 		{ { dither_25, darkyellow_fg_yellow_bg }, RGBColor(238, 238, 0) },
 		{ { dither_0, darkyellow_fg_yellow_bg }, RGBColor(255, 255, 0) },
-		//	};
-
-		//	static const DitheredColor dithered_white[] = {
 		{ { dither_0, black_fg_black_bg }, RGBColor(0, 0, 0) },
 		{ { dither_25, darkgrey_fg_black_bg }, RGBColor(15, 15, 15) },
 		{ { dither_50, darkgrey_fg_black_bg }, RGBColor(32, 32, 32) },
@@ -173,15 +150,12 @@ namespace Display
 		{ { dither_25, grey_fg_white_bg }, RGBColor(247, 247, 247) },
 		{ { dither_0, grey_fg_white_bg }, RGBColor(255, 255, 255) },
 	};
-	static constexpr uint8_t dithered_colors_len = 76;
 
 	class DitheredRenderer : public IRenderer
 	{
 	private:
 		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
 		ConsoleManager console_manager;
-
-		std::map<uint32_t, uint8_t> color_lookup_table;
 
 		void GenerateLookupTable();
 
