@@ -12,7 +12,7 @@ namespace Display
 	};
 
 	static const uint8_t vt8bit_color_mappting[16777216] = {
-#include "dithered_color_map.data"
+#include "vt8bit_color_map.data"
 	};
 
 }
