@@ -107,12 +107,12 @@ bool PlainShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTran
 RGBColor PlainShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 {
 	Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord,
-																		vert_v1_texture_coord,
-																		vert_v2_texture_coord,
-																		triangle,
-																		barcoord0,
-																		barcoord1,
-																		barcoord2);
+									    vert_v1_texture_coord,
+									    vert_v2_texture_coord,
+									    triangle,
+									    barcoord0,
+									    barcoord1,
+									    barcoord2);
 
 	RGBColor final_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 	final_color.BlendMultiply(color);
