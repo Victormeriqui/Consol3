@@ -16,7 +16,7 @@ The input file must be in the format \<red\>, \<green\>, \<blue\> the index assu
 Corresponds to the output space with 3 indices, 0 corresponding to black, 1 corresponding to dark red and 2 corresponding to dark green  
 
 After loading the output space, the tool will go over the entire RGB space and calculate the closest color in the output space for each input color (all 16 777 216 of them)  
-It will then write an output file with the corresponding output index for each color, ordered by color value (first like is #000000, last line is #ffffff)  
+It will then write an output file with the corresponding output index for each color, ordered by color value (first line is #000000, last line is #ffffff)  
 
 The engine can then use this output file to initialize an array with the desired values  
 When a full RGB color needs to be converted to an indexed color, the engine can just get the corresponding index at the same array location as the color's value  
