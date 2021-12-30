@@ -56,6 +56,10 @@ No external dependencies will ever be used in this engine, the goal is to do eve
 ###### Specular highlights
 <img src="images/specular.gif" width="200" height="200">
 
+###### Colored lighting
+<img src="images/colored_lights.png" width="200" height="200">
+
+
 ### Existing Renderers  
 Different renderers for the same scene can be used, these components basically decide how each pixel should be drawn to the console
 
@@ -68,8 +72,12 @@ Similar to the previous one, but also takes advantage of the dithering block cha
 <img src="images/ditheredgreyscale.png" width="200" height="200">  
 
 ###### Dithered  
-Uses the same mechanism from the previous renderer but with the default pallette, giving more depth to the default colors (11 shades per color)  
+Uses the same mechanism from the previous renderer but with the default pallette, giving more depth to the default colors (10 shades per color)  
 <img src="images/dithered.png" width="200" height="200">  
+
+###### VT Escape Sequence
+Uses escape sequences to set the colors of each pixel, allowing for full 32 bit real RGB colors, or index colors (256 color palette)  
+<img src="images/vtescapesequence.png" width="200" height="200">  
 
 ###### Text Only  
 Does not use any attribute change, thus the only color is white, the lightness of each pixel is controlled through the character in the cell  
@@ -83,7 +91,7 @@ Vertex and Fragment shaders can be created, they are basically classes that impl
 
 A simple shader:
 ```cpp
-bool PlainTextureShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
+bool PlainShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
 {
 	TransformVertexMVP(v0, mvp_mats);
 	TransformVertexMVP(v1, mvp_mats);
@@ -96,19 +104,25 @@ bool PlainTextureShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const 
 	return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 }
 
-HSVColor PlainShader::FragmentShader(const RGBColor& color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+RGBColor PlainShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
 {
-	Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord, vert_v1_texture_coord, vert_v2_texture_coord, triangle, barcoord0, barcoord1, barcoord2);
+	Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord,
+																		vert_v1_texture_coord,
+																		vert_v2_texture_coord,
+																		triangle,
+																		barcoord0,
+																		barcoord1,
+																		barcoord2);
 
-	RGBColor texture_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
+	RGBColor final_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
+	final_color.BlendMultiply(color);
 
-	return HSVColor(texture_color.BlendMultiply(color));
+	return final_color;
 }
 ```
 
 ### Planned Features  
 
 * Faster vertex transformations with SIMD  
-* ANSI Escape sequence renderer  
 * Faster rasterizer with multipixel filling  
 * Faster rasterizer with binning  
