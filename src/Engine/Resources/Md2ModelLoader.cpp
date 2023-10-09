@@ -47,20 +47,18 @@ namespace Engine
 											   std::map<std::string, Animation>& out_animations,
 											   ModelLoadingOptions options)
 		{
-			std::ifstream file_stream;
-
-			file_stream.open(filename, std::ios::binary);
+			std::ifstream file_stream(filename, std::ios::binary);
 
 			if (!file_stream.is_open())
 				return false;
 
-			const uint8_t md2_header_bytes = sizeof(Md2Header);
+			//const uint8_t md2_header_bytes = sizeof(Md2Header);
 
 			Md2Header header;
 
 			file_stream.read((char*)&header, sizeof(Md2Header));
 
-			if (header.magicnumber != 844121161)
+			if (header.magicnumber != 844121161) // NOLINT we read the header above
 				return false;
 
 			if (header.version != 8)

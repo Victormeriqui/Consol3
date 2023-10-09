@@ -15,8 +15,8 @@ namespace Engine
 		}
 
 		VertexBuffer::VertexBuffer(const std::vector<Vertex>& vertices, std::shared_ptr<std::vector<uint32_t>> indices) :
-			selfstored_vertices(vertices),
-			indices(std::move(indices))
+			indices(std::move(indices)),
+			selfstored_vertices(vertices)
 		{
 		}
 

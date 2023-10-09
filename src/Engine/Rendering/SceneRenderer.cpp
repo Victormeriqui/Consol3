@@ -11,10 +11,10 @@ namespace Engine
 									 std::shared_ptr<ResourceManager> resource_manager,
 									 std::shared_ptr<LightingSystem> lighting_system) :
 			renderer(std::move(renderer)),
-			resource_manager(std::move(resource_manager)),
 			null_renderer(std::make_shared<NullRenderer>()),
 			rasterizer(this->renderer),
 			shadowmap_rasterizer(null_renderer),
+			resource_manager(std::move(resource_manager)),
 			lighting_system(std::move(lighting_system)),
 			camera(std::make_shared<Camera>())
 		{

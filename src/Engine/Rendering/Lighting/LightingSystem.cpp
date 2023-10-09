@@ -17,7 +17,7 @@ namespace Engine
 		{
 			using namespace Math;
 
-			LightingSystem::LightingSystem() : lights(std::vector<std::shared_ptr<ILight>>()), ambient_light_color(RGBColor(255, 255, 255))
+			LightingSystem::LightingSystem() : ambient_light_color(RGBColor(255, 255, 255)), lights(std::vector<std::shared_ptr<ILight>>())
 			{
 			}
 

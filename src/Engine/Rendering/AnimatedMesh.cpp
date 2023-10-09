@@ -9,10 +9,10 @@ namespace Engine
 
 		AnimatedMesh::AnimatedMesh() :
 			AbstractMesh(),
+			is_animating(false),
 			anim_current_name("null"),
 			anim_current_progress(0.0f),
-			anim_current_fps(0.0f),
-			is_animating(false)
+			anim_current_fps(0.0f)
 		{
 		}
 

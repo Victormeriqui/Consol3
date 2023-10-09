@@ -11,7 +11,7 @@ namespace Display
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
-		ClearFrameBuffer();
+		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
 	void DitheredRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
@@ -33,7 +33,7 @@ namespace Display
 
 	void DitheredRenderer::ClearFrameBuffer()
 	{
-		this->framebuffer->FillBuffer({ ' ', 0x00 });
+		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
 	const uint16_t DitheredRenderer::GetFrameBufferWidth() const
