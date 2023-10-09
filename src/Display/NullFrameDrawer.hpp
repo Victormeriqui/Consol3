@@ -1,8 +1,8 @@
-#ifndef NULLRENDERER_HPP
-#define NULLRENDERER_HPP
+#ifndef NullFrameDrawer_HPP
+#define NullFrameDrawer_HPP
 
 #include "HSVColor.hpp"
-#include "IRenderer.hpp"
+#include "IFrameDrawer.hpp"
 
 #include <cstdint>
 #include <string>
@@ -11,10 +11,10 @@ namespace Display
 {
 	// this class exists only to prevent the rasterizer from writing to the screen's framebuffer when rasterizing to a light's depthmap
 	// thus none of these methods will have any action whatsoever
-	class NullRenderer : public IRenderer
+	class NullFrameDrawer : public IFrameDrawer
 	{
 	public:
-		NullRenderer()
+		NullFrameDrawer()
 		{
 		}
 

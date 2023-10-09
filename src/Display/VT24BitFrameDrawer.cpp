@@ -1,8 +1,8 @@
-#include "VT24BitRenderer.hpp"
+#include "VT24BitFrameDrawer.hpp"
 
 namespace Display
 {
-	VT24BitRenderer::VT24BitRenderer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer) :
+	VT24BitFrameDrawer::VT24BitFrameDrawer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
@@ -12,12 +12,12 @@ namespace Display
 		framebuffer_string_len = 0;
 	}
 
-	void VT24BitRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
+	void VT24BitFrameDrawer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		framebuffer->SetValue(x, y, color.GetHexValues());
 	}
 
-	void VT24BitRenderer::TranslateFrameBuffer()
+	void VT24BitFrameDrawer::TranslateFrameBuffer()
 	{
 		uint32_t last_color			  = 0x000000;
 		uint64_t current_string_index = 0;
@@ -71,28 +71,28 @@ namespace Display
 		framebuffer_string_len = current_string_index;
 	}
 
-	void VT24BitRenderer::DisplayFrame()
+	void VT24BitFrameDrawer::DisplayFrame()
 	{
 		TranslateFrameBuffer();
 		console_manager.WriteConsoleString(framebuffer_string, framebuffer_string_len);
 	}
 
-	void VT24BitRenderer::ReportInformation(const std::string& info)
+	void VT24BitFrameDrawer::ReportInformation(const std::string& info)
 	{
 		console_manager.SetTitle(info);
 	}
 
-	void VT24BitRenderer::ClearFrameBuffer()
+	void VT24BitFrameDrawer::ClearFrameBuffer()
 	{
 		this->framebuffer->FillBuffer(0x000000);
 	}
 
-	const uint16_t VT24BitRenderer::GetFrameBufferWidth() const
+	const uint16_t VT24BitFrameDrawer::GetFrameBufferWidth() const
 	{
 		return framebuffer->GetWidth();
 	}
 
-	const uint16_t VT24BitRenderer::GetFrameBufferHeight() const
+	const uint16_t VT24BitFrameDrawer::GetFrameBufferHeight() const
 	{
 		return framebuffer->GetHeight();
 	}

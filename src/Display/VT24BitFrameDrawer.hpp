@@ -1,10 +1,13 @@
-#ifndef TEXTONLYRENDERER_HPP
-#define TEXTONLYRENDERER_HPP
+
+
+#ifndef VT24BitFrameDrawer_HPP
+#define VT24BitFrameDrawer_HPP
 
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
 #include "HSVColor.hpp"
-#include "IRenderer.hpp"
+#include "IFrameDrawer.hpp"
+#include "RGBColor.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -15,20 +18,24 @@
 
 namespace Display
 {
-	static const COLORREF palette_textonly[16] = { 0x000000, 0x111111, 0x212121, 0x333333, 0x444444, 0x565656, 0x666666, 0x777777,
-												   0x898989, 0x999999, 0xAAAAAA, 0xBCBCBC, 0xCCCCCC, 0xDDDDDD, 0xEFEFEF, 0xFFFFFF };
-
-	class TextOnlyRenderer : public IRenderer
+	class VT24BitFrameDrawer : public IFrameDrawer
 	{
 	private:
-		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
+		std::shared_ptr<FrameBuffer<uint32_t>> framebuffer;
 		ConsoleManager console_manager;
 
-		const std::string shades;
-		const uint8_t shades_count;
+		std::string framebuffer_string;
+		uint64_t framebuffer_string_len;
+
+		const std::string esc_sequence_start = "\x1b[48;2;";
+		const uint8_t esc_sequence_start_len = (uint8_t)esc_sequence_start.length();
+		const std::string esc_sequence_end	 = "m";
+		const uint8_t esc_sequence_len		 = (uint8_t)esc_sequence_end.length();
+
+		void TranslateFrameBuffer();
 
 	public:
-		TextOnlyRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
+		VT24BitFrameDrawer(std::shared_ptr<FrameBuffer<uint32_t>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 

@@ -1,12 +1,12 @@
 
 
-#ifndef VT8BITRENDERER_HPP
-#define VT8BITRENDERER_HPP
+#ifndef VT8BitFrameDrawer_HPP
+#define VT8BitFrameDrawer_HPP
 
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
 #include "HSVColor.hpp"
-#include "IRenderer.hpp"
+#include "IFrameDrawer.hpp"
 #include "RGBColor.hpp"
 
 // Windows.h overrides std::min
@@ -93,7 +93,7 @@ namespace Display
 	};
 	static constexpr uint8_t indexed_colors_len = 255;
 
-	class VT8BitRenderer : public IRenderer
+	class VT8BitFrameDrawer : public IFrameDrawer
 	{
 	private:
 		std::shared_ptr<FrameBuffer<uint8_t>> framebuffer;
@@ -111,7 +111,7 @@ namespace Display
 		void TranslateFrameBuffer();
 
 	public:
-		VT8BitRenderer(std::shared_ptr<FrameBuffer<uint8_t>> framebuffer);
+		VT8BitFrameDrawer(std::shared_ptr<FrameBuffer<uint8_t>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 
