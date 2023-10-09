@@ -7,7 +7,7 @@ namespace Display
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_greyscale))
 	{
 		// ensure that every char is a space, that way we can just control the color
-		ClearFrameBuffer();
+		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
 	void GreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
@@ -19,7 +19,7 @@ namespace Display
 		uint8_t background_index = index * 16;
 
 		// in greyscale all pixels are a space and we control the color through the background
-		framebuffer->SetValue(x, y, { ' ', background_index });
+		framebuffer->SetValue(x, y, { { ' ' }, background_index });
 	}
 
 	void GreyscaleRenderer::DisplayFrame()
@@ -34,7 +34,7 @@ namespace Display
 
 	void GreyscaleRenderer::ClearFrameBuffer()
 	{
-		this->framebuffer->FillBuffer({ ' ', 0x00 });
+		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
 	const uint16_t GreyscaleRenderer::GetFrameBufferWidth() const

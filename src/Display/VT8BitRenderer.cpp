@@ -8,7 +8,7 @@ namespace Display
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
 	{
-		ClearFrameBuffer();
+		this->framebuffer->FillBuffer(0x000000);
 
 		framebuffer_string	   = std::string(this->framebuffer->GetWidth() * this->framebuffer->GetHeight() * 20, ' ');
 		framebuffer_string_len = 0;

@@ -157,8 +157,6 @@ namespace Display
 		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
 		ConsoleManager console_manager;
 
-		void GenerateLookupTable();
-
 	public:
 		DitheredRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 

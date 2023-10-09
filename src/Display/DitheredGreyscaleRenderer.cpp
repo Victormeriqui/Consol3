@@ -16,7 +16,8 @@ namespace Display
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered_greyscale)),
 		shade_map()
 	{
-		ClearFrameBuffer();
+		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
+
 		ComputeShadeMap();
 	}
 
@@ -51,7 +52,7 @@ namespace Display
 
 			// exact match
 			if (closest.first == closest.second)
-				shade_map[shade] = { 32, (WORD)(closest.first * 16) };
+				shade_map[shade] = { { 32 }, static_cast<WORD>(closest.first * 16) };
 
 			uint8_t low_idx	   = closest.first;
 			uint8_t low_shade  = palette_shades[low_idx];
@@ -66,15 +67,15 @@ namespace Display
 			// each of these corresponds to the domain of each shaded block between two colors in the palette
 			// which is exactly 25% for each one
 			if (shade_progress > 0 && shade_progress < 0.125f)
-				shade_map[shade] = { 32, (WORD)(low_idx * 16) };
+				shade_map[shade] = { { 32 }, static_cast<WORD>(low_idx * 16) };
 			else if (shade_progress >= 0.125f && shade_progress < 0.376f)
-				shade_map[shade] = { 176, attribute };
+				shade_map[shade] = { { 176 }, attribute };
 			else if (shade_progress >= 0.375f && shade_progress < 0.625f)
-				shade_map[shade] = { 177, attribute };
+				shade_map[shade] = { { 177 }, attribute };
 			else if (shade_progress >= 0.625f && shade_progress < 0.875f)
-				shade_map[shade] = { 178, attribute };
+				shade_map[shade] = { { 178 }, attribute };
 			else if (shade_progress >= 0.875f && shade_progress < 1.0f)
-				shade_map[shade] = { 32, (WORD)(high_idx * 16) };
+				shade_map[shade] = { { 32 }, static_cast<WORD>(high_idx * 16) };
 		}
 	}
 
@@ -98,7 +99,7 @@ namespace Display
 
 	void DitheredGreyscaleRenderer::ClearFrameBuffer()
 	{
-		this->framebuffer->FillBuffer({ ' ', 0x00 });
+		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
 	const uint16_t DitheredGreyscaleRenderer::GetFrameBufferWidth() const

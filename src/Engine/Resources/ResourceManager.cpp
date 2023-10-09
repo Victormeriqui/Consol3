@@ -44,7 +44,7 @@ namespace Engine
 				if (!success)
 					return false;
 
-				texture_cache.emplace(filename, std::move(std::make_shared<Texture>(imagebuffer, wrap_options)));
+				texture_cache.emplace(filename, std::make_shared<Texture>(imagebuffer, wrap_options));
 
 				return true;
 			}
@@ -74,7 +74,7 @@ namespace Engine
 				if (!success)
 					return false;
 
-				static_model_cache.emplace(filename, std::move(std::make_shared<StaticModel>(obj_vertices, obj_indices)));
+				static_model_cache.emplace(filename, std::make_shared<StaticModel>(obj_vertices, obj_indices));
 
 				return true;
 			}
@@ -89,7 +89,7 @@ namespace Engine
 				if (!success)
 					return false;
 
-				animated_model_cache.emplace(filename, std::move(std::make_shared<AnimatedModel>(md2_frames, md2_indices, md2_animations)));
+				animated_model_cache.emplace(filename, std::make_shared<AnimatedModel>(md2_frames, md2_indices, md2_animations));
 
 				return true;
 			}
@@ -99,17 +99,17 @@ namespace Engine
 
 		void ResourceManager::LoadTexture(const std::string& resource_name, const Texture& texture)
 		{
-			texture_cache.emplace(resource_name, std::move(std::make_shared<Texture>(texture)));
+			texture_cache.emplace(resource_name, std::make_shared<Texture>(texture));
 		}
 
 		void ResourceManager::LoadModel(const std::string& resource_name, const StaticModel& model)
 		{
-			static_model_cache.emplace(resource_name, std::move(std::make_shared<StaticModel>(model)));
+			static_model_cache.emplace(resource_name, std::make_shared<StaticModel>(model));
 		}
 
 		void ResourceManager::LoadModel(const std::string& resource_name, const AnimatedModel& model)
 		{
-			animated_model_cache.emplace(resource_name, std::move(std::make_shared<AnimatedModel>(model)));
+			animated_model_cache.emplace(resource_name, std::make_shared<AnimatedModel>(model));
 		}
 
 		std::optional<std::shared_ptr<Texture>> ResourceManager::GetLoadedTexture(const std::string& resource_name)

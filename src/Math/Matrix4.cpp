@@ -119,7 +119,7 @@ namespace Math
 		float ww = rotation.w * rotation.w;
 		float x2 = rotation.x * 2.0f;
 		float y2 = rotation.y * 2.0f;
-		float z2 = rotation.z * 2.0f;
+		//float z2 = rotation.z * 2.0f;
 		float w2 = rotation.w * 2.0f;
 		float xy = x2 * rotation.y;
 		float xz = x2 * rotation.z;

@@ -61,7 +61,7 @@ namespace Engine
 				const Vertex& from_vert = frames[from_frame].vertices->at(i);
 				const Vertex& to_vert	= frames[to_frame].vertices->at(i);
 
-				vertices.push_back(std::move(from_vert.GetLerped(to_vert, calculated_frame_floatpart)));
+				vertices.push_back(from_vert.GetLerped(to_vert, calculated_frame_floatpart));
 			}
 
 			// self stored vertices by the vertexbuffer

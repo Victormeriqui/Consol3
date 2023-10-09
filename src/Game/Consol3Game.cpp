@@ -51,8 +51,8 @@ namespace Game
 							 std::shared_ptr<ResourceManager> resource_manager,
 							 std::shared_ptr<LightingSystem> lighting_system) :
 		scene_renderer(std::move(scene_renderer)),
-		resource_manager(std::move(resource_manager)),
 		lighting_system(std::move(lighting_system)),
+		resource_manager(std::move(resource_manager)),
 		camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f))
 	{
 		LoadResources();

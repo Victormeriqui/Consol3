@@ -17,9 +17,9 @@ namespace Engine
 
 			PointLight::PointLight(const Vector3& position, float range, RGBColor color) :
 				position(position),
+				attenuation({ 0.1f, 0.1f, 1.0f }),
 				range(range),
-				color(color),
-				attenuation({ 0.1f, 0.1f, 1.0f })
+				color(color)
 			{
 			}
 

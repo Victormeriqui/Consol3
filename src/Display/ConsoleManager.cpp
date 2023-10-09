@@ -43,13 +43,13 @@ namespace Display
 		// struct
 		info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 		// resolution, how many chars there are
-		info.dwSize = { width, height + 1 };	// the +1 avoids problems when resizing
+		info.dwSize = { width, static_cast<SHORT>(height + 1) };	// the +1 avoids problems when resizing
 		// position of the cursor (irrelevant since we're going to hide it)
 		info.dwCursorPosition = { 0, 0 };
 		// attributes used by preceding writes (irrelevant since we're not going to give input to the console)
 		info.wAttributes = 0;
 		// window size
-		info.srWindow = { 0, 0, width + 1, height + 1 };
+		info.srWindow = { 0, 0, static_cast<SHORT>(width + 1), static_cast<SHORT>(height + 1) };
 		// maximum window size in chars
 		info.dwMaximumWindowSize = { 1920, 1080 };
 		// attributes used by popups (irrelevant)

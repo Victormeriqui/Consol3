@@ -11,7 +11,7 @@ namespace Display
 		// shades(" .:-=+*#%@"),
 		shades_count((uint8_t)shades.length())
 	{
-		ClearFrameBuffer();
+		this->framebuffer->FillBuffer({ { ' ' }, 0x0F });
 	}
 
 	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
@@ -20,7 +20,7 @@ namespace Display
 
 		uint8_t index = Math::Util::LerpCast<uint8_t>(luminance, 0, shades_count - 1);
 
-		framebuffer->SetValue(x, y, { (WCHAR)shades[index], 0x0F });
+		framebuffer->SetValue(x, y, { { static_cast<WCHAR>(shades[index]) }, 0x0F });
 	}
 
 	void TextOnlyRenderer::DisplayFrame()
@@ -35,7 +35,7 @@ namespace Display
 
 	void TextOnlyRenderer::ClearFrameBuffer()
 	{
-		this->framebuffer->FillBuffer({ ' ', 0x0F });
+		this->framebuffer->FillBuffer({ { ' ' }, 0x0F });
 	}
 
 	const uint16_t TextOnlyRenderer::GetFrameBufferWidth() const
