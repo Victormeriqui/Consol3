@@ -1,10 +1,10 @@
-#ifndef DITHEREDRENDERER_HPP
-#define DITHEREDRENDERER_HPP
+#ifndef DitheredFrameDrawer_HPP
+#define DitheredFrameDrawer_HPP
 
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
 #include "HSVColor.hpp"
-#include "IRenderer.hpp"
+#include "IFrameDrawer.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -151,14 +151,14 @@ namespace Display
 		{ { dither_0, grey_fg_white_bg }, RGBColor(255, 255, 255) },
 	};
 
-	class DitheredRenderer : public IRenderer
+	class DitheredFrameDrawer : public IFrameDrawer
 	{
 	private:
 		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
 		ConsoleManager console_manager;
 
 	public:
-		DitheredRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
+		DitheredFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 

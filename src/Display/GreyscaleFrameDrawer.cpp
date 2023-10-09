@@ -1,8 +1,8 @@
-#include "GreyscaleRenderer.hpp"
+#include "GreyscaleFrameDrawer.hpp"
 
 namespace Display
 {
-	GreyscaleRenderer::GreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
+	GreyscaleFrameDrawer::GreyscaleFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_greyscale))
 	{
@@ -10,7 +10,7 @@ namespace Display
 		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
-	void GreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
+	void GreyscaleFrameDrawer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		float luminance = color.GetColorNormal();
 
@@ -22,27 +22,27 @@ namespace Display
 		framebuffer->SetValue(x, y, { { ' ' }, background_index });
 	}
 
-	void GreyscaleRenderer::DisplayFrame()
+	void GreyscaleFrameDrawer::DisplayFrame()
 	{
 		console_manager.FillScreenBuffer(framebuffer->GetFrameBufferData());
 	}
 
-	void GreyscaleRenderer::ReportInformation(const std::string& info)
+	void GreyscaleFrameDrawer::ReportInformation(const std::string& info)
 	{
 		console_manager.SetTitle(info);
 	}
 
-	void GreyscaleRenderer::ClearFrameBuffer()
+	void GreyscaleFrameDrawer::ClearFrameBuffer()
 	{
 		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
-	const uint16_t GreyscaleRenderer::GetFrameBufferWidth() const
+	const uint16_t GreyscaleFrameDrawer::GetFrameBufferWidth() const
 	{
 		return framebuffer->GetWidth();
 	}
 
-	const uint16_t GreyscaleRenderer::GetFrameBufferHeight() const
+	const uint16_t GreyscaleFrameDrawer::GetFrameBufferHeight() const
 	{
 		return framebuffer->GetHeight();
 	}

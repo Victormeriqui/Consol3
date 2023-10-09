@@ -1,10 +1,10 @@
-#ifndef DITHEREDGREYSCALERENDERER_HPP
-#define DITHEREDGREYSCALERENDERER_HPP
+#ifndef DitheredGreyscaleFrameDrawer_HPP
+#define DitheredGreyscaleFrameDrawer_HPP
 
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
 #include "HSVColor.hpp"
-#include "IRenderer.hpp"
+#include "IFrameDrawer.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -24,7 +24,7 @@ namespace Display
 
 	const uint8_t palette_shades[16] = { 0x00, 0x11, 0x21, 0x33, 0x44, 0x56, 0x66, 0x77, 0x89, 0x99, 0xAA, 0xBC, 0xCC, 0xDD, 0xEF, 0xFF };
 
-	class DitheredGreyscaleRenderer : public IRenderer
+	class DitheredGreyscaleFrameDrawer : public IFrameDrawer
 	{
 	private:
 		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
@@ -39,7 +39,7 @@ namespace Display
 		void ComputeShadeMap();
 
 	public:
-		DitheredGreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
+		DitheredGreyscaleFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 

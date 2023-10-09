@@ -1,10 +1,10 @@
-#include "TextOnlyRenderer.hpp"
+#include "TextOnlyFrameDrawer.hpp"
 
 #include "../Math/Util/MathUtil.hpp"
 
 namespace Display
 {
-	TextOnlyRenderer::TextOnlyRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
+	TextOnlyFrameDrawer::TextOnlyFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Terminal", 4, 4, palette_textonly)),
 		shades({ ' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219 }),
@@ -14,7 +14,7 @@ namespace Display
 		this->framebuffer->FillBuffer({ { ' ' }, 0x0F });
 	}
 
-	void TextOnlyRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
+	void TextOnlyFrameDrawer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		float luminance = color.GetColorNormal();
 
@@ -23,27 +23,27 @@ namespace Display
 		framebuffer->SetValue(x, y, { { static_cast<WCHAR>(shades[index]) }, 0x0F });
 	}
 
-	void TextOnlyRenderer::DisplayFrame()
+	void TextOnlyFrameDrawer::DisplayFrame()
 	{
 		console_manager.FillScreenBuffer(framebuffer->GetFrameBufferData());
 	}
 
-	void TextOnlyRenderer::ReportInformation(const std::string& info)
+	void TextOnlyFrameDrawer::ReportInformation(const std::string& info)
 	{
 		console_manager.SetTitle(info);
 	}
 
-	void TextOnlyRenderer::ClearFrameBuffer()
+	void TextOnlyFrameDrawer::ClearFrameBuffer()
 	{
 		this->framebuffer->FillBuffer({ { ' ' }, 0x0F });
 	}
 
-	const uint16_t TextOnlyRenderer::GetFrameBufferWidth() const
+	const uint16_t TextOnlyFrameDrawer::GetFrameBufferWidth() const
 	{
 		return framebuffer->GetWidth();
 	}
 
-	const uint16_t TextOnlyRenderer::GetFrameBufferHeight() const
+	const uint16_t TextOnlyFrameDrawer::GetFrameBufferHeight() const
 	{
 		return framebuffer->GetHeight();
 	}

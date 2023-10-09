@@ -1,10 +1,10 @@
-#ifndef GREYSCALERENDERER_HPP
-#define GREYSCALERENDERER_HPP
+#ifndef GreyscaleFrameDrawer_HPP
+#define GreyscaleFrameDrawer_HPP
 
 #include "ConsoleManager.hpp"
 #include "FrameBuffer.hpp"
 #include "HSVColor.hpp"
-#include "IRenderer.hpp"
+#include "IFrameDrawer.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX
@@ -17,14 +17,14 @@ namespace Display
 	static const COLORREF palette_greyscale[16] = { 0x000000, 0x111111, 0x212121, 0x333333, 0x444444, 0x565656, 0x666666, 0x777777,
 													0x898989, 0x999999, 0xAAAAAA, 0xBCBCBC, 0xCCCCCC, 0xDDDDDD, 0xEFEFEF, 0xFFFFFF };
 
-	class GreyscaleRenderer : public IRenderer
+	class GreyscaleFrameDrawer : public IFrameDrawer
 	{
 	private:
 		std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer;
 		ConsoleManager console_manager;
 
 	public:
-		GreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
+		GreyscaleFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
 
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 

@@ -3,7 +3,7 @@
 
 #include "../Display/ConsoleManager.hpp"
 #include "../Display/FrameBuffer.hpp"
-#include "../Display/IRenderer.hpp"
+#include "../Display/IFrameDrawer.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"
 #include "../Game/Consol3Game.hpp"
 #include "Rendering/SceneRenderer.hpp"
@@ -23,7 +23,7 @@ namespace Engine
 	class Consol3Engine
 	{
 	private:
-		std::shared_ptr<IRenderer> renderer;
+		std::shared_ptr<IFrameDrawer> frame_drawer;
 		std::shared_ptr<LightingSystem> lighting_system;
 		std::shared_ptr<ResourceManager> resource_manager;
 		std::shared_ptr<SceneRenderer> scene_renderer;
@@ -41,7 +41,7 @@ namespace Engine
 		inline void DrawFrame(int64_t delta);
 
 	public:
-		Consol3Engine(std::shared_ptr<IRenderer> renderer);
+		Consol3Engine(std::shared_ptr<IFrameDrawer> frame_drawer);
 
 		void Start();
 		void Stop();

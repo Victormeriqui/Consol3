@@ -1,4 +1,4 @@
-#include "DitheredGreyscaleRenderer.hpp"
+#include "DitheredGreyscaleFrameDrawer.hpp"
 
 #include "../Math/Util/MathUtil.hpp"
 
@@ -11,7 +11,7 @@ namespace Display
 {
 	using namespace Math;
 
-	DitheredGreyscaleRenderer::DitheredGreyscaleRenderer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
+	DitheredGreyscaleFrameDrawer::DitheredGreyscaleFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer) :
 		framebuffer(std::move(framebuffer)),
 		console_manager(ConsoleManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_dithered_greyscale)),
 		shade_map()
@@ -21,7 +21,7 @@ namespace Display
 		ComputeShadeMap();
 	}
 
-	std::pair<uint8_t, uint8_t> DitheredGreyscaleRenderer::GetClosestIndexInPalette(uint8_t shade) const
+	std::pair<uint8_t, uint8_t> DitheredGreyscaleFrameDrawer::GetClosestIndexInPalette(uint8_t shade) const
 	{
 		uint8_t low_idx	 = 0;
 		uint8_t high_idx = 15;
@@ -42,7 +42,7 @@ namespace Display
 		return std::pair<uint8_t, uint8_t>(high_idx, low_idx);
 	}
 
-	void DitheredGreyscaleRenderer::ComputeShadeMap()
+	void DitheredGreyscaleFrameDrawer::ComputeShadeMap()
 	{
 		for (uint16_t color_value = 0; color_value <= 255; color_value++)
 		{
@@ -79,7 +79,7 @@ namespace Display
 		}
 	}
 
-	void DitheredGreyscaleRenderer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
+	void DitheredGreyscaleFrameDrawer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
 	{
 		float luminance = color.GetColorNormal();
 
@@ -87,27 +87,27 @@ namespace Display
 		framebuffer->SetValue(x, y, shade_map[shade]);
 	}
 
-	void DitheredGreyscaleRenderer::DisplayFrame()
+	void DitheredGreyscaleFrameDrawer::DisplayFrame()
 	{
 		console_manager.FillScreenBuffer(framebuffer->GetFrameBufferData());
 	}
 
-	void DitheredGreyscaleRenderer::ReportInformation(const std::string& info)
+	void DitheredGreyscaleFrameDrawer::ReportInformation(const std::string& info)
 	{
 		console_manager.SetTitle(info);
 	}
 
-	void DitheredGreyscaleRenderer::ClearFrameBuffer()
+	void DitheredGreyscaleFrameDrawer::ClearFrameBuffer()
 	{
 		this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
 	}
 
-	const uint16_t DitheredGreyscaleRenderer::GetFrameBufferWidth() const
+	const uint16_t DitheredGreyscaleFrameDrawer::GetFrameBufferWidth() const
 	{
 		return framebuffer->GetWidth();
 	}
 
-	const uint16_t DitheredGreyscaleRenderer::GetFrameBufferHeight() const
+	const uint16_t DitheredGreyscaleFrameDrawer::GetFrameBufferHeight() const
 	{
 		return framebuffer->GetHeight();
 	}

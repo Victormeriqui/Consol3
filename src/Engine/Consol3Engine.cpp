@@ -10,11 +10,11 @@ namespace Engine
 	using namespace Display;
 	using namespace Rendering;
 
-	Consol3Engine::Consol3Engine(std::shared_ptr<IRenderer> renderer) :
-		renderer(std::move(renderer)),
+	Consol3Engine::Consol3Engine(std::shared_ptr<IFrameDrawer> frame_drawer) :
+		frame_drawer(std::move(frame_drawer)),
 		lighting_system(std::make_shared<LightingSystem>()),
 		resource_manager(std::make_shared<ResourceManager>()),
-		scene_renderer(std::make_shared<SceneRenderer>(this->renderer, resource_manager, lighting_system)),
+		scene_renderer(std::make_shared<SceneRenderer>(this->frame_drawer, resource_manager, lighting_system)),
 		game(Consol3Game(scene_renderer, resource_manager, lighting_system)),
 		running(false),
 		delta(0)
@@ -95,10 +95,10 @@ namespace Engine
 	inline void Consol3Engine::DrawFrame(int64_t delta)
 	{
 		auto time = this->GetCurrentTime();
-		renderer->ClearFrameBuffer();
+		frame_drawer->ClearFrameBuffer();
 		game.Render(delta);
-		renderer->DisplayFrame();
+		frame_drawer->DisplayFrame();
 
-		renderer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(this->GetCurrentTime() - time));
+		frame_drawer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(this->GetCurrentTime() - time));
 	}
 }

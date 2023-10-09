@@ -12,7 +12,7 @@ namespace Engine
 		using namespace Math;
 		using namespace Shaders;
 
-		Rasterizer::Rasterizer(std::shared_ptr<IRenderer> renderer) :
+		Rasterizer::Rasterizer(std::shared_ptr<IFrameDrawer> renderer) :
 			viewport_mat(Matrix4().SetViewportMatrix(renderer->GetFrameBufferWidth(), renderer->GetFrameBufferHeight())),
 			renderer(std::move(renderer)),
 			clipper(Clipper())
