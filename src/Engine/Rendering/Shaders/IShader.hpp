@@ -72,7 +72,7 @@ namespace Engine
 					return center.GetDotProduct(facenormal) > 0;
 				}
 
-				template<class T>
+				template<typename T>
 				[[nodiscard]] inline T PerspectiveCorrectInterpolate(const T& value0,
 																	 const T& value1,
 																	 const T& value2,
