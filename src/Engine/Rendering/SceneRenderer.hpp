@@ -28,9 +28,9 @@ namespace Engine
 		class SceneRenderer
 		{
 		private:
-			std::shared_ptr<IFrameDrawer> renderer;
-			// a non functioning renderer for the shadowmap rasterizer
-			std::shared_ptr<NullFrameDrawer> null_renderer;
+			std::shared_ptr<IFrameDrawer> frame_drawer;
+			// a non functioning frame drawer for the shadowmap rasterizer
+			std::shared_ptr<NullFrameDrawer> null_frame_drawer;
 
 			Rasterizer rasterizer;
 			// a secondary rasterizer that writes to the light's depthbuffer, this is prefered so the main rasterizer doesn't need to be affected
@@ -57,7 +57,7 @@ namespace Engine
 			void RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color);
 
 		public:
-			SceneRenderer(std::shared_ptr<IFrameDrawer> renderer,
+			SceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
 						  std::shared_ptr<ResourceManager> resource_manager,
 						  std::shared_ptr<LightingSystem> lighting_system);
 

@@ -23,20 +23,20 @@ int main()
 	uint16_t height = 200;
 
 	// std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer = std::make_shared<FrameBuffer<CHAR_INFO>>(FrameBuffer<CHAR_INFO>(width, height));
-	// std::shared_ptr<DitheredFrameDrawer> renderer			= std::make_shared<DitheredFrameDrawer>(framebuffer);
+	// std::shared_ptr<DitheredFrameDrawer> frame_drawer			= std::make_shared<DitheredFrameDrawer>(framebuffer);
 
 	// std::shared_ptr<FrameBuffer<uint32_t>> framebuffer = std::make_shared<FrameBuffer<uint32_t>>(width, height);
-	// std::shared_ptr<VT24BitFrameDrawer> renderer	   = std::make_shared<VT24BitFrameDrawer>(framebuffer);
+	// std::shared_ptr<VT24BitFrameDrawer> frame_drawer	   = std::make_shared<VT24BitFrameDrawer>(framebuffer);
 
 	std::shared_ptr<FrameBuffer<uint8_t>> framebuffer = std::make_shared<FrameBuffer<uint8_t>>(width, height);
-	std::shared_ptr<VT8BitFrameDrawer> renderer		  = std::make_shared<VT8BitFrameDrawer>(framebuffer);
+	std::shared_ptr<VT8BitFrameDrawer> frame_drawer	  = std::make_shared<VT8BitFrameDrawer>(framebuffer);
 
-	// std::shared_ptr<GreyscaleFrameDrawer> renderer = std::make_shared<GreyscaleFrameDrawer>(framebuffer);
+	// std::shared_ptr<GreyscaleFrameDrawer> frame_drawer = std::make_shared<GreyscaleFrameDrawer>(framebuffer);
 
-	// std::shared_ptr<DitheredGreyscaleFrameDrawer> renderer = std::make_shared<DitheredGreyscaleFrameDrawer>(framebuffer);
-	// std::shared_ptr<TextOnlyFrameDrawer> renderer = std::make_shared<TextOnlyFrameDrawer>(framebuffer);
+	// std::shared_ptr<DitheredGreyscaleFrameDrawer> frame_drawer = std::make_shared<DitheredGreyscaleFrameDrawer>(framebuffer);
+	// std::shared_ptr<TextOnlyFrameDrawer> frame_drawer = std::make_shared<TextOnlyFrameDrawer>(framebuffer);
 
-	Consol3Engine engine = Consol3Engine(renderer);
+	Consol3Engine engine = Consol3Engine(frame_drawer);
 
 	engine.Start();
 

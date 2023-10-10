@@ -60,8 +60,8 @@ No external dependencies will ever be used in this engine, the goal is to do eve
 <img src="images/colored_lights.png" width="200" height="200">
 
 
-### Existing Renderers  
-Different renderers for the same scene can be used, these components basically decide how each pixel should be drawn to the console
+### Existing Frame Drawers  
+Different Frame Drawers for the same scene can be used, these components basically decide how each pixel should be drawn to the console
 
 ###### Greyscale  
 Overrides the palette with 16 shades from black to white  
@@ -72,7 +72,7 @@ Similar to the previous one, but also takes advantage of the dithering block cha
 <img src="images/ditheredgreyscale.png" width="200" height="200">  
 
 ###### Dithered  
-Uses the same mechanism from the previous renderer but with the default pallette, giving more depth to the default colors (10 shades per color)  
+Uses the same mechanism from the previous Frame Drawer but with the default pallette, giving more depth to the default colors (10 shades per color)  
 <img src="images/dithered.png" width="200" height="200">  
 
 ###### VT Escape Sequence
@@ -82,7 +82,7 @@ Uses escape sequences to set the colors of each pixel, allowing for full 32 bit 
 ###### Text Only  
 Does not use any attribute change, thus the only color is white, the lightness of each pixel is controlled through the character in the cell  
 
-Due to the way the Windows Console renders the character cells, this is currently the fastest renderer (although the one with the least detail), the current characters used are: " ·;%░≡¥▒▓█"  
+Due to the way the Windows Console renders the character cells, this is currently the fastest frame drawer (although the one with the least detail), the current characters used are: " ·;%░≡¥▒▓█"  
 <img src="images/ascii.png" width="200" height="200">  
 
 

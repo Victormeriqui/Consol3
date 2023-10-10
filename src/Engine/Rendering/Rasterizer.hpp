@@ -35,7 +35,7 @@ namespace Engine
 			Matrix4 inverse_projection_mat;
 			Matrix4 viewport_mat;
 
-			std::shared_ptr<IFrameDrawer> renderer;
+			std::shared_ptr<IFrameDrawer> frame_drawer;
 
 			Clipper clipper;
 
@@ -46,7 +46,7 @@ namespace Engine
 			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader);
 
 		public:
-			Rasterizer(std::shared_ptr<IFrameDrawer> renderer);
+			Rasterizer(std::shared_ptr<IFrameDrawer> frame_drawer);
 
 			void SetModelMatrix(const Transform& model_transform);
 			void SetModelMatrix(const Matrix4& model_matrix);

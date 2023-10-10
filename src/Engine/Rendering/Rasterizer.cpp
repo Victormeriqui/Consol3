@@ -12,9 +12,9 @@ namespace Engine
 		using namespace Math;
 		using namespace Shaders;
 
-		Rasterizer::Rasterizer(std::shared_ptr<IFrameDrawer> renderer) :
-			viewport_mat(Matrix4().SetViewportMatrix(renderer->GetFrameBufferWidth(), renderer->GetFrameBufferHeight())),
-			renderer(std::move(renderer)),
+		Rasterizer::Rasterizer(std::shared_ptr<IFrameDrawer> frame_drawer) :
+			viewport_mat(Matrix4().SetViewportMatrix(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight())),
+			frame_drawer(std::move(frame_drawer)),
 			clipper(Clipper())
 		{
 		}
@@ -111,13 +111,14 @@ namespace Engine
 			int32_t bbox_max_y = std::max({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
 
 			// guaranteed to be outside the camera
-			if (bbox_min_x >= renderer->GetFrameBufferWidth() || bbox_max_x < 0 || bbox_min_y >= renderer->GetFrameBufferHeight() || bbox_max_y < 0)
+			if (bbox_min_x >= frame_drawer->GetFrameBufferWidth() || bbox_max_x < 0 || bbox_min_y >= frame_drawer->GetFrameBufferHeight()
+				|| bbox_max_y < 0)
 				return;
 
 			Point2 bbox_min = Point2(std::max(0, bbox_min_x), std::max(0, bbox_min_y));
 
-			Point2 bbox_max = Point2(std::min(bbox_max_x, (int32_t)renderer->GetFrameBufferWidth() - 1),
-									 std::min(bbox_max_y, (int32_t)renderer->GetFrameBufferHeight() - 1));
+			Point2 bbox_max = Point2(std::min(bbox_max_x, (int32_t)frame_drawer->GetFrameBufferWidth() - 1),
+									 std::min(bbox_max_y, (int32_t)frame_drawer->GetFrameBufferHeight() - 1));
 
 			Point2 point = Point2(bbox_min.x, bbox_min.y);
 
@@ -152,7 +153,7 @@ namespace Engine
 							RGBColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2);
 
 							depthbuffer.SetValue(x, y, z);
-							renderer->SetPixel(x, y, out_color);
+							frame_drawer->SetPixel(x, y, out_color);
 						}
 					}
 
@@ -169,7 +170,7 @@ namespace Engine
 
 		void Rasterizer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
 		{
-			renderer->SetPixel(x, y, color);
+			frame_drawer->SetPixel(x, y, color);
 		}
 
 		void Rasterizer::SetModelMatrix(const Transform& model_transform)
