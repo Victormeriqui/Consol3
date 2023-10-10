@@ -7,13 +7,13 @@ namespace Engine
 {
 	namespace Rendering
 	{
-		SceneRenderer::SceneRenderer(std::shared_ptr<IFrameDrawer> renderer,
+		SceneRenderer::SceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
 									 std::shared_ptr<ResourceManager> resource_manager,
 									 std::shared_ptr<LightingSystem> lighting_system) :
-			renderer(std::move(renderer)),
-			null_renderer(std::make_shared<NullFrameDrawer>()),
-			rasterizer(this->renderer),
-			shadowmap_rasterizer(null_renderer),
+			frame_drawer(std::move(frame_drawer)),
+			null_frame_drawer(std::make_shared<NullFrameDrawer>()),
+			rasterizer(this->frame_drawer),
+			shadowmap_rasterizer(null_frame_drawer),
 			resource_manager(std::move(resource_manager)),
 			lighting_system(std::move(lighting_system)),
 			camera(std::make_shared<Camera>())

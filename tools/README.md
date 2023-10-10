@@ -3,7 +3,7 @@ In this directory are all the tools created to help the development of the Conso
 The tools are created in Python and serve only to generate data and to aid in development, no engine code is actually done in Python
 
 ### color_map_generator.py
-Used to generate color mappings from full RGB to indexed colors, that are later imported by the engine to use as lookup tables for some of the different renderers  
+Used to generate color mappings from full RGB to indexed colors, that are later imported by the engine to use as lookup tables for some of the different frame drawers  
 
 The tool will load an input file describing the output space, this file will have all the colors in the desired output palette, ordered by index  
 The input file must be in the format \<red\>, \<green\>, \<blue\> the index assumed for each entry is the line number  
