@@ -1,7 +1,6 @@
 #ifndef CONSOL3ENGINE_HPP
 #define CONSOL3ENGINE_HPP
 
-#include "../Display/ConsoleManager.hpp"
 #include "../Display/FrameBuffer.hpp"
 #include "../Display/IFrameDrawer.hpp"
 #include "../Engine/Rendering/Lighting/LightingSystem.hpp"

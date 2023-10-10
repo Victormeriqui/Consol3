@@ -1,8 +1,8 @@
-#ifndef NullFrameDrawer_HPP
-#define NullFrameDrawer_HPP
+#ifndef NULLFRAMEDRAWER_HPP
+#define NULLFRAMEDRAWER_HPP
 
-#include "HSVColor.hpp"
 #include "IFrameDrawer.hpp"
+#include "RGBColor.hpp"
 
 #include <cstdint>
 #include <string>
@@ -36,7 +36,7 @@ namespace Display
 
 		[[nodiscard]] virtual const uint16_t GetFrameBufferWidth() const override
 		{
-			return 200;
+			return 200;	   // todo make this changable
 		}
 
 		[[nodiscard]] virtual const uint16_t GetFrameBufferHeight() const override

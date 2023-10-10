@@ -1,5 +1,5 @@
-#ifndef IFrameDrawer_HPP
-#define IFrameDrawer_HPP
+#ifndef IFRAMEDRAWER_HPP
+#define IFRAMEDRAWER_HPP
 
 #include "HSVColor.hpp"
 
