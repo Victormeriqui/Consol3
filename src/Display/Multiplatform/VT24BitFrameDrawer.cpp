@@ -8,10 +8,10 @@
 typedef struct _CHAR_INFO
 {
 	union {
-		WCHAR UnicodeChar;
-		CHAR AsciiChar;
+		char UnicodeChar;
+		char AsciiChar;
 	} Char;
-	WORD Attributes;
+	uint32_t Attributes;
 } CHAR_INFO, *PCHAR_INFO;
 #endif
 
