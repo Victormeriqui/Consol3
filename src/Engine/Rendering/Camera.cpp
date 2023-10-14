@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-#include "../../Math/Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 
 #include <cmath>
 

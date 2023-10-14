@@ -1,8 +1,8 @@
 #include "Md2ModelLoader.hpp"
-#include "../../Math/Vector2.hpp"
-#include "../../Math/Vector3.hpp"
+#include "Math/Vector2.hpp"
+#include "Math/Vector3.hpp"
 #include "Md2Normals.hpp"
-#include "Util/FileUtils.hpp"
+#include "Engine/Resources/Util/FileUtils.hpp"
 
 #include <algorithm>
 #include <array>

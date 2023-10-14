@@ -1,12 +1,12 @@
 #ifndef RESOURCEMANAGER_HPP
 #define RESOURCEMANAGER_HPP
 
-#include "../../Display/Framebuffer.hpp"
-#include "../../Display/RGBColor.hpp"
-#include "../Rendering/AnimatedModel.hpp"
-#include "../Rendering/StaticModel.hpp"
-#include "../Rendering/Texture.hpp"
-#include "../Rendering/Vertex.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/RGBColor.hpp"
+#include "Engine/Rendering/AnimatedModel.hpp"
+#include "Engine/Rendering/StaticModel.hpp"
+#include "Engine/Rendering/Texture.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 #include "BmpTextureLoader.hpp"
 #include "IModelLoader.hpp"
 #include "ITextureLoader.hpp"

@@ -1,9 +1,9 @@
 #ifndef RASTERIZER_HPP
 #define RASTERIZER_HPP
 
-#include "../../Display/IFrameDrawer.hpp"
-#include "../../Display/RGBColor.hpp"
-#include "../../Math/Matrix4.hpp"
+#include "Display/IFrameDrawer.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
 #include "Clipper.hpp"
 #include "DepthBuffer.hpp"
 #include "Shaders/IShader.hpp"

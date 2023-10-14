@@ -3,10 +3,10 @@
 #ifndef VT8BITFRAMEDRAWER_HPP
 #define VT8BITFRAMEDRAWER_HPP
 
-#include "../FrameBuffer.hpp"
-#include "../IFrameDrawer.hpp"
-#include "../ITerminalManager.hpp"
-#include "../RGBColor.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/IFrameDrawer.hpp"
+#include "Display/ITerminalManager.hpp"
+#include "Display/RGBColor.hpp"
 
 #include <cstdint>
 #include <map>

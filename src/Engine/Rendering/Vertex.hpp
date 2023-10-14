@@ -1,9 +1,9 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-#include "../../Math/Matrix4.hpp"
-#include "../../Math/Vector2.hpp"
-#include "../../Math/Vector3.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Vector2.hpp"
+#include "Math/Vector3.hpp"
 
 #include <vector>
 

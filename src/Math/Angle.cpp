@@ -1,6 +1,6 @@
 #include "Angle.hpp"
 
-#include "Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 
 namespace Math
 {

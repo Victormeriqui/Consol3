@@ -1,7 +1,7 @@
 #ifndef FILEUTILS_HPP
 #define FILEUTILS_HPP
 
-#include "../../Rendering/Vertex.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 
 #include <algorithm>
 #include <fstream>

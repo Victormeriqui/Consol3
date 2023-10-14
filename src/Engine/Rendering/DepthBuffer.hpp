@@ -1,7 +1,7 @@
 #ifndef DEPTHBUFFER_HPP
 #define DEPTHBUFFER_HPP
 
-#include "../../Display/FrameBuffer.hpp"
+#include "Display/FrameBuffer.hpp"
 
 namespace Engine
 {

@@ -1,8 +1,8 @@
 #ifndef ITEXTURELOADER_HPP
 #define ITEXTURELOADER_HPP
 
-#include "../../Display/Framebuffer.hpp"
-#include "../../Display/RGBColor.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/RGBColor.hpp"
 
 #include <cstdint>
 #include <string>

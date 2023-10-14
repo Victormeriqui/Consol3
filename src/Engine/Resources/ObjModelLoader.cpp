@@ -1,5 +1,5 @@
 #include "ObjModelLoader.hpp"
-#include "Util/FileUtils.hpp"
+#include "Engine/Resources/Util/FileUtils.hpp"
 
 #include <algorithm>
 #include <fstream>

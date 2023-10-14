@@ -1,6 +1,6 @@
 #include "TextOnlyFrameDrawer.hpp"
 
-#include "../../Math/Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 
 #if CUR_SYS == SYS_WIN
 // Windows.h overrides std::min

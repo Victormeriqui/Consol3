@@ -1,7 +1,7 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 
-#include "../../Math/Vector3.hpp"
+#include "Math/Vector3.hpp"
 #include "Vertex.hpp"
 #include "VertexBuffer.hpp"
 

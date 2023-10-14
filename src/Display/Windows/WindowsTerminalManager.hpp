@@ -1,7 +1,7 @@
 #ifndef WINDOWSTERMINALMANAGER_HPP
 #define WINDOWSTERMINALMANAGER_HPP
 
-#include "../ITerminalManager.hpp"
+#include "Display/ITerminalManager.hpp"
 
 // Windows.h overrides std::min
 #define NOMINMAX

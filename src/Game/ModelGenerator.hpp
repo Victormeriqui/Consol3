@@ -1,9 +1,9 @@
 #ifndef MODELGENERATOR_HPP
 #define MODELGENERATOR_HPP
 
-#include "../Engine/Rendering/StaticModel.hpp"
-#include "../Math/Vector2.hpp"
-#include "../Math/Vector3.hpp"
+#include "Engine/Rendering/StaticModel.hpp"
+#include "Math/Vector2.hpp"
+#include "Math/Vector3.hpp"
 
 #include <cstdint>
 #include <map>

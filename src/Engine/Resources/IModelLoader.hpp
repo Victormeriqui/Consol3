@@ -1,8 +1,8 @@
 #ifndef IMODELLOADER_HPP
 #define IMODELLOADER_HPP
 
-#include "../Rendering/Animation.h"
-#include "../Rendering/Vertex.hpp"
+#include "Engine/Rendering/Animation.h"
+#include "Engine/Rendering/Vertex.hpp"
 
 #include <cstdint>
 #include <map>

@@ -1,8 +1,8 @@
 #ifndef MD2MODELLOADER_HPP
 #define MD2MODELLOADER_HPP
 
-#include "../Rendering/Animation.h"
-#include "../Rendering/Vertex.hpp"
+#include "Engine/Rendering/Animation.h"
+#include "Engine/Rendering/Vertex.hpp"
 #include "IModelLoader.hpp"
 
 #include <cstdint>

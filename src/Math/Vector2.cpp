@@ -1,6 +1,6 @@
 #include "Vector2.hpp"
 
-#include "Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 
 #include <cmath>
 

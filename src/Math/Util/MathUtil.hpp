@@ -3,7 +3,7 @@
 
 #define PI 3.1415921f
 
-#include "../Vector3.hpp"
+#include "Math/Vector3.hpp"
 
 #include <algorithm>
 #include <cstdint>

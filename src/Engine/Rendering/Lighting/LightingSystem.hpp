@@ -3,12 +3,12 @@
 
 #include "ILight.hpp"
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Vector3.hpp"
-#include "../DepthBuffer.hpp"
-#include "../Rasterizer.hpp"
-#include "../Transform.hpp"
-#include "../Vertex.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Vector3.hpp"
+#include "Engine/Rendering/DepthBuffer.hpp"
+#include "Engine/Rendering/Rasterizer.hpp"
+#include "Engine/Rendering/Transform.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 #include "MaterialProperties.hpp"
 
 #include <memory>

@@ -1,9 +1,9 @@
 #ifndef DITHEREDFRAMEDRAWER_HPP
 #define DITHEREDFRAMEDRAWER_HPP
 
-#include "../FrameBuffer.hpp"
-#include "../IFrameDrawer.hpp"
-#include "../RGBColor.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/IFrameDrawer.hpp"
+#include "Display/RGBColor.hpp"
 #include "WindowsTerminalManager.hpp"
 
 // Windows.h overrides std::min

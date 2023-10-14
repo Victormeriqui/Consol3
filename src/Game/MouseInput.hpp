@@ -1,7 +1,7 @@
 #ifndef MOUSEINPUT_HPP
 #define MOUSEINPUT_HPP
 
-#include "../Math/Point2.hpp"
+#include "Math/Point2.hpp"
 
 #include <cstdint>
 // Windows.h overrides std::min

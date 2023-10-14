@@ -1,11 +1,11 @@
 #ifndef SPOTLIGHT_HPP
 #define SPOTLIGHT_HPP
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Vector3.hpp"
-#include "../DepthBuffer.hpp"
-#include "../Transform.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Vector3.hpp"
+#include "Engine/Rendering/DepthBuffer.hpp"
+#include "Engine/Rendering/Transform.hpp"
 #include "ILight.hpp"
 
 #include <functional>

@@ -1,6 +1,6 @@
 #include "VT8BitFrameDrawer.hpp"
 
-#include "../ColorMapping.hpp"
+#include "Display/ColorMapping.hpp"
 
 #if CUR_SYS == SYS_WIN
 // Windows.h overrides std::min

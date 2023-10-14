@@ -2,7 +2,7 @@
 #include "Quaternion.hpp"
 #include "Vector3.hpp"
 
-#include "Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 
 #include <cmath>
 

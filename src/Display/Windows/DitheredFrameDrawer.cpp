@@ -1,7 +1,7 @@
 #include "DitheredFrameDrawer.hpp"
 
-#include "../../Math/Util/MathUtil.hpp"
-#include "../ColorMapping.hpp"
+#include "/Math/Util/MathUtil.hpp"
+#include "Display/ColorMapping.hpp"
 
 namespace Display
 {

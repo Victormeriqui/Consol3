@@ -1,9 +1,9 @@
 #ifndef TEXTURECONSTANTS_HPP
 #define TEXTURECONSTANTS_HPP
 
-#include "../../Display/FrameBuffer.hpp"
-#include "../../Display/RGBColor.hpp"
-#include "../../Display/RGBColorConstants.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/RGBColor.hpp"
+#include "Display/RGBColorConstants.hpp"
 #include "Texture.hpp"
 
 #include <memory>

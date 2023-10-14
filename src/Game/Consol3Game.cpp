@@ -1,6 +1,6 @@
 #include "Consol3Game.hpp"
 
-#include "../Math/Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 #include "MouseInput.hpp"
 
 // Windows.h overrides std::min

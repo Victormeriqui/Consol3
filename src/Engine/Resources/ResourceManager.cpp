@@ -1,6 +1,6 @@
 #include "ResourceManager.hpp"
-#include "../Rendering/Animation.h"
-#include "../Rendering/StaticModel.hpp"
+#include "Engine/Rendering/Animation.h"
+#include "Engine/Rendering/StaticModel.hpp"
 
 #include <map>
 

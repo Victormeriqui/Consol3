@@ -1,6 +1,6 @@
 #include "ShadedShader.hpp"
 
-#include "../../../Math/Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 
 #include <algorithm>
 

@@ -1,11 +1,11 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include "../../Display/HSVColor.hpp"
-#include "../../Display/RGBColor.hpp"
-#include "../../Display/RGBColorConstants.hpp"
-#include "../../Math/Angle.hpp"
-#include "../../Math/Vector3.hpp"
+#include "Display/HSVColor.hpp"
+#include "Display/RGBColor.hpp"
+#include "Display/RGBColorConstants.hpp"
+#include "Math/Angle.hpp"
+#include "Math/Vector3.hpp"
 #include "Lighting/MaterialProperties.hpp"
 #include "Transform.hpp"
 

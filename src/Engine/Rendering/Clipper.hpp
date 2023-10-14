@@ -1,7 +1,7 @@
 #ifndef CLIPPER_HPP
 #define CLIPPER_HPP
 
-#include "../../Math/Vector3.hpp"
+#include "Math/Vector3.hpp"
 #include "Vertex.hpp"
 
 #include <array>

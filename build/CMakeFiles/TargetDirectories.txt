@@ -1,0 +1,3 @@
+/home/victor/Consol3/build/CMakeFiles/rebuild_cache.dir
+/home/victor/Consol3/build/CMakeFiles/edit_cache.dir
+/home/victor/Consol3/build/CMakeFiles/Consol3.dir

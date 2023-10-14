@@ -1,8 +1,8 @@
 #ifndef NOISEGENERATOR_HPP
 #define NOISEGENERATOR_HPP
 
-#include "../Math/Util/MathUtil.hpp"
-#include "../Math/Vector2.hpp"
+#include "Math/Util/MathUtil.hpp"
+#include "Math/Vector2.hpp"
 
 #include <cmath>
 #include <cstdint>

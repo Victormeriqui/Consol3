@@ -1,10 +1,10 @@
 #ifndef ILIGHT_HPP
 #define ILIGHT_HPP
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Vector3.hpp"
-#include "../DepthBuffer.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Vector3.hpp"
+#include "Engine/Rendering/DepthBuffer.hpp"
 #include "MaterialProperties.hpp"
 
 #include <functional>

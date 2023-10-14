@@ -1,10 +1,10 @@
 #ifndef TRANSFORM_HPP
 #define TRANSFORM_HPP
 
-#include "../../Math/Angle.hpp"
-#include "../../Math/Matrix4.hpp"
-#include "../../Math/Quaternion.hpp"
-#include "../../Math/Vector3.hpp"
+#include "Math/Angle.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Quaternion.hpp"
+#include "Math/Vector3.hpp"
 
 namespace Engine
 {

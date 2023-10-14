@@ -1,9 +1,9 @@
 #ifndef GREYSCALEFRAMEDRAWER_HPP
 #define GREYSCALEFRAMEDRAWER_HPP
 
-#include "../FrameBuffer.hpp"
-#include "../IFrameDrawer.hpp"
-#include "../RGBColor.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/IFrameDrawer.hpp"
+#include "Display/RGBColor.hpp"
 #include "WindowsTerminalManager.hpp"
 
 // Windows.h overrides std::min

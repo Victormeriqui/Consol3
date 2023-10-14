@@ -1,10 +1,10 @@
 #ifndef ISHADER_HPP
 #define ISHADER_HPP
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../Triangle.hpp"
-#include "../Vertex.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
+#include "Engine/Rendering/Triangle.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 
 #include <cstdint>
 #include <map>

@@ -3,13 +3,13 @@
 
 #include "IShader.hpp"
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../DepthBuffer.hpp"
-#include "../Lighting/LightingSystem.hpp"
-#include "../Lighting/MaterialProperties.hpp"
-#include "../Texture.hpp"
-#include "../Vertex.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
+#include "Engine/Rendering/DepthBuffer.hpp"
+#include "Engine/Rendering/Lighting/LightingSystem.hpp"
+#include "Engine/Rendering/Lighting/MaterialProperties.hpp"
+#include "Engine/Rendering/Texture.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 
 #include <cstdint>
 #include <functional>

@@ -1,8 +1,8 @@
 #ifndef BMPTEXTURELOADER_HPP
 #define BMPTEXTURELOADER_HPP
 
-#include "../../Display/Framebuffer.hpp"
-#include "../../Display/RGBColor.hpp"
+#include "Display/FrameBuffer.hpp"
+#include "Display/RGBColor.hpp"
 #include "ITextureLoader.hpp"
 
 #include <cstdint>

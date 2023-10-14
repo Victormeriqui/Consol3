@@ -1,9 +1,9 @@
 #ifndef POINTLIGHT_HPP
 #define POINTLIGHT_HPP
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Vector3.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Vector3.hpp"
 #include "ILight.hpp"
 
 #include <functional>

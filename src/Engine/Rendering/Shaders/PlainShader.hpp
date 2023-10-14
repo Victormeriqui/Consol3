@@ -3,10 +3,10 @@
 
 #include "IShader.hpp"
 
-#include "../../../Display/RGBColor.hpp"
-#include "../../../Math/Matrix4.hpp"
-#include "../Texture.hpp"
-#include "../Vertex.hpp"
+#include "Display/RGBColor.hpp"
+#include "Math/Matrix4.hpp"
+#include "Engine/Rendering/Texture.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 
 namespace Engine
 {

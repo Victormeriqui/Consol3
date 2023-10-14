@@ -1,7 +1,7 @@
 #include "ModelGenerator.hpp"
 
-#include "../Engine/Rendering/Vertex.hpp"
-#include "../Math/Vector3.hpp"
+#include "Engine/Rendering/Vertex.hpp"
+#include "Math/Vector3.hpp"
 #include "NoiseGenerator.hpp"
 
 #include <cmath>

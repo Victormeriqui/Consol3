@@ -1,7 +1,7 @@
 #ifndef LINUXTERMINALMANAGER_HPP
 #define LINUXTERMINALMANAGER_HPP
 
-#include "../ITerminalManager.hpp"
+#include "Display/ITerminalManager.hpp"
 
 #include <cstdint>
 #include <string>

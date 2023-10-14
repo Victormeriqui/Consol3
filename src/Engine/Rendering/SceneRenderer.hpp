@@ -1,10 +1,10 @@
 #ifndef SCENERENDERER_HPP
 #define SCENERENDERER_HPP
 
-#include "../../Display/IFrameDrawer.hpp"
-#include "../../Display/NullFrameDrawer.hpp"
-#include "../../Display/RGBColor.hpp"
-#include "../Resources/ResourceManager.hpp"
+#include "Display/IFrameDrawer.hpp"
+#include "Display/NullFrameDrawer.hpp"
+#include "Display/RGBColor.hpp"
+#include "Engine/Resources/ResourceManager.hpp"
 #include "AbstractMesh.hpp"
 #include "AnimatedMesh.hpp"
 #include "Camera.hpp"

@@ -1,7 +1,7 @@
 #ifndef MD2NORMALS_HPP
 #define MD2NORMALS_HPP
 
-#include "../../Math/Vector3.hpp"
+#include "Math/Vector3.hpp"
 
 namespace Engine
 {

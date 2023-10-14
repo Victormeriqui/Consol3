@@ -1,9 +1,9 @@
 #include "DirectionalLight.hpp"
 
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Util/MathUtil.hpp"
-#include "../../../Math/Vector3.hpp"
-#include "../Transform.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Util/MathUtil.hpp"
+#include "Math/Vector3.hpp"
+#include "Engine/Rendering/Transform.hpp"
 
 #include <algorithm>
 #include <cmath>

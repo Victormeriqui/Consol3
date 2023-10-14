@@ -1,6 +1,6 @@
 #include "Rasterizer.hpp"
 
-#include "../../Math/Point2.hpp"
+#include "Math/Point2.hpp"
 
 #include <algorithm>
 

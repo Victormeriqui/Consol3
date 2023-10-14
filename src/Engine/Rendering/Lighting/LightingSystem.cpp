@@ -1,9 +1,9 @@
 #include "LightingSystem.hpp"
 
-#include "../../../Math/Util/MathUtil.hpp"
-#include "../../../Math/Vector3.hpp"
-#include "../Transform.hpp"
-#include "../Vertex.hpp"
+#include ".Math/Util/MathUtil.hpp"
+#include ".Math/Vector3.hpp"
+#include ".Engine/Rendering/Transform.hpp"
+#include "Engine/Rendering/Vertex.hpp"
 
 #include <cstdint>
 #include <memory>

@@ -1,8 +1,8 @@
 #ifndef TRIANGLE_HPP
 #define TRIANGLE_HPP
 
-#include "../../Math/Point2.hpp"
-#include "../../Math/Vector2.hpp"
+#include "Math/Point2.hpp"
+#include "Math/Vector2.hpp"
 #include "Vertex.hpp"
 
 #include <cstdint>
