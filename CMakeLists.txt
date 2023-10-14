@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(Consol3 VERSION 1.0.0)
 
+set_property(TARGET Consol3 PROPERTY CXX_STANDARD 17)
+
 file(GLOB_RECURSE SOURCES
     "src/*.cpp"
 )
