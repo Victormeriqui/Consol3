@@ -1,7 +1,7 @@
 #ifndef RASTERIZER_HPP
 #define RASTERIZER_HPP
 
-#include "../../Display/IRenderer.hpp"
+#include "../../Display/IFrameDrawer.hpp"
 #include "../../Display/RGBColor.hpp"
 #include "../../Math/Matrix4.hpp"
 #include "Clipper.hpp"
@@ -35,7 +35,7 @@ namespace Engine
 			Matrix4 inverse_projection_mat;
 			Matrix4 viewport_mat;
 
-			std::shared_ptr<IRenderer> renderer;
+			std::shared_ptr<IFrameDrawer> frame_drawer;
 
 			Clipper clipper;
 
@@ -46,7 +46,7 @@ namespace Engine
 			void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader);
 
 		public:
-			Rasterizer(std::shared_ptr<IRenderer> renderer);
+			Rasterizer(std::shared_ptr<IFrameDrawer> frame_drawer);
 
 			void SetModelMatrix(const Transform& model_transform);
 			void SetModelMatrix(const Matrix4& model_matrix);

@@ -51,8 +51,8 @@ namespace Game
 							 std::shared_ptr<ResourceManager> resource_manager,
 							 std::shared_ptr<LightingSystem> lighting_system) :
 		scene_renderer(std::move(scene_renderer)),
-		resource_manager(std::move(resource_manager)),
 		lighting_system(std::move(lighting_system)),
+		resource_manager(std::move(resource_manager)),
 		camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f))
 	{
 		LoadResources();
@@ -67,16 +67,16 @@ namespace Game
 			.SetPosition(Vector3(1.0f, -0.9f, 0.0f))
 			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
 			.SetRotation(Angle(-1.7f, 0.0f, 0.0f))
-			.SetColor(RGBColor(255, 0, 0));
+			.SetColor(RGBColor(255, 255, 255));
 
 		anim_mesh2 = AnimatedMesh();
 		anim_mesh2
-			.SetModelResource("res/marvin.md2")
+			.SetModelResource("res/penguin.md2")
 			//.SetTextureResource("res/text.bmp")
-			.SetPosition(Vector3(-1.0f, -0.9f, 0.0f))
+			.SetPosition(Vector3(-2.0f, -0.9f, 0.0f))
 			.SetScale(Vector3(0.05f, 0.05f, 0.05f))
 			.SetRotation(Angle(-1.7f, 0.0f, 0.0f))
-			.SetColor(RGBColor(0, 255, 0));
+			.SetColor(RGBColor(255, 255, 255));
 
 		anim_mesh3 = AnimatedMesh();
 		anim_mesh3
@@ -132,11 +132,11 @@ namespace Game
 		spot_light3->SetColor(RGBColor(0, 0, 255));
 
 		this->lighting_system->SetAmbientLightColor(RGBColor(10, 10, 10));
-		//	this->lighting_system->AddLight(dir_light);
+		this->lighting_system->AddLight(dir_light);
 		// this->lighting_system->AddLight(point_light);
 		this->lighting_system->AddLight(spot_light);
-		this->lighting_system->AddLight(spot_light2);
-		this->lighting_system->AddLight(spot_light3);
+		// this->lighting_system->AddLight(spot_light2);
+		// this->lighting_system->AddLight(spot_light3);
 
 		plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
 	}
@@ -251,13 +251,13 @@ namespace Game
 
 		scene_renderer->DrawShadedMesh(floor);
 
-		scene_renderer->DrawShadedMesh(mesh);
-		scene_renderer->DrawShadedMesh(mesh2);
+		// scene_renderer->DrawShadedMesh(mesh);
+		// scene_renderer->DrawShadedMesh(mesh2);
 
 		//	scene_renderer->DrawMesh(plight_mesh);
 
-		// scene_renderer->DrawShadedMesh(anim_mesh);
-		// scene_renderer->DrawShadedMesh(anim_mesh2);
+		scene_renderer->DrawShadedMesh(anim_mesh);
+		scene_renderer->DrawShadedMesh(anim_mesh2);
 		// scene_renderer->DrawShadedMesh(anim_mesh3);
 
 		scene_renderer->RenderScene(delta);

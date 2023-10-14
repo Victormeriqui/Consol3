@@ -22,11 +22,11 @@ BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakAfterJavaFieldAnnotations: 'true'
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Custom
+BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: 'false'
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
-ColumnLimit: '150'
+ColumnLimit: '230'
 CompactNamespaces: 'false'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
 Cpp11BracedListStyle: 'false'

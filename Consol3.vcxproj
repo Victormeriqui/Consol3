@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Consol3.cpp" />
-    <ClCompile Include="src\Display\VT24BitRenderer.cpp" />
-    <ClCompile Include="src\Display\ConsoleManager.cpp" />
-    <ClCompile Include="src\Display\DitheredGreyscaleRenderer.cpp" />
-    <ClCompile Include="src\Display\TextOnlyRenderer.cpp" />
-    <ClCompile Include="src\Display\NullRenderer.hpp" />
-    <ClCompile Include="src\Display\VT8BitRenderer.cpp" />
+    <ClCompile Include="src\Display\Linux\LinuxTerminalManager.cpp" />
+    <ClCompile Include="src\Display\Linux\LinuxTerminalManager.hpp" />
+    <ClCompile Include="src\Display\Multiplatform\VT24BitFrameDrawer.cpp" />
+    <ClCompile Include="src\Display\Windows\WindowsTerminalManager.cpp" />
+    <ClCompile Include="src\Display\Windows\DitheredGreyscaleFrameDrawer.cpp" />
+    <ClCompile Include="src\Display\Multiplatform\TextOnlyFrameDrawer.cpp" />
+    <ClCompile Include="src\Display\NullFrameDrawer.hpp" />
+    <ClCompile Include="src\Display\Multiplatform\VT8BitFrameDrawer.cpp" />
     <ClCompile Include="src\Engine\Rendering\AnimatedMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\AnimatedModel.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\PlainShader.cpp" />
@@ -38,8 +40,8 @@
     <ClCompile Include="src\Engine\Rendering\SceneRenderer.cpp" />
     <ClCompile Include="src\Engine\Rendering\Shaders\DepthMapShader.cpp" />
     <ClCompile Include="src\Engine\Rendering\Texture.cpp" />
-    <ClCompile Include="src\Display\DitheredRenderer.cpp" />
-    <ClCompile Include="src\Display\GreyscaleRenderer.cpp" />
+    <ClCompile Include="src\Display\Windows\DitheredFrameDrawer.cpp" />
+    <ClCompile Include="src\Display\Windows\GreyscaleFrameDrawer.cpp" />
     <ClCompile Include="src\Engine\Consol3Engine.cpp" />
     <ClCompile Include="src\Engine\Rendering\AbstractMesh.cpp" />
     <ClCompile Include="src\Engine\Rendering\Clipper.cpp" />
@@ -64,12 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Display\ColorMapping.hpp" />
-    <ClInclude Include="src\Display\VT24BitRenderer.hpp" />
-    <ClInclude Include="src\Display\DitheredGreyscaleRenderer.hpp" />
-    <ClInclude Include="src\Display\IRenderer.hpp" />
+    <ClInclude Include="src\Display\ITerminalManager.hpp" />
+    <ClInclude Include="src\Display\Multiplatform\VT24BitFrameDrawer.hpp" />
+    <ClInclude Include="src\Display\Windows\DitheredGreyscaleFrameDrawer.hpp" />
+    <ClInclude Include="src\Display\IFrameDrawer.hpp" />
     <ClInclude Include="src\Display\RGBColorConstants.hpp" />
-    <ClInclude Include="src\Display\TextOnlyRenderer.hpp" />
-    <ClInclude Include="src\Display\VT8BitRenderer.hpp" />
+    <ClInclude Include="src\Display\Multiplatform\TextOnlyFrameDrawer.hpp" />
+    <ClInclude Include="src\Display\Multiplatform\VT8BitFrameDrawer.hpp" />
     <ClInclude Include="src\Engine\Rendering\AnimatedMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\AnimatedModel.hpp" />
     <ClInclude Include="src\Engine\Rendering\Animation.h" />
@@ -93,12 +96,12 @@
     <ClInclude Include="src\Engine\Rendering\Lighting\DirectionalLight.hpp" />
     <ClInclude Include="src\Engine\Rendering\Lighting\ILight.hpp" />
     <ClInclude Include="src\Engine\Rendering\DepthBuffer.hpp" />
-    <ClInclude Include="src\Display\DitheredRenderer.hpp" />
-    <ClInclude Include="src\Display\GreyscaleRenderer.hpp" />
+    <ClInclude Include="src\Display\Windows\DitheredFrameDrawer.hpp" />
+    <ClInclude Include="src\Display\Windows\GreyscaleFrameDrawer.hpp" />
     <ClInclude Include="src\Display\HSVColor.hpp" />
     <ClInclude Include="src\Display\FrameBuffer.hpp" />
     <ClInclude Include="src\Display\RGBColor.hpp" />
-    <ClInclude Include="src\Display\ConsoleManager.hpp" />
+    <ClInclude Include="src\Display\Windows\WindowsTerminalManager.hpp" />
     <ClInclude Include="src\Engine\Consol3Engine.hpp" />
     <ClInclude Include="src\Engine\Rendering\AbstractMesh.hpp" />
     <ClInclude Include="src\Engine\Rendering\Clipper.hpp" />
@@ -141,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
+    <None Include=".clang-tidy" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -198,18 +202,30 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)</OutDir>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)</OutDir>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)</OutDir>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)</OutDir>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

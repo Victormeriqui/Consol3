@@ -18,9 +18,9 @@ namespace Engine
 		{
 			SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range, RGBColor color) :
 				angle(90),
+				attenuation({ 0.01f, 0.01f, 1.0f }),
 				range(range),
 				color(color),
-				attenuation({ 0.01f, 0.01f, 1.0f }),
 				// TODO: figure out the best value for this
 				depthbuffer(DepthBuffer(200, 200)),
 				// TODO: calculate width, height and fov with the light's angle

@@ -25,11 +25,11 @@ namespace Engine
 
 			file_stream.read((char*)header.data(), header.size());
 
-			uint32_t file_size = *reinterpret_cast<uint32_t*>(&header[2]);
-			uint32_t offset	   = *reinterpret_cast<uint32_t*>(&header[10]);
+			//uint32_t file_size = *reinterpret_cast<uint32_t*>(&header[2]);
+			//uint32_t offset	   = *reinterpret_cast<uint32_t*>(&header[10]);
 			uint32_t width	   = *reinterpret_cast<uint32_t*>(&header[18]);
 			uint32_t height	   = *reinterpret_cast<uint32_t*>(&header[22]);
-			uint16_t depth	   = *reinterpret_cast<uint16_t*>(&header[28]);
+			//uint16_t depth	   = *reinterpret_cast<uint16_t*>(&header[28]);
 
 			out_imagebuffer = FrameBuffer<RGBColor>(width, height);
 
