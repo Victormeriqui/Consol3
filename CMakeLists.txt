@@ -2,15 +2,19 @@ cmake_minimum_required(VERSION 3.0)
 
 project(Consol3 VERSION 1.0.0)
 
-set_property(TARGET Consol3 PROPERTY CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB_RECURSE SOURCES
-    "src/*.cpp"
-)
+# Define a compile-time flag for the target system
+if(WIN32)
+    add_definitions(-DSYS_WINDOWS)
+elseif(UNIX)
+    add_definitions(-DSYS_LINUX)
+endif()
 
-file(GLOB_RECURSE HEADERS
-    "src/*.hpp"
-)
+
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+file(GLOB_RECURSE HEADERS "src/*.hpp")
 
 add_executable(Consol3 ${SOURCES} ${HEADERS})
 
@@ -30,3 +34,5 @@ PRIVATE ${CMAKE_SOURCE_DIR}/src/Game
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Math
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Math/Util
 )
+
+

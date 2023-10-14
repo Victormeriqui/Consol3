@@ -1,18 +1,11 @@
 #include "VT24BitFrameDrawer.hpp"
 
-#if CUR_SYS == SYS_WIN
+#if defined(SYS_WINDOWS)
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
-#elif CUR_SYS == SYS_LIN
-typedef struct _CHAR_INFO
-{
-	union {
-		char UnicodeChar;
-		char AsciiChar;
-	} Char;
-	uint32_t Attributes;
-} CHAR_INFO, *PCHAR_INFO;
+#elif defined(SYS_LINUX)
+#include "Display/Windows/WindowsStructsForLinux.hpp"
 #endif
 
 namespace Display

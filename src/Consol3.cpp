@@ -2,15 +2,10 @@
 #include <iostream>
 #include <memory>
 
-#define SYS_WIN 1
-#define SYS_LIN 2
-
-#define CUR_SYS SYS_LIN
-
 #include "Display/FrameBuffer.hpp"
 #include "Engine/Consol3Engine.hpp"
 
-#if CUR_SYS == SYS_WIN
+#if defined(SYS_WINDOWS)
 #include "Display/Windows/DitheredFrameDrawer.hpp"
 #include "Display/Windows/DitheredGreyscaleFrameDrawer.hpp"
 #include "Display/Windows/GreyscaleFrameDrawer.hpp"
@@ -18,17 +13,9 @@
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
-#elif CUR_SYS == SYS_LIN
+#elif defined(SYS_LINUX)
 #include "Display/Linux/LinuxTerminalManager.hpp"
-typedef struct _CHAR_INFO
-{
-	union
-	{
-		char UnicodeChar;
-		char AsciiChar;
-	} Char;
-	uint32_t Attributes;
-} CHAR_INFO, *PCHAR_INFO;
+#include "Display/Windows/WindowsStructsForLinux.hpp"
 #endif
 
 #include "Display/Multiplatform/TextOnlyFrameDrawer.hpp"

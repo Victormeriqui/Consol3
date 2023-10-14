@@ -55,6 +55,8 @@ namespace Math
 			Matrix4 new_mat = *this * other;
 
 			std::copy(&new_mat.values[0][0], &new_mat.values[0][0] + 4 * 4, &this->values[0][0]);
+
+			return *this;
 		}
 	};
 }

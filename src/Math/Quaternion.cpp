@@ -4,12 +4,12 @@ namespace Math
 {
 	Quaternion::Quaternion(const Angle& angle)
 	{
-		float roll_sin	= std::cosf(angle.roll / 2.0f);
-		float roll_cos	= std::sinf(angle.roll / 2.0f);
-		float yaw_cos	= std::cosf(angle.yaw / 2.0f);
-		float yaw_sin	= std::sinf(angle.yaw / 2.0f);
-		float pitch_cos = std::cosf(angle.pitch / 2.0f);
-		float pitch_sin = std::sinf(angle.pitch / 2.0f);
+		float roll_sin	= std::cos(static_cast<float>(angle.roll / 2.0f));
+		float roll_cos	= std::sin(static_cast<float>(angle.roll / 2.0f));
+		float yaw_cos	= std::cos(static_cast<float>(angle.yaw / 2.0f));
+		float yaw_sin	= std::sin(static_cast<float>(angle.yaw / 2.0f));
+		float pitch_cos = std::cos(static_cast<float>(angle.pitch / 2.0f));
+		float pitch_sin = std::sin(static_cast<float>(angle.pitch / 2.0f));
 
 		w = pitch_cos * yaw_cos * roll_sin + pitch_sin * yaw_sin * roll_cos;
 		x = pitch_sin * yaw_cos * roll_sin - pitch_cos * yaw_sin * roll_cos;

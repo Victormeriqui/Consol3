@@ -1,4 +1,4 @@
-#ifndef QUATERNION_HPP
+	#ifndef QUATERNION_HPP
 #define QUATERNION_HPP
 
 #include "Angle.hpp"
@@ -26,8 +26,8 @@ namespace Math
 
 		Quaternion(const Vector3& axis, float w)
 		{
-			float half_sinw = std::sinf(w / 2.0f);
-			float half_cosw = std::cosf(w / 2.0f);
+			float half_sinw = std::sin(static_cast<float>(w / 2.0f));
+			float half_cosw = std::cos(static_cast<float>(w / 2.0f));
 
 			x		= axis.x * half_sinw;
 			y		= axis.y * half_sinw;

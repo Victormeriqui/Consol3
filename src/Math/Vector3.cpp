@@ -31,8 +31,8 @@ namespace Math
 
 	Vector3 Vector3::GetRotated(const Vector3& axis, float amount) const
 	{
-		float amount_sin = std::sinf(-amount);
-		float amount_cos = std::cosf(-amount);
+		float amount_sin = std::sin(static_cast<float>(-amount));
+		float amount_cos = std::cos(static_cast<float>(-amount));
 
 		const Vector3 rx = GetCrossProduct(axis * amount_sin);
 		const Vector3 ry = axis * GetDotProduct((axis * (1 - amount_cos)));
