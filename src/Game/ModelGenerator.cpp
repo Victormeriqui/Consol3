@@ -40,7 +40,7 @@ namespace Game
 											Util::Lerp((float)y, 0, (float)(tile_amount_y + 1), 0.0f, 1.0f));
 
 				vertices.push_back(
-					std::move(Vertex(Vector3(x * tile_width, noise * (0.01f * noise_amount), y * tile_height), plane_normal, texture_coordinates)));
+					Vertex(Vector3(x * tile_width, noise * (0.01f * noise_amount), y * tile_height), plane_normal, texture_coordinates));
 
 				noise_x += 0.1f;
 			}
@@ -112,7 +112,7 @@ namespace Game
 		Vector3 new_mid				  = vert0.GetPosition().GetMiddleFrom(vert1.GetPosition()).Normalize();
 		Vector2 new_mid_texturecoords = GetSphereTextureCoords(new_mid);
 
-		vertices.push_back(std::move(Vertex(new_mid, new_mid, new_mid_texturecoords)));
+		vertices.push_back(Vertex(new_mid, new_mid, new_mid_texturecoords));
 
 		// it's index is now the last one since it was just pushed back
 		return (uint32_t)(vertices.size() - 1);
@@ -120,15 +120,15 @@ namespace Game
 
 	StaticModel ModelGenerator::GenerateSphere(uint8_t iterations)
 	{
-		uint32_t vertex_count = CalculateVertexCount_Icosahedron(iterations);
-		uint32_t index_count  = CalculateIndexCount_Icosahedron(iterations);
+		//uint32_t vertex_count = CalculateVertexCount_Icosahedron(iterations);
+		//uint32_t index_count  = CalculateIndexCount_Icosahedron(iterations);
 
 		std::vector<SphereEdge> edges;
 		std::vector<uint32_t> indices;
 		std::vector<Vertex> vertices;
 
 		for (const Vector3& pos : icosahedron_verts)
-			vertices.push_back(std::move(Vertex(pos.GetNormalized(), pos.GetNormalized(), GetSphereTextureCoords(pos.GetNormalized()))));
+			vertices.push_back(Vertex(pos.GetNormalized(), pos.GetNormalized(), GetSphereTextureCoords(pos.GetNormalized())));
 
 		for (uint32_t index : icosahedron_indices)
 			indices.push_back(index);

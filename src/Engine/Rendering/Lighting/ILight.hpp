@@ -34,6 +34,9 @@ namespace Engine
 				{
 				}
 
+				virtual ~ILight() = default;
+
+
 				[[nodiscard]] inline float GetSpecularHighlightAt(const Vector3& position,
 																  const Vector3& normal,
 																  const Vector3& cam_pos,

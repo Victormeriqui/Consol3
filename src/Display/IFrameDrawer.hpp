@@ -1,5 +1,5 @@
-#ifndef IRENDERER_HPP
-#define IRENDERER_HPP
+#ifndef IFRAMEDRAWER_HPP
+#define IFRAMEDRAWER_HPP
 
 #include "HSVColor.hpp"
 
@@ -10,12 +10,14 @@
 
 namespace Display
 {
-	class IRenderer
+	class IFrameDrawer
 	{
 	protected:
-		IRenderer()
+		IFrameDrawer()
 		{
 		}
+
+		virtual ~IFrameDrawer() = default;
 
 	public:
 		virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) = 0;

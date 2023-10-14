@@ -19,8 +19,9 @@ namespace Engine
 			position(Vector3()),
 			rotation(Angle()),
 			transform(Transform()),
-			depthbuffer(DepthBuffer(100, 100)),
-			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov))
+			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov)),
+			depthbuffer(DepthBuffer(100, 100))
+
 		{
 		}
 
@@ -33,8 +34,8 @@ namespace Engine
 			position(Vector3()),
 			rotation(Quaternion()),
 			transform(Transform()),
-			depthbuffer(DepthBuffer(width, height)),
-			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov))
+			projection_mat(Matrix4().SetPerspectiveProjection(width, height, znear, zfar, fov)),
+			depthbuffer(DepthBuffer(width, height))
 		{
 		}
 
