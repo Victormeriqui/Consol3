@@ -21,7 +21,7 @@ namespace Engine
 			float anim_current_progress;
 			float anim_current_fps;
 
-			std::chrono::steady_clock::time_point last_update;
+			std::chrono::high_resolution_clock::time_point last_update;
 
 		public:
 			AnimatedMesh();
