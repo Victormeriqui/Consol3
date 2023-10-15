@@ -26,6 +26,7 @@ PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Linux
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Multiplatform
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Windows
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine
+PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Input
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Rendering
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Lighting
 PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Shaders

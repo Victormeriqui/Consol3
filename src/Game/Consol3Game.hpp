@@ -1,6 +1,7 @@
 #ifndef CONSOL3GAME_HPP
 #define CONSOL3GAME_HPP
 
+#include "Engine/Input/IInputManager.hpp"
 #include "Engine/Rendering/AnimatedMesh.hpp"
 #include "Engine/Rendering/Camera.hpp"
 #include "Engine/Rendering/Lighting/DirectionalLight.hpp"
@@ -21,53 +22,55 @@
 #include <cstdint>
 #include <memory>
 
-namespace Game
-{
-	using namespace Display;
-	using namespace Engine;
-	using namespace Engine::Rendering;
-	using namespace Math;
-	using namespace Lighting;
-	using namespace Resources;
+namespace Game {
+using namespace Display;
+using namespace Engine;
+using namespace Engine::Rendering;
+using namespace Math;
+using namespace Lighting;
+using namespace Resources;
+using namespace Input;
 
-	class Consol3Game
-	{
-	private:
-		std::shared_ptr<SceneRenderer> scene_renderer;
-		std::shared_ptr<LightingSystem> lighting_system;
-		ModelGenerator model_generator;
+class Consol3Game {
+private:
+    std::shared_ptr<SceneRenderer> scene_renderer;
+    std::shared_ptr<IInputManager> input_manager;
 
-		std::shared_ptr<ResourceManager> resource_manager;
+    std::shared_ptr<LightingSystem> lighting_system;
+    ModelGenerator model_generator;
 
-		std::shared_ptr<Camera> camera;
+    std::shared_ptr<ResourceManager> resource_manager;
 
-		StaticMesh mesh;
-		StaticMesh mesh2;
-		StaticMesh mesh3;
+    std::shared_ptr<Camera> camera;
 
-		AnimatedMesh anim_mesh;
-		AnimatedMesh anim_mesh2;
-		AnimatedMesh anim_mesh3;
-		StaticMesh floor;
+    StaticMesh mesh;
+    StaticMesh mesh2;
+    StaticMesh mesh3;
 
-		std::shared_ptr<DirectionalLight> dir_light;
-		std::shared_ptr<PointLight> point_light;
-		std::shared_ptr<SpotLight> spot_light;
-		std::shared_ptr<SpotLight> spot_light2;
-		std::shared_ptr<SpotLight> spot_light3;
-		StaticMesh plight_mesh;
+    AnimatedMesh anim_mesh;
+    AnimatedMesh anim_mesh2;
+    AnimatedMesh anim_mesh3;
+    StaticMesh floor;
 
-		void LoadResources();
+    std::shared_ptr<DirectionalLight> dir_light;
+    std::shared_ptr<PointLight> point_light;
+    std::shared_ptr<SpotLight> spot_light;
+    std::shared_ptr<SpotLight> spot_light2;
+    std::shared_ptr<SpotLight> spot_light3;
+    StaticMesh plight_mesh;
 
-	public:
-		Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer,
-					std::shared_ptr<ResourceManager> resource_manager,
-					std::shared_ptr<LightingSystem> lighting_system);
+    void LoadResources();
 
-		void HandleInput();
-		void Update();
-		std::chrono::milliseconds Render(int64_t delta);
-	};
+public:
+    Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer,
+                std::shared_ptr<IInputManager> input_manager,
+                std::shared_ptr<ResourceManager> resource_manager,
+                std::shared_ptr<LightingSystem> lighting_system);
+
+    void HandleInput();
+    void Update();
+    std::chrono::milliseconds Render(int64_t delta);
+};
 }
 
 #endif
