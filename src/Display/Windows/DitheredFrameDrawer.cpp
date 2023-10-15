@@ -1,6 +1,8 @@
+#ifdef SYS_WINDOWS
+
 #include "DitheredFrameDrawer.hpp"
 
-#include "/Math/Util/MathUtil.hpp"
+#include "Math/Util/MathUtil.hpp"
 #include "Display/ColorMapping.hpp"
 
 namespace Display
@@ -49,3 +51,4 @@ namespace Display
 		}
 	}
 }
+#endif

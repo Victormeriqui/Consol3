@@ -1,3 +1,4 @@
+#ifdef SYS_WINDOWS
 #ifndef DITHEREDGREYSCALEFRAMEDRAWER_HPP
 #define DITHEREDGREYSCALEFRAMEDRAWER_HPP
 
@@ -58,4 +59,5 @@ namespace Display
 	}
 }
 
+#endif
 #endif

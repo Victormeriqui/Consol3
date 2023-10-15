@@ -1,3 +1,5 @@
+#ifdef SYS_WINDOWS
+
 #include "WindowsTerminalManager.hpp"
 
 #include <algorithm>
@@ -166,3 +168,5 @@ namespace Display
 		}
 	}
 }
+
+#endif

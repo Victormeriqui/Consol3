@@ -2,7 +2,7 @@
 
 #include "Math/Util/MathUtil.hpp"
 
-#if defined(SYS_WINDOWS)
+#ifdef SYS_WINDOWS
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>

@@ -1,3 +1,5 @@
+#ifdef SYS_WINDOWS
+
 #include "GreyscaleFrameDrawer.hpp"
 
 namespace Display
@@ -52,3 +54,4 @@ namespace Display
 
 	}
 }
+#endif

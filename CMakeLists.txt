@@ -3,17 +3,18 @@ cmake_minimum_required(VERSION 3.0)
 project(Consol3 VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Define a compile-time flag for the target system
 if(WIN32)
     add_definitions(-DSYS_WINDOWS)
+    message(STATUS "Building for Windows")
 elseif(UNIX)
     add_definitions(-DSYS_LINUX)
+    message(STATUS "Building for Linux")
 endif()
 
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
-
 file(GLOB_RECURSE HEADERS "src/*.hpp")
 
 add_executable(Consol3 ${SOURCES} ${HEADERS})

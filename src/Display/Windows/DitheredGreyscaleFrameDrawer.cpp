@@ -1,3 +1,5 @@
+#ifdef SYS_WINDOWS
+
 #include "DitheredGreyscaleFrameDrawer.hpp"
 
 #include "Math/Util/MathUtil.hpp"
@@ -116,3 +118,4 @@ namespace Display
 		}
 	}
 }
+#endif
