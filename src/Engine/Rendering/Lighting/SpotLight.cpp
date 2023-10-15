@@ -114,7 +114,7 @@ namespace Engine
 
 				float spotfactor = light_dir.GetDotProduct(direction);
 
-				float ang = Math::Util::ToDegrees(std::acosf(spotfactor));
+				float ang = Math::Util::ToDegrees(std::acos(static_cast<float>(spotfactor)));
 
 				if (ang > angle)
 					return RGBColor(0, 0, 0);
