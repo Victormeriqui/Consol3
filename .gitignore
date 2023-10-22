@@ -342,3 +342,5 @@ ASALocalRun/
 healthchecksdb
 /Consol3.exe
 .vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
