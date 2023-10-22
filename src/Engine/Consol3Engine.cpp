@@ -18,7 +18,7 @@ namespace Engine
         game(Consol3Game(scene_renderer, input_manager, resource_manager, lighting_system)),
         running(false),
         delta(0),
-        input_manager(std::move(input_manager))
+        input_manager(input_manager)
     {
     }
 

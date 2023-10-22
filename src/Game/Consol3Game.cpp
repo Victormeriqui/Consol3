@@ -14,32 +14,30 @@ namespace Game
     void Consol3Game::LoadResources()
     {
         ModelLoadingOptions model_options;
-
-        resource_manager->LoadModel("res/monkey.obj", model_options);
-        resource_manager->LoadModel("res/bunny.obj", model_options);
-        resource_manager->LoadModel("res/cube.obj", model_options);
+        resource_manager->LoadModel("../res/bunny.obj", model_options);
+        resource_manager->LoadModel("../res/cube.obj", model_options);
         resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
         resource_manager->LoadModel("sphere1", model_generator.GenerateSphere(4));
 
-        resource_manager->LoadModel("res/alien.md2", model_options);
-        resource_manager->LoadModel("res/marvin.md2", model_options);
-        resource_manager->LoadModel("res/buggy.md2", model_options);
-        resource_manager->LoadModel("res/scarlet.md2", model_options);
-        resource_manager->LoadModel("res/warrior.md2", model_options);
-        resource_manager->LoadModel("res/raptor.md2", model_options);
-        resource_manager->LoadModel("res/penguin.md2", model_options);
-        resource_manager->LoadModel("res/centaur.md2", model_options);
+        resource_manager->LoadModel("../res/alien.md2", model_options);
+        resource_manager->LoadModel("../res/marvin.md2", model_options);
+        resource_manager->LoadModel("../res/buggy.md2", model_options);
+        resource_manager->LoadModel("../res/scarlet.md2", model_options);
+        resource_manager->LoadModel("../res/warrior.md2", model_options);
+        resource_manager->LoadModel("../res/raptor.md2", model_options);
+        resource_manager->LoadModel("../res/penguin.md2", model_options);
+        resource_manager->LoadModel("../res/centaur.md2", model_options);
 
-        resource_manager->LoadTexture("res/tiles.bmp", TextureLoadingOptions::DEFAULT);
-        resource_manager->LoadTexture("res/tnt.bmp", TextureLoadingOptions::DEFAULT);
-        resource_manager->LoadTexture("res/text.bmp", TextureLoadingOptions::DEFAULT);
-        resource_manager->LoadTexture("res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
-        resource_manager->LoadTexture("res/bricks_norm.bmp", TextureLoadingOptions::DEFAULT);
-        resource_manager->LoadTexture("res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
-        resource_manager->LoadTexture("res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
-        resource_manager->LoadTexture("res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
-        resource_manager->LoadTexture("res/earth.bmp", TextureLoadingOptions::DEFAULT);
-        resource_manager->LoadTexture("res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
+        resource_manager->LoadTexture("../res/tiles.bmp", TextureLoadingOptions::DEFAULT);
+        resource_manager->LoadTexture("../res/tnt.bmp", TextureLoadingOptions::DEFAULT);
+        resource_manager->LoadTexture("../res/text.bmp", TextureLoadingOptions::DEFAULT);
+        resource_manager->LoadTexture("../res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
+        resource_manager->LoadTexture("../res/bricks_norm.bmp", TextureLoadingOptions::DEFAULT);
+        resource_manager->LoadTexture("../res/raptor.bmp", TextureLoadingOptions::FLIP_Y);
+        resource_manager->LoadTexture("../res/penguin.bmp", TextureLoadingOptions::FLIP_Y);
+        resource_manager->LoadTexture("../res/centaur.bmp", TextureLoadingOptions::FLIP_Y);
+        resource_manager->LoadTexture("../res/earth.bmp", TextureLoadingOptions::DEFAULT);
+        resource_manager->LoadTexture("../res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
     }
 
     float rot = 1.33f;
@@ -57,7 +55,7 @@ namespace Game
 
         anim_mesh = AnimatedMesh();
         anim_mesh
-            .SetModelResource("res/marvin.md2")
+            .SetModelResource("../res/marvin.md2")
             //.SetTextureResource("res/text.bmp")
             .SetPosition(Vector3(1.0f, -0.9f, 0.0f))
             .SetScale(Vector3(0.05f, 0.05f, 0.05f))
@@ -66,7 +64,7 @@ namespace Game
 
         anim_mesh2 = AnimatedMesh();
         anim_mesh2
-            .SetModelResource("res/penguin.md2")
+            .SetModelResource("../res/penguin.md2")
             //.SetTextureResource("res/text.bmp")
             .SetPosition(Vector3(-2.0f, -0.9f, 0.0f))
             .SetScale(Vector3(0.05f, 0.05f, 0.05f))
@@ -75,7 +73,7 @@ namespace Game
 
         anim_mesh3 = AnimatedMesh();
         anim_mesh3
-            .SetModelResource("res/marvin.md2")
+            .SetModelResource("../res/marvin.md2")
             //.SetTextureResource("res/text.bmp")
             .SetPosition(Vector3(0.0f, -0.9f, 1.0f))
             .SetScale(Vector3(0.05f, 0.05f, 0.05f))
@@ -83,7 +81,7 @@ namespace Game
             .SetColor(RGBColor(0, 0, 255));
 
         mesh = StaticMesh();
-        mesh.SetModelResource("res/bunny.obj")
+        mesh.SetModelResource("../res/bunny.obj")
             .SetPosition(Vector3(2, 1, 0))
             //.SetColor(RGBColor(0, 0, 200))
             .SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
@@ -91,7 +89,7 @@ namespace Game
             .SetMaterialProperties(MaterialProperties(20.0f, 1.6f));
 
         mesh2 = StaticMesh();
-        mesh2.SetModelResource("res/bunny.obj")
+        mesh2.SetModelResource("../res/bunny.obj")
             .SetPosition(Vector3(-2, 1, 0))
             //.SetColor(RGBColor(0, 0, 255))
             .SetRotation(Angle(0, 3.14159f / 2 * 4, 0))
@@ -99,10 +97,10 @@ namespace Game
             .SetMaterialProperties(MaterialProperties(0.0f, 0.0f));
 
         plight_mesh = StaticMesh();
-        plight_mesh.SetModelResource("res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
+        plight_mesh.SetModelResource("../res/cube.obj").SetPosition(Vector3(-2.0f, 0.0f, 0.0f));
 
         floor = StaticMesh();
-        floor.SetModelResource("plane50").SetTextureResource("res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -2, -6));
+        floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -2, -6));
 
         dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
         dir_light->SetColor(RGBColor(255, 255, 255));
