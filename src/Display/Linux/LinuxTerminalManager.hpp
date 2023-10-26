@@ -8,28 +8,28 @@
 
 namespace Display
 {
-	namespace Linux
-	{
-		class LinuxTerminalManager : public ITerminalManager<char>
-		{
-		private:
-			short width;
-			short height;
+    namespace Linux
+    {
+        class LinuxTerminalManager : public ITerminalManager<char>
+        {
+        private:
+            short width;
+            short height;
 
-		public:
-			LinuxTerminalManager(short width, short height);
-			~LinuxTerminalManager();
+        public:
+            LinuxTerminalManager(short width, short height);
+            ~LinuxTerminalManager();
 
-			virtual void SetPalette(const uint32_t palette[]) override;
-			virtual void SetTitle(const std::string& title) override;
+            virtual void SetPalette(const uint32_t palette[]) override;
+            virtual void SetTitle(const std::string& title) override;
 
-			virtual void DisableCursor() override;
-			virtual void EnableCursor() override;
+            virtual void DisableCursor() override;
+            virtual void EnableCursor() override;
 
-			virtual void WriteFrameBufferData(const char* data) override;
-			virtual void WriteSizedString(const std::string& string, uint64_t size) override;
-		};
-	}
+            virtual void WriteFrameBufferData(const char* data) override;
+            virtual void WriteSizedString(const std::string& string, uint64_t size) override;
+        };
+    }
 
 }
 

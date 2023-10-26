@@ -3,8 +3,10 @@
 
 #include <cstdint>
 
-typedef struct _CHAR_INFO {
-    union {
+typedef struct _CHAR_INFO
+{
+    union
+    {
         char UnicodeChar;
         char AsciiChar;
     } Char;

@@ -5,10 +5,10 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		using DepthBuffer = Display::FrameBuffer<float>;
-	}
+    namespace Rendering
+    {
+        using DepthBuffer = Display::FrameBuffer<float>;
+    }
 }
 
 #endif

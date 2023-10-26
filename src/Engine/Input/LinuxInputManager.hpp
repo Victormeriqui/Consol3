@@ -5,27 +5,30 @@
 
 #include <cstdint>
 
-namespace Engine {
-namespace Input {
+namespace Engine
+{
+    namespace Input
+    {
 
-    class LinuxInputManager : public IInputManager {
-    private:
-        uint32_t TranslateKey(Key key) const;
+        class LinuxInputManager : public IInputManager
+        {
+        private:
+            uint32_t TranslateKey(Key key) const;
 
-    public:
-        LinuxInputManager();
+        public:
+            LinuxInputManager();
 
-        Point2 GetMousePosition() const override;
-        void SetMousePosition(const Point2& position) override;
+            Point2 GetMousePosition() const override;
+            void SetMousePosition(const Point2& position) override;
 
-        Vector2 GetMouseDistanceToCenter() const override;
-        void SetMousePositionToCenter() override;
+            Vector2 GetMouseDistanceToCenter() const override;
+            void SetMousePositionToCenter() override;
 
-        bool IsKeyPressed(Key key) const override;
-        bool IsKeyReleased(Key key) const override;
-        bool IsKeyHeld(Key key) const override;
-    };
-}
+            bool IsKeyPressed(Key key) const override;
+            bool IsKeyReleased(Key key) const override;
+            bool IsKeyHeld(Key key) const override;
+        };
+    }
 }
 
 #endif

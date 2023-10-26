@@ -10,21 +10,21 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		struct Frame
-		{
-			std::string name;
+    namespace Rendering
+    {
+        struct Frame
+        {
+            std::string name;
 
-			std::shared_ptr<std::vector<Vertex>> vertices;
-		};
+            std::shared_ptr<std::vector<Vertex>> vertices;
+        };
 
-		struct Animation
-		{
-			uint32_t start_frame;
-			uint32_t end_frame;
-		};
-	}
+        struct Animation
+        {
+            uint32_t start_frame;
+            uint32_t end_frame;
+        };
+    }
 }
 
 #endif

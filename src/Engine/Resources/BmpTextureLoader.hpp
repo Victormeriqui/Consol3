@@ -11,21 +11,21 @@
 
 namespace Engine
 {
-	namespace Resources
-	{
-		using namespace Display;
+    namespace Resources
+    {
+        using namespace Display;
 
-		class BmpTextureLoader : public ITextureLoader
-		{
-		private:
-		public:
-			BmpTextureLoader()
-			{
-			}
+        class BmpTextureLoader : public ITextureLoader
+        {
+        private:
+        public:
+            BmpTextureLoader()
+            {
+            }
 
-			virtual bool LoadTexture(const std::string& filename, FrameBuffer<RGBColor>& out_imagebuffer, TextureLoadingOptions options) override;
-		};
-	}
+            virtual bool LoadTexture(const std::string& filename, FrameBuffer<RGBColor>& out_imagebuffer, TextureLoadingOptions options) override;
+        };
+    }
 }
 
 #endif

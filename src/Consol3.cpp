@@ -41,8 +41,8 @@ using namespace Engine;
 
 int main(int argc, char* argv[])
 {
-    uint16_t width  = 100;
-    uint16_t height = 100;
+    uint16_t width  = 50;
+    uint16_t height = 50;
 
     // set current dir to executable dir so resource loading works as intended
     std::filesystem::path executable_path = std::filesystem::canonical(std::filesystem::path(argv[0])).parent_path();

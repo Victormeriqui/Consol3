@@ -8,27 +8,30 @@
 #define NOMINMAX
 #include <Windows.h>
 
-namespace Engine {
-namespace Input {
+namespace Engine
+{
+    namespace Input
+    {
 
-    class WindowsInputManager : public IInputManager {
-    private:
-        DWORD TranslateKey(Key key) const;
+        class WindowsInputManager : public IInputManager
+        {
+        private:
+            DWORD TranslateKey(Key key) const;
 
-    public:
-        WindowsInputManager();
+        public:
+            WindowsInputManager();
 
-        Point2 GetMousePosition() const override;
-        void SetMousePosition(const Point2& position) override;
+            Point2 GetMousePosition() const override;
+            void SetMousePosition(const Point2& position) override;
 
-        Vector2 GetMouseDistanceToCenter() const override;
-        void SetMousePositionToCenter() override;
+            Vector2 GetMouseDistanceToCenter() const override;
+            void SetMousePositionToCenter() override;
 
-        bool IsKeyPressed(Key key) const override;
-        bool IsKeyReleased(Key key) const override;
-        bool IsKeyHeld(Key key) const override;
-    };
-}
+            bool IsKeyPressed(Key key) const override;
+            bool IsKeyReleased(Key key) const override;
+            bool IsKeyHeld(Key key) const override;
+        };
+    }
 }
 
 #endif
