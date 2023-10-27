@@ -11,7 +11,7 @@ namespace Engine
         {
         }
 
-        DWORD WindowsInputManager::TranslateKey(Key key)
+        DWORD WindowsInputManager::TranslateKey(Key key) const
         {
             switch (key)
             {
@@ -89,12 +89,12 @@ namespace Engine
 
         bool WindowsInputManager::IsKeyReleased(Key key) const
         {
-            return !GetKeyState(TranslateKey(key)) & 0x8000;
+            return (GetKeyState(TranslateKey(key)) & 0x8000) != 0;
         }
 
         bool WindowsInputManager::IsKeyHeld(Key key) const
         {
-            return GetKeyState(TranslateKey(key)) & 0x8000;
+            return (GetKeyState(TranslateKey(key)) & 0x8000) == 0;
         }
 
     }
