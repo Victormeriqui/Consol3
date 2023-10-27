@@ -18,7 +18,6 @@ namespace Game
     using namespace Engine;
     using namespace Engine::Rendering;
     using namespace Math;
-    using namespace Lighting;
     using namespace Resources;
     using namespace Input;
 
