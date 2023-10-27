@@ -3,9 +3,8 @@
 
 #include "Display/FrameBuffer.hpp"
 #include "Display/IFrameDrawer.hpp"
-#include "Engine/Rendering/Lighting/LightingSystem.hpp"
-#include "Engine/Rendering/SceneRenderer.hpp"
-#include "Game/Consol3Game.hpp"
+#include "Engine/Rendering/RasterSceneRenderer.hpp"
+#include "Game/IGame.hpp"
 #include "Input/IInputManager.hpp"
 
 #include <chrono>
@@ -25,12 +24,9 @@ namespace Engine
     {
     private:
         std::shared_ptr<IFrameDrawer> frame_drawer;
-        std::shared_ptr<LightingSystem> lighting_system;
-        std::shared_ptr<ResourceManager> resource_manager;
-        std::shared_ptr<SceneRenderer> scene_renderer;
         std::shared_ptr<IInputManager> input_manager;
 
-        Consol3Game game;
+        std::unique_ptr<IGame> game;
 
         bool running;
         float delta;

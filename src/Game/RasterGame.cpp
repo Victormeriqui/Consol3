@@ -1,8 +1,6 @@
-#include "Consol3Game.hpp"
+#include "RasterGame.hpp"
 
 #include "Math/Util/MathUtil.hpp"
-
-#include <cstdint>
 
 namespace Game
 {
@@ -11,7 +9,7 @@ namespace Game
     using namespace Engine::Rendering;
     using namespace Math;
 
-    void Consol3Game::LoadResources()
+    void RasterGame::LoadResources()
     {
         ModelLoadingOptions model_options;
         resource_manager->LoadModel("../res/bunny.obj", model_options);
@@ -40,18 +38,16 @@ namespace Game
         resource_manager->LoadTexture("../res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
     }
 
-    float rot = 1.33f;
-    Consol3Game::Consol3Game(std::shared_ptr<SceneRenderer> scene_renderer, std::shared_ptr<IInputManager> input_manager, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system) :
-        scene_renderer(std::move(scene_renderer)),
-        input_manager(input_manager),
-        lighting_system(std::move(lighting_system)),
-        resource_manager(std::move(resource_manager)),
-        camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f))
+    RasterGame::RasterGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
+        input_manager(std::move(input_manager)),
+        resource_manager(std::make_shared<ResourceManager>()),
+        lighting_system(std::make_shared<LightingSystem>()),
+        camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f)),
+        scene_renderer(frame_drawer, resource_manager, lighting_system, camera)
     {
         LoadResources();
 
         camera->SetPosition(Vector3(0, 0.1f, -1.155f));
-        this->scene_renderer->SetCamera(camera);
 
         anim_mesh = AnimatedMesh();
         anim_mesh
@@ -134,10 +130,7 @@ namespace Game
         plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
     }
 
-    float mov_speed = 0.05f;
-    bool shifting   = false;
-
-    void Consol3Game::HandleInput()
+    void RasterGame::HandleInput()
     {
         if (input_manager->IsKeyPressed(Key::CAPITAL))
         {
@@ -203,7 +196,7 @@ namespace Game
     }
 
     float i = 0;
-    void Consol3Game::Update()
+    void RasterGame::Update()
     {
         // point_light->SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
         // plight_mesh.SetPosition(Vector3(std::sin(i) * 2, 0.5, std::cos(i) * 2));
@@ -214,22 +207,22 @@ namespace Game
         i += 0.01f;
     }
 
-    std::chrono::milliseconds Consol3Game::Render(int64_t delta)
+    std::chrono::milliseconds RasterGame::Render(int64_t delta)
     {
         auto time = std::chrono::high_resolution_clock::now();
 
-        scene_renderer->DrawShadedMesh(floor);
+        scene_renderer.DrawShadedMesh(floor);
 
-        // scene_renderer->DrawShadedMesh(mesh);
-        // scene_renderer->DrawShadedMesh(mesh2);
+        // scene_renderer.DrawShadedMesh(mesh);
+        // scene_renderer.DrawShadedMesh(mesh2);
 
-        //	scene_renderer->DrawMesh(plight_mesh);
+        //	scene_renderer.DrawMesh(plight_mesh);
 
-        scene_renderer->DrawShadedMesh(anim_mesh);
-        scene_renderer->DrawShadedMesh(anim_mesh2);
-        // scene_renderer->DrawShadedMesh(anim_mesh3);
+        scene_renderer.DrawShadedMesh(anim_mesh);
+        scene_renderer.DrawShadedMesh(anim_mesh2);
+        // scene_renderer.DrawShadedMesh(anim_mesh3);
 
-        scene_renderer->RenderScene(delta);
+        scene_renderer.RenderScene(delta);
         /*
         for (int y = 0; y < 200; y++)
         {
@@ -238,7 +231,7 @@ namespace Game
                         float z		= dir_light->GetLightDepthBuffer().value().get().GetValue(x, y);
                         uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
                         uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
-                        scene_renderer->DrawPixel(nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+                        scene_renderer.DrawPixel(nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
                 }
         }
 
@@ -249,7 +242,7 @@ namespace Game
                         float z		= spot_light->GetLightDepthBuffer().value().get().GetValue(x, y);
                         uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
                         uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
-                        scene_renderer->DrawPixel(50 + nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+                        scene_renderer.DrawPixel(50 + nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
                 }
         }
 
@@ -261,7 +254,7 @@ namespace Game
                         float z = spot_light2->GetLightDepthBuffer().value().get().GetValue(x, y);
                         uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 50);
                         uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 50);
-                        scene_renderer->DrawPixel(150+nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
+                        scene_renderer.DrawPixel(150+nx, ny, HSVColor(0, 0, Util::Lerp(z, 0, 1)));
                 }
         }*/
 
