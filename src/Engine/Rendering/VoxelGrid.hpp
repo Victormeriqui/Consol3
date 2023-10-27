@@ -15,8 +15,9 @@ namespace Engine
             std::array<T, WIDTH * HEIGHT * DEPTH> grid;
 
         public:
-            VoxelGrid()
+            VoxelGrid(T default)
             {
+                grid.fill(default);
             }
 
             [[nodiscard]] T GetVoxel(uint16_t x, uint16_t y, uint16_t z) const

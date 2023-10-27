@@ -21,7 +21,7 @@ namespace Game
     {
         LoadResources();
 
-        camera->SetPosition(Vector3(0, 0.1f, -1.155f));
+        camera->SetPosition(Vector3(40, 40, 30));
     }
 
     void VoxelGame::HandleInput()
