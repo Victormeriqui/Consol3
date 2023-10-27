@@ -139,7 +139,7 @@ namespace Game
 
     void Consol3Game::HandleInput()
     {
-        if (input_manager->IsKeyHeld(Key::CAPITAL))
+        if (input_manager->IsKeyPressed(Key::CAPITAL))
         {
             Vector2 mouse_dist_center = input_manager->GetMouseDistanceToCenter();
 
