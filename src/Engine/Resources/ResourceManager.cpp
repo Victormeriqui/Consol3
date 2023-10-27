@@ -72,7 +72,12 @@ namespace Engine
                 success = model_loader_obj.LoadStaticModel(filename, obj_vertices, obj_indices, options);
 
                 if (!success)
-                    return false;
+                {
+                    // try again one level up due to Windows cmake build folder structure
+                    success = model_loader_obj.LoadStaticModel("../" + filename, obj_vertices, obj_indices, options);
+                    if (!success)
+                        return false;
+                }
 
                 static_model_cache.emplace(filename, std::make_shared<StaticModel>(obj_vertices, obj_indices));
 
@@ -87,7 +92,12 @@ namespace Engine
                 success = model_loader_md2.LoadAnimatedModel(filename, md2_frames, md2_indices, md2_animations, options);
 
                 if (!success)
-                    return false;
+                {
+                    // try again one level up due to Windows cmake build folder structure
+                    success = model_loader_md2.LoadAnimatedModel("../" + filename, md2_frames, md2_indices, md2_animations, options);
+                    if (!success)
+                        return false;
+                }
 
                 animated_model_cache.emplace(filename, std::make_shared<AnimatedModel>(md2_frames, md2_indices, md2_animations));
 
