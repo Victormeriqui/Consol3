@@ -1,9 +1,9 @@
 #include "DirectionalLight.hpp"
 
-#include "../../../Math/Matrix4.hpp"
-#include "../../../Math/Util/MathUtil.hpp"
-#include "../../../Math/Vector3.hpp"
-#include "../Transform.hpp"
+#include "Engine/Rendering/Transform.hpp"
+#include "Math/Matrix4.hpp"
+#include "Math/Util/MathUtil.hpp"
+#include "Math/Vector3.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -11,104 +11,101 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		namespace Lighting
-		{
-			float ortho_size = 3;
+    namespace Rendering
+    {
+        namespace Lighting
+        {
+            float ortho_size = 3;
 
-			DirectionalLight::DirectionalLight(const Vector3& direction, RGBColor color) :
-				color(RGBColor()),
-				// TODO: figure out the best value for this
-				depthbuffer(DepthBuffer(200, 200)),
-				projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
-			{
-				SetDirection(direction);
-			}
+            DirectionalLight::DirectionalLight(const Vector3& direction, RGBColor color) :
+                color(RGBColor()),
+                // TODO: figure out the best value for this
+                depthbuffer(DepthBuffer(200, 200)),
+                projection_mat(Matrix4().SetOrthographicProjection(-ortho_size, ortho_size, ortho_size, -ortho_size, -ortho_size, ortho_size))
+            {
+                SetDirection(direction);
+            }
 
-			void DirectionalLight::UpdateViewMatrix()
-			{
-				Vector3 right = Util::yaxis.GetCrossProduct(direction);
-				right.Normalize();
+            void DirectionalLight::UpdateViewMatrix()
+            {
+                Vector3 right = Util::yaxis.GetCrossProduct(direction);
+                right.Normalize();
 
-				Vector3 up = direction.GetCrossProduct(right);
-				up.Normalize();
+                Vector3 up = direction.GetCrossProduct(right);
+                up.Normalize();
 
-				Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, up, direction);
+                Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, up, direction);
 
-				view_mat = rotation_mat;
-			}
+                view_mat = rotation_mat;
+            }
 
-			Vector3 DirectionalLight::GetDirection() const
-			{
-				return direction;
-			}
+            Vector3 DirectionalLight::GetDirection() const
+            {
+                return direction;
+            }
 
-			void DirectionalLight::SetDirection(const Vector3& direction)
-			{
-				this->direction = direction;
+            void DirectionalLight::SetDirection(const Vector3& direction)
+            {
+                this->direction = direction;
 
-				UpdateViewMatrix();
-			}
+                UpdateViewMatrix();
+            }
 
-			RGBColor DirectionalLight::GetColorAt(const Vector3& position,
-												  const Vector3& normal,
-												  const Vector3& cam_pos,
-												  const MaterialProperties& material_properties) const
-			{
-				float amount = normal.GetDotProduct(-direction);
+            RGBColor DirectionalLight::GetColorAt(const Vector3& position, const Vector3& normal, const Vector3& cam_pos, const MaterialProperties& material_properties) const
+            {
+                float amount = normal.GetDotProduct(-direction);
 
-				amount += GetSpecularHighlightAt(position, normal, cam_pos, direction, material_properties);
+                amount += GetSpecularHighlightAt(position, normal, cam_pos, direction, material_properties);
 
-				amount = std::clamp(amount, 0.0f, 1.0f);
+                amount = std::clamp(amount, 0.0f, 1.0f);
 
-				return color.GetBlendMultiplied(amount);
-			}
+                return color.GetBlendMultiplied(amount);
+            }
 
-			bool DirectionalLight::IsShadowCaster() const
-			{
-				return true;
-			}
+            bool DirectionalLight::IsShadowCaster() const
+            {
+                return true;
+            }
 
-			RGBColor DirectionalLight::GetColor() const
-			{
-				return color;
-			}
+            RGBColor DirectionalLight::GetColor() const
+            {
+                return color;
+            }
 
-			void DirectionalLight::SetColor(RGBColor color)
-			{
-				this->color = color;
-			}
+            void DirectionalLight::SetColor(RGBColor color)
+            {
+                this->color = color;
+            }
 
-			std::optional<bool> DirectionalLight::IsLinearProjection() const
-			{
-				return std::optional(true);
-			}
+            std::optional<bool> DirectionalLight::IsLinearProjection() const
+            {
+                return std::optional(true);
+            }
 
-			std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetProjectionMatrix() const
-			{
-				return std::optional(std::reference_wrapper(projection_mat));
-			}
+            std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetProjectionMatrix() const
+            {
+                return std::optional(std::reference_wrapper(projection_mat));
+            }
 
-			std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetViewMatrix() const
-			{
-				return std::optional(std::reference_wrapper(view_mat));
-			}
+            std::optional<std::reference_wrapper<const Matrix4>> DirectionalLight::GetViewMatrix() const
+            {
+                return std::optional(std::reference_wrapper(view_mat));
+            }
 
-			std::optional<std::reference_wrapper<DepthBuffer>> DirectionalLight::GetLightDepthBuffer()
-			{
-				return std::optional(std::reference_wrapper<DepthBuffer>(depthbuffer));
-			}
+            std::optional<std::reference_wrapper<DepthBuffer>> DirectionalLight::GetLightDepthBuffer()
+            {
+                return std::optional(std::reference_wrapper<DepthBuffer>(depthbuffer));
+            }
 
-			std::optional<float> DirectionalLight::GetBias() const
-			{
-				return 0.04f;
-			}
+            std::optional<float> DirectionalLight::GetBias() const
+            {
+                return 0.04f;
+            }
 
-			void DirectionalLight::ClearDepthBuffer()
-			{
-				depthbuffer.FillBuffer(std::numeric_limits<float>::max());
-			}
-		}
-	}
+            void DirectionalLight::ClearDepthBuffer()
+            {
+                depthbuffer.FillBuffer(std::numeric_limits<float>::max());
+            }
+        }
+    }
 }

@@ -2,11 +2,11 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		bool StaticMesh::IsAnimated() const
-		{
-			return false;
-		}
-	}
+    namespace Rendering
+    {
+        bool StaticMesh::IsAnimated() const
+        {
+            return false;
+        }
+    }
 }

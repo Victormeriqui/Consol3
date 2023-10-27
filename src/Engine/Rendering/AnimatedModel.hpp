@@ -12,27 +12,27 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		using namespace Math;
+    namespace Rendering
+    {
+        using namespace Math;
 
-		class AnimatedModel
-		{
-		private:
-			std::vector<Frame> frames;
-			std::shared_ptr<std::vector<uint32_t>> indices;
+        class AnimatedModel
+        {
+        private:
+            std::vector<Frame> frames;
+            std::shared_ptr<std::vector<uint32_t>> indices;
 
-			std::map<std::string, Animation> animations;
+            std::map<std::string, Animation> animations;
 
-		public:
-			AnimatedModel();
-			AnimatedModel(const std::vector<Frame>& frames, const std::vector<uint32_t>& indices, const std::map<std::string, Animation>& animations);
+        public:
+            AnimatedModel();
+            AnimatedModel(const std::vector<Frame>& frames, const std::vector<uint32_t>& indices, const std::map<std::string, Animation>& animations);
 
-			[[nodiscard]] const Animation& GetAnimation(const std::string& name) const;
+            [[nodiscard]] const Animation& GetAnimation(const std::string& name) const;
 
-			VertexBuffer GetVertexBuffer(const std::string& animation_name, float interpolation);
-		};
-	}
+            VertexBuffer GetVertexBuffer(const std::string& animation_name, float interpolation);
+        };
+    }
 }
 
 #endif

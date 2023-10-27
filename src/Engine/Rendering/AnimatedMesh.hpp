@@ -10,34 +10,34 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		class AnimatedMesh : public AbstractMesh
-		{
-		private:
-			bool is_animating;
+    namespace Rendering
+    {
+        class AnimatedMesh : public AbstractMesh
+        {
+        private:
+            bool is_animating;
 
-			std::string anim_current_name;
-			float anim_current_progress;
-			float anim_current_fps;
+            std::string anim_current_name;
+            float anim_current_progress;
+            float anim_current_fps;
 
-			std::chrono::steady_clock::time_point last_update;
+            std::chrono::high_resolution_clock::time_point last_update;
 
-		public:
-			AnimatedMesh();
+        public:
+            AnimatedMesh();
 
-			virtual bool IsAnimated() const override;
+            virtual bool IsAnimated() const override;
 
-			void PlayAnimation(const std::string& animation, float fps);
+            void PlayAnimation(const std::string& animation, float fps);
 
-			[[nodiscard]] bool IsAnimating() const;
+            [[nodiscard]] bool IsAnimating() const;
 
-			[[nodiscard]] const std::string& GetCurrentAnimationName() const;
-			[[nodiscard]] float GetCurrentAnimationProgress() const;
+            [[nodiscard]] const std::string& GetCurrentAnimationName() const;
+            [[nodiscard]] float GetCurrentAnimationProgress() const;
 
-			void UpdateAnimation();
-		};
-	}
+            void UpdateAnimation();
+        };
+    }
 }
 
 #endif

@@ -7,16 +7,16 @@
 
 namespace Engine
 {
-	namespace Rendering
-	{
-		class StaticMesh : public AbstractMesh
-		{
-		public:
-			using AbstractMesh::AbstractMesh;
+    namespace Rendering
+    {
+        class StaticMesh : public AbstractMesh
+        {
+        public:
+            using AbstractMesh::AbstractMesh;
 
-			virtual bool IsAnimated() const override;
-		};
-	}
+            virtual bool IsAnimated() const override;
+        };
+    }
 }
 
 #endif

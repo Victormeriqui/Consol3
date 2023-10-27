@@ -8,61 +8,61 @@
 
 namespace Display
 {
-	template<typename T>
-	class FrameBuffer
-	{
-	protected:
-		uint16_t width;
-		uint16_t height;
+    template<typename T>
+    class FrameBuffer
+    {
+    protected:
+        uint16_t width;
+        uint16_t height;
 
-		std::vector<T> buffer;
+        std::vector<T> buffer;
 
-	public:
-		FrameBuffer() : width(0), height(0)
-		{
-			buffer = std::vector<T>(width * height, T());
-		}
+    public:
+        FrameBuffer() : width(0), height(0)
+        {
+            buffer = std::vector<T>(width * height, T());
+        }
 
-		FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
-		{
-			buffer = std::vector<T>(width * height, T());
-		}
+        FrameBuffer(uint16_t width, uint16_t height) : width(width), height(height)
+        {
+            buffer = std::vector<T>(width * height, T());
+        }
 
-		FrameBuffer(uint16_t width, uint16_t height, T value) : width(width), height(height)
-		{
-			buffer = std::vector<T>(width * height, value);
-		}
+        FrameBuffer(uint16_t width, uint16_t height, T value) : width(width), height(height)
+        {
+            buffer = std::vector<T>(width * height, value);
+        }
 
-		void SetValue(uint16_t x, uint16_t y, const T& value)
-		{
-			buffer.data()[x + width * y] = value;
-		}
+        void SetValue(uint16_t x, uint16_t y, const T& value)
+        {
+            buffer.data()[x + width * y] = value;
+        }
 
-		[[nodiscard]] T GetValue(uint16_t x, uint16_t y) const
-		{
-			return buffer[x + width * y];
-		};
+        [[nodiscard]] T GetValue(uint16_t x, uint16_t y) const
+        {
+            return buffer[x + width * y];
+        };
 
-		[[nodiscard]] uint16_t GetWidth() const
-		{
-			return width;
-		}
+        [[nodiscard]] uint16_t GetWidth() const
+        {
+            return width;
+        }
 
-		[[nodiscard]] uint16_t GetHeight() const
-		{
-			return height;
-		}
+        [[nodiscard]] uint16_t GetHeight() const
+        {
+            return height;
+        }
 
-		[[nodiscard]] const T* GetFrameBufferData() const
-		{
-			return buffer.data();
-		}
+        [[nodiscard]] const T* GetFrameBufferData() const
+        {
+            return buffer.data();
+        }
 
-		void FillBuffer(const T& value)
-		{
-			std::fill(buffer.begin(), buffer.end(), value);
-		}
-	};
+        void FillBuffer(const T& value)
+        {
+            std::fill(buffer.begin(), buffer.end(), value);
+        }
+    };
 }
 
 #endif
