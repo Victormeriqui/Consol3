@@ -82,7 +82,7 @@ namespace Game
                     float dx = static_cast<float>(5 - x);
                     float dy = static_cast<float>(5 - y);
                     float dz = static_cast<float>(5 - z);
-                    if (std::sqrt(dx * dx + dy * dy + dz * dz) <= (sin(increasing_counter) * 4.0f + 2.0f))
+                    if (std::sqrt(dx * dx + dy * dy + dz * dz) <= (sin(increasing_counter) * 4.0f + 4.0f))
                         voxel_grid->SetVoxel(40 + x, 40 + y, 40 + z, 1);
                 }
             }
