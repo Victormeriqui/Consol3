@@ -11,10 +11,6 @@
 #include <cstdint>
 #include <memory>
 
-#define GRID_WIDTH  100
-#define GRID_HEIGHT 100
-#define GRID_DEPTH  100
-
 namespace Engine
 {
     namespace Rendering
@@ -26,15 +22,16 @@ namespace Engine
         {
         private:
             std::shared_ptr<IFrameDrawer> frame_drawer;
-
             std::shared_ptr<ResourceManager> resource_manager;
-
             std::shared_ptr<Camera> camera;
 
-            VoxelGrid<uint8_t, GRID_WIDTH, GRID_HEIGHT, GRID_DEPTH> voxel_grid;
+            std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid;
 
         public:
-            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<Camera> camera);
+            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
+                               std::shared_ptr<ResourceManager> resource_manager,
+                               std::shared_ptr<Camera> camera,
+                               std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid);
 
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 

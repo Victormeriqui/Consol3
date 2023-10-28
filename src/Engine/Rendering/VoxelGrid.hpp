@@ -4,30 +4,39 @@
 #include <array>
 #include <cstdint>
 
+#define VOXEL_GRID_WIDTH  100
+#define VOXEL_GRID_HEIGHT 100
+#define VOXEL_GRID_DEPTH  100
+
 namespace Engine
 {
     namespace Rendering
     {
-        template<typename T, uint16_t WIDTH, uint16_t HEIGHT, uint16_t DEPTH>
+        template<uint16_t WIDTH, uint16_t HEIGHT, uint16_t DEPTH>
         class VoxelGrid
         {
         private:
-            std::array<T, WIDTH * HEIGHT * DEPTH> grid;
+            std::array<uint8_t, WIDTH * HEIGHT * DEPTH> grid;
 
         public:
-            VoxelGrid(T default)
+            VoxelGrid(uint8_t default)
             {
                 grid.fill(default);
             }
 
-            [[nodiscard]] T GetVoxel(uint16_t x, uint16_t y, uint16_t z) const
+            [[nodiscard]] uint8_t GetVoxel(uint16_t x, uint16_t y, uint16_t z) const
             {
                 return grid[x + WIDTH * (y + HEIGHT * z)];
             }
 
-            void SetVoxel(uint16_t x, uint16_t y, uint16_t z, T voxel)
+            void SetVoxel(uint16_t x, uint16_t y, uint16_t z, uint8_t voxel)
             {
                 grid[x + WIDTH * (y + HEIGHT * z)] = voxel;
+            }
+
+            void Fill(uint8_t voxel)
+            {
+                grid.fill(voxel);
             }
         };
     }
