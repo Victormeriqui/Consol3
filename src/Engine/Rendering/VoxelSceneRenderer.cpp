@@ -31,13 +31,11 @@ namespace Engine
 
         void VoxelSceneRenderer::RenderScene(int64_t delta)
         {
-            Vector3 ray_origin  = camera->GetPosition();
-            Vector3 camera_look = camera->GetLookDirection();
-            float camera_fov    = camera->GetFOV();
-            Matrix4 view_matrix = camera->GetViewMatrix();
-            Matrix4 proj_matrix = camera->GetProjectionMatrix();
-            Matrix4 inv_vp      = proj_matrix * view_matrix;
-            inv_vp.Invert();
+            Vector3 camera_pos      = camera->GetPosition();
+            Vector3 camera_look     = camera->GetLookDirection();
+            float camera_fov        = camera->GetFOV();
+            Matrix4 view_matrix_inv = camera->GetViewMatrix().GetInverted();
+            Matrix4 proj_matrix_inv = camera->GetProjectionMatrix().GetInverted();
 
             float step_size = 0.5f;
 
@@ -45,20 +43,19 @@ namespace Engine
             {
                 for (uint16_t x = 0; x < frame_drawer->GetFrameBufferWidth(); x++)
                 {
-                    Vector3 camera_space_ray;
-                    // NDC coordinates are the same as the camera space ray from center to the pixel
-                    camera_space_ray.x = 2.0f * (static_cast<float>(x) / frame_drawer->GetFrameBufferWidth()) - 1.0f;
-                    camera_space_ray.y = 1.0f - 2.0f * (static_cast<float>(y) / frame_drawer->GetFrameBufferHeight());
-                    camera_space_ray.z = 1.0f;
+                    float ndc_x = 2.0f * (static_cast<float>(x) / static_cast<float>(frame_drawer->GetFrameBufferWidth())) - 1.0f;
+                    float ndc_y = 1.0f - 2.0f * (static_cast<float>(y) / static_cast<float>(frame_drawer->GetFrameBufferHeight()));
 
-                    // trasnform with inverse of view projection to rotate our camera space ray to world space like the camera look vector
-                    Vector3 world_space_ray = camera_space_ray * inv_vp;
-                    world_space_ray.Normalize();
+                    Vector3 clip_space_point(ndc_x, ndc_y, -1.0f);
+                    Vector3 view_space_point  = clip_space_point * proj_matrix_inv;
+                    Vector3 world_space_point = view_space_point * view_matrix_inv;
 
-                    float cur_step = 0.1f;
+                    Vector3 ray_dir = (world_space_point - camera_pos).GetNormalized();
+
+                    float cur_step = 0.5f;
                     while (true)
                     {
-                        Vector3 cur_march_pos = ray_origin + world_space_ray * cur_step;
+                        Vector3 cur_march_pos = camera_pos + ray_dir * cur_step;
 
                         bool inside_voxel_grid = IsInRange(cur_march_pos.x, 0, VOXEL_GRID_WIDTH - 1) && IsInRange(cur_march_pos.y, 0, VOXEL_GRID_HEIGHT - 1) && IsInRange(cur_march_pos.z, 0, VOXEL_GRID_DEPTH - 1);
 

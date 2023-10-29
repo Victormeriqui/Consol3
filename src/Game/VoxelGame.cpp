@@ -16,7 +16,7 @@ namespace Game
     VoxelGame::VoxelGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
         input_manager(input_manager),
         resource_manager(std::make_shared<ResourceManager>()),
-        camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f)),
+        camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
         voxel_grid(std::make_shared<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>>(0)),
         scene_renderer(frame_drawer, resource_manager, camera, voxel_grid)
     {
@@ -88,7 +88,8 @@ namespace Game
             }
         }
 
-        increasing_counter += 0.005f;
+        // increasing_counter += 0.005f;
+        increasing_counter = 3;
     }
 
     std::chrono::milliseconds VoxelGame::Render(int64_t delta)

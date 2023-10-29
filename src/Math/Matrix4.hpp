@@ -31,8 +31,8 @@ namespace Math
         Matrix4& Invert();
         Matrix4& Transpose();
 
-        Matrix4 GetInverted();
-        Matrix4 GetTransposed();
+        Matrix4 GetInverted() const;
+        Matrix4 GetTransposed() const;
 
         [[nodiscard]] Matrix4 operator*(const Matrix4& other) const noexcept
         {

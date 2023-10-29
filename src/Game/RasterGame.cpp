@@ -42,7 +42,7 @@ namespace Game
         input_manager(std::move(input_manager)),
         resource_manager(std::make_shared<ResourceManager>()),
         lighting_system(std::make_shared<LightingSystem>()),
-        camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f)),
+        camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
         scene_renderer(frame_drawer, resource_manager, lighting_system, camera)
     {
         LoadResources();

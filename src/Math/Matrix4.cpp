@@ -350,12 +350,12 @@ namespace Math
         return *this;
     }
 
-    Matrix4 Matrix4::GetInverted()
+    Matrix4 Matrix4::GetInverted() const
     {
         return Matrix4(*this).Invert();
     }
 
-    Matrix4 Matrix4::GetTransposed()
+    Matrix4 Matrix4::GetTransposed() const
     {
         return Matrix4(*this).Transpose();
     }
