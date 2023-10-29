@@ -8,10 +8,12 @@
 #include "Engine/Rendering/VoxelGrid.hpp"
 #include "Engine/Rendering/VoxelSceneRenderer.hpp"
 #include "Engine/Resources/ResourceManager.hpp"
+#include "VoxelTypes.hpp"
 
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <random>
 
 namespace Game
 {
@@ -39,6 +41,14 @@ namespace Game
         bool shifting   = false;
 
         float increasing_counter = 0;
+
+        std::mt19937 random_generator;
+
+        VoxelType GetVoxel(uint16_t x, uint16_t y, uint16_t z) const;
+        void SetVoxel(uint16_t x, uint16_t y, uint16_t z, VoxelType voxel);
+
+        VoxelType GetVoxel(const Vector3& pos) const;
+        void SetVoxel(const Vector3& pos, VoxelType voxel);
 
     public:
         VoxelGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager);

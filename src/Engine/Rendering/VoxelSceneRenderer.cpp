@@ -24,6 +24,11 @@ namespace Engine
         {
         }
 
+        void VoxelSceneRenderer::SetVoxelPalette(std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette)
+        {
+            this->voxel_palette = std::move(voxel_palette);
+        }
+
         void VoxelSceneRenderer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
         {
             frame_drawer->SetPixel(x, y, color);
@@ -68,9 +73,10 @@ namespace Engine
 
                         uint8_t cur_voxel = voxel_grid->GetVoxel(grid_x, grid_y, grid_z);
 
-                        if (cur_voxel == 1)
+                        if (cur_voxel != 0)
                         {
-                            DrawPixel(x, y, RGBColor(grid_x * 10, grid_y * 10, grid_z * 10));
+                            const RGBColor color = voxel_palette->at(cur_voxel);
+                            DrawPixel(x, y, color);
                             break;
                         }
                         cur_step += step_size;

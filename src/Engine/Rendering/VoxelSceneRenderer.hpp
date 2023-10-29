@@ -26,12 +26,15 @@ namespace Engine
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid;
+            std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette;
 
         public:
             VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
                                std::shared_ptr<ResourceManager> resource_manager,
                                std::shared_ptr<Camera> camera,
                                std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid);
+
+            void SetVoxelPalette(std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette);
 
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 
