@@ -23,7 +23,17 @@ namespace Engine
 
     static std::map<VoxelType, std::vector<RGBColor>> voxel_color_map = { { VoxelType::AIR, { RGBConstants::Black() } },
                                                                           { VoxelType::ROCK, { RGBColor(100, 100, 100) } },
-                                                                          { VoxelType::SAND, { RGBColor(255, 255, 0), RGBColor(255, 185, 0), RGBColor(255, 135, 0) } },
+                                                                          { VoxelType::SAND,
+                                                                            { RGBColor(245, 219, 178),
+                                                                              RGBColor(235, 195, 130),
+                                                                              RGBColor(221, 184, 121),
+                                                                              RGBColor(204, 167, 110),
+                                                                              RGBColor(187, 157, 102),
+                                                                              RGBColor(176, 145, 94),
+                                                                              RGBColor(162, 134, 86),
+                                                                              RGBColor(148, 124, 78),
+                                                                              RGBColor(134, 113, 70),
+                                                                              RGBColor(121, 103, 63) } },
                                                                           { VoxelType::WATER, { RGBColor(0, 0, 255) } } };
 }
 

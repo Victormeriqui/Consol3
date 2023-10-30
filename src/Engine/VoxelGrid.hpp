@@ -1,6 +1,7 @@
 #ifndef VOXELGRID_HPP
 #define VOXELGRID_HPP
 
+#include "Math/Util/MathUtil.hpp"
 #include "VoxelTypes.hpp"
 
 #include <array>
@@ -9,6 +10,9 @@
 #define VOXEL_GRID_WIDTH  100
 #define VOXEL_GRID_HEIGHT 100
 #define VOXEL_GRID_DEPTH  100
+
+using namespace Math;
+using namespace Math::Util;
 
 namespace Engine
 {
@@ -68,6 +72,16 @@ namespace Engine
         void SetVoxelData(const Vector3& pos, VoxelData voxel_data)
         {
             grid[static_cast<uint16_t>(pos.x) + WIDTH * (static_cast<uint16_t>(pos.y) + HEIGHT * static_cast<uint16_t>(pos.z))] = voxel_data;
+        }
+
+        [[nodiscard]] bool IsPositionInsideGrid(uint16_t x, uint16_t y, uint16_t z)
+        {
+            return IsInRange(x, 0, VOXEL_GRID_WIDTH - 1) && IsInRange(y, 0, VOXEL_GRID_HEIGHT - 1) && IsInRange(z, 0, VOXEL_GRID_DEPTH - 1);
+        }
+
+        [[nodiscard]] bool IsPositionInsideGrid(const Vector3& pos)
+        {
+            return IsPositionInsideGrid(static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z));
         }
 
         void Fill(VoxelData voxel_data)

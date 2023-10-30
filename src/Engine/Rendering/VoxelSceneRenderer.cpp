@@ -58,9 +58,7 @@ namespace Engine
                     {
                         Vector3 cur_march_pos = camera_pos + ray_dir * cur_step;
 
-                        bool inside_voxel_grid = IsInRange(cur_march_pos.x, 0, VOXEL_GRID_WIDTH - 1) && IsInRange(cur_march_pos.y, 0, VOXEL_GRID_HEIGHT - 1) && IsInRange(cur_march_pos.z, 0, VOXEL_GRID_DEPTH - 1);
-
-                        if (!inside_voxel_grid)
+                        if (!voxel_grid->IsPositionInsideGrid(cur_march_pos))
                             break;
 
                         uint16_t grid_x = static_cast<uint16_t>(cur_march_pos.x);

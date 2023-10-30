@@ -93,10 +93,14 @@ namespace Game
 
                                 for (const Vector3& side_option : rand_side_down_options)
                                 {
-                                    Vector3 side_pos          = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
+                                    Vector3 side_pos = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
+
+                                    if (!voxel_grid->IsPositionInsideGrid(side_pos))
+                                        continue;
+
                                     VoxelType side_voxel_type = voxel_grid->GetVoxelType(side_pos);
 
-                                    if (side_voxel_type == VoxelType::AIR && IsInRange(side_pos.x, 5, VOXEL_GRID_WIDTH - 5) && IsInRange(side_pos.y, 0, VOXEL_GRID_HEIGHT) && IsInRange(side_pos.z, 5, VOXEL_GRID_DEPTH - 5))
+                                    if (side_voxel_type == VoxelType::AIR)
                                     {
                                         voxel_grid->SetVoxelData(x, y, z, { VoxelType::AIR });
                                         voxel_grid->SetVoxelData(side_pos, cur_voxel_data);
@@ -113,10 +117,14 @@ namespace Game
 
                                     for (const Vector3& side_option : rand_side_options)
                                     {
-                                        Vector3 side_pos          = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
+                                        Vector3 side_pos = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
+
+                                        if (!voxel_grid->IsPositionInsideGrid(side_pos))
+                                            continue;
+
                                         VoxelType side_voxel_type = voxel_grid->GetVoxelType(side_pos);
 
-                                        if (side_voxel_type == VoxelType::AIR && IsInRange(side_pos.x, 5, VOXEL_GRID_WIDTH - 5) && IsInRange(side_pos.y, 0, VOXEL_GRID_HEIGHT) && IsInRange(side_pos.z, 5, VOXEL_GRID_DEPTH - 5))
+                                        if (side_voxel_type == VoxelType::AIR)
                                         {
                                             voxel_grid->SetVoxelData(x, y, z, { VoxelType::AIR });
                                             voxel_grid->SetVoxelData(side_pos, cur_voxel_data);
@@ -158,7 +166,13 @@ namespace Game
                     Vector3 side_pos = Vector3(cam_pos.x + side_option.x, cam_pos.y + side_option.y, cam_pos.z + side_option.z);
                     SpawnVoxel(side_pos, VoxelType::WATER);
                 }
+                SpawnVoxel(cam_pos, VoxelType::WATER);
             }
+            if (input_manager->IsKeyHeld(Key::MOUSE5))
+            {
+                SpawnVoxel(camera->GetPosition(), VoxelType::ROCK);
+            }
+
             if (input_manager->IsKeyHeld(Key::SPACE))
                 camera->MoveY(mov_speed);
 
@@ -181,7 +195,7 @@ namespace Game
             {
                 shifting = true;
                 // mov_speed = 0.001f;
-                mov_speed = 0.1f;
+                mov_speed = 0.5f;
             }
             else if (shifting)
             {
