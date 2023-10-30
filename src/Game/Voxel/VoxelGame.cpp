@@ -9,6 +9,7 @@ using namespace Math::Util;
 
 #include <algorithm>
 #include <random>
+#include <vector>
 
 namespace Game
 {
@@ -23,7 +24,7 @@ namespace Game
             input_manager(input_manager),
             resource_manager(std::make_shared<ResourceManager>()),
             camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
-            voxel_grid(std::make_shared<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>>(0)),
+            voxel_grid(std::make_shared<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>>()),
             scene_renderer(frame_drawer, resource_manager, camera, voxel_grid),
             random_generator(std::random_device()())
         {
@@ -32,13 +33,27 @@ namespace Game
             camera->SetPosition(Vector3(40, 40, 30));
         }
 
+        void VoxelGame::SpawnVoxel(uint16_t x, uint16_t y, uint16_t z, VoxelType voxel_type)
+        {
+            const std::vector<RGBColor>& color_options = voxel_color_map.at(voxel_type);
+
+            uint8_t random_color = static_cast<uint8_t>(random_generator() % color_options.size());
+
+            voxel_grid->SetVoxelData(x, y, z, { voxel_type, color_options.at(random_color) });
+        }
+
+        void VoxelGame::SpawnVoxel(const Vector3& pos, VoxelType voxel_type)
+        {
+            this->SpawnVoxel(static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z), voxel_type);
+        }
+
         void VoxelGame::LoadResources()
         {
             for (uint16_t z = 0; z < VOXEL_GRID_DEPTH; z++)
             {
                 for (uint16_t x = 0; x < VOXEL_GRID_WIDTH; x++)
                 {
-                    voxel_grid->SetVoxel(x, 0, z, VoxelType::ROCK);
+                    SpawnVoxel(x, 0, z, VoxelType::ROCK);
                 }
             }
         }
@@ -47,22 +62,27 @@ namespace Game
         static std::array<Vector3, 4> side_options      = { Vector3(-1, 0, 0), Vector3(1, 0, 0), Vector3(0, 0, -1), Vector3(0, 0, 1) };
         void VoxelGame::Update()
         {
+            update_tick++;
+
+            if (update_tick % 5 != 0)
+                return;
+
             for (uint16_t y = 0; y < VOXEL_GRID_HEIGHT; y++)
             {
                 for (uint16_t x = 0; x < VOXEL_GRID_WIDTH; x++)
                 {
                     for (uint16_t z = 0; z < VOXEL_GRID_DEPTH; z++)
                     {
-                        VoxelType cur_voxel = voxel_grid->GetVoxel(x, y, z);
+                        VoxelData cur_voxel_data = voxel_grid->GetVoxelData(x, y, z);
 
-                        if (cur_voxel == VoxelType::SAND || cur_voxel == VoxelType::WATER)
+                        if (cur_voxel_data.type == VoxelType::SAND || cur_voxel_data.type == VoxelType::WATER)
                         {
-                            VoxelType down_voxel = voxel_grid->GetVoxel(x, y - 1, z);
+                            VoxelType down_voxel_type = voxel_grid->GetVoxelType(x, y - 1, z);
 
-                            if (down_voxel == VoxelType::AIR)
+                            if (down_voxel_type == VoxelType::AIR)
                             {
-                                voxel_grid->SetVoxel(x, y, z, VoxelType::AIR);
-                                voxel_grid->SetVoxel(x, y - 1, z, cur_voxel);
+                                voxel_grid->SetVoxelData(x, y, z, { VoxelType::AIR });
+                                voxel_grid->SetVoxelData(x, y - 1, z, cur_voxel_data);
                             }
                             else
                             {
@@ -73,19 +93,19 @@ namespace Game
 
                                 for (const Vector3& side_option : rand_side_down_options)
                                 {
-                                    Vector3 side_pos     = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
-                                    VoxelType side_voxel = voxel_grid->GetVoxel(side_pos);
+                                    Vector3 side_pos          = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
+                                    VoxelType side_voxel_type = voxel_grid->GetVoxelType(side_pos);
 
-                                    if (side_voxel == VoxelType::AIR && IsInRange(side_pos.x, 5, VOXEL_GRID_WIDTH - 5) && IsInRange(side_pos.y, 0, VOXEL_GRID_HEIGHT) && IsInRange(side_pos.z, 5, VOXEL_GRID_DEPTH - 5))
+                                    if (side_voxel_type == VoxelType::AIR && IsInRange(side_pos.x, 5, VOXEL_GRID_WIDTH - 5) && IsInRange(side_pos.y, 0, VOXEL_GRID_HEIGHT) && IsInRange(side_pos.z, 5, VOXEL_GRID_DEPTH - 5))
                                     {
-                                        voxel_grid->SetVoxel(x, y, z, VoxelType::AIR);
-                                        voxel_grid->SetVoxel(side_pos, cur_voxel);
+                                        voxel_grid->SetVoxelData(x, y, z, { VoxelType::AIR });
+                                        voxel_grid->SetVoxelData(side_pos, cur_voxel_data);
                                         moved_down_side = true;
                                         break;
                                     }
                                 }
 
-                                if (cur_voxel == VoxelType::WATER && !moved_down_side)
+                                if (cur_voxel_data.type == VoxelType::WATER && !moved_down_side)
                                 {
                                     std::array<Vector3, 4> rand_side_options = side_options;
 
@@ -93,13 +113,13 @@ namespace Game
 
                                     for (const Vector3& side_option : rand_side_options)
                                     {
-                                        Vector3 side_pos     = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
-                                        VoxelType side_voxel = voxel_grid->GetVoxel(side_pos);
+                                        Vector3 side_pos          = Vector3(static_cast<float>(x + side_option.x), static_cast<float>(y + side_option.y), static_cast<float>(z + side_option.z));
+                                        VoxelType side_voxel_type = voxel_grid->GetVoxelType(side_pos);
 
-                                        if (side_voxel == VoxelType::AIR && IsInRange(side_pos.x, 5, VOXEL_GRID_WIDTH - 5) && IsInRange(side_pos.y, 0, VOXEL_GRID_HEIGHT) && IsInRange(side_pos.z, 5, VOXEL_GRID_DEPTH - 5))
+                                        if (side_voxel_type == VoxelType::AIR && IsInRange(side_pos.x, 5, VOXEL_GRID_WIDTH - 5) && IsInRange(side_pos.y, 0, VOXEL_GRID_HEIGHT) && IsInRange(side_pos.z, 5, VOXEL_GRID_DEPTH - 5))
                                         {
-                                            voxel_grid->SetVoxel(x, y, z, VoxelType::AIR);
-                                            voxel_grid->SetVoxel(side_pos, cur_voxel);
+                                            voxel_grid->SetVoxelData(x, y, z, { VoxelType::AIR });
+                                            voxel_grid->SetVoxelData(side_pos, cur_voxel_data);
                                             break;
                                         }
                                     }
@@ -109,8 +129,6 @@ namespace Game
                     }
                 }
             }
-
-            increasing_counter += 0.005f;
         }
 
         void VoxelGame::HandleInput()
@@ -129,14 +147,18 @@ namespace Game
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
             {
-                voxel_grid->SetVoxel(camera->GetPosition(), VoxelType::SAND);
+                SpawnVoxel(camera->GetPosition(), VoxelType::SAND);
             }
 
             if (input_manager->IsKeyHeld(Key::MOUSE4))
             {
-                voxel_grid->SetVoxel(camera->GetPosition(), VoxelType::WATER);
+                const Vector3 cam_pos = camera->GetPosition();
+                for (const Vector3& side_option : side_options)
+                {
+                    Vector3 side_pos = Vector3(cam_pos.x + side_option.x, cam_pos.y + side_option.y, cam_pos.z + side_option.z);
+                    SpawnVoxel(side_pos, VoxelType::WATER);
+                }
             }
-
             if (input_manager->IsKeyHeld(Key::SPACE))
                 camera->MoveY(mov_speed);
 

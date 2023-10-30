@@ -7,18 +7,12 @@
 #include <cstdint>
 #include <map>
 #include <string_view>
+#include <vector>
 
 using namespace Display;
 
 namespace Engine
 {
-
-    struct VoxelData
-    {
-        std::string_view name;
-        RGBColor color;
-    };
-
     enum class VoxelType : uint8_t
     {
         AIR = 0,
@@ -27,10 +21,10 @@ namespace Engine
         WATER
     };
 
-    static std::map<VoxelType, VoxelData> voxel_type_map = {
-        { VoxelType::AIR, { "Air", RGBConstants::Black() } }, { VoxelType::ROCK, { "Rock", RGBConstants::White() } }, { VoxelType::SAND, { "Sand", RGBColor(255, 255, 0) } }, { VoxelType::WATER, { "Water", RGBColor(0, 0, 255) } }
-    };
-
+    static std::map<VoxelType, std::vector<RGBColor>> voxel_color_map = { { VoxelType::AIR, { RGBConstants::Black() } },
+                                                                          { VoxelType::ROCK, { RGBColor(100, 100, 100) } },
+                                                                          { VoxelType::SAND, { RGBColor(255, 255, 0), RGBColor(255, 185, 0), RGBColor(255, 135, 0) } },
+                                                                          { VoxelType::WATER, { RGBColor(0, 0, 255) } } };
 }
 
 #endif

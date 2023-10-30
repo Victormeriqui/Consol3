@@ -67,12 +67,11 @@ namespace Engine
                         uint16_t grid_y = static_cast<uint16_t>(cur_march_pos.y);
                         uint16_t grid_z = static_cast<uint16_t>(cur_march_pos.z);
 
-                        VoxelType cur_voxel = voxel_grid->GetVoxel(grid_x, grid_y, grid_z);
+                        VoxelData cur_voxel_data = voxel_grid->GetVoxelData(grid_x, grid_y, grid_z);
 
-                        if (cur_voxel != VoxelType::AIR)
+                        if (cur_voxel_data.type != VoxelType::AIR)
                         {
-                            const RGBColor color = voxel_type_map.at(cur_voxel).color;
-                            DrawPixel(x, y, color);
+                            DrawPixel(x, y, cur_voxel_data.color);
                             break;
                         }
                         cur_step += step_size;

@@ -12,51 +12,67 @@
 
 namespace Engine
 {
+    struct VoxelData
+    {
+        VoxelType type;
+        RGBColor color;
+
+        VoxelData() : type(VoxelType::AIR)
+        {
+        }
+        VoxelData(VoxelType type) : type(type)
+        {
+        }
+        VoxelData(VoxelType type, const RGBColor& color) : type(type), color(color)
+        {
+        }
+    };
+
     template<uint16_t WIDTH, uint16_t HEIGHT, uint16_t DEPTH>
     class VoxelGrid
     {
     private:
-        std::array<uint8_t, WIDTH * HEIGHT * DEPTH> grid;
+        std::array<VoxelData, WIDTH * HEIGHT * DEPTH> grid;
 
-        [[nodiscard]] inline uint8_t GetVoxelData(uint16_t x, uint16_t y, uint16_t z) const
+    public:
+        VoxelGrid()
+        {
+            grid.fill({ VoxelType::AIR });
+        }
+
+        [[nodiscard]] VoxelData GetVoxelData(uint16_t x, uint16_t y, uint16_t z) const
         {
             return grid[x + WIDTH * (y + HEIGHT * z)];
         }
 
-        inline void SetVoxelData(uint16_t x, uint16_t y, uint16_t z, uint8_t voxel)
+        [[nodiscard]] VoxelData GetVoxelData(const Vector3& pos) const
         {
-            grid[x + WIDTH * (y + HEIGHT * z)] = voxel;
+            return grid[static_cast<uint16_t>(pos.x) + WIDTH * (static_cast<uint16_t>(pos.y) + HEIGHT * static_cast<uint16_t>(pos.z))];
         }
 
-    public:
-        VoxelGrid(uint8_t default)
+        [[nodiscard]] VoxelType GetVoxelType(uint16_t x, uint16_t y, uint16_t z) const
         {
-            grid.fill(default);
+            return grid[x + WIDTH * (y + HEIGHT * z)].type;
         }
 
-        [[nodiscard]] VoxelType GetVoxel(const Vector3& pos) const
+        [[nodiscard]] VoxelType GetVoxelType(const Vector3& pos) const
         {
-            return static_cast<VoxelType>(this->GetVoxelData(static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z)));
+            return grid[static_cast<uint16_t>(pos.x) + WIDTH * (static_cast<uint16_t>(pos.y) + HEIGHT * static_cast<uint16_t>(pos.z))].type;
         }
 
-        [[nodiscard]] VoxelType GetVoxel(uint16_t x, uint16_t y, uint16_t z) const
+        void SetVoxelData(uint16_t x, uint16_t y, uint16_t z, VoxelData voxel_data)
         {
-            return static_cast<VoxelType>(this->GetVoxelData(x, y, z));
+            grid[x + WIDTH * (y + HEIGHT * z)] = voxel_data;
         }
 
-        void SetVoxel(const Vector3& pos, VoxelType voxel)
+        void SetVoxelData(const Vector3& pos, VoxelData voxel_data)
         {
-            this->SetVoxelData(static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z), static_cast<uint8_t>(voxel));
+            grid[static_cast<uint16_t>(pos.x) + WIDTH * (static_cast<uint16_t>(pos.y) + HEIGHT * static_cast<uint16_t>(pos.z))] = voxel_data;
         }
 
-        void SetVoxel(uint16_t x, uint16_t y, uint16_t z, VoxelType voxel)
+        void Fill(VoxelData voxel_data)
         {
-            this->SetVoxelData(x, y, z, static_cast<uint8_t>(voxel));
-        }
-
-        void Fill(uint8_t voxel)
-        {
-            grid.fill(voxel);
+            grid.fill(voxel_data);
         }
     };
 

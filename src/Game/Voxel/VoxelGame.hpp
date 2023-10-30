@@ -39,10 +39,13 @@ namespace Game
 
             virtual void LoadResources() override;
 
+            void SpawnVoxel(uint16_t x, uint16_t y, uint16_t z, VoxelType voxel_type);
+            void SpawnVoxel(const Vector3& pos, VoxelType voxel_type);
+
             float mov_speed = 0.05f;
             bool shifting   = false;
 
-            float increasing_counter = 0;
+            uint64_t update_tick = 0;
 
             std::mt19937 random_generator;
 
