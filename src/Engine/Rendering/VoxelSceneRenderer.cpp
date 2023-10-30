@@ -1,6 +1,7 @@
 #include "VoxelSceneRenderer.hpp"
 
 #include "Display/RGBColorConstants.hpp"
+#include "Engine/VoxelTypes.hpp"
 #include "Math/Matrix4.hpp"
 #include "Math/Quaternion.hpp"
 #include "Math/Util/MathUtil.hpp"
@@ -22,11 +23,6 @@ namespace Engine
             camera(std::move(camera)),
             voxel_grid(std::move(voxel_grid))
         {
-        }
-
-        void VoxelSceneRenderer::SetVoxelPalette(std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette)
-        {
-            this->voxel_palette = std::move(voxel_palette);
         }
 
         void VoxelSceneRenderer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
@@ -71,11 +67,11 @@ namespace Engine
                         uint16_t grid_y = static_cast<uint16_t>(cur_march_pos.y);
                         uint16_t grid_z = static_cast<uint16_t>(cur_march_pos.z);
 
-                        uint8_t cur_voxel = voxel_grid->GetVoxel(grid_x, grid_y, grid_z);
+                        VoxelType cur_voxel = voxel_grid->GetVoxel(grid_x, grid_y, grid_z);
 
-                        if (cur_voxel != 0)
+                        if (cur_voxel != VoxelType::AIR)
                         {
-                            const RGBColor color = voxel_palette->at(cur_voxel);
+                            const RGBColor color = voxel_type_map.at(cur_voxel).color;
                             DrawPixel(x, y, color);
                             break;
                         }

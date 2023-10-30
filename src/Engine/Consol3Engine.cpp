@@ -1,7 +1,7 @@
 #include "Consol3Engine.hpp"
 
-#include "Game/RasterGame.hpp"
-#include "Game/VoxelGame.hpp"
+#include "Game/Raster/RasterGame.hpp"
+#include "Game/Voxel/VoxelGame.hpp"
 
 #define UPDATE_STEP 10
 
@@ -10,6 +10,8 @@ namespace Engine
     using namespace std;
     using namespace std::chrono;
     using namespace Game;
+    using namespace Game::Raster;
+    using namespace Game::Voxel;
     using namespace Display;
     using namespace Rendering;
 
