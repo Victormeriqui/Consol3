@@ -3,7 +3,6 @@
 #include "Display/RGBColorConstants.hpp"
 #include "Engine/VoxelTypes.hpp"
 #include "Math/Matrix4.hpp"
-#include "Math/Quaternion.hpp"
 #include "Math/Util/MathUtil.hpp"
 #include "Math/Vector3.hpp"
 
@@ -38,20 +37,23 @@ namespace Engine
             Matrix4 view_matrix_inv = camera->GetViewMatrix().GetInverted();
             Matrix4 proj_matrix_inv = camera->GetProjectionMatrix().GetInverted();
 
-            float step_size = 0.5f;
+            float step_size = 0.1f;
 
             for (uint16_t y = 0; y < frame_drawer->GetFrameBufferHeight(); y++)
             {
                 for (uint16_t x = 0; x < frame_drawer->GetFrameBufferWidth(); x++)
                 {
-                    float ndc_x = 2.0f * (static_cast<float>(x) / static_cast<float>(frame_drawer->GetFrameBufferWidth())) - 1.0f;
-                    float ndc_y = 1.0f - 2.0f * (static_cast<float>(y) / static_cast<float>(frame_drawer->GetFrameBufferHeight()));
+                    float ndc_x = -1.0f + 2.0f * static_cast<float>(x) / static_cast<float>(frame_drawer->GetFrameBufferHeight() - 1);
+                    float ndc_y = 1.0f - 2.0f * static_cast<float>(y) / static_cast<float>(frame_drawer->GetFrameBufferHeight() - 1);
 
-                    Vector3 clip_space_point(ndc_x, ndc_y, -1.0f);
-                    Vector3 view_space_point  = clip_space_point * proj_matrix_inv;
-                    Vector3 world_space_point = view_space_point * view_matrix_inv;
+                    Vector3 pixel_point = Vector3(ndc_x, ndc_y, 1.0f);
+                    // ndc to world
+                    pixel_point *= proj_matrix_inv;
+                    // camera transform
+                    pixel_point *= view_matrix_inv;
 
-                    Vector3 ray_dir = (world_space_point - camera_pos).GetNormalized();
+                    Vector3 ray_dir = (pixel_point - camera_pos);
+                    ray_dir.Normalize();
 
                     float cur_step = 0.5f;
                     while (true)
