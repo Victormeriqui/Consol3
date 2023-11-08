@@ -13,10 +13,7 @@ namespace Engine
 {
     namespace Rendering
     {
-        VoxelSceneRenderer::VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
-                                               std::shared_ptr<ResourceManager> resource_manager,
-                                               std::shared_ptr<Camera> camera,
-                                               std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid) :
+        VoxelSceneRenderer::VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid) :
             frame_drawer(std::move(frame_drawer)),
             resource_manager(std::move(resource_manager)),
             camera(std::move(camera)),

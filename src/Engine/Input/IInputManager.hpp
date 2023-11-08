@@ -17,7 +17,9 @@ namespace Engine
             SPACE,
             LCONTROL,
             LSHIFT,
+            Q,
             W,
+            E,
             A,
             S,
             D,
@@ -26,7 +28,17 @@ namespace Engine
             MOUSE2,
             MOUSE3,
             MOUSE4,
-            MOUSE5
+            MOUSE5,
+            N1,
+            N2,
+            N3,
+            N4,
+            N5,
+            N6,
+            N7,
+            N8,
+            N9,
+            N0
         };
 
         class IInputManager

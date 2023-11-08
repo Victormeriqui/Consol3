@@ -25,13 +25,10 @@ namespace Engine
             std::shared_ptr<ResourceManager> resource_manager;
             std::shared_ptr<Camera> camera;
 
-            std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid;
+            std::shared_ptr<VoxelGrid> voxel_grid;
 
         public:
-            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
-                               std::shared_ptr<ResourceManager> resource_manager,
-                               std::shared_ptr<Camera> camera,
-                               std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid);
+            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid);
 
             void SetVoxelPalette(std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette);
 

@@ -23,8 +23,12 @@ namespace Engine
                 return VK_LCONTROL;
             case Key::LSHIFT:
                 return VK_LSHIFT;
+            case Key::Q:
+                return 0x51;
             case Key::W:
                 return 0x57;
+            case Key::E:
+                return 0x45;
             case Key::A:
                 return 0x41;
             case Key::S:
@@ -43,6 +47,26 @@ namespace Engine
                 return VK_XBUTTON1;
             case Key::MOUSE5:
                 return VK_XBUTTON2;
+            case Key::N1:
+                return 0x31;
+            case Key::N2:
+                return 0x32;
+            case Key::N3:
+                return 0x33;
+            case Key::N4:
+                return 0x34;
+            case Key::N5:
+                return 0x35;
+            case Key::N6:
+                return 0x36;
+            case Key::N7:
+                return 0x37;
+            case Key::N8:
+                return 0x38;
+            case Key::N9:
+                return 0x39;
+            case Key::N0:
+                return 0x30;
             }
             return 0;
         }

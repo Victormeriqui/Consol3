@@ -9,11 +9,11 @@
 #include "Engine/Resources/ResourceManager.hpp"
 #include "Engine/VoxelGrid.hpp"
 #include "Engine/VoxelTypes.hpp"
+#include "Math/Vector3.hpp"
 
 #include <chrono>
 #include <cstdint>
 #include <memory>
-#include <random>
 
 namespace Game
 {
@@ -34,20 +34,21 @@ namespace Game
             std::shared_ptr<ResourceManager> resource_manager;
             std::shared_ptr<Camera> camera;
 
-            std::shared_ptr<VoxelGrid<VOXEL_GRID_WIDTH, VOXEL_GRID_HEIGHT, VOXEL_GRID_DEPTH>> voxel_grid;
+            std::shared_ptr<VoxelGrid> voxel_grid;
             VoxelSceneRenderer scene_renderer;
 
             virtual void LoadResources() override;
 
-            void SpawnVoxel(uint16_t x, uint16_t y, uint16_t z, VoxelType voxel_type);
-            void SpawnVoxel(const Vector3& pos, VoxelType voxel_type);
-
             float mov_speed = 0.05f;
             bool shifting   = false;
 
-            uint64_t update_tick = 0;
+            Vector3 cursor_pos;
+            VoxelData cursor_voxel_data;
+            float cursor_depth = 5.0f;
 
-            std::mt19937 random_generator;
+            VoxelType selected_voxel = VoxelType::SAND;
+
+            uint64_t update_tick = 0;
 
         public:
             VoxelGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager);

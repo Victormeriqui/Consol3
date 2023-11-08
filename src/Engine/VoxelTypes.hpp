@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <map>
 #include <string_view>
+#include <unordered_set>
 #include <vector>
 
 using namespace Display;
@@ -16,13 +17,19 @@ namespace Engine
     enum class VoxelType : uint8_t
     {
         AIR = 0,
+        CURSOR,
         ROCK,
         SAND,
         WATER
     };
 
+    static std::unordered_set<VoxelType> voxel_liquid_types = { VoxelType::WATER };
+    static std::unordered_set<VoxelType> voxel_solid_types  = { VoxelType::ROCK };
+    static std::unordered_set<VoxelType> voxel_air_types    = { VoxelType::AIR, VoxelType::CURSOR };
+
     static std::map<VoxelType, std::vector<RGBColor>> voxel_color_map = { { VoxelType::AIR, { RGBConstants::Black() } },
-                                                                          { VoxelType::ROCK, { RGBColor(100, 100, 100) } },
+                                                                          { VoxelType::CURSOR, { RGBConstants::White() } },
+                                                                          { VoxelType::ROCK, { RGBColor(158, 158, 158), RGBColor(135, 135, 135), RGBColor(120, 120, 120), RGBColor(107, 107, 107), RGBColor(92, 92, 92) } },
                                                                           { VoxelType::SAND,
                                                                             { RGBColor(245, 219, 178),
                                                                               RGBColor(235, 195, 130),
