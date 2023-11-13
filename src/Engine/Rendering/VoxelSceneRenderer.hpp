@@ -6,6 +6,7 @@
 #include "Display/IFrameDrawer.hpp"
 #include "Display/RGBColor.hpp"
 #include "Engine/Resources/ResourceManager.hpp"
+#include "Lighting/LightingSystem.hpp"
 #include "VoxelGrid.hpp"
 
 #include <cstdint>
@@ -17,18 +18,26 @@ namespace Engine
     {
         using namespace Display;
         using namespace Resources;
+        using namespace Lighting;
 
         class VoxelSceneRenderer
         {
         private:
             std::shared_ptr<IFrameDrawer> frame_drawer;
             std::shared_ptr<ResourceManager> resource_manager;
+
+            std::shared_ptr<LightingSystem> lighting_system;
+
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid> voxel_grid;
 
         public:
-            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid);
+            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
+                               std::shared_ptr<ResourceManager> resource_manager,
+                               std::shared_ptr<LightingSystem> lighting_system,
+                               std::shared_ptr<Camera> camera,
+                               std::shared_ptr<VoxelGrid> voxel_grid);
 
             void SetVoxelPalette(std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette);
 

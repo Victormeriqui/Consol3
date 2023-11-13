@@ -24,9 +24,10 @@ namespace Game
         VoxelGame::VoxelGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
             input_manager(input_manager),
             resource_manager(std::make_shared<ResourceManager>()),
+            lighting_system(std::make_shared<LightingSystem>()),
             camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
             voxel_grid(std::make_shared<VoxelGrid>()),
-            scene_renderer(frame_drawer, resource_manager, camera, voxel_grid)
+            scene_renderer(frame_drawer, resource_manager, lighting_system, camera, voxel_grid)
         {
             LoadResources();
 
@@ -124,7 +125,7 @@ namespace Game
                 selected_voxel = VoxelElement::WATER;
 
             if (input_manager->IsKeyHeld(Key::N3))
-                selected_voxel = VoxelElement::STONE;
+                selected_voxel = VoxelElement::STEEL;
 
             if (input_manager->IsKeyHeld(Key::N4))
                 selected_voxel = VoxelElement::STEAM;

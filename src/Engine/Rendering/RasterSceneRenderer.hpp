@@ -24,6 +24,7 @@ namespace Engine
     {
         using namespace Display;
         using namespace Resources;
+        using namespace Lighting;
 
         class RasterSceneRenderer
         {
