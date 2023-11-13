@@ -2,8 +2,8 @@
 #define VOXELUTIL_HPP
 
 #include "Display/RGBColor.hpp"
+#include "Engine/VoxelElements.hpp"
 #include "Engine/VoxelGrid.hpp"
-#include "Engine/VoxelTypes.hpp"
 #include "Math/Vector3.hpp"
 
 #include <cstdint>
@@ -25,26 +25,34 @@ namespace Game
             static Vector3 up       = Vector3(0, -1, 0);
             static Vector3 down     = Vector3(0, 1, 0);
 
-            static std::array<Vector3, 4> sides      = { left, right, forward, backward };
-            static std::array<Vector3, 4> sides_down = { left - down, right - down, forward - down, backward - down };
-            static std::array<Vector3, 4> sides_up   = { left - down, right - down, forward - down, backward - down };
+            static std::array<Vector3, 4> sides                 = { left, right, forward, backward };
+            static std::array<Vector3, 4> sides_down            = { left - down, right - down, forward - down, backward - down };
+            static std::array<Vector3, 4> sides_up              = { left - up, right - up, forward - up, backward - up };
+            static std::array<Vector3, 9> up_sides_and_sides_up = { up, left, right, forward, backward, left - up, right - up, forward - up, backward - up };
 
-            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, uint16_t x, uint16_t y, uint16_t z, VoxelType voxel_type, RGBColor color)
+            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, uint16_t x, uint16_t y, uint16_t z, VoxelElement voxel_type, uint8_t color_index)
             {
-                voxel_grid->SetVoxelData(x, y, z, { voxel_type, color });
+                voxel_grid->SetVoxelData(x, y, z, { voxel_type, color_index });
             }
 
-            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, uint16_t x, uint16_t y, uint16_t z, VoxelType voxel_type)
+            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, uint16_t x, uint16_t y, uint16_t z, VoxelElement voxel_type)
             {
-                const std::vector<RGBColor>& color_options = voxel_color_map.at(voxel_type);
-
-                uint8_t random_color = static_cast<uint8_t>(random_generator() % color_options.size());
-                SpawnVoxel(voxel_grid, x, y, z, voxel_type, color_options[random_color]);
+                uint8_t random_color_index = static_cast<uint8_t>(random_generator() % voxel_color_map[voxel_type].size());
+                SpawnVoxel(voxel_grid, x, y, z, voxel_type, random_color_index);
             }
 
-            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3& pos, VoxelType voxel_type)
+            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3& pos, VoxelElement voxel_type)
             {
                 SpawnVoxel(voxel_grid, static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z), voxel_type);
+            }
+
+            static void SwapVoxels(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3& pos_a, const Vector3& pos_b)
+            {
+                VoxelData a_data = voxel_grid->GetVoxelData(pos_a);
+                VoxelData b_data = voxel_grid->GetVoxelData(pos_b);
+
+                voxel_grid->SetVoxelData(pos_a, b_data);
+                voxel_grid->SetVoxelData(pos_b, a_data);
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Game
                     for (uint16_t x = 40; x < 60; x++)
                     {
                         if (x % 4 == 0 && y % 4 == 0 && z % 4 == 0)
-                            SpawnVoxel(x, y, z, VoxelType::ROCK);
+                            SpawnVoxel(x, y, z, VoxelElement::ROCK);
                     }
                 }
             }*/
@@ -50,7 +50,7 @@ namespace Game
             {
                 for (uint16_t x = 0; x < VOXEL_GRID_WIDTH; x++)
                 {
-                    voxel_grid->SetVoxelData(x, 0, z, { VoxelType::ROCK, RGBColor(50, 50, 50) });
+                    voxel_grid->SetVoxelData(x, 0, z, { VoxelElement::STONE, 0 });
                 }
             }
         }
@@ -59,7 +59,8 @@ namespace Game
         {
             update_tick++;
 
-            VoxelSimulation::UpdateSimulation(voxel_grid, update_tick);
+            VoxelSimulation::UpdateSimulationDownTop(voxel_grid, update_tick);
+            VoxelSimulation::UpdateSimulationTopDown(voxel_grid, update_tick);
         }
 
         void VoxelGame::HandleInput()
@@ -117,13 +118,16 @@ namespace Game
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_pos, selected_voxel);
 
             if (input_manager->IsKeyHeld(Key::N1))
-                selected_voxel = VoxelType::ROCK;
+                selected_voxel = VoxelElement::SAND;
 
             if (input_manager->IsKeyHeld(Key::N2))
-                selected_voxel = VoxelType::SAND;
+                selected_voxel = VoxelElement::WATER;
 
             if (input_manager->IsKeyHeld(Key::N3))
-                selected_voxel = VoxelType::WATER;
+                selected_voxel = VoxelElement::STONE;
+
+            if (input_manager->IsKeyHeld(Key::N4))
+                selected_voxel = VoxelElement::STEAM;
         }
 
         std::chrono::milliseconds VoxelGame::Render(int64_t delta)
@@ -136,7 +140,7 @@ namespace Game
             if (voxel_grid->IsPositionInsideGrid(cursor_pos))
             {
                 cursor_voxel_data = voxel_grid->GetVoxelData(cursor_pos);
-                voxel_grid->SetVoxelData(cursor_pos, { VoxelType::CURSOR, RGBConstants::White() });
+                voxel_grid->SetVoxelData(cursor_pos, { VoxelElement::CURSOR, 0 });
                 cursor_was_set = true;
             }
 

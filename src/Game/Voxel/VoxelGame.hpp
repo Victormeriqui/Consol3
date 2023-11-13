@@ -7,8 +7,8 @@
 #include "Engine/Rendering/Camera.hpp"
 #include "Engine/Rendering/VoxelSceneRenderer.hpp"
 #include "Engine/Resources/ResourceManager.hpp"
+#include "Engine/VoxelElements.hpp"
 #include "Engine/VoxelGrid.hpp"
-#include "Engine/VoxelTypes.hpp"
 #include "Math/Vector3.hpp"
 
 #include <chrono>
@@ -46,7 +46,7 @@ namespace Game
             VoxelData cursor_voxel_data;
             float cursor_depth = 5.0f;
 
-            VoxelType selected_voxel = VoxelType::SAND;
+            VoxelElement selected_voxel = VoxelElement::SAND;
 
             uint64_t update_tick = 0;
 

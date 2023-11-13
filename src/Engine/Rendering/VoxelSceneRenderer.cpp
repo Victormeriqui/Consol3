@@ -1,7 +1,7 @@
 #include "VoxelSceneRenderer.hpp"
 
 #include "Display/RGBColorConstants.hpp"
-#include "Engine/VoxelTypes.hpp"
+#include "Engine/VoxelElements.hpp"
 #include "Math/Matrix4.hpp"
 #include "Math/Util/MathUtil.hpp"
 #include "Math/Vector3.hpp"
@@ -66,9 +66,9 @@ namespace Engine
 
                         VoxelData cur_voxel_data = voxel_grid->GetVoxelData(grid_x, grid_y, grid_z);
 
-                        if (cur_voxel_data.type != VoxelType::AIR)
+                        if (cur_voxel_data.type != VoxelElement::AIR)
                         {
-                            DrawPixel(x, y, cur_voxel_data.color);
+                            DrawPixel(x, y, voxel_color_map[cur_voxel_data.type][cur_voxel_data.color_index]);
                             break;
                         }
                         cur_step += step_size;

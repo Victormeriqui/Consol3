@@ -2,7 +2,7 @@
 #define VOXELGRID_HPP
 
 #include "Math/Util/MathUtil.hpp"
-#include "VoxelTypes.hpp"
+#include "VoxelElements.hpp"
 
 #include <array>
 #include <cstdint>
@@ -16,18 +16,19 @@ using namespace Math::Util;
 
 namespace Engine
 {
+
     struct VoxelData
     {
-        VoxelType type;
-        RGBColor color;
+        VoxelElement type;
+        uint8_t color_index = 0;
 
-        VoxelData() : type(VoxelType::AIR)
+        VoxelData() : type(VoxelElement::AIR)
         {
         }
-        VoxelData(VoxelType type) : type(type)
+        VoxelData(VoxelElement type) : type(type)
         {
         }
-        VoxelData(VoxelType type, const RGBColor& color) : type(type), color(color)
+        VoxelData(VoxelElement type, uint8_t color_index) : type(type), color_index(color_index)
         {
         }
     };
@@ -40,7 +41,7 @@ namespace Engine
     public:
         VoxelGrid()
         {
-            grid.fill({ VoxelType::AIR });
+            grid.fill({ VoxelElement::AIR });
         }
 
         [[nodiscard]] VoxelData GetVoxelData(uint16_t x, uint16_t y, uint16_t z) const
@@ -53,12 +54,12 @@ namespace Engine
             return grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))];
         }
 
-        [[nodiscard]] VoxelType GetVoxelType(uint16_t x, uint16_t y, uint16_t z) const
+        [[nodiscard]] VoxelElement GetVoxelElement(uint16_t x, uint16_t y, uint16_t z) const
         {
             return grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)].type;
         }
 
-        [[nodiscard]] VoxelType GetVoxelType(const Vector3& pos) const
+        [[nodiscard]] VoxelElement GetVoxelElement(const Vector3& pos) const
         {
             return grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))].type;
         }
