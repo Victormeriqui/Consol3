@@ -40,6 +40,8 @@ namespace Math
         [[nodiscard]] Vector3 GetMiddleFrom(const Vector3& other) const;
         [[nodiscard]] Vector3 GetLerped(const Vector3& other, float amount) const;
         [[nodiscard]] Vector3 GetRounded() const;
+        [[nodiscard]] Vector3 GetSignVector() const;
+        [[nodiscard]] Vector3 GetAbsoluteValue() const;
 
         constexpr Vector3& operator+=(const Vector3& other) noexcept
         {

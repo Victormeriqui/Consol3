@@ -6,7 +6,6 @@
 #include "Math/Util/MathUtil.hpp"
 #include "Math/Vector3.hpp"
 
-using namespace Math;
 using namespace Math::Util;
 
 namespace Engine
@@ -26,6 +25,46 @@ namespace Engine
         void VoxelSceneRenderer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
         {
             frame_drawer->SetPixel(x, y, color);
+        }
+
+        MarchResult VoxelSceneRenderer::MarchUntilHit(const Ray& ray, float step_size, float max_step) const
+        {
+            Ray ret_ray     = ray;
+            float cur_delta = 0.0f;
+            while (true)
+            {
+                // ret_ray.origin = ret_ray.March(cur_delta);
+
+                if (!voxel_grid->IsPositionInsideGrid(ret_ray.origin))
+                    return { .ray = ret_ray, .did_hit = false, .voxel_data_ptr = nullptr };
+
+                VoxelData* cur_voxel_data_ptr = voxel_grid->GetVoxelDataPtr(ret_ray.origin);
+
+                if (cur_voxel_data_ptr->type != VoxelElement::AIR)
+                    return { .ray = ret_ray, .did_hit = true, .voxel_data_ptr = cur_voxel_data_ptr };
+
+                Vector3 dir_sign = ret_ray.direction.GetSignVector();
+                Vector3 pos      = ret_ray.origin * dir_sign;
+                float temp       = 0.0f;
+                pos.x            = 1.0f - std::modf(pos.x, &temp) + 1e-5f;
+                pos.y            = 1.0f - std::modf(pos.y, &temp) + 1e-5f;
+                pos.z            = 1.0f - std::modf(pos.z, &temp) + 1e-5f;
+
+                Vector3 dir_abs = ret_ray.direction.GetAbsoluteValue();
+
+                Vector3 delta_vec = pos / dir_abs;
+
+                float min_delta       = std::min({ delta_vec.x, delta_vec.y, delta_vec.z });
+                Vector3 min_delta_vec = Vector3(min_delta, min_delta, min_delta);
+                float x_hit           = min_delta_vec.x == delta_vec.x ? 1.0f : 0.0f;
+                float y_hit           = min_delta_vec.y == delta_vec.y ? 1.0f : 0.0f;
+                float z_hit           = min_delta_vec.z == delta_vec.z ? 1.0f : 0.0f;
+                Vector3 hitMask       = Vector3(x_hit, y_hit, z_hit);
+
+                ret_ray.origin = ret_ray.origin + ret_ray.direction * min_delta;
+
+                ret_ray.direction = -hitMask * dir_sign;
+            }
         }
 
         void VoxelSceneRenderer::RenderScene(int64_t delta)
@@ -51,33 +90,16 @@ namespace Engine
                     // camera transform
                     pixel_point *= view_matrix_inv;
 
-                    Vector3 ray_dir = (pixel_point - camera_pos);
-                    ray_dir.Normalize();
+                    Ray ray = Ray(camera_pos, (pixel_point - camera_pos).GetNormalized());
 
-                    float cur_step = 0.5f;
-                    while (true)
-                    {
-                        Vector3 cur_march_pos = camera_pos + ray_dir * cur_step;
+                    MarchResult march_res = MarchUntilHit(ray, step_size, 1000.0f);
 
-                        if (!voxel_grid->IsPositionInsideGrid(cur_march_pos))
-                            break;
+                    if (!march_res.did_hit)
+                        continue;
 
-                        uint16_t grid_x = static_cast<uint16_t>(cur_march_pos.x);
-                        uint16_t grid_y = static_cast<uint16_t>(cur_march_pos.y);
-                        uint16_t grid_z = static_cast<uint16_t>(cur_march_pos.z);
+                    RGBColor voxel_color = voxel_color_map[march_res.voxel_data_ptr->type][march_res.voxel_data_ptr->color_index];
 
-                        VoxelData cur_voxel_data = voxel_grid->GetVoxelData(grid_x, grid_y, grid_z);
-
-                        if (cur_voxel_data.type != VoxelElement::AIR)
-                        {
-                            DrawPixel(x, y, voxel_color_map[cur_voxel_data.type][cur_voxel_data.color_index]);
-                            break;
-                        }
-                        cur_step += step_size;
-
-                        if (cur_step > 1000)
-                            break;
-                    }
+                    DrawPixel(x, y, voxel_color);
                 }
             }
         }

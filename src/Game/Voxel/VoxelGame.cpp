@@ -47,11 +47,11 @@ namespace Game
                     }
                 }
             }*/
-            for (uint16_t z = 0; z < VOXEL_GRID_DEPTH; z++)
+            for (uint16_t z = 1; z < VOXEL_GRID_DEPTH - 1; z++)
             {
-                for (uint16_t x = 0; x < VOXEL_GRID_WIDTH; x++)
+                for (uint16_t x = 1; x < VOXEL_GRID_WIDTH - 1; x++)
                 {
-                    voxel_grid->SetVoxelData(x, 0, z, { VoxelElement::STONE, 0 });
+                    voxel_grid->SetVoxelData(x, 1, z, { VoxelElement::STONE, 0 });
                 }
             }
         }

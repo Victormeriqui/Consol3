@@ -7,6 +7,7 @@
 #include "Display/RGBColor.hpp"
 #include "Engine/Resources/ResourceManager.hpp"
 #include "Lighting/LightingSystem.hpp"
+#include "Ray.hpp"
 #include "VoxelGrid.hpp"
 
 #include <cstdint>
@@ -19,6 +20,14 @@ namespace Engine
         using namespace Display;
         using namespace Resources;
         using namespace Lighting;
+        using namespace Math;
+
+        struct MarchResult
+        {
+            Ray ray;
+            bool did_hit;
+            VoxelData* voxel_data_ptr;
+        };
 
         class VoxelSceneRenderer
         {
@@ -31,6 +40,8 @@ namespace Engine
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid> voxel_grid;
+
+            MarchResult MarchUntilHit(const Ray& ray, float step_size, float max_step) const;
 
         public:
             VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,

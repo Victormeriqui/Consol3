@@ -44,9 +44,19 @@ namespace Engine
             grid.fill({ VoxelElement::AIR });
         }
 
+        [[nodiscard]] VoxelData* GetVoxelDataPtr(uint16_t x, uint16_t y, uint16_t z)
+        {
+            return &grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)];
+        }
+
         [[nodiscard]] VoxelData GetVoxelData(uint16_t x, uint16_t y, uint16_t z) const
         {
             return grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)];
+        }
+
+        [[nodiscard]] VoxelData* GetVoxelDataPtr(const Vector3& pos)
+        {
+            return &grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))];
         }
 
         [[nodiscard]] VoxelData GetVoxelData(const Vector3& pos) const
