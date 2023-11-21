@@ -6,6 +6,9 @@
 #include "Math/Util/MathUtil.hpp"
 #include "Math/Vector3.hpp"
 
+#include <cmath>
+#include <limits>
+
 using namespace Math::Util;
 
 namespace Engine
@@ -27,44 +30,106 @@ namespace Engine
             frame_drawer->SetPixel(x, y, color);
         }
 
+        Vector3I VoxelSceneRenderer::CalculateStep(const Vector3& direction) const
+        {
+            return Vector3I((direction.x >= 0.0f) ? 1 : -1, (direction.y >= 0.0f) ? 1 : -1, (direction.z >= 0.0f) ? 1 : -1);
+        }
+
+        Vector3I VoxelSceneRenderer::CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords, const Vector3& direction) const
+        {
+            return Vector3I(cur_grid_coords.x + (direction.x > 0.0f ? 1 : 0), cur_grid_coords.y + (direction.y > 0.0f ? 1 : 0), cur_grid_coords.z + (direction.z > 0.0f ? 1 : 0));
+        }
+
+        Vector3I VoxelSceneRenderer::CalculateVoxelGridCoords(const Vector3& origin) const
+        {
+            return Vector3I(static_cast<uint16_t>(std::floor(origin.x)), static_cast<uint16_t>(std::floor(origin.y)), static_cast<uint16_t>(std::floor(origin.z)));
+        }
+
+        Vector3 VoxelSceneRenderer::CalculateTMax(const Vector3I& near_grid_coords, const Ray& ray) const
+        {
+            // grid coords to world coords
+            Vector3 tmax = near_grid_coords;
+
+            tmax -= ray.origin;
+            tmax /= ray.direction;
+            return tmax;
+        }
+
+        Vector3 VoxelSceneRenderer::CalculateDelta(const Vector3& direction) const
+        {
+            Vector3 delta;
+            Vector3 abs_dir = direction.GetAbsoluteValue();
+
+            if (abs_dir.x > 0.0f)
+                delta.x = 1.0f / abs_dir.x;
+            if (abs_dir.y > 0.0f)
+                delta.y = 1.0f / abs_dir.y;
+            if (abs_dir.z > 0.0f)
+                delta.z = 1.0f / abs_dir.z;
+
+            return delta;
+        }
+
         MarchResult VoxelSceneRenderer::MarchUntilHit(const Ray& ray, float step_size, float max_step) const
         {
-            Ray ret_ray     = ray;
-            float cur_delta = 0.0f;
-            while (true)
+            MarchResult res = { ray, false, nullptr };
+
+            Vector3I step             = CalculateStep(ray.direction);
+            Vector3I cur_grid_coords  = CalculateVoxelGridCoords(ray.origin);
+            Vector3I near_grid_coords = CalculateNearestVoxelGridCoords(cur_grid_coords, ray.direction);
+            Vector3 t_max             = CalculateTMax(near_grid_coords, ray);
+            Vector3 delta             = CalculateDelta(ray.direction);
+
+            float t = 0.0f;
+            while (t <= max_step)
             {
-                // ret_ray.origin = ret_ray.March(cur_delta);
+                if (!voxel_grid->IsPositionInsideGrid(cur_grid_coords))
+                {
+                    res.did_hit = false;
+                    return res;
+                }
 
-                if (!voxel_grid->IsPositionInsideGrid(ret_ray.origin))
-                    return { .ray = ret_ray, .did_hit = false, .voxel_data_ptr = nullptr };
+                res.voxel_data_ptr = voxel_grid->GetVoxelDataPtr(cur_grid_coords);
 
-                VoxelData* cur_voxel_data_ptr = voxel_grid->GetVoxelDataPtr(ret_ray.origin);
+                if (res.voxel_data_ptr->type != VoxelElement::AIR)
+                {
+                    res.did_hit = true;
+                    return res;
+                }
 
-                if (cur_voxel_data_ptr->type != VoxelElement::AIR)
-                    return { .ray = ret_ray, .did_hit = true, .voxel_data_ptr = cur_voxel_data_ptr };
-
-                Vector3 dir_sign = ret_ray.direction.GetSignVector();
-                Vector3 pos      = ret_ray.origin * dir_sign;
-                float temp       = 0.0f;
-                pos.x            = 1.0f - std::modf(pos.x, &temp) + 1e-5f;
-                pos.y            = 1.0f - std::modf(pos.y, &temp) + 1e-5f;
-                pos.z            = 1.0f - std::modf(pos.z, &temp) + 1e-5f;
-
-                Vector3 dir_abs = ret_ray.direction.GetAbsoluteValue();
-
-                Vector3 delta_vec = pos / dir_abs;
-
-                float min_delta       = std::min({ delta_vec.x, delta_vec.y, delta_vec.z });
-                Vector3 min_delta_vec = Vector3(min_delta, min_delta, min_delta);
-                float x_hit           = min_delta_vec.x == delta_vec.x ? 1.0f : 0.0f;
-                float y_hit           = min_delta_vec.y == delta_vec.y ? 1.0f : 0.0f;
-                float z_hit           = min_delta_vec.z == delta_vec.z ? 1.0f : 0.0f;
-                Vector3 hitMask       = Vector3(x_hit, y_hit, z_hit);
-
-                ret_ray.origin = ret_ray.origin + ret_ray.direction * min_delta;
-
-                ret_ray.direction = -hitMask * dir_sign;
+                if (t_max.x < t_max.y)
+                {
+                    if (t_max.x < t_max.z)
+                    {
+                        cur_grid_coords.x += step.x;
+                        t = t_max.x;
+                        t_max.x += delta.x;
+                    }
+                    else
+                    {
+                        cur_grid_coords.z += step.z;
+                        t = t_max.z;
+                        t_max.z += delta.z;
+                    }
+                }
+                else
+                {
+                    if (t_max.y < t_max.z)
+                    {
+                        cur_grid_coords.y += step.y;
+                        t = t_max.y;
+                        t_max.y += delta.y;
+                    }
+                    else
+                    {
+                        cur_grid_coords.z += step.z;
+                        t = t_max.z;
+                        t_max.z += delta.z;
+                    }
+                }
             }
+
+            return res;
         }
 
         void VoxelSceneRenderer::RenderScene(int64_t delta)
@@ -92,7 +157,7 @@ namespace Engine
 
                     Ray ray = Ray(camera_pos, (pixel_point - camera_pos).GetNormalized());
 
-                    MarchResult march_res = MarchUntilHit(ray, step_size, 1000.0f);
+                    MarchResult march_res = MarchUntilHit(ray, step_size, 10000.0f);
 
                     if (!march_res.did_hit)
                         continue;

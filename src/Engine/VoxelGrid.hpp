@@ -2,6 +2,8 @@
 #define VOXELGRID_HPP
 
 #include "Math/Util/MathUtil.hpp"
+#include "Vector3.hpp"
+#include "Vector3i.hpp"
 #include "VoxelElements.hpp"
 
 #include <array>
@@ -54,6 +56,11 @@ namespace Engine
             return grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)];
         }
 
+        [[nodiscard]] VoxelData* GetVoxelDataPtr(const Vector3I& pos)
+        {
+            return &grid[pos.x + VOXEL_GRID_WIDTH * (pos.y + VOXEL_GRID_HEIGHT * pos.z)];
+        }
+
         [[nodiscard]] VoxelData* GetVoxelDataPtr(const Vector3& pos)
         {
             return &grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))];
@@ -92,6 +99,11 @@ namespace Engine
         [[nodiscard]] bool IsPositionInsideGrid(const Vector3& pos)
         {
             return IsPositionInsideGrid(static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z));
+        }
+
+        [[nodiscard]] bool IsPositionInsideGrid(const Vector3I& pos)
+        {
+            return IsPositionInsideGrid(pos.x, pos.y, pos.z);
         }
 
         void Fill(VoxelData voxel_data)
