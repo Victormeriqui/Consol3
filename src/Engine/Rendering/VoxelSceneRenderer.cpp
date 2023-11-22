@@ -60,9 +60,9 @@ namespace Engine
             return delta;
         }
 
-        MarchResult VoxelSceneRenderer::MarchUntilHit(const Ray& ray, float step_size, float max_step) const
+        MarchResult VoxelSceneRenderer::MarchUntilHit(const Ray& ray, uint16_t max_iterations) const
         {
-            MarchResult res = { ray, false, nullptr };
+            MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .voxel_data_ptr = nullptr };
 
             Vector3I step             = ray.direction.GetSignVector();
             Vector3I cur_grid_coords  = voxel_grid->GetGridPosition(ray.origin);
@@ -70,9 +70,10 @@ namespace Engine
             Vector3 t_max             = CalculateTMax(near_grid_coords, ray);
             Vector3 delta             = CalculateDelta(ray.direction);
 
-            uint16_t t = 0;
-            while (t++ <= max_step)
+            uint16_t i = 0;
+            while (i++ < max_iterations)
             {
+                // ray shot off the grid
                 if (!voxel_grid->IsPositionInsideGrid(cur_grid_coords))
                 {
                     res.did_hit = false;
@@ -84,37 +85,38 @@ namespace Engine
                 if (res.voxel_data_ptr->type != VoxelElement::AIR)
                 {
                     res.did_hit = true;
-                    return res;
+                    // cant exit immediately, we should calculate the normal and hit position
+                    i = max_iterations;
                 }
 
-                if (t_max.x < t_max.y)
+                if (t_max.x < t_max.y && t_max.x < t_max.z)
                 {
-                    if (t_max.x < t_max.z)
+                    cur_grid_coords.x += step.x;
+                    t_max.x += delta.x;
+                    if (res.did_hit)
                     {
-                        cur_grid_coords.x += step.x;
-
-                        t_max.x += delta.x;
+                        res.hit_normal   = Vector3(static_cast<float>(-step.x), 0.0f, 0.0f);
+                        res.hit_position = ray.origin + ray.direction * t_max.x;
                     }
-                    else
+                }
+                else if (t_max.y < t_max.z)
+                {
+                    cur_grid_coords.y += step.y;
+                    t_max.y += delta.y;
+                    if (res.did_hit)
                     {
-                        cur_grid_coords.z += step.z;
-
-                        t_max.z += delta.z;
+                        res.hit_normal   = Vector3(0.0f, static_cast<float>(-step.y), 0.0f);
+                        res.hit_position = ray.origin + ray.direction * t_max.y;
                     }
                 }
                 else
                 {
-                    if (t_max.y < t_max.z)
+                    cur_grid_coords.z += step.z;
+                    t_max.z += delta.z;
+                    if (res.did_hit)
                     {
-                        cur_grid_coords.y += step.y;
-
-                        t_max.y += delta.y;
-                    }
-                    else
-                    {
-                        cur_grid_coords.z += step.z;
-
-                        t_max.z += delta.z;
+                        res.hit_normal   = Vector3(0.0f, 0.0f, static_cast<float>(-step.z));
+                        res.hit_position = ray.origin + ray.direction * t_max.z;
                     }
                 }
             }
@@ -129,8 +131,6 @@ namespace Engine
             float camera_fov        = camera->GetFOV();
             Matrix4 view_matrix_inv = camera->GetViewMatrix().GetInverted();
             Matrix4 proj_matrix_inv = camera->GetProjectionMatrix().GetInverted();
-
-            float step_size = 0.1f;
 
             for (uint16_t y = 0; y < frame_drawer->GetFrameBufferHeight(); y++)
             {
@@ -147,13 +147,20 @@ namespace Engine
 
                     Ray ray = Ray(camera_pos, (pixel_point - camera_pos).GetNormalized());
 
-                    MarchResult march_res = MarchUntilHit(ray, step_size, 1000.0f);
+                    MarchResult march_res = MarchUntilHit(ray, 1000);
 
                     if (!march_res.did_hit)
                         continue;
 
                     RGBColor voxel_color = voxel_color_map[march_res.voxel_data_ptr->type][march_res.voxel_data_ptr->color_index];
+                    /*
+                                        Vector3 light_dir = Vector3(-1.0f, -0.5f, 0.0f);
 
+                                        float intensity = march_res.hit_normal.GetDotProduct(-light_dir);
+                                        intensity       = std::clamp(intensity, 0.0f, 1.0f);
+
+                                        voxel_color.BlendMultiply(intensity);
+                    */
                     DrawPixel(x, y, voxel_color);
                 }
             }

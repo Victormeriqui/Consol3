@@ -25,8 +25,9 @@ namespace Engine
 
         struct MarchResult
         {
-            Ray ray;
             bool did_hit;
+            Vector3 hit_position;
+            Vector3 hit_normal;
             VoxelData* voxel_data_ptr;
         };
 
@@ -48,7 +49,7 @@ namespace Engine
 
             [[nodiscard]] int CalculateTMax(float direction_component) const;
 
-            MarchResult MarchUntilHit(const Ray& ray, float step_size, float max_step) const;
+            MarchResult MarchUntilHit(const Ray& ray, uint16_t max_iterations) const;
 
         public:
             VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
