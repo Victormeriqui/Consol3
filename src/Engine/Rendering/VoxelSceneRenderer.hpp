@@ -8,7 +8,7 @@
 #include "Engine/Resources/ResourceManager.hpp"
 #include "Lighting/LightingSystem.hpp"
 #include "Ray.hpp"
-#include "Vector3i.hpp"
+#include "Vector3I.hpp"
 #include "VoxelGrid.hpp"
 
 #include <cstdint>
@@ -42,8 +42,6 @@ namespace Engine
 
             std::shared_ptr<VoxelGrid> voxel_grid;
 
-            [[nodiscard]] Vector3I CalculateStep(const Vector3& direction) const;
-            [[nodiscard]] Vector3I CalculateVoxelGridCoords(const Vector3& origin) const;
             [[nodiscard]] Vector3I CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords, const Vector3& direction) const;
             [[nodiscard]] Vector3 CalculateTMax(const Vector3I& near_grid_coords, const Ray& ray) const;
             [[nodiscard]] Vector3 CalculateDelta(const Vector3& direction) const;

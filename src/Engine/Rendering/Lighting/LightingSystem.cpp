@@ -67,7 +67,7 @@ namespace Engine
 
                     const Vector3 position_light = position_lights[i++];
 
-                    if (!Util::IsInRange(position_light.x, -1.0f, 1.0f) || !Util::IsInRange(position_light.y, -1.0f, 1.0f))
+                    if (!Util::IsInRange<float>(position_light.x, -1.0f, 1.0f) || !Util::IsInRange<float>(position_light.y, -1.0f, 1.0f))
                     {
                         final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
 

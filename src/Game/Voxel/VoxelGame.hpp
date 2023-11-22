@@ -49,7 +49,7 @@ namespace Game
             float mov_speed = 0.05f;
             bool shifting   = false;
 
-            Vector3 cursor_pos;
+            Vector3I cursor_grid_pos;
             VoxelData cursor_voxel_data;
             float cursor_depth = 5.0f;
 

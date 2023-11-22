@@ -130,9 +130,9 @@ namespace Math
         return Vector3(*this).Round();
     }
 
-    Vector3 Vector3::GetSignVector() const
+    Vector3I Vector3::GetSignVector() const
     {
-        return Vector3((x > 0) - (x < 0), (y > 0) - (y < 0), (z > 0) - (z < 0));
+        return Vector3I((x > 0) - (x < 0), (y > 0) - (y < 0), (z > 0) - (z < 0));
     }
 
     Vector3 Vector3::GetAbsoluteValue() const

@@ -30,19 +30,9 @@ namespace Engine
             frame_drawer->SetPixel(x, y, color);
         }
 
-        Vector3I VoxelSceneRenderer::CalculateStep(const Vector3& direction) const
-        {
-            return Vector3I((direction.x >= 0.0f) ? 1 : -1, (direction.y >= 0.0f) ? 1 : -1, (direction.z >= 0.0f) ? 1 : -1);
-        }
-
         Vector3I VoxelSceneRenderer::CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords, const Vector3& direction) const
         {
             return Vector3I(cur_grid_coords.x + (direction.x > 0.0f ? 1 : 0), cur_grid_coords.y + (direction.y > 0.0f ? 1 : 0), cur_grid_coords.z + (direction.z > 0.0f ? 1 : 0));
-        }
-
-        Vector3I VoxelSceneRenderer::CalculateVoxelGridCoords(const Vector3& origin) const
-        {
-            return Vector3I(static_cast<uint16_t>(std::floor(origin.x)), static_cast<uint16_t>(std::floor(origin.y)), static_cast<uint16_t>(std::floor(origin.z)));
         }
 
         Vector3 VoxelSceneRenderer::CalculateTMax(const Vector3I& near_grid_coords, const Ray& ray) const
@@ -74,14 +64,14 @@ namespace Engine
         {
             MarchResult res = { ray, false, nullptr };
 
-            Vector3I step             = CalculateStep(ray.direction);
-            Vector3I cur_grid_coords  = CalculateVoxelGridCoords(ray.origin);
+            Vector3I step             = ray.direction.GetSignVector();
+            Vector3I cur_grid_coords  = voxel_grid->GetGridPosition(ray.origin);
             Vector3I near_grid_coords = CalculateNearestVoxelGridCoords(cur_grid_coords, ray.direction);
             Vector3 t_max             = CalculateTMax(near_grid_coords, ray);
             Vector3 delta             = CalculateDelta(ray.direction);
 
-            float t = 0.0f;
-            while (t <= max_step)
+            uint16_t t = 0;
+            while (t++ <= max_step)
             {
                 if (!voxel_grid->IsPositionInsideGrid(cur_grid_coords))
                 {
@@ -102,13 +92,13 @@ namespace Engine
                     if (t_max.x < t_max.z)
                     {
                         cur_grid_coords.x += step.x;
-                        t = t_max.x;
+
                         t_max.x += delta.x;
                     }
                     else
                     {
                         cur_grid_coords.z += step.z;
-                        t = t_max.z;
+
                         t_max.z += delta.z;
                     }
                 }
@@ -117,13 +107,13 @@ namespace Engine
                     if (t_max.y < t_max.z)
                     {
                         cur_grid_coords.y += step.y;
-                        t = t_max.y;
+
                         t_max.y += delta.y;
                     }
                     else
                     {
                         cur_grid_coords.z += step.z;
-                        t = t_max.z;
+
                         t_max.z += delta.z;
                     }
                 }
@@ -157,7 +147,7 @@ namespace Engine
 
                     Ray ray = Ray(camera_pos, (pixel_point - camera_pos).GetNormalized());
 
-                    MarchResult march_res = MarchUntilHit(ray, step_size, 10000.0f);
+                    MarchResult march_res = MarchUntilHit(ray, step_size, 1000.0f);
 
                     if (!march_res.did_hit)
                         continue;

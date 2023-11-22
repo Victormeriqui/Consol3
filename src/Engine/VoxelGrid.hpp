@@ -3,7 +3,7 @@
 
 #include "Math/Util/MathUtil.hpp"
 #include "Vector3.hpp"
-#include "Vector3i.hpp"
+#include "Vector3I.hpp"
 #include "VoxelElements.hpp"
 
 #include <array>
@@ -12,6 +12,13 @@
 #define VOXEL_GRID_WIDTH  100
 #define VOXEL_GRID_HEIGHT 100
 #define VOXEL_GRID_DEPTH  100
+
+#define VOXEL_GRID_LEFT      -VOXEL_GRID_WIDTH / 2
+#define VOXEL_GRID_RIGHT     VOXEL_GRID_WIDTH / 2 - 1
+#define VOXEL_GRID_DOWN      -VOXEL_GRID_HEIGHT / 2
+#define VOXEL_GRID_UP        VOXEL_GRID_HEIGHT / 2 - 1
+#define VOXEL_GRID_BACKWARDS -VOXEL_GRID_DEPTH / 2
+#define VOXEL_GRID_FORWARDS  VOXEL_GRID_DEPTH / 2 - 1
 
 using namespace Math;
 using namespace Math::Util;
@@ -40,65 +47,54 @@ namespace Engine
     private:
         std::array<VoxelData, VOXEL_GRID_WIDTH * VOXEL_GRID_HEIGHT * VOXEL_GRID_DEPTH> grid;
 
+        constexpr uint32_t GetIndexFromCoords(Vector3I pos) const
+        {
+            pos.x += VOXEL_GRID_WIDTH / 2;
+            pos.y += VOXEL_GRID_HEIGHT / 2;
+            pos.z += VOXEL_GRID_DEPTH / 2;
+
+            return pos.x + VOXEL_GRID_WIDTH * (pos.y + VOXEL_GRID_HEIGHT * pos.z);
+        }
+
     public:
         VoxelGrid()
         {
             grid.fill({ VoxelElement::AIR });
         }
 
-        [[nodiscard]] VoxelData* GetVoxelDataPtr(uint16_t x, uint16_t y, uint16_t z)
+        [[nodiscard]] Vector3I GetGridPosition(const Vector3& world_pos)
         {
-            return &grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)];
-        }
-
-        [[nodiscard]] VoxelData GetVoxelData(uint16_t x, uint16_t y, uint16_t z) const
-        {
-            return grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)];
+            return Vector3I(static_cast<int>(std::floor(world_pos.x)), static_cast<int>(std::floor(world_pos.y)), static_cast<int>(std::floor(world_pos.z)));
         }
 
         [[nodiscard]] VoxelData* GetVoxelDataPtr(const Vector3I& pos)
         {
-            return &grid[pos.x + VOXEL_GRID_WIDTH * (pos.y + VOXEL_GRID_HEIGHT * pos.z)];
+            return &grid[GetIndexFromCoords(pos)];
         }
 
-        [[nodiscard]] VoxelData* GetVoxelDataPtr(const Vector3& pos)
+        [[nodiscard]] VoxelData GetVoxelData(const Vector3I& pos) const
         {
-            return &grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))];
+            return grid[GetIndexFromCoords(pos)];
         }
 
-        [[nodiscard]] VoxelData GetVoxelData(const Vector3& pos) const
+        [[nodiscard]] VoxelElement GetVoxelElement(const Vector3I& pos) const
         {
-            return grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))];
+            return grid[GetIndexFromCoords(pos)].type;
         }
 
-        [[nodiscard]] VoxelElement GetVoxelElement(uint16_t x, uint16_t y, uint16_t z) const
+        void SetVoxelData(const Vector3I& pos, const VoxelData& voxel_data)
         {
-            return grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)].type;
+            grid[GetIndexFromCoords(pos)] = voxel_data;
         }
 
-        [[nodiscard]] VoxelElement GetVoxelElement(const Vector3& pos) const
+        [[nodiscard]] constexpr bool IsPositionInsideGrid(int x, int y, int z) const
         {
-            return grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))].type;
-        }
-
-        void SetVoxelData(uint16_t x, uint16_t y, uint16_t z, const VoxelData& voxel_data)
-        {
-            grid[x + VOXEL_GRID_WIDTH * (y + VOXEL_GRID_HEIGHT * z)] = voxel_data;
-        }
-
-        void SetVoxelData(const Vector3& pos, const VoxelData& voxel_data)
-        {
-            grid[static_cast<uint16_t>(pos.x) + VOXEL_GRID_WIDTH * (static_cast<uint16_t>(pos.y) + VOXEL_GRID_HEIGHT * static_cast<uint16_t>(pos.z))] = voxel_data;
-        }
-
-        [[nodiscard]] bool IsPositionInsideGrid(uint16_t x, uint16_t y, uint16_t z)
-        {
-            return IsInRange(x, 0, VOXEL_GRID_WIDTH - 1) && IsInRange(y, 0, VOXEL_GRID_HEIGHT - 1) && IsInRange(z, 0, VOXEL_GRID_DEPTH - 1);
+            return IsInRange<int>(x, VOXEL_GRID_LEFT, VOXEL_GRID_RIGHT) && IsInRange<int>(y, VOXEL_GRID_DOWN, VOXEL_GRID_UP) && IsInRange<int>(z, VOXEL_GRID_BACKWARDS, VOXEL_GRID_FORWARDS);
         }
 
         [[nodiscard]] bool IsPositionInsideGrid(const Vector3& pos)
         {
-            return IsPositionInsideGrid(static_cast<uint16_t>(pos.x), static_cast<uint16_t>(pos.y), static_cast<uint16_t>(pos.z));
+            return IsPositionInsideGrid(static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(pos.z));
         }
 
         [[nodiscard]] bool IsPositionInsideGrid(const Vector3I& pos)
@@ -111,7 +107,6 @@ namespace Engine
             grid.fill(voxel_data);
         }
     };
-
 }
 
 #endif

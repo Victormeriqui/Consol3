@@ -36,22 +36,11 @@ namespace Game
 
         void VoxelGame::LoadResources()
         {
-            /*for (uint16_t z = 40; z < 60; z++)
+            for (int z = VOXEL_GRID_BACKWARDS; z < VOXEL_GRID_FORWARDS - 1; z++)
             {
-                for (uint16_t y = 40; y < 60; y++)
+                for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT - 1; x++)
                 {
-                    for (uint16_t x = 40; x < 60; x++)
-                    {
-                        if (x % 4 == 0 && y % 4 == 0 && z % 4 == 0)
-                            SpawnVoxel(x, y, z, VoxelElement::ROCK);
-                    }
-                }
-            }*/
-            for (uint16_t z = 1; z < VOXEL_GRID_DEPTH - 1; z++)
-            {
-                for (uint16_t x = 1; x < VOXEL_GRID_WIDTH - 1; x++)
-                {
-                    voxel_grid->SetVoxelData(x, 1, z, { VoxelElement::STONE, 0 });
+                    voxel_grid->SetVoxelData(Vector3I(x, 0, z), { VoxelElement::STONE, 0 });
                 }
             }
         }
@@ -116,7 +105,7 @@ namespace Game
                 cursor_depth += 0.2f;
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_pos, selected_voxel);
+                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos, selected_voxel);
 
             if (input_manager->IsKeyHeld(Key::N1))
                 selected_voxel = VoxelElement::SAND;
@@ -135,13 +124,13 @@ namespace Game
         {
             auto time = std::chrono::high_resolution_clock::now();
 
-            cursor_pos          = camera->GetPosition() + (camera->GetLookDirection() * cursor_depth);
+            cursor_grid_pos     = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
             bool cursor_was_set = false;
 
-            if (voxel_grid->IsPositionInsideGrid(cursor_pos))
+            if (voxel_grid->IsPositionInsideGrid(cursor_grid_pos))
             {
-                cursor_voxel_data = voxel_grid->GetVoxelData(cursor_pos);
-                voxel_grid->SetVoxelData(cursor_pos, { VoxelElement::CURSOR, 0 });
+                cursor_voxel_data = voxel_grid->GetVoxelData(cursor_grid_pos);
+                voxel_grid->SetVoxelData(cursor_grid_pos, { VoxelElement::CURSOR, 0 });
                 cursor_was_set = true;
             }
 
@@ -149,7 +138,7 @@ namespace Game
 
             // reset the cursor to it's previous voxel data so the simulation doesn't include the CURSOR type
             if (cursor_was_set)
-                voxel_grid->SetVoxelData(cursor_pos, cursor_voxel_data);
+                voxel_grid->SetVoxelData(cursor_grid_pos, cursor_voxel_data);
 
             return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
         }
