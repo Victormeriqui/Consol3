@@ -147,7 +147,7 @@ namespace Engine
 
                     RGBColor voxel_color = voxel_color_map[march_res.voxel_data_ptr->type][march_res.voxel_data_ptr->color_index];
                     RGBColor lit_color   = lighting_system->GetLitColorAt(march_res.hit_position, march_res.hit_normal, camera_pos, MaterialProperties());
-
+                    lit_color += lighting_system->GetAmbientLightColor();
                     voxel_color.BlendMultiply(lit_color);
 
                     DrawPixel(x, y, voxel_color);
