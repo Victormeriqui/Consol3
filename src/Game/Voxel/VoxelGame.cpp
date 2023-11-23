@@ -31,7 +31,13 @@ namespace Game
         {
             LoadResources();
 
-            camera->SetPosition(Vector3(40, 40, 30));
+            camera->SetPosition(Vector3(0, 5, -1));
+
+            this->lighting_system->SetAmbientLightColor(RGBColor(10, 10, 10));
+
+            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
+            dir_light->SetColor(RGBColor(255, 255, 255));
+            this->lighting_system->AddLight(dir_light);
         }
 
         void VoxelGame::LoadResources()
@@ -103,6 +109,9 @@ namespace Game
 
             if (input_manager->IsKeyHeld(Key::E))
                 cursor_depth += 0.2f;
+
+            if (input_manager->IsKeyHeld(Key::MOUSE4))
+                dir_light->SetDirection(camera->GetLookDirection());
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos, selected_voxel);

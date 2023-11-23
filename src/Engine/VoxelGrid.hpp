@@ -92,12 +92,12 @@ namespace Engine
             return IsInRange<int>(x, VOXEL_GRID_LEFT, VOXEL_GRID_RIGHT) && IsInRange<int>(y, VOXEL_GRID_DOWN, VOXEL_GRID_UP) && IsInRange<int>(z, VOXEL_GRID_BACKWARDS, VOXEL_GRID_FORWARDS);
         }
 
-        [[nodiscard]] bool IsPositionInsideGrid(const Vector3& pos)
+        [[nodiscard]] constexpr bool IsPositionInsideGrid(const Vector3& pos) const
         {
             return IsPositionInsideGrid(static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(pos.z));
         }
 
-        [[nodiscard]] bool IsPositionInsideGrid(const Vector3I& pos)
+        [[nodiscard]] constexpr bool IsPositionInsideGrid(const Vector3I& pos) const
         {
             return IsPositionInsideGrid(pos.x, pos.y, pos.z);
         }

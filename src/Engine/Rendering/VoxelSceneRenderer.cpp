@@ -85,39 +85,31 @@ namespace Engine
                 if (res.voxel_data_ptr->type != VoxelElement::AIR)
                 {
                     res.did_hit = true;
-                    // cant exit immediately, we should calculate the normal and hit position
-                    i = max_iterations;
+                    return res;
                 }
 
                 if (t_max.x < t_max.y && t_max.x < t_max.z)
                 {
                     cur_grid_coords.x += step.x;
                     t_max.x += delta.x;
-                    if (res.did_hit)
-                    {
-                        res.hit_normal   = Vector3(static_cast<float>(-step.x), 0.0f, 0.0f);
-                        res.hit_position = ray.origin + ray.direction * t_max.x;
-                    }
+                    res.hit_normal   = Vector3(static_cast<float>(-step.x), 0.0f, 0.0f);
+                    res.hit_position = ray.origin + ray.direction * t_max.x;
                 }
                 else if (t_max.y < t_max.z)
                 {
                     cur_grid_coords.y += step.y;
                     t_max.y += delta.y;
-                    if (res.did_hit)
-                    {
-                        res.hit_normal   = Vector3(0.0f, static_cast<float>(-step.y), 0.0f);
-                        res.hit_position = ray.origin + ray.direction * t_max.y;
-                    }
+
+                    res.hit_normal   = Vector3(0.0f, static_cast<float>(-step.y), 0.0f);
+                    res.hit_position = ray.origin + ray.direction * t_max.y;
                 }
                 else
                 {
                     cur_grid_coords.z += step.z;
                     t_max.z += delta.z;
-                    if (res.did_hit)
-                    {
-                        res.hit_normal   = Vector3(0.0f, 0.0f, static_cast<float>(-step.z));
-                        res.hit_position = ray.origin + ray.direction * t_max.z;
-                    }
+
+                    res.hit_normal   = Vector3(0.0f, 0.0f, static_cast<float>(-step.z));
+                    res.hit_position = ray.origin + ray.direction * t_max.z;
                 }
             }
 
@@ -126,7 +118,8 @@ namespace Engine
 
         void VoxelSceneRenderer::RenderScene(int64_t delta)
         {
-            Vector3 camera_pos      = camera->GetPosition();
+            Vector3 camera_pos = camera->GetPosition();
+
             Vector3 camera_look     = camera->GetLookDirection();
             float camera_fov        = camera->GetFOV();
             Matrix4 view_matrix_inv = camera->GetViewMatrix().GetInverted();
@@ -145,7 +138,7 @@ namespace Engine
                     // camera transform
                     pixel_point *= view_matrix_inv;
 
-                    Ray ray = Ray(camera_pos, (pixel_point - camera_pos).GetNormalized());
+                    Ray ray = Ray(camera_pos, camera_pos.GetDirectionalTo(pixel_point));
 
                     MarchResult march_res = MarchUntilHit(ray, 1000);
 
@@ -153,14 +146,10 @@ namespace Engine
                         continue;
 
                     RGBColor voxel_color = voxel_color_map[march_res.voxel_data_ptr->type][march_res.voxel_data_ptr->color_index];
-                    /*
-                                        Vector3 light_dir = Vector3(-1.0f, -0.5f, 0.0f);
+                    RGBColor lit_color   = lighting_system->GetLitColorAt(march_res.hit_position, march_res.hit_normal, camera_pos, MaterialProperties());
 
-                                        float intensity = march_res.hit_normal.GetDotProduct(-light_dir);
-                                        intensity       = std::clamp(intensity, 0.0f, 1.0f);
+                    voxel_color.BlendMultiply(lit_color);
 
-                                        voxel_color.BlendMultiply(intensity);
-                    */
                     DrawPixel(x, y, voxel_color);
                 }
             }

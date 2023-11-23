@@ -86,6 +86,19 @@ namespace Engine
                 return final_color;
             }
 
+            RGBColor LightingSystem::GetLitColorAt(const Vector3& position, const Vector3& normal, const Vector3& cam_pos, const MaterialProperties& material_properties) const
+            {
+                RGBColor final_color;
+
+                uint8_t i = 0;
+                for (std::shared_ptr<ILight> light : lights)
+                {
+                    final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
+                }
+
+                return final_color;
+            }
+
             void LightingSystem::ClearDepthBuffers()
             {
                 for (std::shared_ptr<ILight> light : lights)

@@ -41,6 +41,7 @@ namespace Engine
                 const std::vector<std::shared_ptr<ILight>> GetLights() const;
 
                 [[nodiscard]] RGBColor GetLitColorAt(const Vertex& vertex, const Vector3& cam_pos, const Vector3 vertex_position_lights[], const MaterialProperties& material_properties) const;
+                [[nodiscard]] RGBColor GetLitColorAt(const Vector3& position, const Vector3& normal, const Vector3& cam_pos, const MaterialProperties& material_properties) const;
                 [[nodiscard]] RGBColor GetLitColorAt(const Vector3& position, const Vector3& normal, const Vector3& cam_pos, const Vector3 position_lights[], const MaterialProperties& material_properties) const;
 
                 void ClearDepthBuffers();

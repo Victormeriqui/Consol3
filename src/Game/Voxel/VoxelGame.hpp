@@ -46,6 +46,8 @@ namespace Game
 
             virtual void LoadResources() override;
 
+            std::shared_ptr<DirectionalLight> dir_light;
+
             float mov_speed = 0.05f;
             bool shifting   = false;
 
