@@ -15,7 +15,7 @@ namespace Engine
         {
             using namespace Math;
 
-            PointLight::PointLight(const Vector3& position, float range, RGBColor color) : position(position), attenuation({ 0.1f, 0.1f, 1.0f }), range(range), color(color)
+            PointLight::PointLight(const Vector3& position, float range, RGBColor color) : position(position), attenuation({ 0.1f, 0.0f, 0.0f }), range(range), color(color)
             {
             }
 

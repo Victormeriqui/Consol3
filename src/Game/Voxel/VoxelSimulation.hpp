@@ -21,7 +21,7 @@ namespace Game
                 if (update_tick % 3 != 0)
                     return;
 
-                for (int y = VOXEL_GRID_UP - 1; y > VOXEL_GRID_DOWN + 1; y--)
+                for (int y = VOXEL_GRID_UP; y > VOXEL_GRID_DOWN; y--)
                 {
                     for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT; x++)
                     {
@@ -68,7 +68,7 @@ namespace Game
                 if (update_tick % 3 != 0)
                     return;
 
-                for (int y = VOXEL_GRID_DOWN; y < VOXEL_GRID_UP - 1; y++)
+                for (int y = VOXEL_GRID_DOWN; y < VOXEL_GRID_UP; y++)
                 {
                     for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT; x++)
                     {
@@ -87,7 +87,7 @@ namespace Game
                                 continue;
 
                             // potential swap voxel, down in the case of liquids and solids
-                            Vector3I swap_voxel_pos = cur_voxel_pos - VoxelUtil::down;
+                            Vector3I swap_voxel_pos = cur_voxel_pos + VoxelUtil::down;
 
                             if (voxel_grid->IsPositionInsideGrid(swap_voxel_pos))
                             {
@@ -112,9 +112,11 @@ namespace Game
                                 if (!voxel_grid->IsPositionInsideGrid(side_pos))
                                     continue;
 
-                                VoxelElement side_voxel_element = voxel_grid->GetVoxelElement(side_pos);
+                                VoxelElement side_voxel_element    = voxel_grid->GetVoxelElement(side_pos);
+                                VoxelElement side_voxel_element_up = voxel_grid->GetVoxelElement(side_pos - VoxelUtil::up);
 
-                                if (side_voxel_element == VoxelElement::AIR)
+                                // only move diagonally down if the side is also clear, otherwise we'd teleport diagonally
+                                if (side_voxel_element == VoxelElement::AIR && side_voxel_element_up == VoxelElement::AIR)
                                 {
                                     VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, side_pos);
                                     moved_down_side = true;

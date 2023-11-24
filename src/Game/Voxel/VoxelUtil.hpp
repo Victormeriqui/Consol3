@@ -23,13 +23,13 @@ namespace Game
             static Vector3I right    = Vector3I(1, 0, 0);
             static Vector3I forward  = Vector3I(0, 0, 1);
             static Vector3I backward = Vector3I(0, 0, -1);
-            static Vector3I up       = Vector3I(0, -1, 0);
-            static Vector3I down     = Vector3I(0, 1, 0);
+            static Vector3I up       = Vector3I(0, 1, 0);
+            static Vector3I down     = Vector3I(0, -1, 0);
 
             static std::array<Vector3I, 4> sides                 = { left, right, forward, backward };
-            static std::array<Vector3I, 4> sides_down            = { left - down, right - down, forward - down, backward - down };
-            static std::array<Vector3I, 4> sides_up              = { left - up, right - up, forward - up, backward - up };
-            static std::array<Vector3I, 9> up_sides_and_sides_up = { up, left, right, forward, backward, left - up, right - up, forward - up, backward - up };
+            static std::array<Vector3I, 4> sides_down            = { left + down, right + down, forward + down, backward + down };
+            static std::array<Vector3I, 4> sides_up              = { left + up, right + up, forward + up, backward + up };
+            static std::array<Vector3I, 9> up_sides_and_sides_up = { up, left, right, forward, backward, left + up, right + up, forward + up, backward + up };
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, uint8_t color_index)
             {

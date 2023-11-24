@@ -33,11 +33,22 @@ namespace Game
 
             camera->SetPosition(Vector3(0, 5, -1));
 
-            this->lighting_system->SetAmbientLightColor(RGBColor(10, 10, 10));
+            lighting_system->SetAmbientLightColor(RGBColor(10, 10, 10));
 
             dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
             dir_light->SetColor(RGBColor(255, 255, 255));
-            this->lighting_system->AddLight(dir_light);
+            lighting_system->AddLight(dir_light);
+
+            point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
+            point_light->SetRange(300.0f);
+            point_light->SetColor(RGBColor(255, 255, 255));
+            // lighting_system->AddLight(point_light);
+
+            spot_light = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
+            spot_light->SetRange(300.0f);
+            spot_light->SetAngle(20.0f);
+            spot_light->SetColor(RGBColor(255, 255, 255));
+            // lighting_system->AddLight(spot_light);
         }
 
         void VoxelGame::LoadResources()
@@ -46,7 +57,7 @@ namespace Game
             {
                 for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT - 1; x++)
                 {
-                    voxel_grid->SetVoxelData(Vector3I(x, 0, z), { VoxelElement::STONE, 0 });
+                    voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
         }
@@ -110,8 +121,15 @@ namespace Game
             if (input_manager->IsKeyHeld(Key::E))
                 cursor_depth += 0.2f;
 
-            if (input_manager->IsKeyHeld(Key::MOUSE4))
+            if (input_manager->IsKeyHeld(Key::MOUSE3))
                 dir_light->SetDirection(camera->GetLookDirection());
+            if (input_manager->IsKeyHeld(Key::MOUSE4))
+                point_light->SetPosition(camera->GetPosition());
+            if (input_manager->IsKeyHeld(Key::MOUSE5))
+            {
+                spot_light->SetPosition(camera->GetPosition());
+                spot_light->SetDirection(camera->GetLookDirection());
+            }
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos, selected_voxel);
