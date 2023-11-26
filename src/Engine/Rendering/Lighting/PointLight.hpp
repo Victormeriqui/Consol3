@@ -29,8 +29,8 @@ namespace Engine
             public:
                 PointLight(const Vector3& position = Vector3(), float range = 1.0f, RGBColor color = RGBColor());
 
-                [[nodiscard]] Vector3 GetPosition() const;
-                void SetPosition(const Vector3& position);
+                virtual [[nodiscard]] Vector3 GetPosition() const override;
+                virtual void SetPosition(const Vector3& position) override;
 
                 [[nodiscard]] float GetRange() const;
                 void SetRange(float range);

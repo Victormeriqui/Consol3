@@ -4,10 +4,12 @@
 
 #include "Camera.hpp"
 #include "Display/IFrameDrawer.hpp"
+#include "Display/NullFrameDrawer.hpp"
 #include "Display/RGBColor.hpp"
 #include "Engine/Resources/ResourceManager.hpp"
 #include "Lighting/LightingSystem.hpp"
 #include "Ray.hpp"
+#include "RayMarcher.hpp"
 #include "Vector3I.hpp"
 #include "VoxelGrid.hpp"
 
@@ -23,42 +25,26 @@ namespace Engine
         using namespace Lighting;
         using namespace Math;
 
-        struct MarchResult
-        {
-            bool did_hit;
-            Vector3 hit_position;
-            Vector3 hit_normal;
-            VoxelData* voxel_data_ptr;
-        };
-
         class VoxelSceneRenderer
         {
         private:
             std::shared_ptr<IFrameDrawer> frame_drawer;
-            std::shared_ptr<ResourceManager> resource_manager;
+            // a non functioning frame drawer for the shadowmap ray marcher
+            std::shared_ptr<NullFrameDrawer> null_frame_drawer;
+
+            RayMarcher ray_marcher;
+            // a secondary ray marcher that writes to the light's depthbuffer, this is prefered so the main  ray marcher doesn't need to be affected
+            RayMarcher shadowmap_ray_marcher;
 
             std::shared_ptr<LightingSystem> lighting_system;
-
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid> voxel_grid;
 
-            [[nodiscard]] Vector3I CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords, const Vector3& direction) const;
-            [[nodiscard]] Vector3 CalculateTMax(const Vector3I& near_grid_coords, const Ray& ray) const;
-            [[nodiscard]] Vector3 CalculateDelta(const Vector3& direction) const;
-
-            [[nodiscard]] int CalculateTMax(float direction_component) const;
-
-            MarchResult MarchUntilHit(const Ray& ray, uint16_t max_iterations) const;
+            void RenderShadowMapPass();
 
         public:
-            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer,
-                               std::shared_ptr<ResourceManager> resource_manager,
-                               std::shared_ptr<LightingSystem> lighting_system,
-                               std::shared_ptr<Camera> camera,
-                               std::shared_ptr<VoxelGrid> voxel_grid);
-
-            void SetVoxelPalette(std::unique_ptr<std::map<uint8_t, RGBColor>> voxel_palette);
+            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid);
 
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 

@@ -62,12 +62,12 @@ namespace Engine
             grid.fill({ VoxelElement::AIR });
         }
 
-        [[nodiscard]] Vector3I GetGridPosition(const Vector3& world_pos)
+        [[nodiscard]] Vector3I GetGridPosition(const Vector3& world_pos) const
         {
             return Vector3I(static_cast<int>(std::floor(world_pos.x)), static_cast<int>(std::floor(world_pos.y)), static_cast<int>(std::floor(world_pos.z)));
         }
 
-        [[nodiscard]] VoxelData* GetVoxelDataPtr(const Vector3I& pos)
+        [[nodiscard]] const VoxelData* GetVoxelDataPtr(const Vector3I& pos) const
         {
             return &grid[GetIndexFromCoords(pos)];
         }

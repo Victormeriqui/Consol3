@@ -35,6 +35,9 @@ namespace Engine
             public:
                 DirectionalLight(const Vector3& direction = Vector3(), RGBColor color = RGBColor());
 
+                virtual [[nodiscard]] Vector3 GetPosition() const override;
+                virtual void SetPosition(const Vector3& position) override;
+
                 [[nodiscard]] Vector3 GetDirection() const;
                 void SetDirection(const Vector3& direction);
 

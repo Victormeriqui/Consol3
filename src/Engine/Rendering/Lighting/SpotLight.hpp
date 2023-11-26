@@ -40,8 +40,8 @@ namespace Engine
             public:
                 SpotLight(const Vector3& position = Vector3(), const Vector3& direction = Vector3(), float range = 1.0f, RGBColor color = RGBColor());
 
-                [[nodiscard]] Vector3 GetPosition() const;
-                void SetPosition(const Vector3& position);
+                virtual [[nodiscard]] Vector3 GetPosition() const override;
+                virtual void SetPosition(const Vector3& position) override;
 
                 [[nodiscard]] Vector3 GetDirection() const;
                 void SetDirection(const Vector3& direction);

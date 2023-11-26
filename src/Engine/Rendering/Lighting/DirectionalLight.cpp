@@ -39,6 +39,15 @@ namespace Engine
                 view_mat = rotation_mat;
             }
 
+            Vector3 DirectionalLight::GetPosition() const
+            {
+                return Vector3(0.0f, 0.0f, 0.0f) + -direction * 10.0f;
+            }
+
+            void DirectionalLight::SetPosition(const Vector3& position)
+            {
+            }
+
             Vector3 DirectionalLight::GetDirection() const
             {
                 return direction;

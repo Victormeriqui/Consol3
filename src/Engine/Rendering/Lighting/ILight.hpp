@@ -53,6 +53,9 @@ namespace Engine
                 [[nodiscard]] virtual RGBColor GetColor() const   = 0;
                 virtual void SetColor(RGBColor color)             = 0;
 
+                [[nodiscard]] virtual Vector3 GetPosition() const = 0;
+                virtual void SetPosition(const Vector3& position) = 0;
+
                 // i dislike the need for the referece_wrapper here, but C++ optionals don't allow references
                 [[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetProjectionMatrix() const = 0;
                 [[nodiscard]] virtual std::optional<std::reference_wrapper<const Matrix4>> GetViewMatrix() const       = 0;
