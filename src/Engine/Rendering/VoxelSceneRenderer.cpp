@@ -118,12 +118,19 @@ namespace Engine
 
         void VoxelSceneRenderer::RenderScene(int64_t delta)
         {
+            camera->ClearDepthBuffer();
+            // lighting_system->ClearDepthBuffers();
+
             Vector3 camera_pos = camera->GetPosition();
 
             Vector3 camera_look     = camera->GetLookDirection();
             float camera_fov        = camera->GetFOV();
+            Matrix4 view_matrix     = camera->GetViewMatrix();
+            Matrix4 proj_matrix     = camera->GetProjectionMatrix();
             Matrix4 view_matrix_inv = camera->GetViewMatrix().GetInverted();
             Matrix4 proj_matrix_inv = camera->GetProjectionMatrix().GetInverted();
+
+            DepthBuffer& depth_buffer = camera->GetDepthBuffer();
 
             for (uint16_t y = 0; y < frame_drawer->GetFrameBufferHeight(); y++)
             {
@@ -133,17 +140,26 @@ namespace Engine
                     float ndc_y = 1.0f - 2.0f * static_cast<float>(y) / static_cast<float>(frame_drawer->GetFrameBufferHeight() - 1);
 
                     Vector3 pixel_point = Vector3(ndc_x, ndc_y, 1.0f);
-                    // ndc to world
-                    pixel_point *= proj_matrix_inv;
-                    // camera transform
-                    pixel_point *= view_matrix_inv;
+                    Vertex vert         = Vertex(pixel_point);
+                    // ndc to view
+                    // pixel_point *= proj_matrix_inv;
+                    vert *= proj_matrix_inv;
 
-                    Ray ray = Ray(camera_pos, camera_pos.GetDirectionalTo(pixel_point));
+                    // view to world
+                    // pixel_point *= view_matrix_inv;
+                    vert *= view_matrix_inv;
+                    vert.PerspectiveDivide();
+
+                    Ray ray = Ray(camera_pos, camera_pos.GetDirectionalTo(vert.GetPosition()));
 
                     MarchResult march_res = MarchUntilHit(ray, 1000);
 
                     if (!march_res.did_hit)
                         continue;
+
+                    Vector3 world_hit_point = march_res.hit_position;
+                    world_hit_point *= view_matrix;
+                    depth_buffer.SetValue(x, y, world_hit_point.z);
 
                     RGBColor voxel_color = voxel_color_map[march_res.voxel_data_ptr->type][march_res.voxel_data_ptr->color_index];
                     RGBColor lit_color   = lighting_system->GetLitColorAt(march_res.hit_position, march_res.hit_normal, camera_pos, MaterialProperties());
@@ -153,6 +169,19 @@ namespace Engine
                     DrawPixel(x, y, voxel_color);
                 }
             }
+
+            for (uint16_t y = 0; y < frame_drawer->GetFrameBufferHeight(); y++)
+            {
+                for (uint16_t x = 0; x < frame_drawer->GetFrameBufferWidth(); x++)
+                {
+                    // float z     = depth_buffer.GetValue(x, y);
+                    float z     = lighting_system->GetLights().at(0)->GetLightDepthBuffer().value().get().GetValue(x, y);
+                    uint16_t nx = Util::LerpCast<uint16_t>(x / 200.0f, 0, 100);
+                    uint16_t ny = Util::LerpCast<uint16_t>(y / 200.0f, 0, 100);
+                    DrawPixel(nx, ny, RGBColor(Util::Lerp(z, 1.0f, 0.0f), Util::Lerp(z, 1.0f, 0.0f), Util::Lerp(z, 1.0f, 0.0f)));
+                }
+            }
         }
+
     }
 }
