@@ -15,7 +15,7 @@ namespace Engine
     {
         namespace Lighting
         {
-            float ortho_size = 3;
+            float ortho_size = 100;
 
             DirectionalLight::DirectionalLight(const Vector3& direction, RGBColor color) :
                 color(RGBColor()),
@@ -34,14 +34,14 @@ namespace Engine
                 Vector3 up = direction.GetCrossProduct(right);
                 up.Normalize();
 
-                Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, up, direction);
+                Matrix4 rotation_mat = Matrix4().SetDirectionalRotation(right, -up, direction);
 
                 view_mat = rotation_mat;
             }
 
             Vector3 DirectionalLight::GetPosition() const
             {
-                return Vector3(0.0f, 0.0f, 0.0f) + -direction * 10.0f;
+                return Vector3();
             }
 
             void DirectionalLight::SetPosition(const Vector3& position)

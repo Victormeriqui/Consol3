@@ -67,6 +67,7 @@ namespace Engine
 
                     const Vector3 position_light = position_lights[i++];
 
+                    // out of light's view range (outside the NDC coords from its perspective)
                     if (!Util::IsInRange<float>(position_light.x, -1.0f, 1.0f) || !Util::IsInRange<float>(position_light.y, -1.0f, 1.0f))
                     {
                         final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
@@ -81,19 +82,6 @@ namespace Engine
 
                     if (position_light.z < (light_depth + light->GetBias().value()))
                         final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
-                }
-
-                return final_color;
-            }
-
-            RGBColor LightingSystem::GetLitColorAt(const Vector3& position, const Vector3& normal, const Vector3& cam_pos, const MaterialProperties& material_properties) const
-            {
-                RGBColor final_color;
-
-                uint8_t i = 0;
-                for (std::shared_ptr<ILight> light : lights)
-                {
-                    final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
                 }
 
                 return final_color;

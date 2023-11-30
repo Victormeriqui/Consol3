@@ -31,11 +31,12 @@ namespace Game
         {
             LoadResources();
 
-            camera->SetPosition(Vector3(0, 5, -1));
+            camera->SetPosition(Vector3(-2, -48, 1));
+            camera->SetRotation(Angle(0, -200, 0));
 
-            lighting_system->SetAmbientLightColor(RGBColor(10, 10, 10));
+            lighting_system->SetAmbientLightColor(RGBColor(100, 100, 100));
 
-            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -0.5f, 0));
+            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -1));
             dir_light->SetColor(RGBColor(255, 255, 255));
             lighting_system->AddLight(dir_light);
 
@@ -44,11 +45,11 @@ namespace Game
             point_light->SetColor(RGBColor(255, 255, 255));
             // lighting_system->AddLight(point_light);
 
-            spot_light = std::make_shared<SpotLight>(Vector3(0, 0.1f, -3.0f), Vector3(0, 0, 1));
+            spot_light = std::make_shared<SpotLight>(Vector3(0, -48, 4), Vector3(0, -0.5f, -1));
             spot_light->SetRange(300.0f);
             spot_light->SetAngle(20.0f);
-            spot_light->SetColor(RGBColor(255, 255, 255));
-            // lighting_system->AddLight(spot_light);
+            spot_light->SetColor(RGBColor(255, 0, 0));
+            lighting_system->AddLight(spot_light);
         }
 
         void VoxelGame::LoadResources()
@@ -60,6 +61,27 @@ namespace Game
                     voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
+
+            voxel_grid->SetVoxelData(Vector3I(0, VOXEL_GRID_DOWN + 1, 0), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 1, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 2, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 3, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 4, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 5, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 6, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 7, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 9, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 10, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 11, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 12, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 13, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 14, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 15, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 16, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 17, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 18, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 19, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
+            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 20, VOXEL_GRID_BACKWARDS + 30), { VoxelElement::SAND, 0 });
         }
 
         void VoxelGame::Update()

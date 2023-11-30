@@ -40,6 +40,15 @@ namespace Engine
 
             std::shared_ptr<IFrameDrawer> frame_drawer;
 
+            Vector3 hit_ndc_light_space[10];
+
+            Ray SetupRayPerspective(uint16_t x, uint16_t y, const Vector3& origin) const;
+            Ray SetupRayOrtho(uint16_t x, uint16_t y) const;
+            Vector3 HitPositionToNDCPerspective(const Vector3& hit_pos) const;
+            Vector3 HitPositionToNDCOrtho(Vector3 hit_pos) const;
+            void SetupLightSpacePerspective(const Vector3& hit_pos, const LightingSystem& lighting_system);
+            void SetupLightSpaceOrtho(const Vector3& hit_pos, const LightingSystem& lighting_system);
+
             Vector3I CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords, const Vector3& direction) const;
             Vector3 CalculateTMax(const Vector3I& near_grid_coords, const Ray& ray) const;
             Vector3 CalculateDelta(const Vector3& direction) const;
@@ -54,8 +63,9 @@ namespace Engine
             void SetViewMatrix(const Matrix4& view_matrix);
             void SetProjectionMatrix(const Matrix4& projection_matrix);
 
-            void DrawVoxelGridLight(DepthBuffer& depthbuffer, const VoxelGrid& voxel_grid, const Vector3& origin);
-            void DrawVoxelGridCamera(DepthBuffer& depthbuffer, const VoxelGrid& voxel_grid, const Vector3& origin, const LightingSystem& lighting_system);
+            void DrawVoxelGridDepthOnlyPerspective(DepthBuffer& depthbuffer, const VoxelGrid& voxel_grid, const Vector3& origin);
+            void DrawVoxelGridDepthOnlyOrtho(DepthBuffer& depthbuffer, const VoxelGrid& voxel_grid);
+            void DrawVoxelGridPerspective(DepthBuffer& depthbuffer, const VoxelGrid& voxel_grid, const Vector3& origin, const LightingSystem& lighting_system);
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
         };
     }
