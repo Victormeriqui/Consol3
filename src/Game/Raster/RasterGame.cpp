@@ -175,7 +175,7 @@ namespace Game
                 mov_speed = 0.05f;
             }
 
-            if (input_manager->IsKeyHeld(Key::MOUSE1))
+            if (input_manager->IsKeyHeld(Key::MOUSE3))
             {
                 dir_light->SetDirection(camera->GetLookDirection());
                 point_light->SetPosition(camera->GetPosition());

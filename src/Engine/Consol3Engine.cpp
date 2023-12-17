@@ -1,5 +1,6 @@
 #include "Consol3Engine.hpp"
 
+#include "Game/Dual/DualGame.hpp"
 #include "Game/Raster/RasterGame.hpp"
 #include "Game/Voxel/VoxelGame.hpp"
 
@@ -18,7 +19,9 @@ namespace Engine
     Consol3Engine::Consol3Engine(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
         frame_drawer(std::move(frame_drawer)),
         // game(std::make_unique<RasterGame>(this->frame_drawer, input_manager)),
-        game(std::make_unique<VoxelGame>(this->frame_drawer, input_manager)),
+        //  game(std::make_unique<VoxelGame>(this->frame_drawer, input_manager)),
+        game(std::make_unique<DualGame>(this->frame_drawer, input_manager)),
+
         running(false),
         delta(0),
         input_manager(input_manager)

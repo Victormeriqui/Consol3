@@ -9,11 +9,11 @@
 #include <map>
 #include <optional>
 
-namespace Engine
+namespace Game
 {
-    namespace Resources
+    namespace Raster
     {
-
+        using namespace Engine;
         using namespace Rendering;
 
         static Vector3 icosahedron_verts[12] = { Vector3(-1, 0, 1), Vector3(1, 0, 1),   Vector3(-1, 0, -1), Vector3(1, 0, -1), Vector3(0, 1, 1),  Vector3(0, 1, -1),

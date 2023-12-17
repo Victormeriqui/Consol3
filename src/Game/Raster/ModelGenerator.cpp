@@ -7,9 +7,9 @@
 #include <cmath>
 #include <vector>
 
-namespace Engine
+namespace Game
 {
-    namespace Resources
+    namespace Raster
     {
 
         using namespace Engine::Rendering;

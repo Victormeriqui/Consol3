@@ -11,9 +11,9 @@
 https://en.wikipedia.org/wiki/Perlin_noise
 */
 
-namespace Engine
+namespace Game
 {
-    namespace Resources
+    namespace Raster
     {
 
         using namespace Math;
