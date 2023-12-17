@@ -42,7 +42,13 @@ namespace Engine
                 success = texture_loader_bmp.LoadTexture(filename, imagebuffer, load_options);
 
                 if (!success)
-                    return false;
+                {
+                    // try again one level up due to Windows cmake build folder structure
+                    success = texture_loader_bmp.LoadTexture("../" + filename, imagebuffer, load_options);
+
+                    if (!success)
+                        return false;
+                }
 
                 texture_cache.emplace(filename, std::make_shared<Texture>(imagebuffer, wrap_options));
 
