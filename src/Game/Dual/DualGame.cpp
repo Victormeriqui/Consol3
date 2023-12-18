@@ -34,11 +34,11 @@ namespace Game
 
             camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
 
-            lighting_system->SetAmbientLightColor(RGBColor(100, 100, 100));
+            lighting_system->SetAmbientLightColor(RGBColor(70, 70, 70));
 
-            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -1));
+            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -0.5f));
             dir_light->SetColor(RGBColor(255, 255, 255));
-            lighting_system->AddLight(dir_light);
+            // lighting_system->AddLight(dir_light);
 
             point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
             point_light->SetRange(300.0f);
@@ -48,17 +48,16 @@ namespace Game
             spot_light = std::make_shared<SpotLight>(Vector3(0, -48, 4), Vector3(0, -0.5f, -1));
             spot_light->SetRange(300.0f);
             spot_light->SetAngle(20.0f);
-            spot_light->SetColor(RGBColor(255, 0, 0));
+            spot_light->SetColor(RGBColor(255, 255, 255));
             lighting_system->AddLight(spot_light);
 
             floor = StaticMesh();
-            floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -47, -6));
+            floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -42, -6));
 
             penguin = AnimatedMesh();
-            penguin
-                .SetModelResource("../res/penguin.md2")
-                //.SetTextureResource("res/bricks.bmp")
-                .SetPosition(Vector3(1.0f, -45.9f, 0.0f))
+            penguin.SetModelResource("../res/penguin.md2")
+                .SetTextureResource("../res/bricks.bmp")
+                .SetPosition(Vector3(1.0f, -40.9f, 0.0f))
                 .SetScale(Vector3(0.05f, 0.05f, 0.05f))
                 .SetRotation(Angle(-1.5708f, 0.0f, 0.0f))
                 .SetColor(RGBColor(255, 255, 255));

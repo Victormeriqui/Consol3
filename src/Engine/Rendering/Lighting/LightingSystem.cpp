@@ -75,8 +75,8 @@ namespace Engine
                         continue;
                     }
 
-                    uint16_t depthbuffer_x = (uint16_t)Util::Lerp(position_light.x, -1, 1, 0, 199);
-                    uint16_t depthbuffer_y = (uint16_t)Util::Lerp(position_light.y, 1, -1, 0, 199);
+                    uint16_t depthbuffer_x = (uint16_t)Util::Lerp(position_light.x, -1, 1, 0, 200);
+                    uint16_t depthbuffer_y = (uint16_t)Util::Lerp(position_light.y, 1, -1, 0, 200);
 
                     float light_depth = light->GetLightDepthBuffer().value().get().GetValue(depthbuffer_x, depthbuffer_y);
 
