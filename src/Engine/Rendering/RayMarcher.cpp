@@ -209,7 +209,8 @@ namespace Engine
 
                     Vector3 hit_ndc = HitPositionToNDCPerspective(march_res.hit_position);
 
-                    depthbuffer.SetValue(x, y, hit_ndc.z);
+                    if (depthbuffer.GetValue(x, y) > hit_ndc.z)
+                        depthbuffer.SetValue(x, y, hit_ndc.z);
                 }
             }
         }
@@ -229,7 +230,8 @@ namespace Engine
 
                     Vector3 hit_ndc = HitPositionToNDCOrtho(march_res.hit_position);
 
-                    depthbuffer.SetValue(x, y, hit_ndc.z);
+                    if (depthbuffer.GetValue(x, y) > hit_ndc.z)
+                        depthbuffer.SetValue(x, y, hit_ndc.z);
                 }
             }
         }
@@ -247,10 +249,10 @@ namespace Engine
                     if (!march_res.did_hit)
                         continue;
 
-                    if (!march_res.did_hit)
-                        continue;
+                    Vector3 hit_ndc = HitPositionToNDCPerspective(march_res.hit_position);
 
-                    Vector3 hit_ndc = HitPositionToNDCOrtho(march_res.hit_position);
+                    if (depthbuffer.GetValue(x, y) < hit_ndc.z)
+                        continue;
 
                     depthbuffer.SetValue(x, y, hit_ndc.z);
 

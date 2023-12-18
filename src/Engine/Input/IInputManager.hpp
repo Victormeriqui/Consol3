@@ -23,6 +23,7 @@ namespace Engine
             A,
             S,
             D,
+            P,
             TAB,
             MOUSE1,
             MOUSE2,

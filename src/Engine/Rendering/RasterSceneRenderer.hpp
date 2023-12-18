@@ -64,6 +64,7 @@ namespace Engine
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 
             void RenderScene(int64_t delta);
+            void RenderSceneShared(int64_t delta);
         };
     }
 }

@@ -35,6 +35,8 @@ namespace Engine
                 return 0x53;
             case Key::D:
                 return 0x44;
+            case Key::P:
+                return 0x50;
             case Key::TAB:
                 return VK_TAB;
             case Key::MOUSE1:

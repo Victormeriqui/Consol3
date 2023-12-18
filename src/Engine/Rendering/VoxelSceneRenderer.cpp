@@ -51,6 +51,11 @@ namespace Engine
             camera->ClearDepthBuffer();
             lighting_system->ClearDepthBuffers();
 
+            RenderSceneShared(delta);
+        }
+
+        void VoxelSceneRenderer::RenderSceneShared(int64_t delta)
+        {
             RenderShadowMapPass();
 
             ray_marcher.SetViewMatrix(camera->GetViewMatrix());

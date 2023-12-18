@@ -88,6 +88,11 @@ namespace Engine
             camera->ClearDepthBuffer();
             lighting_system->ClearDepthBuffers();
 
+            RenderSceneShared(delta);
+        }
+
+        void RasterSceneRenderer::RenderSceneShared(int64_t delta)
+        {
             RenderShadowMapPass();
 
             rasterizer.SetViewMatrix(camera->GetViewMatrix());
