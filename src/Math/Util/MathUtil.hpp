@@ -46,7 +46,8 @@ namespace Math
             return (T)((1 - val) * min + val * max);
         }
 
-        [[nodiscard]] constexpr inline static bool IsInRange(float val, float min, float max)
+        template<typename T>
+        [[nodiscard]] constexpr inline static bool IsInRange(T val, T min, T max)
         {
             return val >= min && val <= max;
         }

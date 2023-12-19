@@ -1,4 +1,4 @@
-#include "SceneRenderer.hpp"
+#include "RasterSceneRenderer.hpp"
 
 #include "AnimatedMesh.hpp"
 #include "TextureConstants.hpp"
@@ -7,26 +7,20 @@ namespace Engine
 {
     namespace Rendering
     {
-        SceneRenderer::SceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system) :
+        RasterSceneRenderer::RasterSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera) :
             frame_drawer(std::move(frame_drawer)),
             null_frame_drawer(std::make_shared<NullFrameDrawer>()),
             rasterizer(this->frame_drawer),
             shadowmap_rasterizer(null_frame_drawer),
             resource_manager(std::move(resource_manager)),
             lighting_system(std::move(lighting_system)),
-            camera(std::make_shared<Camera>())
+            camera(std::move(camera))
         {
             shader_shaded.SetLightingSystem(this->lighting_system);
-        }
-
-        void SceneRenderer::SetCamera(std::shared_ptr<Camera> camera)
-        {
-            this->camera = std::move(camera);
-
             rasterizer.SetProjectionMatrix(this->camera->GetProjectionMatrix());
         }
 
-        void SceneRenderer::DrawMesh(AbstractMesh& mesh)
+        void RasterSceneRenderer::DrawMesh(AbstractMesh& mesh)
         {
             render_buffer_plain.push_back(std::reference_wrapper(mesh));
 
@@ -34,7 +28,7 @@ namespace Engine
                 updatable_animated_meshes.push_back(std::reference_wrapper(dynamic_cast<AnimatedMesh&>(mesh)));
         }
 
-        void SceneRenderer::DrawShadedMesh(AbstractMesh& mesh)
+        void RasterSceneRenderer::DrawShadedMesh(AbstractMesh& mesh)
         {
             render_buffer_shaded.push_back(std::reference_wrapper(mesh));
 
@@ -42,13 +36,13 @@ namespace Engine
                 updatable_animated_meshes.push_back(std::reference_wrapper(dynamic_cast<AnimatedMesh&>(mesh)));
         }
 
-        void SceneRenderer::RenderStaticMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
+        void RasterSceneRenderer::RenderStaticMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
         {
             rasterizer.SetModelMatrix(mesh.GetTransform());
             rasterizer.DrawVertexBuffer(depthbuffer, resource_manager->GetLoadedStaticModel(mesh.GetModelResource()).value()->GetVertexBuffer(), color, shader);
         }
 
-        void SceneRenderer::RenderAnimatedMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
+        void RasterSceneRenderer::RenderAnimatedMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
         {
             AnimatedMesh& animated_mesh = dynamic_cast<AnimatedMesh&>(mesh);
 
@@ -61,7 +55,7 @@ namespace Engine
             animated_mesh.UpdateAnimation();
         }
 
-        void SceneRenderer::RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
+        void RasterSceneRenderer::RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color)
         {
             if (mesh.IsAnimated())
                 RenderAnimatedMesh(rasterizer, mesh, depthbuffer, shader, color);
@@ -69,7 +63,7 @@ namespace Engine
                 RenderStaticMesh(rasterizer, mesh, depthbuffer, shader, color);
         }
 
-        void SceneRenderer::RenderShadowMapPass()
+        void RasterSceneRenderer::RenderShadowMapPass()
         {
             for (std::shared_ptr<ILight> light : lighting_system->GetLights())
             {
@@ -89,11 +83,16 @@ namespace Engine
             }
         }
 
-        void SceneRenderer::RenderScene(int64_t delta)
+        void RasterSceneRenderer::RenderScene(int64_t delta)
         {
             camera->ClearDepthBuffer();
             lighting_system->ClearDepthBuffers();
 
+            RenderSceneShared(delta);
+        }
+
+        void RasterSceneRenderer::RenderSceneShared(int64_t delta)
+        {
             RenderShadowMapPass();
 
             rasterizer.SetViewMatrix(camera->GetViewMatrix());
@@ -133,7 +132,7 @@ namespace Engine
             updatable_animated_meshes.clear();
         }
 
-        void SceneRenderer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
+        void RasterSceneRenderer::DrawPixel(uint16_t x, uint16_t y, const RGBColor& color)
         {
             rasterizer.DrawPixel(x, y, color);
         }

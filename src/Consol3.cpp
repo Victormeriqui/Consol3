@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     std::filesystem::path executable_path = std::filesystem::canonical(std::filesystem::path(argv[0])).parent_path();
     std::filesystem::current_path(executable_path);
 
-    FrameDrawerSelection selected_frame_drawer = FrameDrawerSelection::VT8BIT;
+    FrameDrawerSelection selected_frame_drawer = FrameDrawerSelection::VT24BIT;
 
     std::shared_ptr<IFrameDrawer> frame_drawer;
 

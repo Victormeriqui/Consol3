@@ -1,5 +1,5 @@
-#ifndef SCENERENDERER_HPP
-#define SCENERENDERER_HPP
+#ifndef RASTERSCENERENDERER_HPP
+#define RASTERSCENERENDERER_HPP
 
 #include "AbstractMesh.hpp"
 #include "AnimatedMesh.hpp"
@@ -24,8 +24,9 @@ namespace Engine
     {
         using namespace Display;
         using namespace Resources;
+        using namespace Lighting;
 
-        class SceneRenderer
+        class RasterSceneRenderer
         {
         private:
             std::shared_ptr<IFrameDrawer> frame_drawer;
@@ -57,15 +58,13 @@ namespace Engine
             void RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color);
 
         public:
-            SceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system);
-
-            void SetCamera(std::shared_ptr<Camera> camera);
-
+            RasterSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera);
             void DrawMesh(AbstractMesh& mesh);
             void DrawShadedMesh(AbstractMesh& mesh);
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 
             void RenderScene(int64_t delta);
+            void RenderSceneShared(int64_t delta);
         };
     }
 }

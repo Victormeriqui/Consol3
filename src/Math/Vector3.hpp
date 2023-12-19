@@ -2,6 +2,7 @@
 #define VECTOR3_HPP
 
 #include "Matrix4.hpp"
+#include "Vector3I.hpp"
 
 namespace Math
 {
@@ -19,6 +20,10 @@ namespace Math
         }
 
         constexpr Vector3(float x, float y, float z) : x(x), y(y), z(z)
+        {
+        }
+
+        constexpr Vector3(const Vector3I vec) : x(static_cast<float>(vec.x)), y(static_cast<float>(vec.y)), z(static_cast<float>(vec.z))
         {
         }
 
@@ -40,6 +45,8 @@ namespace Math
         [[nodiscard]] Vector3 GetMiddleFrom(const Vector3& other) const;
         [[nodiscard]] Vector3 GetLerped(const Vector3& other, float amount) const;
         [[nodiscard]] Vector3 GetRounded() const;
+        [[nodiscard]] Vector3I GetSignVector() const;
+        [[nodiscard]] Vector3 GetAbsoluteValue() const;
 
         constexpr Vector3& operator+=(const Vector3& other) noexcept
         {

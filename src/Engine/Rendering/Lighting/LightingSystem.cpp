@@ -67,15 +67,16 @@ namespace Engine
 
                     const Vector3 position_light = position_lights[i++];
 
-                    if (!Util::IsInRange(position_light.x, -1.0f, 1.0f) || !Util::IsInRange(position_light.y, -1.0f, 1.0f))
+                    // out of light's view range (outside the NDC coords from its perspective)
+                    if (!Util::IsInRange<float>(position_light.x, -1.0f, 1.0f) || !Util::IsInRange<float>(position_light.y, -1.0f, 1.0f))
                     {
                         final_color += light->GetColorAt(position, normal, cam_pos, material_properties);
 
                         continue;
                     }
 
-                    uint16_t depthbuffer_x = (uint16_t)Util::Lerp(position_light.x, -1, 1, 0, 199);
-                    uint16_t depthbuffer_y = (uint16_t)Util::Lerp(position_light.y, 1, -1, 0, 199);
+                    uint16_t depthbuffer_x = (uint16_t)Util::Lerp(position_light.x, -1, 1, 0, 200);
+                    uint16_t depthbuffer_y = (uint16_t)Util::Lerp(position_light.y, 1, -1, 0, 200);
 
                     float light_depth = light->GetLightDepthBuffer().value().get().GetValue(depthbuffer_x, depthbuffer_y);
 

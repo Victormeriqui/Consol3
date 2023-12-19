@@ -1,5 +1,9 @@
 #include "Consol3Engine.hpp"
 
+#include "Game/Dual/DualGame.hpp"
+#include "Game/Raster/RasterGame.hpp"
+#include "Game/Voxel/VoxelGame.hpp"
+
 #define UPDATE_STEP 10
 
 namespace Engine
@@ -7,15 +11,17 @@ namespace Engine
     using namespace std;
     using namespace std::chrono;
     using namespace Game;
+    using namespace Game::Raster;
+    using namespace Game::Voxel;
     using namespace Display;
     using namespace Rendering;
 
     Consol3Engine::Consol3Engine(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
         frame_drawer(std::move(frame_drawer)),
-        lighting_system(std::make_shared<LightingSystem>()),
-        resource_manager(std::make_shared<ResourceManager>()),
-        scene_renderer(std::make_shared<SceneRenderer>(this->frame_drawer, resource_manager, lighting_system)),
-        game(Consol3Game(scene_renderer, input_manager, resource_manager, lighting_system)),
+        // game(std::make_unique<RasterGame>(this->frame_drawer, input_manager)),
+        //  game(std::make_unique<VoxelGame>(this->frame_drawer, input_manager)),
+        game(std::make_unique<DualGame>(this->frame_drawer, input_manager)),
+
         running(false),
         delta(0),
         input_manager(input_manager)
@@ -82,8 +88,8 @@ namespace Engine
 
             while (accumulator > 0)
             {
-                game.HandleInput();
-                game.Update();
+                game->HandleInput();
+                game->Update();
                 accumulator -= UPDATE_STEP;
             }
 
@@ -97,7 +103,7 @@ namespace Engine
     {
         auto time = this->GetCurrentTime();
         frame_drawer->ClearFrameBuffer();
-        game.Render(delta);
+        game->Render(delta);
         frame_drawer->DisplayFrame();
 
         frame_drawer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(this->GetCurrentTime() - time));
