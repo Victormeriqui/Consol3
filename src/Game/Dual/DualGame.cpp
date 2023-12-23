@@ -34,7 +34,7 @@ namespace Game
 
             camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
 
-            lighting_system->SetAmbientLightColor(RGBColor(70, 70, 70));
+            lighting_system->SetAmbientLightColor(RGBColor(150, 150, 150));
 
             dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -0.5f));
             dir_light->SetColor(RGBColor(255, 255, 255));
@@ -65,6 +65,8 @@ namespace Game
 
         void DualGame::LoadResources()
         {
+            VoxelUtil::InitializeSidesUntilMaxDist(10);
+
             resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
 
             ModelLoadingOptions model_options;
@@ -165,6 +167,9 @@ namespace Game
 
             if (input_manager->IsKeyHeld(Key::N4))
                 selected_voxel = VoxelElement::STEAM;
+
+            if (input_manager->IsKeyHeld(Key::N5))
+                selected_voxel = VoxelElement::LAVA;
 
             if (input_manager->IsKeyHeld(Key::P))
                 penguin.PlayAnimation("taunt", 1.0f);

@@ -16,9 +16,12 @@ namespace Game
     {
         namespace VoxelSimulation
         {
+
+            constexpr uint64_t update_frequency = 3;
+
             static void UpdateSimulationTopDown(std::shared_ptr<VoxelGrid> voxel_grid, uint64_t update_tick)
             {
-                if (update_tick % 3 != 0)
+                if (update_tick % update_frequency != 0)
                     return;
 
                 for (int y = VOXEL_GRID_UP; y > VOXEL_GRID_DOWN; y--)
@@ -33,6 +36,10 @@ namespace Game
 
                             // non simulated types like air
                             if (cur_voxel_settings.skip_simulation)
+                                continue;
+
+                            // only update on the right frequency
+                            if (cur_voxel_settings.slowness_factor != 0 && update_tick % (update_frequency + cur_voxel_settings.slowness_factor) != 0)
                                 continue;
 
                             // only gas is handled top down
@@ -65,7 +72,7 @@ namespace Game
 
             static void UpdateSimulationDownTop(std::shared_ptr<VoxelGrid> voxel_grid, uint64_t update_tick)
             {
-                if (update_tick % 3 != 0)
+                if (update_tick % update_frequency != 0)
                     return;
 
                 for (int y = VOXEL_GRID_DOWN; y < VOXEL_GRID_UP; y++)
@@ -80,6 +87,10 @@ namespace Game
 
                             // non simulated types like air
                             if (cur_voxel_settings.skip_simulation)
+                                continue;
+
+                            // only update on the right frequency
+                            if (cur_voxel_settings.slowness_factor != 0 && update_tick % (update_frequency + cur_voxel_settings.slowness_factor) != 0)
                                 continue;
 
                             // static types never move, and gas types are not simulated down top
@@ -101,24 +112,24 @@ namespace Game
                             }
 
                             // move sideways down
-                            std::array<Vector3I, 4> rand_swap_sides = VoxelUtil::sides_down;
+                            std::vector<Vector3I> rand_swap_sides = VoxelUtil::sides_at_dist[1];
                             std::shuffle(rand_swap_sides.begin(), rand_swap_sides.end(), VoxelUtil::random_generator);    // randomize the order so theres no spreading pattern
 
                             bool moved_down_side = false;
                             for (const Vector3I& side_option : rand_swap_sides)
                             {
-                                Vector3I side_pos = cur_voxel_pos + side_option;
+                                swap_voxel_pos = cur_voxel_pos + side_option;
 
-                                if (!voxel_grid->IsPositionInsideGrid(side_pos))
+                                if (!voxel_grid->IsPositionInsideGrid(swap_voxel_pos))
                                     continue;
 
-                                VoxelElement side_voxel_element    = voxel_grid->GetVoxelElement(side_pos);
-                                VoxelElement side_voxel_element_up = voxel_grid->GetVoxelElement(side_pos - VoxelUtil::up);
+                                VoxelElement side_voxel_element    = voxel_grid->GetVoxelElement(swap_voxel_pos);
+                                VoxelElement side_voxel_element_up = voxel_grid->GetVoxelElement(swap_voxel_pos - VoxelUtil::up);
 
-                                // only move diagonally down if the side is also clear, otherwise we'd teleport diagonally
+                                // only move diagonally down if the above voxel on the side is also clear, otherwise we'd teleport diagonally
                                 if (side_voxel_element == VoxelElement::AIR && side_voxel_element_up == VoxelElement::AIR)
                                 {
-                                    VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, side_pos);
+                                    VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, swap_voxel_pos);
                                     moved_down_side = true;
                                     break;
                                 }
@@ -130,22 +141,29 @@ namespace Game
                             if (cur_voxel_settings.movement_type != VoxelMovementType::LIQUID)
                                 continue;
 
-                            std::array<Vector3I, 4> rand_sides = VoxelUtil::sides;
-                            std::shuffle(rand_sides.begin(), rand_sides.end(), VoxelUtil::random_generator);    // randomize the order so theres no spreading pattern
+                            // dont bother with a liquid that has no dispersion
+                            if (cur_voxel_settings.dispersion_rate == 0)
+                                continue;
 
-                            for (const Vector3I& side_option : rand_sides)
+                            for (uint8_t dist = 0; dist < cur_voxel_settings.dispersion_rate; dist++)
                             {
-                                Vector3I side_pos = cur_voxel_pos + side_option;
+                                std::vector<Vector3I> rand_sides = VoxelUtil::sides_at_dist[dist];
+                                std::shuffle(rand_sides.begin(), rand_sides.end(), VoxelUtil::random_generator);    // randomize the order so theres no spreading pattern
 
-                                if (!voxel_grid->IsPositionInsideGrid(side_pos))
-                                    continue;
-
-                                VoxelElement side_voxel_element = voxel_grid->GetVoxelElement(side_pos);
-
-                                if (side_voxel_element == VoxelElement::AIR)
+                                for (const Vector3I& side_option : rand_sides)
                                 {
-                                    VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, side_pos);
-                                    break;
+                                    Vector3I side_pos = cur_voxel_pos + side_option;    //* cur_disp;
+
+                                    if (!voxel_grid->IsPositionInsideGrid(side_pos))
+                                        continue;
+
+                                    VoxelElement side_voxel_element = voxel_grid->GetVoxelElement(side_pos);
+
+                                    if (side_voxel_element == VoxelElement::AIR)
+                                    {
+                                        VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, side_pos);
+                                        break;
+                                    }
                                 }
                             }
                         }
