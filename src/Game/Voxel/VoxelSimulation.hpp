@@ -112,7 +112,7 @@ namespace Game
                             }
 
                             // move sideways down
-                            std::vector<Vector3I> rand_swap_sides = VoxelUtil::sides_at_dist[1];
+                            std::vector<Vector3I> rand_swap_sides = VoxelUtil::sides_down;
                             std::shuffle(rand_swap_sides.begin(), rand_swap_sides.end(), VoxelUtil::random_generator);    // randomize the order so theres no spreading pattern
 
                             bool moved_down_side = false;
