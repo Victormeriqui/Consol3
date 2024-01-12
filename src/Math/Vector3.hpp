@@ -46,7 +46,11 @@ namespace Math
         [[nodiscard]] Vector3 GetLerped(const Vector3& other, float amount) const;
         [[nodiscard]] Vector3 GetRounded() const;
         [[nodiscard]] Vector3I GetSignVector() const;
-        [[nodiscard]] Vector3 GetAbsoluteValue() const;
+
+        [[nodiscard]] constexpr Vector3 GetAbsoluteValue() const
+        {
+            return Vector3(std::abs(x), std::abs(y), std::abs(z));
+        }
 
         constexpr Vector3& operator+=(const Vector3& other) noexcept
         {

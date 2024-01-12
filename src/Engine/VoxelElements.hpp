@@ -26,8 +26,6 @@ namespace Engine
     {
         bool skip_simulation = false;
         VoxelMovementType movement_type;
-        uint8_t dispersion_rate = 0;
-        uint8_t slowness_factor = 0;
     };
 
     enum class VoxelElement : uint8_t
@@ -50,7 +48,7 @@ namespace Engine
         { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID } },
         { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID } },
         { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS } },
-        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .slowness_factor = 2 } },
+        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID } },
     };
 
     static std::map<VoxelElement, std::vector<RGBColor>> voxel_color_map = {

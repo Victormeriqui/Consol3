@@ -30,6 +30,9 @@ namespace Engine
     {
         VoxelElement type;
         uint8_t color_index = 0;
+        Vector3 velocity    = Vector3(0.0f, 0.0f, 0.0f);
+        bool is_falling     = false;
+        bool is_sleeping    = false;
 
         VoxelData() : type(VoxelElement::AIR)
         {

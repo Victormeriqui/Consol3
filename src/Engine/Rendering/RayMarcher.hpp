@@ -22,14 +22,6 @@ namespace Engine
         using namespace Math;
         using namespace Lighting;
 
-        struct MarchResult
-        {
-            bool did_hit;
-            Vector3 hit_position;
-            Vector3 hit_normal;
-            const VoxelData* voxel_data_ptr;
-        };
-
         class RayMarcher
         {
         private:
@@ -48,14 +40,6 @@ namespace Engine
             Vector3 HitPositionToNDCOrtho(Vector3 hit_pos) const;
             void SetupLightSpacePerspective(const Vector3& hit_pos, const LightingSystem& lighting_system);
             void SetupLightSpaceOrtho(const Vector3& hit_pos, const LightingSystem& lighting_system);
-
-            Vector3I CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords, const Vector3& direction) const;
-            Vector3 CalculateTMax(const Vector3I& near_grid_coords, const Ray& ray) const;
-            Vector3 CalculateDelta(const Vector3& direction) const;
-
-            int CalculateTMax(float direction_component) const;
-
-            MarchResult MarchUntilHit(const Ray& ray, const VoxelGrid& voxel_grid, uint16_t max_iterations) const;
 
         public:
             RayMarcher(std::shared_ptr<IFrameDrawer> frame_drawer);
