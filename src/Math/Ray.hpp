@@ -83,10 +83,6 @@ namespace Math
                 if (!voxel_grid.IsPositionInsideGrid(cur_grid_coords))
                     return res;
 
-                // ray hit max dist
-                if (origin.GetDistanceTo(res.hit_position) >= max_dist)
-                    return res;
-
                 res.voxel_data_ptr = voxel_grid.GetVoxelDataPtr(cur_grid_coords);
 
                 if (res.voxel_data_ptr->type != VoxelElement::AIR)
@@ -122,6 +118,10 @@ namespace Math
                     cur_grid_coords.z += step.z;
                     t_max.z += delta.z;
                 }
+
+                // ray hit max dist
+                if (origin.GetDistanceTo(res.hit_position) >= max_dist)
+                    return res;
             }
 
             return res;
