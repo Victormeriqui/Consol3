@@ -4,6 +4,8 @@
 #include "IGame.hpp"
 
 #include "../Raster/ModelGenerator.hpp"
+#include "../Voxel/VoxelSimulation.hpp"
+#include "../Voxel/VoxelUtil.hpp"
 #include "Engine/Input/IInputManager.hpp"
 #include "Engine/Rendering/AnimatedMesh.hpp"
 #include "Engine/Rendering/Camera.hpp"
@@ -46,6 +48,8 @@ namespace Game
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid> voxel_grid;
+            VoxelSimulation voxel_sim;
+
             VoxelSceneRenderer voxel_scene_renderer;
             RasterSceneRenderer raster_scene_renderer;
 

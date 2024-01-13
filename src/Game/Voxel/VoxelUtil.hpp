@@ -16,6 +16,8 @@ namespace Game
 {
     namespace Voxel
     {
+        using namespace Engine;
+
         namespace VoxelUtil
         {
             static std::mt19937 random_generator(std::random_device {}());

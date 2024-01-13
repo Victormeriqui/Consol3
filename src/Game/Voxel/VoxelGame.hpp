@@ -15,6 +15,8 @@
 #include "Engine/VoxelElements.hpp"
 #include "Engine/VoxelGrid.hpp"
 #include "Math/Vector3.hpp"
+#include "VoxelSimulation.hpp"
+#include "VoxelUtil.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -42,6 +44,8 @@ namespace Game
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid> voxel_grid;
+            VoxelSimulation voxel_sim;
+
             VoxelSceneRenderer scene_renderer;
 
             virtual void LoadResources() override;

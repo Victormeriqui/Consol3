@@ -68,7 +68,7 @@ namespace Math
 
         MarchResult MarchUntilHit(const VoxelGrid& voxel_grid, uint16_t max_iterations, float max_dist) const
         {
-            MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .voxel_data_ptr = nullptr };
+            MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr };
 
             Vector3I step             = direction.GetSignVector();
             Vector3I cur_grid_coords  = voxel_grid.GetGridPosition(origin);
