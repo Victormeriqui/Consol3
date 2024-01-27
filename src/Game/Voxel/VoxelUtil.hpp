@@ -21,6 +21,8 @@ namespace Game
         namespace VoxelUtil
         {
             static std::mt19937 random_generator(std::random_device {}());
+            static std::uniform_real_distribution<float> rand_direction_component { -1.0f, 1.0f };
+            static std::uniform_real_distribution<float> rand_magnitude_component { -1.0f, 1.0f };
 
             static Vector3I left           = Vector3I(-1, 0, 0);
             static Vector3I left_forward   = Vector3I(-1, 0, 1);
@@ -66,7 +68,7 @@ namespace Game
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, uint8_t color_index)
             {
-                voxel_grid->SetVoxelData(grid_pos, { voxel_type, color_index });
+                voxel_grid->SetVoxelData(grid_pos, { voxel_type, color_index, Vector3(0.0f, -1.0f, 0.0f) });
             }
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type)

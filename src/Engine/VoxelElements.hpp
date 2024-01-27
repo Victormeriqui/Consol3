@@ -26,6 +26,7 @@ namespace Engine
     {
         bool skip_simulation = false;
         VoxelMovementType movement_type;
+        float friction = 0.0f;
     };
 
     enum class VoxelElement : uint8_t
@@ -45,10 +46,10 @@ namespace Engine
         { VoxelElement::CURSOR, { .skip_simulation = true } },
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
-        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID } },
+        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.3f } },
         { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID } },
         { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS } },
-        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID } },
+        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.1f } },
     };
 
     static std::map<VoxelElement, std::vector<RGBColor>> voxel_color_map = {

@@ -29,10 +29,12 @@ namespace Engine
     struct VoxelData
     {
         VoxelElement type;
-        uint8_t color_index = 0;
-        Vector3 velocity    = Vector3(0.0f, 0.0f, 0.0f);
-        bool is_falling     = false;
-        bool is_sleeping    = false;
+        bool processed_flip_flop   = false;
+        uint8_t color_index        = 0;
+        Vector3 velocity           = Vector3();
+        Vector3 velocity_threshold = Vector3();
+        bool is_falling            = true;
+        bool is_sleeping           = false;
 
         VoxelData() : type(VoxelElement::AIR)
         {
@@ -41,6 +43,9 @@ namespace Engine
         {
         }
         VoxelData(VoxelElement type, uint8_t color_index) : type(type), color_index(color_index)
+        {
+        }
+        VoxelData(VoxelElement type, uint8_t color_index, const Vector3& velocity) : type(type), color_index(color_index), velocity(velocity)
         {
         }
     };

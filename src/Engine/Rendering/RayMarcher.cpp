@@ -115,7 +115,7 @@ namespace Engine
                 {
                     Ray ray = SetupRayPerspective(x, y, origin);
 
-                    MarchResult march_res = ray.MarchUntilHit(voxel_grid, 1000, 1000.0f);
+                    MarchResult march_res = ray.MarchUntilHit(voxel_grid, 1000);
 
                     if (!march_res.did_hit)
                         continue;
@@ -136,7 +136,7 @@ namespace Engine
                 {
                     Ray ray = SetupRayOrtho(x, y);
 
-                    MarchResult march_res = ray.MarchUntilHit(voxel_grid, 1000, 1000.0f);
+                    MarchResult march_res = ray.MarchUntilHit(voxel_grid, 1000);
 
                     if (!march_res.did_hit)
                         continue;
@@ -157,7 +157,7 @@ namespace Engine
                 {
                     Ray ray = SetupRayPerspective(x, y, origin);
 
-                    MarchResult march_res = ray.MarchUntilHit(voxel_grid, 1000, 1000.0f);
+                    MarchResult march_res = ray.MarchUntilHit(voxel_grid, 1000);
 
                     if (!march_res.did_hit)
                         continue;

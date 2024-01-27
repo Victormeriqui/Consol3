@@ -14,6 +14,13 @@ namespace Game
     {
         using namespace Engine;
 
+        struct CandidateSwapInfo
+        {
+            Vector3I hit_voxel_coord;
+            // the voxel immediately before the hit voxel
+            Vector3I before_hit_voxel_coord;
+        };
+
         class VoxelSimulation
         {
         private:
@@ -21,7 +28,7 @@ namespace Game
 
             std::shared_ptr<VoxelGrid> voxel_grid;
 
-            Vector3I GetSwapVoxelCoord(const Vector3I& from_coord, const Vector3& velocity);
+            CandidateSwapInfo GetCandidateSwap(const Vector3I& from_coord, VoxelData& voxel_data);
 
         public:
             VoxelSimulation(std::shared_ptr<VoxelGrid> voxel_grid);

@@ -83,6 +83,9 @@ namespace Game
                     voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
+
+            voxel_grid->SetVoxelData(Vector3I(-48, -47, -48), { VoxelElement::SAND, 0, Vector3(0.0f, -1.0f, 0.0f) });
+            voxel_grid->SetVoxelData(Vector3I(-48, -49, -48), { VoxelElement::STONE, 0, Vector3() });
         }
 
         void DualGame::Update()
