@@ -4,6 +4,7 @@
 #include "Display/RGBColor.hpp"
 #include "Engine/VoxelElements.hpp"
 #include "Engine/VoxelGrid.hpp"
+#include "Math/Util/MathUtil.hpp"
 #include "Math/Vector3.hpp"
 #include "Math/Vector3I.hpp"
 
@@ -23,6 +24,11 @@ namespace Game
             static std::mt19937 random_generator(std::random_device {}());
             static std::uniform_real_distribution<float> rand_direction_component { -1.0f, 1.0f };
             static std::uniform_real_distribution<float> rand_magnitude_component { -1.0f, 1.0f };
+
+            static Vector3 GetRandomHorizontalVelocity()
+            {
+                return Vector3(rand_direction_component(random_generator), 0.0f, rand_direction_component(random_generator));
+            }
 
             static Vector3I left           = Vector3I(-1, 0, 0);
             static Vector3I left_forward   = Vector3I(-1, 0, 1);

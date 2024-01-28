@@ -58,7 +58,7 @@ namespace Game
                     {
                         Vector3I cur_voxel_pos                  = Vector3I(x, y, z);
                         VoxelData cur_voxel_data                = voxel_grid->GetVoxelData(cur_voxel_pos);
-                        VoxelElementSettings cur_voxel_settings = voxel_elements_map[cur_voxel_data.type];
+                        VoxelElementSettings cur_voxel_settings = voxel_element_settings_map[cur_voxel_data.type];
 
                         // non simulated types like air
                         if (cur_voxel_settings.skip_simulation)
@@ -107,7 +107,7 @@ namespace Game
                     {
                         Vector3I cur_voxel_pos                  = Vector3I(x, y, z);
                         VoxelData cur_voxel_data                = voxel_grid->GetVoxelData(cur_voxel_pos);
-                        VoxelElementSettings cur_voxel_settings = voxel_elements_map[cur_voxel_data.type];
+                        VoxelElementSettings cur_voxel_settings = voxel_element_settings_map[cur_voxel_data.type];
 
                         // non simulated types like air
                         if (cur_voxel_settings.skip_simulation)
@@ -129,83 +129,125 @@ namespace Game
                         cur_voxel_data.processed_flip_flop = !cur_voxel_data.processed_flip_flop;
                         voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
 
-                        // sleep if we have little or no velocity
-                        if (std::abs(cur_voxel_data.velocity.x) <= 0.01f && std::abs(cur_voxel_data.velocity.y) <= 0.01f && std::abs(cur_voxel_data.velocity.z) <= 0.01f)
-                        {
-                            cur_voxel_data.is_sleeping = true;
-                            cur_voxel_data.velocity    = Vector3();
-                            voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
-                            continue;
-                        }
+                        // under our current pos
+                        Vector3I cur_voxel_under_pos         = cur_voxel_pos + VoxelUtil::down;
+                        VoxelElement cur_voxel_under_element = voxel_grid->GetVoxelElement(cur_voxel_under_pos);
 
                         CandidateSwapInfo candidate_voxel = GetCandidateSwap(cur_voxel_pos, cur_voxel_data);
-                        Vector3I candidate_voxel_pos      = candidate_voxel.hit_voxel_coord;
 
-                        bool cadidate_is_inside_grid = voxel_grid->IsPositionInsideGrid(candidate_voxel_pos);
+                        // our candidate
+                        Vector3I candidate_voxel_pos         = candidate_voxel.hit_voxel_coord;
+                        VoxelElement candidate_voxel_element = voxel_grid->GetVoxelElement(candidate_voxel_pos);
 
-                        // if we're not falling we are in contact with the ground, apply friction
-                        if (!cur_voxel_data.is_falling)
+                        // under our candidate
+                        Vector3I candidate_voxel_under_pos         = candidate_voxel_pos + VoxelUtil::down;
+                        VoxelElement candidate_voxel_under_element = voxel_grid->GetVoxelElement(candidate_voxel_under_pos);
+
+                        // falling movement
+                        if (cur_voxel_data.is_falling)
                         {
-                            cur_voxel_data.velocity *= (1.0f - cur_voxel_settings.friction);
+                            // swap if the candidate is air
+                            if (candidate_voxel_element == VoxelElement::AIR)
+                            {
+                                VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
+                                cur_voxel_pos = candidate_voxel_pos;
+                                continue;
+                            }
+
+                            // we hit either a non air element or the grid wall
+
+                            // under our poisiton is air, we can fall vertically
+                            if (cur_voxel_under_element == VoxelElement::AIR)
+                            {
+                                // remove all horiontal velocity so we just fall vertically, keep original vertical velocity or a head start if there is none
+                                cur_voxel_data.velocity   = Vector3(0.0f, -1.0f, 0.0f);
+                                cur_voxel_data.is_falling = true;
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                continue;
+                            }
+
+                            // under our position is either a non air element, or the grid floor, so we cant fall anymore
+                            cur_voxel_data.is_falling = false;
+
+                            // remove all vertical velocity as we cannot fall anymore
+                            cur_voxel_data.velocity = Vector3(cur_voxel_data.velocity.x, 0.0f, cur_voxel_data.velocity.z);
+
+                            // if we didn't have horizontal velocity before, add a little bit to slide off to the sides
+                            if (cur_voxel_data.velocity.x == 0.0f && cur_voxel_data.velocity.z == 0.0f)
+                            {
+                                Vector3 rand_vel = VoxelUtil::GetRandomHorizontalVelocity();
+
+                                // adapt the slide off velocity to the element dispersion
+                                cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
+                            }
+
                             voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
                         }
-
-                        // simple case the is inside the grid and is air, continue in the velocity's vector
-                        if (cadidate_is_inside_grid && voxel_grid->GetVoxelElement(candidate_voxel_pos) == VoxelElement::AIR)
+                        // floor sliding movement
+                        else
                         {
-                            // swap with the candidate
-                            VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
-                            cur_voxel_pos = candidate_voxel_pos;
+                            // if we're on top of the grid bounds just sleep
+                            if (candidate_voxel_under_element == VoxelElement::OUT_OF_BOUNDS)
+                            {
+                                cur_voxel_data.is_sleeping = true;
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                continue;
+                            }
 
-                            continue;
-                        }
+                            VoxelData candidate_voxel_under_data                = voxel_grid->GetVoxelData(candidate_voxel_under_pos);
+                            VoxelElementSettings candidate_voxel_under_settings = voxel_element_settings_map[candidate_voxel_under_data.type];
 
-                        // only relevant if velocity _mag > 1
-                        // we hit either a non air element or the grid wall
-                        // swap with hit - 1, so we're just touching the hit voxel
-                        // candidate_voxel_pos = candidate_voxel.before_hit_voxel_coord;
-                        // VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
-                        // cur_voxel_pos = candidate_voxel_pos;
+                            // apply friction if we're on top of a solid
+                            if (candidate_voxel_under_settings.movement_type == VoxelMovementType::SOLID || candidate_voxel_under_settings.movement_type == VoxelMovementType::STATIC)
+                            {
+                                cur_voxel_data.velocity *= (1.0f - cur_voxel_settings.friction);
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                            }
 
-                        // look directly under the new position
-                        Vector3I candidate_voxel_pos_under = candidate_voxel_pos + Vector3I(0, -1, 0);
+                            bool should_sleep = std::abs(cur_voxel_data.velocity.x) <= 0.1f && std::abs(cur_voxel_data.velocity.z) <= 0.1f;
 
-                        // under our new poisiton is air, we can fall vertically
-                        if (voxel_grid->IsPositionInsideGrid(candidate_voxel_pos_under) && voxel_grid->GetVoxelElement(candidate_voxel_pos_under) == VoxelElement::AIR)
-                        {
-                            // remove all horiontal velocity so we just fall vertically, keep original vertical velocity or a head start if there is none
-                            cur_voxel_data.velocity   = Vector3(0.0f, cur_voxel_data.velocity.y != 0.0f ? cur_voxel_data.velocity.y : -1.0f, 0.0f);
-                            cur_voxel_data.is_falling = true;
-                            voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
-                            continue;
-                        }
+                            // try to sleep if we don't have enough velocity
+                            if (should_sleep)
+                            {
+                                // dont sleep if we're on top of a liquid, push a little bit instead so it disperses
+                                if (candidate_voxel_under_settings.movement_type == VoxelMovementType::LIQUID)
+                                {
+                                    Vector3 rand_vel = VoxelUtil::GetRandomHorizontalVelocity();
 
-                        // under our new position is either a non air element, or the grid floor
+                                    // make sure the push  is significant enough to move it
+                                    if (rand_vel.GetLength() < 0.8f)
+                                        rand_vel *= 6.0f;
 
-                        // if we weren't falling when we hit it means we were sliding and hit another voxel
-                        if (!cur_voxel_data.is_falling)
-                        {
-                            // TODO bounce off maybe
-                        }
+                                    cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
+                                    voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                    continue;
+                                }
 
-                        cur_voxel_data.is_falling = false;
+                                // cur_voxel_data.is_sleeping = true;
+                                // cur_voxel_data.velocity    = Vector3(0.0f, 0.0f, 0.0f);
+                                // voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                // continue;
+                            }
 
-                        // remove all vertical velocity as we cannot fall anymore
-                        cur_voxel_data.velocity = Vector3(cur_voxel_data.velocity.x, 0.0f, cur_voxel_data.velocity.z);
+                            // swap if the candidate is air or the same element
+                            if (candidate_voxel_element == VoxelElement::AIR || (candidate_voxel_element == cur_voxel_data.type && cur_voxel_pos != candidate_voxel_pos))
+                            {
+                                VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
+                                cur_voxel_pos = candidate_voxel_pos;
+                            }
 
-                        // if we didn't have horizontal velocity before, add a little bit
-                        if (cur_voxel_data.velocity.x == 0.0f && cur_voxel_data.velocity.z == 0.0f)
-                        {
-                            Vector3 rand_dir = Vector3(VoxelUtil::rand_direction_component(VoxelUtil::random_generator), 0.0f, VoxelUtil::rand_direction_component(VoxelUtil::random_generator));
-                            float rand_mag   = 1.0f;    // VoxelUtil::rand_magnitude_component(VoxelUtil::random_generator);
-
-                            cur_voxel_data.velocity = rand_dir * rand_mag;
-                            voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                            // under our poisiton is air, we can fall vertically
+                            if (candidate_voxel_under_element == VoxelElement::AIR)
+                            {
+                                cur_voxel_data.velocity   = Vector3(0.0f, -1.0f, 0.0f);
+                                cur_voxel_data.is_falling = true;
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                continue;
+                            }
                         }
                     }
                 }
             }
         }
     }
-
 }

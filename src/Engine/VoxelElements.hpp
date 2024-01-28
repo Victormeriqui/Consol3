@@ -16,6 +16,7 @@ namespace Engine
 
     enum class VoxelMovementType
     {
+        NONE,
         STATIC,
         SOLID,
         LIQUID,
@@ -26,12 +27,14 @@ namespace Engine
     {
         bool skip_simulation = false;
         VoxelMovementType movement_type;
-        float friction = 0.0f;
+        float friction   = 0.0f;
+        float dispersion = 0.0f;
     };
 
     enum class VoxelElement : uint8_t
     {
-        AIR = 0,
+        OUT_OF_BOUNDS = 0,
+        AIR,
         CURSOR,
         STONE,
         STEEL,
@@ -41,15 +44,15 @@ namespace Engine
         LAVA,
     };
 
-    static std::map<VoxelElement, VoxelElementSettings> voxel_elements_map = {
-        { VoxelElement::AIR, { .skip_simulation = true } },
+    static std::map<VoxelElement, VoxelElementSettings> voxel_element_settings_map = {
+        { VoxelElement::AIR, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
         { VoxelElement::CURSOR, { .skip_simulation = true } },
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
-        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.3f } },
+        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.3f, .dispersion = 1.0f } },
         { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID } },
         { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS } },
-        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.1f } },
+        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.0f, .dispersion = 0.5f } },
     };
 
     static std::map<VoxelElement, std::vector<RGBColor>> voxel_color_map = {

@@ -87,6 +87,9 @@ namespace Engine
 
         [[nodiscard]] VoxelElement GetVoxelElement(const Vector3I& pos) const
         {
+            if (!IsPositionInsideGrid(pos))
+                return VoxelElement::OUT_OF_BOUNDS;
+
             return grid[GetIndexFromCoords(pos)].type;
         }
 
