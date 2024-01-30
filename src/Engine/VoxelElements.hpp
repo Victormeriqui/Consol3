@@ -49,10 +49,10 @@ namespace Engine
         { VoxelElement::CURSOR, { .skip_simulation = true } },
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
-        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.3f, .dispersion = 1.0f } },
-        { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID } },
+        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.16f, .dispersion = 1.0f } },
+        { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.4f, .dispersion = 1.0f } },
         { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS } },
-        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.0f, .dispersion = 0.5f } },
+        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.1f, .dispersion = 0.2f } },
     };
 
     static std::map<VoxelElement, std::vector<RGBColor>> voxel_color_map = {
@@ -62,19 +62,28 @@ namespace Engine
         { VoxelElement::STEEL, { RGBColor(161, 161, 161) } },
 
         { VoxelElement::SAND,
-          { RGBColor(245, 219, 178),
-            RGBColor(235, 195, 130),
-            RGBColor(221, 184, 121),
-            RGBColor(204, 167, 110),
-            RGBColor(187, 157, 102),
-            RGBColor(176, 145, 94),
-            RGBColor(162, 134, 86),
-            RGBColor(148, 124, 78),
-            RGBColor(134, 113, 70),
-            RGBColor(121, 103, 63) } },
-        { VoxelElement::WATER, { RGBColor(0, 0, 255) } },
+          {
+              RGBColor(254, 236, 207),
+              RGBColor(227, 206, 178),
+              RGBColor(240, 221, 171),
+              RGBColor(240, 206, 158),
+              RGBColor(235, 233, 197),
+          } },
+        { VoxelElement::WATER,
+          {
+              RGBColor(46, 152, 245),
+              RGBColor(106, 168, 245),
+              RGBColor(62, 176, 245),
+              RGBColor(25, 182, 245),
+              RGBColor(79, 145, 245),
+
+          } },
         { VoxelElement::STEAM, { RGBColor(200, 200, 200) } },
-        { VoxelElement::LAVA, { RGBColor(255, 90, 25) } },
+        { VoxelElement::LAVA,
+          {
+              RGBColor(184, 84, 7),
+              RGBColor(227, 111, 39),
+          } },
 
     };
 

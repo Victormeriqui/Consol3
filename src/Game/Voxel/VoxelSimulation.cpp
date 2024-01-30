@@ -113,8 +113,8 @@ namespace Game
                         if (cur_voxel_settings.skip_simulation)
                             continue;
 
-                        // static types never move, and gas types are not simulated down top
-                        if (cur_voxel_settings.movement_type == VoxelMovementType::STATIC || cur_voxel_settings.movement_type == VoxelMovementType::GAS)
+                        // static types never move
+                        if (cur_voxel_settings.movement_type == VoxelMovementType::STATIC)
                             continue;
 
                         // needs a wakeup from another voxel
@@ -209,14 +209,14 @@ namespace Game
                             // try to sleep if we don't have enough velocity
                             if (should_sleep)
                             {
-                                // dont sleep if we're on top of a liquid, push a little bit instead so it disperses
-                                if (candidate_voxel_under_settings.movement_type == VoxelMovementType::LIQUID)
+                                // dont sleep if we're a liquid on top of a liquid, push a little bit instead so it disperses
+                                if (cur_voxel_settings.movement_type == VoxelMovementType::LIQUID && candidate_voxel_under_settings.movement_type == VoxelMovementType::LIQUID)
                                 {
                                     Vector3 rand_vel = VoxelUtil::GetRandomHorizontalVelocity();
 
                                     // make sure the push  is significant enough to move it
-                                    if (rand_vel.GetLength() < 0.8f)
-                                        rand_vel *= 6.0f;
+                                    // if (rand_vel.GetLength() < 0.8f)
+                                    //  rand_vel *= 6.0f;
 
                                     cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
                                     voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);

@@ -39,7 +39,7 @@ namespace Game
 
             dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -0.5f));
             dir_light->SetColor(RGBColor(255, 255, 255));
-            // lighting_system->AddLight(dir_light);
+            lighting_system->AddLight(dir_light);
 
             point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
             point_light->SetRange(300.0f);
@@ -51,7 +51,7 @@ namespace Game
             spot_light->SetAngle(20.0f);
             spot_light->SetColor(RGBColor(255, 255, 255));
 
-            lighting_system->AddLight(spot_light);
+            // lighting_system->AddLight(spot_light);
 
             floor = StaticMesh();
             floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -42, -6));
@@ -84,96 +84,6 @@ namespace Game
                     voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -49, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -48, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -47, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -46, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -45, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -44, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -43, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -42, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::left, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::left_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::right, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::right_forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::forward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::right_backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::backward, VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(1, -41, 2) - VoxelUtil::left_backward, VoxelElement::LAVA);
         }
 
         void DualGame::Update()
@@ -249,13 +159,9 @@ namespace Game
             {
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos, selected_voxel);
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::left, selected_voxel);
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::left_forward, selected_voxel);
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::right, selected_voxel);
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::right_forward, selected_voxel);
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::forward, selected_voxel);
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::right_backward, selected_voxel);
                 VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::backward, selected_voxel);
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos - VoxelUtil::left_backward, selected_voxel);
             }
 
             if (input_manager->IsKeyHeld(Key::N1))
@@ -286,9 +192,9 @@ namespace Game
             lighting_system->ClearDepthBuffers();
 
             // render raster components
-            // raster_scene_renderer.DrawShadedMesh(floor);
-            // raster_scene_renderer.DrawShadedMesh(penguin);
-            // raster_scene_renderer.RenderSceneShared(delta);
+            raster_scene_renderer.DrawShadedMesh(floor);
+            raster_scene_renderer.DrawShadedMesh(penguin);
+            raster_scene_renderer.RenderSceneShared(delta);
 
             // render voxels
             cursor_grid_pos     = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));

@@ -73,7 +73,7 @@ namespace Engine
 
             bool DirectionalLight::IsShadowCaster() const
             {
-                return true;
+                return false;
             }
 
             RGBColor DirectionalLight::GetColor() const
