@@ -45,53 +45,6 @@ namespace Game
             // return { .hit_voxel_coord = march_res.hit_voxel_coord, .before_hit_voxel_coord = before_hit_coord };
         }
 
-        void VoxelSimulation::UpdateSimulationTopDown(uint64_t update_tick)
-        {
-            if (update_tick % update_frequency != 0)
-                return;
-
-            for (int y = VOXEL_GRID_UP; y > VOXEL_GRID_DOWN; y--)
-            {
-                for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT; x++)
-                {
-                    for (int z = VOXEL_GRID_BACKWARDS; z < VOXEL_GRID_FORWARDS; z++)
-                    {
-                        Vector3I cur_voxel_pos                  = Vector3I(x, y, z);
-                        VoxelData cur_voxel_data                = voxel_grid->GetVoxelData(cur_voxel_pos);
-                        VoxelElementSettings cur_voxel_settings = voxel_element_settings_map[cur_voxel_data.type];
-
-                        // non simulated types like air
-                        if (cur_voxel_settings.skip_simulation)
-                            continue;
-
-                        // only gas is handled top down
-                        if (cur_voxel_settings.movement_type != VoxelMovementType::GAS)
-                            continue;
-
-                        // move up, sideways or sideways up
-                        std::vector<Vector3I> rand_swap_gases = VoxelUtil::up_sides_and_sides_up;
-                        std::shuffle(rand_swap_gases.begin(), rand_swap_gases.end(), VoxelUtil::random_generator);    // randomize the order so theres no spreading pattern
-
-                        for (const Vector3I& move_option : rand_swap_gases)
-                        {
-                            Vector3I move_pos = cur_voxel_pos + move_option;
-
-                            if (!voxel_grid->IsPositionInsideGrid(move_pos))
-                                continue;
-
-                            VoxelElement side_voxel_element = voxel_grid->GetVoxelElement(move_pos);
-
-                            if (side_voxel_element == VoxelElement::AIR)
-                            {
-                                VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, move_pos);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         void VoxelSimulation::UpdateSimulationDownTop(uint64_t update_tick)
         {
             if (update_tick % update_frequency != 0)

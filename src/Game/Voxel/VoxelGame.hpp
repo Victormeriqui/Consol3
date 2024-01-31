@@ -71,6 +71,7 @@ namespace Game
             virtual void HandleInput() override;
             virtual void Update() override;
             virtual std::chrono::milliseconds Render(int64_t delta) override;
+            virtual std::string GetDesiredWindowTitle() const override;
         };
     }
 }

@@ -6,7 +6,7 @@
 
 #include <cstdint>
 #include <map>
-#include <string_view>
+#include <string>
 #include <vector>
 
 using namespace Display;
@@ -44,9 +44,14 @@ namespace Engine
         LAVA,
     };
 
+    static std::map<VoxelElement, std::string> voxel_element_name_map = {
+        { VoxelElement::AIR, "Air" },   { VoxelElement::CURSOR, "Cursor" }, { VoxelElement::STONE, "Stone" }, { VoxelElement::STEEL, "Steel" },
+        { VoxelElement::SAND, "Sand" }, { VoxelElement::WATER, "Water" },   { VoxelElement::STEAM, "Steam" }, { VoxelElement::LAVA, "Lava" },
+    };
+
     static std::map<VoxelElement, VoxelElementSettings> voxel_element_settings_map = {
         { VoxelElement::AIR, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
-        { VoxelElement::CURSOR, { .skip_simulation = true } },
+        { VoxelElement::CURSOR, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.16f, .dispersion = 1.0f } },

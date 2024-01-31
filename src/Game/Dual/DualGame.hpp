@@ -25,6 +25,7 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 namespace Game
 {
@@ -66,9 +67,10 @@ namespace Game
             float mov_speed = 0.05f;
             bool shifting   = false;
 
-            Vector3I cursor_grid_pos;
-            VoxelData cursor_voxel_data;
+            Vector3I cursor_center_grid_pos;
+            std::vector<VoxelData> prev_cursor_data;
             float cursor_depth = 5.0f;
+            float cursor_size  = 1.0f;
 
             VoxelElement selected_voxel = VoxelElement::SAND;
 
@@ -80,6 +82,7 @@ namespace Game
             virtual void HandleInput() override;
             virtual void Update() override;
             virtual std::chrono::milliseconds Render(int64_t delta) override;
+            virtual std::string GetDesiredWindowTitle() const override;
         };
     }
 }

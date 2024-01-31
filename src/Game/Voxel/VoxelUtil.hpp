@@ -23,7 +23,6 @@ namespace Game
         {
             static std::mt19937 random_generator(std::random_device {}());
             static std::uniform_real_distribution<float> rand_direction_component { -1.0f, 1.0f };
-            static std::uniform_real_distribution<float> rand_magnitude_component { -1.0f, 1.0f };
 
             static Vector3 GetRandomHorizontalVelocity()
             {
@@ -40,12 +39,6 @@ namespace Game
             static Vector3I left_backward  = Vector3I(-1, 0, -1);
             static Vector3I up             = Vector3I(0, 1, 0);
             static Vector3I down           = Vector3I(0, -1, 0);
-
-            static std::vector<Vector3I> sides      = { left, left_forward, forward, right_forward, right, right_backward, backward, left_backward };
-            static std::vector<Vector3I> sides_down = { left + down, left_forward + down, forward + down, right_forward + down, right + down, right_backward + down, backward + down, left_backward + down };
-            static std::vector<Vector3I> sides_up   = { left + up, left_forward + up, forward + up, right_forward + up, right + up, right_backward + up, backward + up, left_backward + up };
-
-            static std::vector<Vector3I> up_sides_and_sides_up = { up, left, right, forward, backward, left + up, right + up, forward + up, backward + up };
 
             static std::vector<std::vector<Vector3I>> sides_at_dist;
 

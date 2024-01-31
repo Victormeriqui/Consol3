@@ -90,7 +90,6 @@ namespace Game
             update_tick++;
 
             voxel_sim.UpdateSimulationDownTop(update_tick);
-            voxel_sim.UpdateSimulationTopDown(update_tick);
         }
 
         void VoxelGame::HandleInput()
@@ -191,6 +190,11 @@ namespace Game
                 voxel_grid->SetVoxelData(cursor_grid_pos, cursor_voxel_data);
 
             return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
+        }
+
+        std::string VoxelGame::GetDesiredWindowTitle() const
+        {
+            return "Voxel game";
         }
     }
 }

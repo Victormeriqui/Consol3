@@ -262,5 +262,10 @@ namespace Game
 
             return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
         }
+
+        std::string RasterGame::GetDesiredWindowTitle() const
+        {
+            return "Raster game";
+        }
     }
 }
