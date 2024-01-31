@@ -84,6 +84,8 @@ namespace Game
                     voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
+
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(-48, -48, -48), VoxelElement::SAND);
         }
 
         void DualGame::Update()
@@ -159,8 +161,6 @@ namespace Game
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
             {
-                std::vector<Vector3I> cursor_offsets;
-
                 for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
                 {
                     for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
@@ -204,44 +204,41 @@ namespace Game
             cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
             bool cursor_was_set    = false;
 
-            std::vector<Vector3I> cursor_offsets;
-
             for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
             {
                 for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
-                    cursor_offsets.emplace_back(cursor_offset);
-            }
-
-            for (const Vector3I& cursor_offset : cursor_offsets)
-            {
-                Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
-
-                if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
-                    continue;
-
-                if (!cursor_was_set)
-                    prev_cursor_data.clear();
-
-                // save the voxel data that was under this cursor position
-                prev_cursor_data.emplace_back(voxel_grid->GetVoxelData(cursor_pos));
-                voxel_grid->SetVoxelData(cursor_pos, { VoxelElement::CURSOR, 0 });
-                cursor_was_set = true;
-            }
-            // render voxels
-            voxel_scene_renderer.RenderSceneShared(delta);
-
-            // reset the cursor positions to their previous voxel data so the simulation doesn't include the CURSOR type
-            if (cursor_was_set)
-            {
-                for (const Vector3I& cursor_offset : cursor_offsets)
                 {
                     Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
 
                     if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
                         continue;
 
-                    voxel_grid->SetVoxelData(cursor_pos, prev_cursor_data.back());
-                    prev_cursor_data.pop_back();
+                    // save the voxel data that was under this cursor position
+                    prev_cursor_data.push(voxel_grid->GetVoxelData(cursor_pos));
+
+                    voxel_grid->SetVoxelData(cursor_pos, { VoxelElement::CURSOR, 0 });
+                    cursor_was_set = true;
+                }
+            }
+
+            // render voxels
+            voxel_scene_renderer.RenderSceneShared(delta);
+
+            // reset the cursor positions to their previous voxel data so the simulation doesn't include the CURSOR type
+            if (cursor_was_set)
+            {
+                for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
+                {
+                    for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                    {
+                        Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
+
+                        if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
+                            continue;
+
+                        voxel_grid->SetVoxelData(cursor_pos, prev_cursor_data.front());
+                        prev_cursor_data.pop();
+                    }
                 }
             }
 

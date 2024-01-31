@@ -25,6 +25,7 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <queue>
 #include <vector>
 
 namespace Game
@@ -68,7 +69,7 @@ namespace Game
             bool shifting   = false;
 
             Vector3I cursor_center_grid_pos;
-            std::vector<VoxelData> prev_cursor_data;
+            std::queue<VoxelData> prev_cursor_data;
             float cursor_depth = 5.0f;
             float cursor_size  = 1.0f;
 

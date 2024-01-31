@@ -16,11 +16,8 @@ namespace Game
         {
         }
 
-        CandidateSwapInfo VoxelSimulation::GetCandidateSwap(const Vector3I& from_coord, VoxelData& voxel_data)
+        Vector3I VoxelSimulation::GetCandidateSwapPos(const Vector3I& from_coord, VoxelData& voxel_data)
         {
-            // Ray vel_ray            = Ray(Vector3(from_coord), voxel_data.);
-            // Vector3I max_end_coord = from_coord + Vector3I(static_cast<int>(voxel_data.velocity.x), static_cast<int>(voxel_data.velocity.y), static_cast<int>(voxel_data.velocity.z));
-
             voxel_data.velocity_threshold += voxel_data.velocity;
             Vector3I candidate_coord = from_coord + Vector3I(static_cast<int>(voxel_data.velocity_threshold.x), static_cast<int>(voxel_data.velocity_threshold.y), static_cast<int>(voxel_data.velocity_threshold.z));
 
@@ -35,14 +32,7 @@ namespace Game
 
             voxel_grid->SetVoxelData(from_coord, voxel_data);
 
-            return { .hit_voxel_coord = candidate_coord, .before_hit_voxel_coord = from_coord };
-
-            // MarchResult march_res = vel_ray.MarchUntilHitOrPosition(*voxel_grid, 100, max_end_coord);
-
-            // the hit normal will be pointing towards the ray origin, so we can use it to go one voxel back
-            // Vector3I before_hit_coord = march_res.hit_voxel_coord + voxel_grid->GetGridPosition(march_res.hit_normal);
-
-            // return { .hit_voxel_coord = march_res.hit_voxel_coord, .before_hit_voxel_coord = before_hit_coord };
+            return candidate_coord;
         }
 
         void VoxelSimulation::UpdateSimulationDownTop(uint64_t update_tick)
@@ -86,10 +76,9 @@ namespace Game
                         Vector3I cur_voxel_under_pos         = cur_voxel_pos + VoxelUtil::down;
                         VoxelElement cur_voxel_under_element = voxel_grid->GetVoxelElement(cur_voxel_under_pos);
 
-                        CandidateSwapInfo candidate_voxel = GetCandidateSwap(cur_voxel_pos, cur_voxel_data);
-
                         // our candidate
-                        Vector3I candidate_voxel_pos         = candidate_voxel.hit_voxel_coord;
+                        Vector3I candidate_voxel_pos = GetCandidateSwapPos(cur_voxel_pos, cur_voxel_data);
+
                         VoxelElement candidate_voxel_element = voxel_grid->GetVoxelElement(candidate_voxel_pos);
 
                         // under our candidate
