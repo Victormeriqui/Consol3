@@ -56,9 +56,9 @@ namespace Engine
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.16f, .dispersion = 1.0f, .air_resistance = 0.01f } },
-        { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.4f, .dispersion = 1.0f } },
+        { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.4f, .dispersion = 2.0f } },
         { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS, .dispersion = 1.0f } },
-        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.1f, .dispersion = 0.2f } },
+        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.1f, .dispersion = 0.5f } },
     };
 
     static std::map<VoxelElement, std::vector<RGBColor>> voxel_color_map = {

@@ -80,7 +80,7 @@ namespace Engine
             if (accumulated_delta > 1000)
             {
                 // frame_drawer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
-                frame_drawer->ReportInformation("Consol3    " + game->GetDesiredWindowTitle() + "      FPS: " + std::to_string(frame_count));
+                frame_drawer->ReportInformation("Consol3 " + game->GetDesiredWindowTitle() + " FPS: " + std::to_string(frame_count));
 
                 frame_count       = 0;
                 accumulated_delta = 0;

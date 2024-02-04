@@ -42,7 +42,7 @@ namespace Game
             voxel_grid->SetVoxelData(from_coord, voxel_data);
 
             Ray vel_ray           = Ray(Vector3(from_coord), Vector3(position_offset).GetNormalized());
-            MarchResult march_res = vel_ray.MarchUntilHitOrPosition(*voxel_grid, 100, max_candidate_coord);
+            MarchResult march_res = vel_ray.MarchUntilHitOrPosition(*voxel_grid, 10, max_candidate_coord);
 
             return march_res.hit_voxel_coord;
         }

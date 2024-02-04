@@ -253,7 +253,6 @@ namespace Game
         std::string DualGame::GetDesiredWindowTitle() const
         {
             return "Selected: " + voxel_element_name_map.at(selected_voxel);
-            ;
         }
     }
 }
