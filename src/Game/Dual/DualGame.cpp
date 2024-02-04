@@ -84,8 +84,6 @@ namespace Game
                     voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(-48, -48, -48), VoxelElement::SAND);
         }
 
         void DualGame::Update()
@@ -196,9 +194,9 @@ namespace Game
             lighting_system->ClearDepthBuffers();
 
             // render raster components
-            raster_scene_renderer.DrawShadedMesh(floor);
-            raster_scene_renderer.DrawShadedMesh(penguin);
-            raster_scene_renderer.RenderSceneShared(delta);
+            // raster_scene_renderer.DrawShadedMesh(floor);
+            // raster_scene_renderer.DrawShadedMesh(penguin);
+            // raster_scene_renderer.RenderSceneShared(delta);
 
             // mark cursor positions
             cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));

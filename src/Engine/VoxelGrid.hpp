@@ -12,6 +12,7 @@
 #define VOXEL_GRID_WIDTH  100
 #define VOXEL_GRID_HEIGHT 100
 #define VOXEL_GRID_DEPTH  100
+#define VOXEL_SIZE        1.0f
 
 #define VOXEL_GRID_LEFT      -VOXEL_GRID_WIDTH / 2
 #define VOXEL_GRID_RIGHT     VOXEL_GRID_WIDTH / 2 - 1
@@ -25,7 +26,6 @@ using namespace Math::Util;
 
 namespace Engine
 {
-
     struct VoxelData
     {
         VoxelElement type;

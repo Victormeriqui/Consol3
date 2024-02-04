@@ -19,7 +19,16 @@ namespace Game
         Vector3I VoxelSimulation::GetCandidateSwapPos(const Vector3I& from_coord, VoxelData& voxel_data)
         {
             voxel_data.velocity_threshold += voxel_data.velocity;
-            Vector3I candidate_coord = from_coord + Vector3I(static_cast<int>(voxel_data.velocity_threshold.x), static_cast<int>(voxel_data.velocity_threshold.y), static_cast<int>(voxel_data.velocity_threshold.z));
+
+            Vector3I position_offset     = Vector3I(static_cast<int>(voxel_data.velocity_threshold.x), static_cast<int>(voxel_data.velocity_threshold.y), static_cast<int>(voxel_data.velocity_threshold.z));
+            Vector3I max_candidate_coord = from_coord + position_offset;
+
+            // no movement this call
+            if (max_candidate_coord == from_coord)
+            {
+                voxel_grid->SetVoxelData(from_coord, voxel_data);
+                return from_coord;
+            }
 
             if (std::abs(voxel_data.velocity_threshold.x) >= 1.0f)
                 voxel_data.velocity_threshold.x = 0.0f;
@@ -32,7 +41,10 @@ namespace Game
 
             voxel_grid->SetVoxelData(from_coord, voxel_data);
 
-            return candidate_coord;
+            Ray vel_ray           = Ray(Vector3(from_coord), Vector3(position_offset).GetNormalized());
+            MarchResult march_res = vel_ray.MarchUntilHitOrPosition(*voxel_grid, 100, max_candidate_coord);
+
+            return march_res.hit_voxel_coord;
         }
 
         void VoxelSimulation::UpdateSimulationDownTop(uint64_t update_tick)
@@ -92,7 +104,6 @@ namespace Game
                             if (candidate_voxel_element == VoxelElement::AIR)
                             {
                                 VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
-                                cur_voxel_pos = candidate_voxel_pos;
                                 continue;
                             }
 
@@ -129,7 +140,7 @@ namespace Game
                         else
                         {
                             // if we're on top of the grid bounds just sleep
-                            if (candidate_voxel_under_element == VoxelElement::OUT_OF_BOUNDS)
+                            if (cur_voxel_under_element == VoxelElement::OUT_OF_BOUNDS)
                             {
                                 cur_voxel_data.is_sleeping = true;
                                 voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);

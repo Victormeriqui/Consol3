@@ -20,39 +20,85 @@ namespace Math
         const VoxelData* voxel_data_ptr;
     };
 
+    struct MarchState
+    {
+        Vector3I step;
+        Vector3 delta;
+        Vector3 tmax;
+    };
+
     class Ray
     {
     private:
-        constexpr Vector3I CalculateNearestVoxelGridCoords(const Vector3I& cur_grid_coords) const
+        MarchState GetMarchingPreCompute() const
         {
-            return Vector3I(cur_grid_coords.x + (direction.x > 0.0f ? 1 : 0), cur_grid_coords.y + (direction.y > 0.0f ? 1 : 0), cur_grid_coords.z + (direction.z > 0.0f ? 1 : 0));
-        }
+            MarchState res;
 
-        constexpr Vector3 CalculateTMax(const Vector3I& near_grid_coords) const
-        {
-            // grid coords to world coords
-            Vector3 tmax = near_grid_coords;
+            float current_x_index = std::max(1.0f, std::ceil(origin.x - VOXEL_GRID_LEFT));
+            float current_y_index = std::max(1.0f, std::ceil(origin.y - VOXEL_GRID_DOWN));
+            float current_z_index = std::max(1.0f, std::ceil(origin.z - VOXEL_GRID_BACKWARDS));
 
-            tmax -= origin;
-            tmax /= direction;
-            return Vector3(direction.x != 0.0f ? tmax.x : std::numeric_limits<float>::infinity(),
-                           direction.y != 0.0f ? tmax.y : std::numeric_limits<float>::infinity(),
-                           direction.z != 0.0f ? tmax.z : std::numeric_limits<float>::infinity());
-        }
+            if (direction.x > 0.0f)
+            {
+                res.step.x  = 1;
+                res.delta.x = VOXEL_SIZE / direction.x;
+                res.tmax.x  = (VOXEL_GRID_LEFT + current_x_index - origin.x) / direction.x;
+            }
+            else if (direction.x < 0.0f)
+            {
+                res.step.x             = -1;
+                res.delta.x            = VOXEL_SIZE / -direction.x;
+                float previous_x_index = current_x_index - 1;
+                res.tmax.x             = (VOXEL_GRID_LEFT + previous_x_index - origin.x) / direction.x;
+            }
+            else
+            {
+                res.step.x  = 0;
+                res.delta.x = std::numeric_limits<float>::infinity();
+                res.tmax.x  = std::numeric_limits<float>::infinity();
+            }
 
-        constexpr Vector3 CalculateDelta() const
-        {
-            Vector3 delta;
-            Vector3 abs_dir = direction.GetAbsoluteValue();
+            if (direction.y > 0.0f)
+            {
+                res.step.y  = 1;
+                res.delta.y = VOXEL_SIZE / direction.y;
+                res.tmax.y  = (VOXEL_GRID_LEFT + current_y_index - origin.y) / direction.y;
+            }
+            else if (direction.y < 0.0f)
+            {
+                res.step.y             = -1;
+                res.delta.y            = VOXEL_SIZE / -direction.y;
+                float previous_y_index = current_y_index - 1;
+                res.tmax.y             = (VOXEL_GRID_LEFT + previous_y_index - origin.y) / direction.y;
+            }
+            else
+            {
+                res.step.y  = 0;
+                res.delta.y = std::numeric_limits<float>::infinity();
+                res.tmax.y  = std::numeric_limits<float>::infinity();
+            }
 
-            if (abs_dir.x > 0.0f)
-                delta.x = 1.0f / abs_dir.x;
-            if (abs_dir.y > 0.0f)
-                delta.y = 1.0f / abs_dir.y;
-            if (abs_dir.z > 0.0f)
-                delta.z = 1.0f / abs_dir.z;
+            if (direction.z > 0.0f)
+            {
+                res.step.z  = 1;
+                res.delta.z = VOXEL_SIZE / direction.z;
+                res.tmax.z  = (VOXEL_GRID_LEFT + current_z_index - origin.z) / direction.z;
+            }
+            else if (direction.z < 0.0f)
+            {
+                res.step.z             = -1;
+                res.delta.z            = VOXEL_SIZE / -direction.z;
+                float previous_z_index = current_z_index - 1;
+                res.tmax.z             = (VOXEL_GRID_LEFT + previous_z_index - origin.z) / direction.z;
+            }
+            else
+            {
+                res.step.z  = 0;
+                res.delta.z = std::numeric_limits<float>::infinity();
+                res.tmax.z  = std::numeric_limits<float>::infinity();
+            }
 
-            return delta;
+            return res;
         }
 
     public:
@@ -72,11 +118,8 @@ namespace Math
         {
             MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr };
 
-            Vector3I step             = direction.GetSignVector();
-            Vector3I cur_grid_coords  = voxel_grid.GetGridPosition(origin);
-            Vector3I near_grid_coords = CalculateNearestVoxelGridCoords(cur_grid_coords);
-            Vector3 t_max             = CalculateTMax(near_grid_coords);
-            Vector3 delta             = CalculateDelta();
+            MarchState march_state   = GetMarchingPreCompute();
+            Vector3I cur_grid_coords = voxel_grid.GetGridPosition(origin);
 
             uint16_t i = 0;
             while (i++ < max_iterations)
@@ -93,52 +136,54 @@ namespace Math
                     return res;
                 }
 
-                if (t_max.x < t_max.y && t_max.x < t_max.z)
+                if (march_state.tmax.x < march_state.tmax.y && march_state.tmax.x < march_state.tmax.z)
                 {
-                    cur_grid_coords.x += step.x;
+                    cur_grid_coords.x += march_state.step.x;
 
-                    res.hit_normal      = Vector3(static_cast<float>(-step.x), 0.0f, 0.0f);
-                    res.hit_position    = origin + direction * t_max.x;
+                    res.hit_normal      = Vector3(static_cast<float>(-march_state.step.x), 0.0f, 0.0f);
+                    res.hit_position    = origin + direction * march_state.tmax.x;
                     res.hit_voxel_coord = cur_grid_coords;
 
-                    t_max.x += delta.x;
+                    march_state.tmax.x += march_state.delta.x;
                 }
-                else if (t_max.y < t_max.z)
+                else if (march_state.tmax.y < march_state.tmax.z)
                 {
-                    cur_grid_coords.y += step.y;
+                    cur_grid_coords.y += march_state.step.y;
 
-                    res.hit_normal      = Vector3(0.0f, static_cast<float>(-step.y), 0.0f);
-                    res.hit_position    = origin + direction * t_max.y;
+                    res.hit_normal      = Vector3(0.0f, static_cast<float>(-march_state.step.y), 0.0f);
+                    res.hit_position    = origin + direction * march_state.tmax.y;
                     res.hit_voxel_coord = cur_grid_coords;
 
-                    t_max.y += delta.y;
+                    march_state.tmax.y += march_state.delta.y;
                 }
                 else
                 {
-                    cur_grid_coords.z += step.z;
+                    cur_grid_coords.z += march_state.step.z;
 
-                    res.hit_normal      = Vector3(0.0f, 0.0f, static_cast<float>(-step.z));
-                    res.hit_position    = origin + direction * t_max.z;
+                    res.hit_normal      = Vector3(0.0f, 0.0f, static_cast<float>(-march_state.step.z));
+                    res.hit_position    = origin + direction * march_state.tmax.z;
                     res.hit_voxel_coord = cur_grid_coords;
 
-                    t_max.z += delta.z;
+                    march_state.tmax.z += march_state.delta.z;
                 }
             }
 
             return res;
         }
 
+        // used for non rendering marching, more accurate than the other method due to proper handling of cases where the direciton is diagonal
+        // this method is slower than the one used for rendering
         MarchResult MarchUntilHitOrPosition(const VoxelGrid& voxel_grid, uint16_t max_iterations, const Vector3I& stop_position) const
         {
             MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr };
 
-            Vector3I step             = direction.GetSignVector();
-            Vector3I cur_grid_coords  = voxel_grid.GetGridPosition(origin);
-            Vector3I near_grid_coords = CalculateNearestVoxelGridCoords(cur_grid_coords);
-            Vector3 t_max             = CalculateTMax(near_grid_coords);
-            Vector3 delta             = CalculateDelta();
+            MarchState march_state = GetMarchingPreCompute();
 
-            uint16_t i = 0;
+            Vector3I cur_grid_coords = voxel_grid.GetGridPosition(origin);
+
+            uint16_t i        = 0;
+            int last_smallest = -1;
+
             while (i++ < max_iterations)
             {
                 // ray shot off the grid
@@ -147,41 +192,51 @@ namespace Math
 
                 res.voxel_data_ptr = voxel_grid.GetVoxelDataPtr(cur_grid_coords);
 
-                /*  if (res.voxel_data_ptr->type != VoxelElement::AIR && origin != cur_grid_coords)
-                  {
-                      res.did_hit = true;
-                      return res;
-                  }*/
-
-                if (t_max.x < t_max.y && t_max.x < t_max.z)
+                if (res.voxel_data_ptr->type != VoxelElement::AIR && origin != cur_grid_coords)
                 {
-                    cur_grid_coords.x += step.x;
-
-                    res.hit_normal      = Vector3(static_cast<float>(-step.x), 0.0f, 0.0f);
-                    res.hit_position    = origin + direction * t_max.x;
-                    res.hit_voxel_coord = cur_grid_coords;
-
-                    t_max.x += delta.x;
+                    res.did_hit = true;
+                    return res;
                 }
-                else if (t_max.y < t_max.z)
+
+                bool x_smallest = march_state.tmax.x < march_state.tmax.y && march_state.tmax.x < march_state.tmax.z;
+                bool x_equal    = march_state.tmax.x == march_state.tmax.y && march_state.tmax.x < march_state.tmax.z || march_state.tmax.x == march_state.tmax.z && march_state.tmax.x < march_state.tmax.y;
+                bool y_smallest = march_state.tmax.y < march_state.tmax.x && march_state.tmax.y < march_state.tmax.z;
+                bool y_equal    = march_state.tmax.y == march_state.tmax.x && march_state.tmax.y < march_state.tmax.z || march_state.tmax.y == march_state.tmax.z && march_state.tmax.y < march_state.tmax.x;
+                bool z_smallest = march_state.tmax.z < march_state.tmax.x && march_state.tmax.z < march_state.tmax.y;
+                bool z_equal    = march_state.tmax.z == march_state.tmax.x && march_state.tmax.z < march_state.tmax.y || march_state.tmax.z == march_state.tmax.y && march_state.tmax.z < march_state.tmax.x;
+
+                if (x_smallest || (x_equal && last_smallest != 0))
                 {
-                    cur_grid_coords.y += step.y;
+                    cur_grid_coords.x += march_state.step.x;
 
-                    res.hit_normal      = Vector3(0.0f, static_cast<float>(-step.y), 0.0f);
-                    res.hit_position    = origin + direction * t_max.y;
+                    res.hit_normal      = Vector3(static_cast<float>(-march_state.step.x), 0.0f, 0.0f);
+                    res.hit_position    = origin + direction * march_state.tmax.x;
                     res.hit_voxel_coord = cur_grid_coords;
+                    last_smallest       = 0;
 
-                    t_max.y += delta.y;
+                    march_state.tmax.x += march_state.delta.x;
                 }
-                else
+                else if (y_smallest || (y_equal && last_smallest != 1))
                 {
-                    cur_grid_coords.z += step.z;
+                    cur_grid_coords.y += march_state.step.y;
 
-                    res.hit_normal      = Vector3(0.0f, 0.0f, static_cast<float>(-step.z));
-                    res.hit_position    = origin + direction * t_max.z;
+                    res.hit_normal      = Vector3(0.0f, static_cast<float>(-march_state.step.y), 0.0f);
+                    res.hit_position    = origin + direction * march_state.tmax.y;
                     res.hit_voxel_coord = cur_grid_coords;
+                    last_smallest       = 1;
 
-                    t_max.z += delta.z;
+                    march_state.tmax.y += march_state.delta.y;
+                }
+                else if (z_smallest || (z_equal && last_smallest != 2))
+                {
+                    cur_grid_coords.z += march_state.step.z;
+
+                    res.hit_normal      = Vector3(0.0f, 0.0f, static_cast<float>(-march_state.step.z));
+                    res.hit_position    = origin + direction * march_state.tmax.z;
+                    res.hit_voxel_coord = cur_grid_coords;
+                    last_smallest       = 2;
+
+                    march_state.tmax.z += march_state.delta.z;
                 }
 
                 if (cur_grid_coords == stop_position)
