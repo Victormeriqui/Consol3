@@ -35,6 +35,7 @@ namespace Engine
         Vector3 velocity_threshold = Vector3();
         bool is_falling            = true;
         bool is_sleeping           = false;
+        float temperature          = 0.0f;
 
         VoxelData() : type(VoxelElement::AIR)
         {

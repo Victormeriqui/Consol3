@@ -29,6 +29,7 @@ namespace Engine
         VoxelMovementType movement_type;
         float friction       = 0.0f;
         float dispersion     = 0.0f;
+        float aquaplaning    = 0.0f;
         float air_resistance = 0.0f;
     };
 
@@ -51,14 +52,15 @@ namespace Engine
     };
 
     static std::map<VoxelElement, VoxelElementSettings> voxel_element_settings_map = {
+        { VoxelElement::OUT_OF_BOUNDS, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
         { VoxelElement::AIR, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
         { VoxelElement::CURSOR, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.16f, .dispersion = 1.0f, .air_resistance = 0.01f } },
-        { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.4f, .dispersion = 2.0f } },
+        { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.4f, .dispersion = 2.0f, .aquaplaning = 0.5f } },
         { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS, .dispersion = 1.0f } },
-        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.1f, .dispersion = 0.5f } },
+        { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.1f, .dispersion = 0.5f, .aquaplaning = 0.3f } },
     };
 
     static std::map<VoxelElement, std::vector<RGBColor>> voxel_color_map = {

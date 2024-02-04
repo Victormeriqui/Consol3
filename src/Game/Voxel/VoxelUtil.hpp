@@ -93,6 +93,51 @@ namespace Game
                 voxel_grid->SetVoxelData(grid_pos_a, b_data);
                 voxel_grid->SetVoxelData(grid_pos_b, a_data);
             }
+
+            static void SpawnBox(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, uint8_t size, VoxelElement voxel_type)
+            {
+                uint8_t half_size = size / 2;
+                int min_x         = grid_pos.x - half_size;
+                int max_x         = grid_pos.x + half_size;
+                int min_y         = grid_pos.y - half_size;
+                int max_y         = grid_pos.y + half_size;
+                int min_z         = grid_pos.z - half_size;
+                int max_z         = grid_pos.z + half_size;
+
+                for (int x = min_x; x <= max_x; x++)
+                {
+                    for (int y = min_y; y <= max_y; y++)
+                    {
+                        for (int z = min_z; z <= max_z; z++)
+                        {
+                            if (x == min_x || x == max_x || y == min_y || z == min_z || z == max_z)
+                                SpawnVoxel(voxel_grid, Vector3I(x, y, z), voxel_type);
+                        }
+                    }
+                }
+            }
+
+            static void SpawnCube(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, uint8_t size, VoxelElement voxel_type)
+            {
+                uint8_t half_size = size / 2;
+                int min_x         = grid_pos.x - half_size;
+                int max_x         = grid_pos.x + half_size;
+                int min_y         = grid_pos.y - half_size;
+                int max_y         = grid_pos.y + half_size;
+                int min_z         = grid_pos.z - half_size;
+                int max_z         = grid_pos.z + half_size;
+
+                for (int x = min_x; x <= max_x; x++)
+                {
+                    for (int y = min_y; y <= max_y; y++)
+                    {
+                        for (int z = min_z; z <= max_z; z++)
+                        {
+                            SpawnVoxel(voxel_grid, Vector3I(x, y, z), voxel_type);
+                        }
+                    }
+                }
+            }
         }
     }
 }

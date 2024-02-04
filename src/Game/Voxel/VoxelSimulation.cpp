@@ -189,13 +189,12 @@ namespace Game
                                 // dont sleep if we're a liquid on top of a liquid, push a little bit instead so it disperses
                                 if (cur_voxel_settings.movement_type == VoxelMovementType::LIQUID && candidate_voxel_under_settings.movement_type == VoxelMovementType::LIQUID)
                                 {
-                                    Vector3 rand_vel = VoxelUtil::GetRandomHorizontalVelocity();
-
+                                    Vector3 rand_vel        = VoxelUtil::GetRandomHorizontalVelocity();
+                                    cur_voxel_data.velocity = rand_vel * cur_voxel_settings.aquaplaning;
                                     // make sure the push  is significant enough to move it
                                     // if (rand_vel.GetLength() < 0.8f)
                                     //  rand_vel *= 6.0f;
 
-                                    cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
                                     voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
                                     continue;
                                 }

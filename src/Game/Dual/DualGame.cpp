@@ -85,7 +85,16 @@ namespace Game
                 }
             }
 
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -40, -5), VoxelElement::LAVA);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -40, 30), 10, VoxelElement::STEEL);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -10, 30), 5, VoxelElement::STEEL);
+
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, -20), 20, VoxelElement::STEEL);
+            VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, -20), 19, VoxelElement::WATER);
+
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
+            VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
+
+            // VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -40, -5), VoxelElement::LAVA);
         }
 
         void DualGame::Update()
@@ -167,11 +176,15 @@ namespace Game
                     {
                         Vector3I candidate_pos   = cursor_center_grid_pos + cursor_offset;
                         VoxelElement cur_element = voxel_grid->GetVoxelElement(candidate_pos);
-                        if (cur_element == VoxelElement::AIR)
+
+                        // only allow replacing if we're placing air
+                        if (cur_element == VoxelElement::AIR || selected_voxel == VoxelElement::AIR)
                             VoxelUtil::SpawnVoxel(voxel_grid, candidate_pos, selected_voxel);
                     }
                 }
             }
+            if (input_manager->IsKeyHeld(Key::N0))
+                selected_voxel = VoxelElement::AIR;
 
             if (input_manager->IsKeyHeld(Key::N1))
                 selected_voxel = VoxelElement::SAND;
