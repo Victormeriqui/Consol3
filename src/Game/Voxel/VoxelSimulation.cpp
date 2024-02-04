@@ -14,6 +14,7 @@ namespace Game
 
         VoxelSimulation::VoxelSimulation(std::shared_ptr<VoxelGrid> voxel_grid) : voxel_grid(std::move(voxel_grid))
         {
+            VoxelUtil::InitializeUtilPositions(10);
         }
 
         Vector3I VoxelSimulation::GetCandidateSwapPos(const Vector3I& from_coord, VoxelData& voxel_data)
@@ -98,6 +99,36 @@ namespace Game
                         Vector3I candidate_voxel_under_pos         = candidate_voxel_pos + VoxelUtil::down;
                         VoxelElement candidate_voxel_under_element = voxel_grid->GetVoxelElement(candidate_voxel_under_pos);
 
+                        // temperature handling
+                        for (const Vector3I& adjacent_offset : VoxelUtil::adjacent_positions)
+                        {
+                            Vector3I adjacent_voxel_pos         = cur_voxel_pos + adjacent_offset;
+                            VoxelElement adjacent_voxel_element = voxel_grid->GetVoxelElement(adjacent_voxel_pos);
+
+                            if (adjacent_voxel_element == VoxelElement::AIR || adjacent_voxel_element == VoxelElement::OUT_OF_BOUNDS)
+                                continue;
+
+                            VoxelData adjacent_voxel_data               = voxel_grid->GetVoxelData(adjacent_voxel_pos);
+                            VoxelElementSettings adjacent_voxel_setting = voxel_element_settings_map[adjacent_voxel_element];
+
+                            // their temperature is lower than ours, so we can give them heat
+                            if (adjacent_voxel_data.temperature < cur_voxel_data.temperature)
+                            {
+                                cur_voxel_data.temperature -= adjacent_voxel_setting.heat_condutivity;
+                                adjacent_voxel_data.temperature += adjacent_voxel_setting.heat_condutivity;
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                voxel_grid->SetVoxelData(adjacent_voxel_pos, adjacent_voxel_data);
+                            }
+                        }
+                        if (cur_voxel_data.type == VoxelElement::WATER)
+                        {
+                            if (cur_voxel_data.temperature >= 100.0f)
+                            {
+                                VoxelUtil::SpawnVoxel(voxel_grid, cur_voxel_pos, VoxelElement::STEAM);
+                                continue;
+                            }
+                        }
+
                         // falling movement
                         if (cur_voxel_data.is_falling)
                         {
@@ -128,7 +159,7 @@ namespace Game
                             }
 
                             // no movement this iteration
-                            if (cur_voxel_pos == candidate_voxel_pos)
+                            if (cur_voxel_pos == candidate_voxel_pos || cur_voxel_settings.movement_type == VoxelMovementType::GAS)
                                 continue;
 
                             // we hit either a non air element or the grid wall

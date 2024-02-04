@@ -40,9 +40,10 @@ namespace Game
             static Vector3I up             = Vector3I(0, 1, 0);
             static Vector3I down           = Vector3I(0, -1, 0);
 
+            static std::vector<Vector3I> adjacent_positions;
             static std::vector<std::vector<Vector3I>> sides_at_dist;
 
-            static void InitializeSidesUntilMaxDist(uint8_t max_dist)
+            static void InitializeUtilPositions(uint8_t max_dist)
             {
                 for (uint8_t dist = 0; dist <= max_dist; dist++)
                 {
@@ -63,6 +64,16 @@ namespace Game
 
                     sides_at_dist.emplace_back(cur_sides);
                 }
+
+                for (int y = -1; y <= 1; y++)
+                {
+                    for (const Vector3I& pos : sides_at_dist[1])
+                        adjacent_positions.emplace_back(Vector3I(pos.x, y, pos.z));
+                    for (const Vector3I& pos : sides_at_dist[2])
+                        adjacent_positions.emplace_back(Vector3I(pos.x, y, pos.z));
+                }
+                adjacent_positions.emplace_back(Vector3I(0, 1, 0));
+                adjacent_positions.emplace_back(Vector3I(0, -1, 0));
             }
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, uint8_t color_index)
@@ -75,7 +86,7 @@ namespace Game
                 if (element_settings.movement_type == VoxelMovementType::SOLID || element_settings.movement_type == VoxelMovementType::LIQUID)
                     velocity.y = -1.0f;
 
-                voxel_grid->SetVoxelData(grid_pos, { voxel_type, color_index, velocity });
+                voxel_grid->SetVoxelData(grid_pos, { .type = voxel_type, .color_index = color_index, .velocity = velocity, .temperature = element_settings.base_temperature });
             }
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type)

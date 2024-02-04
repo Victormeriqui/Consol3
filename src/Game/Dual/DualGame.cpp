@@ -67,7 +67,7 @@ namespace Game
 
         void DualGame::LoadResources()
         {
-            VoxelUtil::InitializeSidesUntilMaxDist(10);
+            VoxelUtil::InitializeUtilPositions(10);
 
             resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
 
@@ -94,7 +94,8 @@ namespace Game
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
 
-            // VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -40, -5), VoxelElement::LAVA);
+            // VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
+            // VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 6), VoxelElement::WATER);
         }
 
         void DualGame::Update()

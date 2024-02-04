@@ -29,26 +29,14 @@ namespace Engine
     struct VoxelData
     {
         VoxelElement type;
-        bool processed_flip_flop   = false;
-        uint8_t color_index        = 0;
-        Vector3 velocity           = Vector3();
+        uint8_t color_index = 0;
+        Vector3 velocity    = Vector3();
+        float temperature   = 0.0f;
+
         Vector3 velocity_threshold = Vector3();
         bool is_falling            = true;
         bool is_sleeping           = false;
-        float temperature          = 0.0f;
-
-        VoxelData() : type(VoxelElement::AIR)
-        {
-        }
-        VoxelData(VoxelElement type) : type(type)
-        {
-        }
-        VoxelData(VoxelElement type, uint8_t color_index) : type(type), color_index(color_index)
-        {
-        }
-        VoxelData(VoxelElement type, uint8_t color_index, const Vector3& velocity) : type(type), color_index(color_index), velocity(velocity)
-        {
-        }
+        bool processed_flip_flop   = false;
     };
 
     class VoxelGrid
