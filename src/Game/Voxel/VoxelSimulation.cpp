@@ -91,7 +91,8 @@ namespace Game
                         // our candidate
                         Vector3I candidate_voxel_pos = GetCandidateSwapPos(cur_voxel_pos, cur_voxel_data);
 
-                        VoxelElement candidate_voxel_element = voxel_grid->GetVoxelElement(candidate_voxel_pos);
+                        VoxelElement candidate_voxel_element          = voxel_grid->GetVoxelElement(candidate_voxel_pos);
+                        VoxelElementSettings candidate_voxel_settings = voxel_element_settings_map[candidate_voxel_element];
 
                         // under our candidate
                         Vector3I candidate_voxel_under_pos         = candidate_voxel_pos + VoxelUtil::down;
@@ -100,12 +101,35 @@ namespace Game
                         // falling movement
                         if (cur_voxel_data.is_falling)
                         {
+                            // apply gravity for solid and liquid types
+                            if (cur_voxel_settings.movement_type == VoxelMovementType::SOLID || cur_voxel_settings.movement_type == VoxelMovementType::LIQUID)
+                            {
+                                cur_voxel_data.velocity.y -= gravity_accel - cur_voxel_settings.air_resistance;
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                            }
+
+                            // set constant rise velocity for gases (no acceleration)
+                            if (cur_voxel_settings.movement_type == VoxelMovementType::GAS)
+                            {
+                                // random horizonal dispersion
+                                Vector3 rand_vel        = VoxelUtil::GetRandomHorizontalVelocity();
+                                cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
+                                // rise up
+                                cur_voxel_data.velocity.y = gas_rise_vel - cur_voxel_settings.air_resistance;
+
+                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                            }
+
                             // swap if the candidate is air
-                            if (candidate_voxel_element == VoxelElement::AIR)
+                            if (candidate_voxel_element == VoxelElement::AIR || candidate_voxel_settings.movement_type == VoxelMovementType::GAS)
                             {
                                 VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
                                 continue;
                             }
+
+                            // no movement this iteration
+                            if (cur_voxel_pos == candidate_voxel_pos)
+                                continue;
 
                             // we hit either a non air element or the grid wall
 

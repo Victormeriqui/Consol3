@@ -84,6 +84,8 @@ namespace Game
                     voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
                 }
             }
+
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -40, -5), VoxelElement::LAVA);
         }
 
         void DualGame::Update()
@@ -162,7 +164,12 @@ namespace Game
                 for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
                 {
                     for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
-                        VoxelUtil::SpawnVoxel(voxel_grid, cursor_center_grid_pos + cursor_offset, selected_voxel);
+                    {
+                        Vector3I candidate_pos   = cursor_center_grid_pos + cursor_offset;
+                        VoxelElement cur_element = voxel_grid->GetVoxelElement(candidate_pos);
+                        if (cur_element == VoxelElement::AIR)
+                            VoxelUtil::SpawnVoxel(voxel_grid, candidate_pos, selected_voxel);
+                    }
                 }
             }
 
@@ -194,9 +201,9 @@ namespace Game
             lighting_system->ClearDepthBuffers();
 
             // render raster components
-            // raster_scene_renderer.DrawShadedMesh(floor);
-            // raster_scene_renderer.DrawShadedMesh(penguin);
-            // raster_scene_renderer.RenderSceneShared(delta);
+            raster_scene_renderer.DrawShadedMesh(floor);
+            raster_scene_renderer.DrawShadedMesh(penguin);
+            raster_scene_renderer.RenderSceneShared(delta);
 
             // mark cursor positions
             cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));

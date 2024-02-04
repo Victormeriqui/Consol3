@@ -14,11 +14,13 @@ namespace Game
     {
         using namespace Engine;
 
+        const static uint64_t update_frequency = 3;
+        const static float gravity_accel       = 0.091f;
+        const static float gas_rise_vel        = 0.5f;
+
         class VoxelSimulation
         {
         private:
-            const static uint64_t update_frequency = 3;
-
             std::shared_ptr<VoxelGrid> voxel_grid;
 
             Vector3I GetCandidateSwapPos(const Vector3I& from_coord, VoxelData& voxel_data);

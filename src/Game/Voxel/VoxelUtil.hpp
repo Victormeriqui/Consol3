@@ -67,7 +67,15 @@ namespace Game
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, uint8_t color_index)
             {
-                voxel_grid->SetVoxelData(grid_pos, { voxel_type, color_index, Vector3(0.0f, -1.0f, 0.0f) });
+                VoxelElementSettings element_settings = voxel_element_settings_map[voxel_type];
+
+                Vector3 velocity = Vector3(0.0f, 0.0f, 0.0f);
+
+                // give a downwards head start to solid and liquid spawns
+                if (element_settings.movement_type == VoxelMovementType::SOLID || element_settings.movement_type == VoxelMovementType::LIQUID)
+                    velocity.y = -1.0f;
+
+                voxel_grid->SetVoxelData(grid_pos, { voxel_type, color_index, velocity });
             }
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type)

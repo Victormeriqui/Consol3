@@ -27,8 +27,9 @@ namespace Engine
     {
         bool skip_simulation = false;
         VoxelMovementType movement_type;
-        float friction   = 0.0f;
-        float dispersion = 0.0f;
+        float friction       = 0.0f;
+        float dispersion     = 0.0f;
+        float air_resistance = 0.0f;
     };
 
     enum class VoxelElement : uint8_t
@@ -54,9 +55,9 @@ namespace Engine
         { VoxelElement::CURSOR, { .skip_simulation = true, .movement_type = VoxelMovementType::NONE } },
         { VoxelElement::STONE, { .movement_type = VoxelMovementType::STATIC } },
         { VoxelElement::STEEL, { .movement_type = VoxelMovementType::STATIC } },
-        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.16f, .dispersion = 1.0f } },
+        { VoxelElement::SAND, { .movement_type = VoxelMovementType::SOLID, .friction = 0.16f, .dispersion = 1.0f, .air_resistance = 0.01f } },
         { VoxelElement::WATER, { .movement_type = VoxelMovementType::LIQUID, .friction = 0.4f, .dispersion = 1.0f } },
-        { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS } },
+        { VoxelElement::STEAM, { .movement_type = VoxelMovementType::GAS, .dispersion = 1.0f } },
         { VoxelElement::LAVA, { .movement_type = VoxelMovementType::LIQUID, .friction = 1.1f, .dispersion = 0.2f } },
     };
 
