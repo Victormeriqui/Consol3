@@ -48,6 +48,76 @@ namespace Game
             return march_res.hit_voxel_coord;
         }
 
+        void VoxelSimulation::ConductHeat(const Vector3I& from_coord, VoxelData& voxel_data, const VoxelElementSettings& voxel_settings)
+        {
+            // exchange heat with adjacent elements
+            for (const Vector3I& adjacent_offset : VoxelUtil::adjacent_positions)
+            {
+                Vector3I adjacent_voxel_pos         = from_coord + adjacent_offset;
+                VoxelElement adjacent_voxel_element = voxel_grid->GetVoxelElement(adjacent_voxel_pos);
+
+                if (adjacent_voxel_element == VoxelElement::AIR || adjacent_voxel_element == VoxelElement::OUT_OF_BOUNDS)
+                    continue;
+
+                VoxelData adjacent_voxel_data                = voxel_grid->GetVoxelData(adjacent_voxel_pos);
+                VoxelElementSettings adjacent_voxel_settings = voxel_element_settings_map[adjacent_voxel_element];
+
+                float temp_diff = voxel_data.temperature - adjacent_voxel_data.temperature;
+                // their temperature is lower than ours, so we can give them heat
+                if (temp_diff > 0)
+                {
+                    float available_to_exchange = std::min(voxel_settings.temperature_settings.heat_output_rate, temp_diff);
+                    float exchange              = std::min(available_to_exchange, adjacent_voxel_settings.temperature_settings.heat_input_rate);
+
+                    voxel_data.temperature -= exchange;
+                    adjacent_voxel_data.temperature += exchange;
+
+                    voxel_grid->SetVoxelData(from_coord, voxel_data);
+                    voxel_grid->SetVoxelData(adjacent_voxel_pos, adjacent_voxel_data);
+                }
+            }
+
+            // dissipate heat
+            if (voxel_data.temperature > voxel_settings.temperature_settings.first_spawn_temperature)
+            {
+                voxel_data.temperature -= voxel_settings.temperature_settings.heat_dissipation_rate;
+                voxel_grid->SetVoxelData(from_coord, voxel_data);
+            }
+        }
+
+        bool VoxelSimulation::HandlePhaseTransition(const Vector3I& from_coord, VoxelData& voxel_data)
+        {
+            VoxelPhaseTransitionSettings phase_transition_settings = voxel_element_phase_transition_map[voxel_data.type];
+
+            // boil
+            if (voxel_data.temperature > phase_transition_settings.boil_temperature_threshold && voxel_data.type == phase_transition_settings.liquid_element)
+            {
+                VoxelUtil::PhaseTransitionVoxel(voxel_grid, from_coord, phase_transition_settings.gas_element, voxel_data.temperature);
+                return true;
+            }
+            // condense
+            if (voxel_data.temperature <= phase_transition_settings.boil_temperature_threshold && voxel_data.type == phase_transition_settings.gas_element)
+            {
+                VoxelUtil::PhaseTransitionVoxel(voxel_grid, from_coord, phase_transition_settings.liquid_element, voxel_data.temperature);
+                return true;
+            }
+
+            // freeze
+            if (voxel_data.temperature <= phase_transition_settings.freeze_temperature_threshold && voxel_data.type == phase_transition_settings.liquid_element)
+            {
+                VoxelUtil::PhaseTransitionVoxel(voxel_grid, from_coord, phase_transition_settings.solid_element, voxel_data.temperature);
+                return true;
+            }
+            // melt
+            if (voxel_data.temperature > phase_transition_settings.freeze_temperature_threshold && voxel_data.type == phase_transition_settings.solid_element)
+            {
+                VoxelUtil::PhaseTransitionVoxel(voxel_grid, from_coord, phase_transition_settings.liquid_element, voxel_data.temperature);
+                return true;
+            }
+
+            return false;
+        }
+
         void VoxelSimulation::UpdateSimulationDownTop(uint64_t update_tick)
         {
             if (update_tick % update_frequency != 0)
@@ -55,11 +125,11 @@ namespace Game
 
             bool current_flip_flop = update_tick % 2 != 0;
 
-            for (int y = VOXEL_GRID_DOWN; y < VOXEL_GRID_UP; y++)
+            for (int y = VOXEL_GRID_DOWN; y <= VOXEL_GRID_UP; y++)
             {
-                for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT; x++)
+                for (int x = VOXEL_GRID_LEFT; x <= VOXEL_GRID_RIGHT; x++)
                 {
-                    for (int z = VOXEL_GRID_BACKWARDS; z < VOXEL_GRID_FORWARDS; z++)
+                    for (int z = VOXEL_GRID_BACKWARDS; z <= VOXEL_GRID_FORWARDS; z++)
                     {
                         Vector3I cur_voxel_pos                  = Vector3I(x, y, z);
                         VoxelData cur_voxel_data                = voxel_grid->GetVoxelData(cur_voxel_pos);
@@ -67,10 +137,6 @@ namespace Game
 
                         // non simulated types like air
                         if (cur_voxel_settings.skip_simulation)
-                            continue;
-
-                        // static types never move
-                        if (cur_voxel_settings.movement_type == VoxelMovementType::STATIC)
                             continue;
 
                         // needs a wakeup from another voxel
@@ -84,6 +150,19 @@ namespace Game
                         // mark as processed as we will process it next
                         cur_voxel_data.processed_flip_flop = !cur_voxel_data.processed_flip_flop;
                         voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+
+                        // temperature handling
+                        ConductHeat(cur_voxel_pos, cur_voxel_data, cur_voxel_settings);
+                        bool transitioned_phase = HandlePhaseTransition(cur_voxel_pos, cur_voxel_data);
+
+                        if (transitioned_phase)
+                            continue;
+
+                        // static types never move
+                        if (cur_voxel_settings.movement_type == VoxelMovementType::STATIC)
+                            continue;
+
+                        // movement
 
                         // under our current pos
                         Vector3I cur_voxel_under_pos         = cur_voxel_pos + VoxelUtil::down;
@@ -99,43 +178,13 @@ namespace Game
                         Vector3I candidate_voxel_under_pos         = candidate_voxel_pos + VoxelUtil::down;
                         VoxelElement candidate_voxel_under_element = voxel_grid->GetVoxelElement(candidate_voxel_under_pos);
 
-                        // temperature handling
-                        for (const Vector3I& adjacent_offset : VoxelUtil::adjacent_positions)
-                        {
-                            Vector3I adjacent_voxel_pos         = cur_voxel_pos + adjacent_offset;
-                            VoxelElement adjacent_voxel_element = voxel_grid->GetVoxelElement(adjacent_voxel_pos);
-
-                            if (adjacent_voxel_element == VoxelElement::AIR || adjacent_voxel_element == VoxelElement::OUT_OF_BOUNDS)
-                                continue;
-
-                            VoxelData adjacent_voxel_data               = voxel_grid->GetVoxelData(adjacent_voxel_pos);
-                            VoxelElementSettings adjacent_voxel_setting = voxel_element_settings_map[adjacent_voxel_element];
-
-                            // their temperature is lower than ours, so we can give them heat
-                            if (adjacent_voxel_data.temperature < cur_voxel_data.temperature)
-                            {
-                                cur_voxel_data.temperature -= adjacent_voxel_setting.heat_condutivity;
-                                adjacent_voxel_data.temperature += adjacent_voxel_setting.heat_condutivity;
-                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
-                                voxel_grid->SetVoxelData(adjacent_voxel_pos, adjacent_voxel_data);
-                            }
-                        }
-                        if (cur_voxel_data.type == VoxelElement::WATER)
-                        {
-                            if (cur_voxel_data.temperature >= 100.0f)
-                            {
-                                VoxelUtil::SpawnVoxel(voxel_grid, cur_voxel_pos, VoxelElement::STEAM);
-                                continue;
-                            }
-                        }
-
                         // falling movement
                         if (cur_voxel_data.is_falling)
                         {
                             // apply gravity for solid and liquid types
                             if (cur_voxel_settings.movement_type == VoxelMovementType::SOLID || cur_voxel_settings.movement_type == VoxelMovementType::LIQUID)
                             {
-                                cur_voxel_data.velocity.y -= gravity_accel - cur_voxel_settings.air_resistance;
+                                cur_voxel_data.velocity.y -= gravity_accel - cur_voxel_settings.movement_settings.air_resistance;
                                 voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
                             }
 
@@ -144,9 +193,9 @@ namespace Game
                             {
                                 // random horizonal dispersion
                                 Vector3 rand_vel        = VoxelUtil::GetRandomHorizontalVelocity();
-                                cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
+                                cur_voxel_data.velocity = rand_vel * cur_voxel_settings.movement_settings.dispersion;
                                 // rise up
-                                cur_voxel_data.velocity.y = gas_rise_vel - cur_voxel_settings.air_resistance;
+                                cur_voxel_data.velocity.y = gas_rise_vel - cur_voxel_settings.movement_settings.air_resistance;
 
                                 voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
                             }
@@ -155,6 +204,13 @@ namespace Game
                             if (candidate_voxel_element == VoxelElement::AIR || candidate_voxel_settings.movement_type == VoxelMovementType::GAS)
                             {
                                 VoxelUtil::SwapVoxels(voxel_grid, cur_voxel_pos, candidate_voxel_pos);
+                                continue;
+                            }
+
+                            // if we're under the grid bounds just delete
+                            if (candidate_voxel_element == VoxelElement::OUT_OF_BOUNDS)
+                            {
+                                voxel_grid->SetVoxelData(cur_voxel_pos, {.type = VoxelElement::AIR});
                                 continue;
                             }
 
@@ -186,7 +242,7 @@ namespace Game
                                 Vector3 rand_vel = VoxelUtil::GetRandomHorizontalVelocity();
 
                                 // adapt the slide off velocity to the element dispersion
-                                cur_voxel_data.velocity = rand_vel * cur_voxel_settings.dispersion;
+                                cur_voxel_data.velocity = rand_vel * cur_voxel_settings.movement_settings.dispersion;
                             }
 
                             voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
@@ -194,11 +250,10 @@ namespace Game
                         // floor sliding movement
                         else
                         {
-                            // if we're on top of the grid bounds just sleep
+                            // if we're on top of the grid bounds just delete
                             if (cur_voxel_under_element == VoxelElement::OUT_OF_BOUNDS)
                             {
-                                cur_voxel_data.is_sleeping = true;
-                                voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
+                                voxel_grid->SetVoxelData(cur_voxel_pos, {.type = VoxelElement::AIR});
                                 continue;
                             }
 
@@ -208,7 +263,7 @@ namespace Game
                             // apply friction if we're on top of a solid
                             if (candidate_voxel_under_settings.movement_type == VoxelMovementType::SOLID || candidate_voxel_under_settings.movement_type == VoxelMovementType::STATIC)
                             {
-                                cur_voxel_data.velocity *= (1.0f - cur_voxel_settings.friction);
+                                cur_voxel_data.velocity *= (1.0f - cur_voxel_settings.movement_settings.friction);
                                 voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
                             }
 
@@ -221,7 +276,7 @@ namespace Game
                                 if (cur_voxel_settings.movement_type == VoxelMovementType::LIQUID && candidate_voxel_under_settings.movement_type == VoxelMovementType::LIQUID)
                                 {
                                     Vector3 rand_vel        = VoxelUtil::GetRandomHorizontalVelocity();
-                                    cur_voxel_data.velocity = rand_vel * cur_voxel_settings.aquaplaning;
+                                    cur_voxel_data.velocity = rand_vel * cur_voxel_settings.movement_settings.aquaplaning;
                                     // make sure the push  is significant enough to move it
                                     // if (rand_vel.GetLength() < 0.8f)
                                     //  rand_vel *= 6.0f;
@@ -246,7 +301,7 @@ namespace Game
                             // under our poisiton is air, we can fall vertically
                             if (candidate_voxel_under_element == VoxelElement::AIR)
                             {
-                                cur_voxel_data.velocity   = Vector3(0.0f, -1.0f, 0.0f);
+                                cur_voxel_data.velocity += Vector3(0.0f, -1.0f, 0.0f);
                                 cur_voxel_data.is_falling = true;
                                 voxel_grid->SetVoxelData(cur_voxel_pos, cur_voxel_data);
                                 continue;

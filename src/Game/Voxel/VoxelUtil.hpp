@@ -22,7 +22,7 @@ namespace Game
         namespace VoxelUtil
         {
             static std::mt19937 random_generator(std::random_device {}());
-            static std::uniform_real_distribution<float> rand_direction_component { -1.0f, 1.0f };
+            static std::uniform_real_distribution<float> rand_direction_component {-1.0f, 1.0f};
 
             static Vector3 GetRandomHorizontalVelocity()
             {
@@ -76,7 +76,7 @@ namespace Game
                 adjacent_positions.emplace_back(Vector3I(0, -1, 0));
             }
 
-            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, uint8_t color_index)
+            static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, uint8_t color_index, float temperature)
             {
                 VoxelElementSettings element_settings = voxel_element_settings_map[voxel_type];
 
@@ -86,14 +86,25 @@ namespace Game
                 if (element_settings.movement_type == VoxelMovementType::SOLID || element_settings.movement_type == VoxelMovementType::LIQUID)
                     velocity.y = -1.0f;
 
-                voxel_grid->SetVoxelData(grid_pos, { .type = voxel_type, .color_index = color_index, .velocity = velocity, .temperature = element_settings.base_temperature });
+                voxel_grid->SetVoxelData(grid_pos, {.type = voxel_type, .color_index = color_index, .velocity = velocity, .temperature = temperature});
             }
 
             static void SpawnVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type)
             {
+                VoxelElementSettings element_settings = voxel_element_settings_map[voxel_type];
+
                 uint8_t random_color_index = static_cast<uint8_t>(random_generator() % voxel_color_map[voxel_type].size());
 
-                SpawnVoxel(voxel_grid, grid_pos, voxel_type, random_color_index);
+                SpawnVoxel(voxel_grid, grid_pos, voxel_type, random_color_index, element_settings.temperature_settings.first_spawn_temperature);
+            }
+
+            static void PhaseTransitionVoxel(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos, VoxelElement voxel_type, float temperature)
+            {
+                VoxelElementSettings element_settings = voxel_element_settings_map[voxel_type];
+
+                uint8_t random_color_index = static_cast<uint8_t>(random_generator() % voxel_color_map[voxel_type].size());
+
+                SpawnVoxel(voxel_grid, grid_pos, voxel_type, random_color_index, temperature + element_settings.temperature_settings.phase_transition_temperature_boost);
             }
 
             static void SwapVoxels(std::shared_ptr<VoxelGrid> voxel_grid, const Vector3I& grid_pos_a, const Vector3I& grid_pos_b)

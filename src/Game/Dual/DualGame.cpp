@@ -81,21 +81,20 @@ namespace Game
             {
                 for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT - 1; x++)
                 {
-                    voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
+                    VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(x, VOXEL_GRID_DOWN, z), VoxelElement::STEEL);
                 }
             }
 
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -40, 30), 10, VoxelElement::STEEL);
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -10, 30), 5, VoxelElement::STEEL);
-
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, -20), 20, VoxelElement::STEEL);
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, -20), 19, VoxelElement::WATER);
-
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
 
-            // VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
-            // VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 6), VoxelElement::WATER);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 3), VoxelElement::ICE);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 4), VoxelElement::ICE);
         }
 
         void DualGame::Update()
@@ -191,16 +190,19 @@ namespace Game
                 selected_voxel = VoxelElement::SAND;
 
             if (input_manager->IsKeyHeld(Key::N2))
-                selected_voxel = VoxelElement::WATER;
+                selected_voxel = VoxelElement::ICE;
 
             if (input_manager->IsKeyHeld(Key::N3))
-                selected_voxel = VoxelElement::STEEL;
+                selected_voxel = VoxelElement::WATER;
 
             if (input_manager->IsKeyHeld(Key::N4))
                 selected_voxel = VoxelElement::STEAM;
 
             if (input_manager->IsKeyHeld(Key::N5))
                 selected_voxel = VoxelElement::LAVA;
+
+            if (input_manager->IsKeyHeld(Key::N6))
+                selected_voxel = VoxelElement::STEEL;
 
             if (input_manager->IsKeyHeld(Key::P))
                 penguin.PlayAnimation("taunt", 1.0f);
@@ -235,7 +237,7 @@ namespace Game
                     // save the voxel data that was under this cursor position
                     prev_cursor_data.push(voxel_grid->GetVoxelData(cursor_pos));
 
-                    voxel_grid->SetVoxelData(cursor_pos, { VoxelElement::CURSOR, 0 });
+                    voxel_grid->SetVoxelData(cursor_pos, {VoxelElement::CURSOR, 0});
                     cursor_was_set = true;
                 }
             }

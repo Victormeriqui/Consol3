@@ -25,6 +25,9 @@ namespace Game
 
             Vector3I GetCandidateSwapPos(const Vector3I& from_coord, VoxelData& voxel_data);
 
+            void ConductHeat(const Vector3I& from_coord, VoxelData& voxel_data, const VoxelElementSettings& voxel_settings);
+            bool HandlePhaseTransition(const Vector3I& from_coord, VoxelData& voxel_data);
+
         public:
             VoxelSimulation(std::shared_ptr<VoxelGrid> voxel_grid);
 
