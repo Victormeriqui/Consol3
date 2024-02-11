@@ -80,6 +80,8 @@ namespace Engine
             if (accumulated_delta > 1000)
             {
                 // frame_drawer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
+                frame_drawer->ReportInformation("Consol3 " + game->GetDesiredWindowTitle() + " FPS: " + std::to_string(frame_count));
+
                 frame_count       = 0;
                 accumulated_delta = 0;
             }
@@ -101,11 +103,9 @@ namespace Engine
 
     inline void Consol3Engine::DrawFrame(int64_t delta)
     {
-        auto time = this->GetCurrentTime();
+        // auto time = this->GetCurrentTime();
         frame_drawer->ClearFrameBuffer();
         game->Render(delta);
         frame_drawer->DisplayFrame();
-
-        frame_drawer->ReportInformation(std::string("Consol3 - draw time: ") + std::to_string(this->GetCurrentTime() - time));
     }
 }

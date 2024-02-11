@@ -27,6 +27,7 @@ namespace Game
             lighting_system(std::make_shared<LightingSystem>()),
             camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
             voxel_grid(std::make_shared<VoxelGrid>()),
+            voxel_sim(voxel_grid),
             voxel_scene_renderer(frame_drawer, lighting_system, camera, voxel_grid),
             raster_scene_renderer(frame_drawer, resource_manager, lighting_system, camera)
         {
@@ -34,11 +35,11 @@ namespace Game
 
             camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
 
-            lighting_system->SetAmbientLightColor(RGBColor(70, 70, 70));
+            lighting_system->SetAmbientLightColor(RGBColor(150, 150, 150));
 
             dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -0.5f));
             dir_light->SetColor(RGBColor(255, 255, 255));
-            // lighting_system->AddLight(dir_light);
+            lighting_system->AddLight(dir_light);
 
             point_light = std::make_shared<PointLight>(Vector3(-2, 0, 0));
             point_light->SetRange(300.0f);
@@ -49,7 +50,8 @@ namespace Game
             spot_light->SetRange(300.0f);
             spot_light->SetAngle(20.0f);
             spot_light->SetColor(RGBColor(255, 255, 255));
-            lighting_system->AddLight(spot_light);
+
+            // lighting_system->AddLight(spot_light);
 
             floor = StaticMesh();
             floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -42, -6));
@@ -65,6 +67,8 @@ namespace Game
 
         void DualGame::LoadResources()
         {
+            VoxelUtil::InitializeUtilPositions(10);
+
             resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
 
             ModelLoadingOptions model_options;
@@ -77,17 +81,27 @@ namespace Game
             {
                 for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT - 1; x++)
                 {
-                    voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), { VoxelElement::STONE, 0 });
+                    VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(x, VOXEL_GRID_DOWN, z), VoxelElement::STEEL);
                 }
             }
+
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -40, 30), 10, VoxelElement::STEEL);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -10, 30), 5, VoxelElement::STEEL);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, -20), 20, VoxelElement::STEEL);
+            VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, -20), 19, VoxelElement::WATER);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
+            VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
+
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 3), VoxelElement::ICE);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 4), VoxelElement::ICE);
         }
 
         void DualGame::Update()
         {
             update_tick++;
 
-            VoxelSimulation::UpdateSimulationDownTop(voxel_grid, update_tick);
-            VoxelSimulation::UpdateSimulationTopDown(voxel_grid, update_tick);
+            voxel_sim.UpdateSimulationDownTop(update_tick);
         }
 
         void DualGame::HandleInput()
@@ -137,9 +151,12 @@ namespace Game
             // game
             if (input_manager->IsKeyHeld(Key::Q))
                 cursor_depth -= 0.2f;
-
             if (input_manager->IsKeyHeld(Key::E))
                 cursor_depth += 0.2f;
+            if (input_manager->IsKeyHeld(Key::R) && cursor_size > 1.2f)
+                cursor_size += -0.1f;
+            if (input_manager->IsKeyHeld(Key::T) && cursor_size < 10.0f)
+                cursor_size += 0.1f;
 
             if (input_manager->IsKeyHeld(Key::MOUSE3))
                 dir_light->SetDirection(camera->GetLookDirection());
@@ -152,19 +169,40 @@ namespace Game
             }
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos, selected_voxel);
+            {
+                for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
+                {
+                    for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                    {
+                        Vector3I candidate_pos   = cursor_center_grid_pos + cursor_offset;
+                        VoxelElement cur_element = voxel_grid->GetVoxelElement(candidate_pos);
+
+                        // only allow replacing if we're placing air
+                        if (cur_element == VoxelElement::AIR || selected_voxel == VoxelElement::AIR)
+                            VoxelUtil::SpawnVoxel(voxel_grid, candidate_pos, selected_voxel);
+                    }
+                }
+            }
+            if (input_manager->IsKeyHeld(Key::N0))
+                selected_voxel = VoxelElement::AIR;
 
             if (input_manager->IsKeyHeld(Key::N1))
                 selected_voxel = VoxelElement::SAND;
 
             if (input_manager->IsKeyHeld(Key::N2))
-                selected_voxel = VoxelElement::WATER;
+                selected_voxel = VoxelElement::ICE;
 
             if (input_manager->IsKeyHeld(Key::N3))
-                selected_voxel = VoxelElement::STEEL;
+                selected_voxel = VoxelElement::WATER;
 
             if (input_manager->IsKeyHeld(Key::N4))
                 selected_voxel = VoxelElement::STEAM;
+
+            if (input_manager->IsKeyHeld(Key::N5))
+                selected_voxel = VoxelElement::LAVA;
+
+            if (input_manager->IsKeyHeld(Key::N6))
+                selected_voxel = VoxelElement::STEEL;
 
             if (input_manager->IsKeyHeld(Key::P))
                 penguin.PlayAnimation("taunt", 1.0f);
@@ -183,24 +221,54 @@ namespace Game
             raster_scene_renderer.DrawShadedMesh(penguin);
             raster_scene_renderer.RenderSceneShared(delta);
 
-            // render voxels
-            cursor_grid_pos     = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
-            bool cursor_was_set = false;
+            // mark cursor positions
+            cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
+            bool cursor_was_set    = false;
 
-            if (voxel_grid->IsPositionInsideGrid(cursor_grid_pos))
+            for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
             {
-                cursor_voxel_data = voxel_grid->GetVoxelData(cursor_grid_pos);
-                voxel_grid->SetVoxelData(cursor_grid_pos, { VoxelElement::CURSOR, 0 });
-                cursor_was_set = true;
+                for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                {
+                    Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
+
+                    if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
+                        continue;
+
+                    // save the voxel data that was under this cursor position
+                    prev_cursor_data.push(voxel_grid->GetVoxelData(cursor_pos));
+
+                    voxel_grid->SetVoxelData(cursor_pos, {VoxelElement::CURSOR, 0});
+                    cursor_was_set = true;
+                }
             }
 
+            // render voxels
             voxel_scene_renderer.RenderSceneShared(delta);
 
-            // reset the cursor to it's previous voxel data so the simulation doesn't include the CURSOR type
+            // reset the cursor positions to their previous voxel data so the simulation doesn't include the CURSOR type
             if (cursor_was_set)
-                voxel_grid->SetVoxelData(cursor_grid_pos, cursor_voxel_data);
+            {
+                for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
+                {
+                    for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                    {
+                        Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
+
+                        if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
+                            continue;
+
+                        voxel_grid->SetVoxelData(cursor_pos, prev_cursor_data.front());
+                        prev_cursor_data.pop();
+                    }
+                }
+            }
 
             return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
+        }
+
+        std::string DualGame::GetDesiredWindowTitle() const
+        {
+            return "Selected: " + voxel_element_name_map.at(selected_voxel);
         }
     }
 }

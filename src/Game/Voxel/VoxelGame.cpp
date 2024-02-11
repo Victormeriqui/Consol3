@@ -27,6 +27,7 @@ namespace Game
             lighting_system(std::make_shared<LightingSystem>()),
             camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
             voxel_grid(std::make_shared<VoxelGrid>()),
+            voxel_sim(voxel_grid),
             scene_renderer(frame_drawer, lighting_system, camera, voxel_grid)
         {
             LoadResources();
@@ -88,8 +89,7 @@ namespace Game
         {
             update_tick++;
 
-            VoxelSimulation::UpdateSimulationDownTop(voxel_grid, update_tick);
-            VoxelSimulation::UpdateSimulationTopDown(voxel_grid, update_tick);
+            voxel_sim.UpdateSimulationDownTop(update_tick);
         }
 
         void VoxelGame::HandleInput()
@@ -190,6 +190,11 @@ namespace Game
                 voxel_grid->SetVoxelData(cursor_grid_pos, cursor_voxel_data);
 
             return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
+        }
+
+        std::string VoxelGame::GetDesiredWindowTitle() const
+        {
+            return "Voxel game";
         }
     }
 }

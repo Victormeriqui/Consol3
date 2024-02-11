@@ -129,7 +129,7 @@ namespace Engine
 
             bool SpotLight::IsShadowCaster() const
             {
-                return true;
+                return false;
             }
 
             std::optional<bool> SpotLight::IsLinearProjection() const

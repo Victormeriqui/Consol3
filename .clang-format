@@ -29,7 +29,7 @@ BreakInheritanceList: AfterColon
 ColumnLimit: "230"
 CompactNamespaces: "false"
 ConstructorInitializerAllOnOneLineOrOnePerLine: "true"
-Cpp11BracedListStyle: "false"
+Cpp11BracedListStyle: "true"
 FixNamespaceComments: "false"
 IncludeBlocks: Preserve
 IndentCaseLabels: "false"

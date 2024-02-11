@@ -12,6 +12,7 @@
 #define VOXEL_GRID_WIDTH  100
 #define VOXEL_GRID_HEIGHT 100
 #define VOXEL_GRID_DEPTH  100
+#define VOXEL_SIZE        1.0f
 
 #define VOXEL_GRID_LEFT      -VOXEL_GRID_WIDTH / 2
 #define VOXEL_GRID_RIGHT     VOXEL_GRID_WIDTH / 2 - 1
@@ -25,21 +26,17 @@ using namespace Math::Util;
 
 namespace Engine
 {
-
     struct VoxelData
     {
         VoxelElement type;
         uint8_t color_index = 0;
+        Vector3 velocity    = Vector3();
+        float temperature   = 0.0f;
 
-        VoxelData() : type(VoxelElement::AIR)
-        {
-        }
-        VoxelData(VoxelElement type) : type(type)
-        {
-        }
-        VoxelData(VoxelElement type, uint8_t color_index) : type(type), color_index(color_index)
-        {
-        }
+        Vector3 velocity_threshold = Vector3();
+        bool is_falling            = true;
+        bool is_sleeping           = false;
+        bool processed_flip_flop   = false;
     };
 
     class VoxelGrid
@@ -79,6 +76,9 @@ namespace Engine
 
         [[nodiscard]] VoxelElement GetVoxelElement(const Vector3I& pos) const
         {
+            if (!IsPositionInsideGrid(pos))
+                return VoxelElement::OUT_OF_BOUNDS;
+
             return grid[GetIndexFromCoords(pos)].type;
         }
 

@@ -18,6 +18,11 @@ namespace Math
         {
         }
 
+        [[nodiscard]] constexpr Vector3I GetSignVector() const
+        {
+            return Vector3I((x > 0) - (x < 0), (y > 0) - (y < 0), (z > 0) - (z < 0));
+        }
+
         constexpr Vector3I& operator+=(const Vector3I& other) noexcept
         {
             x += other.x;

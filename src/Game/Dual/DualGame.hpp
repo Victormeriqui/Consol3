@@ -4,6 +4,8 @@
 #include "IGame.hpp"
 
 #include "../Raster/ModelGenerator.hpp"
+#include "../Voxel/VoxelSimulation.hpp"
+#include "../Voxel/VoxelUtil.hpp"
 #include "Engine/Input/IInputManager.hpp"
 #include "Engine/Rendering/AnimatedMesh.hpp"
 #include "Engine/Rendering/Camera.hpp"
@@ -23,6 +25,8 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <queue>
+#include <vector>
 
 namespace Game
 {
@@ -46,6 +50,8 @@ namespace Game
             std::shared_ptr<Camera> camera;
 
             std::shared_ptr<VoxelGrid> voxel_grid;
+            VoxelSimulation voxel_sim;
+
             VoxelSceneRenderer voxel_scene_renderer;
             RasterSceneRenderer raster_scene_renderer;
 
@@ -62,9 +68,10 @@ namespace Game
             float mov_speed = 0.05f;
             bool shifting   = false;
 
-            Vector3I cursor_grid_pos;
-            VoxelData cursor_voxel_data;
+            Vector3I cursor_center_grid_pos;
+            std::queue<VoxelData> prev_cursor_data;
             float cursor_depth = 5.0f;
+            float cursor_size  = 1.0f;
 
             VoxelElement selected_voxel = VoxelElement::SAND;
 
@@ -76,6 +83,7 @@ namespace Game
             virtual void HandleInput() override;
             virtual void Update() override;
             virtual std::chrono::milliseconds Render(int64_t delta) override;
+            virtual std::string GetDesiredWindowTitle() const override;
         };
     }
 }
