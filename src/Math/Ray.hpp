@@ -11,6 +11,7 @@ namespace Math
 {
     using namespace Engine;
 
+    // result of a ray marching operation, with the information about what we hit
     struct MarchResult
     {
         bool did_hit;
@@ -20,6 +21,7 @@ namespace Math
         const VoxelData* voxel_data_ptr;
     };
 
+    // used to keep track of an ongoing raymarching
     struct MarchState
     {
         Vector3I step;
@@ -116,7 +118,7 @@ namespace Math
 
         MarchResult MarchUntilHit(const VoxelGrid& voxel_grid, uint16_t max_iterations) const
         {
-            MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr };
+            MarchResult res = {.did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr};
 
             MarchState march_state   = GetMarchingPreCompute();
             Vector3I cur_grid_coords = voxel_grid.GetGridPosition(origin);
@@ -171,11 +173,14 @@ namespace Math
             return res;
         }
 
-        // used for non rendering marching, more accurate than the other method due to proper handling of cases where the direciton is diagonal
-        // this method is slower than the one used for rendering
+        /**
+         * Marches until a voxel is hit or the stop_position is reached
+         * This method is used for non rendering marching, it's more accurate than the other method due to proper handling of cases where the direciton is diagonal,
+         * therefore it's slower than the one used for rendering
+         */
         MarchResult MarchUntilHitOrPosition(const VoxelGrid& voxel_grid, uint16_t max_iterations, const Vector3I& stop_position) const
         {
-            MarchResult res = { .did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr };
+            MarchResult res = {.did_hit = false, .hit_position = Vector3(), .hit_normal = Vector3(), .hit_voxel_coord = Vector3I(), .voxel_data_ptr = nullptr};
 
             MarchState march_state = GetMarchingPreCompute();
 
@@ -198,6 +203,7 @@ namespace Math
                     return res;
                 }
 
+                // keep track of the last result in case we have a draw, to avoid going in the same direction twice
                 bool x_smallest = march_state.tmax.x < march_state.tmax.y && march_state.tmax.x < march_state.tmax.z;
                 bool x_equal    = march_state.tmax.x == march_state.tmax.y && march_state.tmax.x < march_state.tmax.z || march_state.tmax.x == march_state.tmax.z && march_state.tmax.x < march_state.tmax.y;
                 bool y_smallest = march_state.tmax.y < march_state.tmax.x && march_state.tmax.y < march_state.tmax.z;

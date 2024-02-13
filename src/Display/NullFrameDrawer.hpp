@@ -18,6 +18,10 @@ namespace Display
         {
         }
 
+        virtual void SetupFrameDrawer() override
+        {
+        }
+
         virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override
         {
         }

@@ -18,11 +18,11 @@ namespace Display
         TextOnlyFrameDrawer<CHAR_INFO>::TextOnlyFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer, std::shared_ptr<ITerminalManager<CHAR_INFO>> terminal_manager) :
             framebuffer(std::move(framebuffer)),
             terminal_manager(std::move(terminal_manager)),
-            shades({ ' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219 }),
+            shades({' ', (char)250, ';', '%', (char)176, (char)240, (char)157, (char)177, (char)178, (char)219}),
             // shades(" .:-=+*#%@"),
             shades_count((uint8_t)shades.length())
         {
-            this->framebuffer->FillBuffer({ { ' ' }, 0x0F });
+            this->framebuffer->FillBuffer({{' '}, 0x0F});
         }
 
         template<>
@@ -36,6 +36,12 @@ namespace Display
             this->framebuffer->FillBuffer(' ');
         }
 
+        template<typename T>
+        void TextOnlyFrameDrawer<T>::SetupFrameDrawer()
+        {
+            terminal_manager->SetupTerminalManager();
+        }
+
         template<>
         void TextOnlyFrameDrawer<CHAR_INFO>::SetPixel(uint16_t x, uint16_t y, RGBColor color)
         {
@@ -43,7 +49,7 @@ namespace Display
 
             uint8_t index = Math::Util::LerpCast<uint8_t>(luminance, 0, shades_count - 1);
 
-            framebuffer->SetValue(x, y, { static_cast<WCHAR>(shades[index]), 0x0F });
+            framebuffer->SetValue(x, y, {static_cast<WCHAR>(shades[index]), 0x0F});
         }
 
         template<>
@@ -65,13 +71,13 @@ namespace Display
         template<typename T>
         void TextOnlyFrameDrawer<T>::ReportInformation(const std::string& info)
         {
-            terminal_manager->SetTitle(info);
+            terminal_manager->SetTitle(info + " | TextOnly");
         }
 
         template<>
         void TextOnlyFrameDrawer<CHAR_INFO>::ClearFrameBuffer()
         {
-            this->framebuffer->FillBuffer({ { ' ' }, 0x0F });
+            this->framebuffer->FillBuffer({{' '}, 0x0F});
         }
 
         template<>

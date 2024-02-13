@@ -37,6 +37,12 @@ namespace Display
         }
 
         template<typename T>
+        void VT8BitFrameDrawer<T>::SetupFrameDrawer()
+        {
+            terminal_manager->SetupTerminalManager();
+        }
+
+        template<typename T>
         void VT8BitFrameDrawer<T>::SetPixel(uint16_t x, uint16_t y, RGBColor color)
         {
             uint32_t real_color_hex = color.GetHexValues();
@@ -95,7 +101,7 @@ namespace Display
         template<typename T>
         void VT8BitFrameDrawer<T>::ReportInformation(const std::string& info)
         {
-            terminal_manager->SetTitle(info);
+            terminal_manager->SetTitle(info + " | VT8Bit");
         }
 
         template<typename T>

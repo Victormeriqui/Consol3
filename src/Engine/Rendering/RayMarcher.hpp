@@ -42,7 +42,9 @@ namespace Engine
             void SetupLightSpaceOrtho(const Vector3& hit_pos, const LightingSystem& lighting_system);
 
         public:
-            RayMarcher(std::shared_ptr<IFrameDrawer> frame_drawer);
+            RayMarcher();
+
+            void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer);
 
             void SetViewMatrix(const Matrix4& view_matrix);
             void SetProjectionMatrix(const Matrix4& projection_matrix);

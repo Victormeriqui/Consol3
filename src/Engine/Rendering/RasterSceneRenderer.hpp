@@ -58,7 +58,10 @@ namespace Engine
             void RenderMesh(Rasterizer& rasterizer, AbstractMesh& mesh, DepthBuffer& depthbuffer, IShader& shader, const RGBColor& color);
 
         public:
-            RasterSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera);
+            RasterSceneRenderer(std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera);
+
+            void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer);
+
             void DrawMesh(AbstractMesh& mesh);
             void DrawShadedMesh(AbstractMesh& mesh);
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);

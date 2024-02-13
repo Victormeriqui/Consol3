@@ -46,7 +46,9 @@ namespace Engine
             void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader);
 
         public:
-            Rasterizer(std::shared_ptr<IFrameDrawer> frame_drawer);
+            Rasterizer();
+
+            void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer);
 
             void SetModelMatrix(const Transform& model_transform);
             void SetModelMatrix(const Matrix4& model_matrix);

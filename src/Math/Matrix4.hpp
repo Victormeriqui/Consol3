@@ -18,6 +18,7 @@ namespace Math
         Matrix4(float values[4][4]);
         Matrix4(float value);
 
+        // non transformative matrix state
         Matrix4& SetIdentity();
         Matrix4& SetTranslation(const Vector3& translation);
         Matrix4& SetScale(const Vector3& scale);
@@ -26,6 +27,9 @@ namespace Math
         Matrix4& SetPerspectiveProjection(uint16_t width, uint16_t height, float znear, float zfar, float fov);
         Matrix4& SetOrthographicProjection(float left, float right, float up, float down, float near, float far);
         Matrix4& SetViewportMatrix(uint16_t width, uint16_t height);
+        /**
+         *  Sets the matrix state to a tangent bitangent matrix used to transform normals to world space
+         */
         Matrix4& SetTBNMatrix(const Vector3& tangent, const Vector3& bitangent, const Vector3 normal);
 
         Matrix4& Invert();

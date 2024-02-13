@@ -8,9 +8,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 if(WIN32)
     add_definitions(-DSYS_WINDOWS)
     message(STATUS "Building for Windows")
+
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")  # Compiler optimization level
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /INCREMENTAL:NO /LTCG")  # Linker optimizations
 elseif(UNIX)
     add_definitions(-DSYS_LINUX)
     message(STATUS "Building for Linux")
+
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")  # Compiler optimization level
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -21,8 +26,6 @@ endif()
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.hpp")
 
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")  # Compiler optimization level
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /INCREMENTAL:NO /LTCG")  # Linker optimizations
 
 add_executable(Consol3 ${SOURCES} ${HEADERS})
 

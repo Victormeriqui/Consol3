@@ -20,6 +20,8 @@ namespace Display
             LinuxTerminalManager(short width, short height);
             ~LinuxTerminalManager();
 
+            virtual void SetupTerminalManager() override;
+
             virtual void SetPalette(const uint32_t palette[]) override;
             virtual void SetTitle(const std::string& title) override;
 

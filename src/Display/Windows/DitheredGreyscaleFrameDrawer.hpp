@@ -22,10 +22,25 @@ namespace Display
     namespace Windows
     {
         static const uint32_t palette_dithered_greyscale[16] = {
-            0x000000, 0x111111, 0x212121, 0x333333, 0x444444, 0x565656, 0x666666, 0x777777, 0x898989, 0x999999, 0xAAAAAA, 0xBCBCBC, 0xCCCCCC, 0xDDDDDD, 0xEFEFEF, 0xFFFFFF,
+            0x000000,
+            0x111111,
+            0x212121,
+            0x333333,
+            0x444444,
+            0x565656,
+            0x666666,
+            0x777777,
+            0x898989,
+            0x999999,
+            0xAAAAAA,
+            0xBCBCBC,
+            0xCCCCCC,
+            0xDDDDDD,
+            0xEFEFEF,
+            0xFFFFFF,
         };
 
-        const uint8_t palette_shades[16] = { 0x00, 0x11, 0x21, 0x33, 0x44, 0x56, 0x66, 0x77, 0x89, 0x99, 0xAA, 0xBC, 0xCC, 0xDD, 0xEF, 0xFF };
+        const uint8_t palette_shades[16] = {0x00, 0x11, 0x21, 0x33, 0x44, 0x56, 0x66, 0x77, 0x89, 0x99, 0xAA, 0xBC, 0xCC, 0xDD, 0xEF, 0xFF};
 
         class DitheredGreyscaleFrameDrawer : public IFrameDrawer
         {
@@ -43,6 +58,8 @@ namespace Display
 
         public:
             DitheredGreyscaleFrameDrawer(std::shared_ptr<FrameBuffer<CHAR_INFO>> framebuffer);
+
+            virtual void SetupFrameDrawer() override;
 
             virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 

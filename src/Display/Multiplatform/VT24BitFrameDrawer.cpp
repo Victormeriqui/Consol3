@@ -35,6 +35,12 @@ namespace Display
         }
 
         template<typename T>
+        void VT24BitFrameDrawer<T>::SetupFrameDrawer()
+        {
+            terminal_manager->SetupTerminalManager();
+        }
+
+        template<typename T>
         void VT24BitFrameDrawer<T>::SetPixel(uint16_t x, uint16_t y, RGBColor color)
         {
             framebuffer->SetValue(x, y, color.GetHexValues());
@@ -105,7 +111,7 @@ namespace Display
         template<typename T>
         void VT24BitFrameDrawer<T>::ReportInformation(const std::string& info)
         {
-            terminal_manager->SetTitle(info);
+            terminal_manager->SetTitle(info + " | VT24Bit");
         }
 
         template<typename T>

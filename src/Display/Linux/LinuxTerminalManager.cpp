@@ -9,16 +9,20 @@ namespace Display
     {
         LinuxTerminalManager::LinuxTerminalManager(short width, short height) : width(width), height(height)
         {
-            // set window width & height
-            std::cout << "\033[8;" << height + 1 << ";" << width << "t";
-
-            DisableCursor();
         }
 
         LinuxTerminalManager::~LinuxTerminalManager()
         {
             // restore the console to its original state
             EnableCursor();
+        }
+
+        void LinuxTerminalManager::SetupTerminalManager()
+        {
+            // set window width & height
+            std::cout << "\033[8;" << height + 1 << ";" << width << "t";
+
+            DisableCursor();
         }
 
         void LinuxTerminalManager::SetPalette(const uint32_t palette[])

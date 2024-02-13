@@ -19,12 +19,12 @@ namespace Engine
             return 0;
         }
 
-        Point2 LinuxInputManager::GetMousePosition() const
+        Vector2I LinuxInputManager::GetMousePosition() const
         {
-            return Point2(0, 0);
+            return Vector2I(0, 0);
         }
 
-        void LinuxInputManager::SetMousePosition(const Point2& position)
+        void LinuxInputManager::SetMousePosition(const Vector2I& position)
         {
         }
 

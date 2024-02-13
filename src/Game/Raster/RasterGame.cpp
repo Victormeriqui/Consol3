@@ -40,12 +40,12 @@ namespace Game
             resource_manager->LoadTexture("../res/normalmap.bmp", TextureLoadingOptions::DEFAULT);
         }
 
-        RasterGame::RasterGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
+        RasterGame::RasterGame(std::shared_ptr<IInputManager> input_manager) :
             input_manager(std::move(input_manager)),
             resource_manager(std::make_shared<ResourceManager>()),
             lighting_system(std::make_shared<LightingSystem>()),
-            camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
-            scene_renderer(frame_drawer, resource_manager, lighting_system, camera)
+            camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f)),
+            scene_renderer(resource_manager, lighting_system, camera)
         {
             LoadResources();
 
@@ -131,6 +131,19 @@ namespace Game
 
             plight_mesh.SetScale(Vector3(0.1f, 0.1f, 0.1f));
         }
+
+        void RasterGame::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+        {
+            this->frame_drawer = std::move(frame_drawer);
+
+            this->frame_drawer->SetupFrameDrawer();
+
+            camera = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
+            camera->SetPosition(Vector3(0, 0.1f, -1.155f));
+
+            scene_renderer = RasterSceneRenderer(resource_manager, lighting_system, camera);
+            scene_renderer.SetFrameDrawer(this->frame_drawer);
+        };
 
         void RasterGame::HandleInput()
         {

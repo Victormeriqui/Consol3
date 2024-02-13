@@ -43,7 +43,7 @@ namespace Math
         template<typename T>
         [[nodiscard]] constexpr inline static T LerpCast(float val, T min, T max)
         {
-            return (T)((1 - val) * min + val * max);
+            return static_cast<T>((1 - val) * min + val * max);
         }
 
         template<typename T>

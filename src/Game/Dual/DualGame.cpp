@@ -21,15 +21,15 @@ namespace Game
         using namespace Engine::Rendering;
         using namespace Math;
 
-        DualGame::DualGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
+        DualGame::DualGame(std::shared_ptr<IInputManager> input_manager) :
             input_manager(input_manager),
             resource_manager(std::make_shared<ResourceManager>()),
             lighting_system(std::make_shared<LightingSystem>()),
-            camera(std::make_shared<Camera>(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f)),
+            camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f)),
             voxel_grid(std::make_shared<VoxelGrid>()),
             voxel_sim(voxel_grid),
-            voxel_scene_renderer(frame_drawer, lighting_system, camera, voxel_grid),
-            raster_scene_renderer(frame_drawer, resource_manager, lighting_system, camera)
+            voxel_scene_renderer(lighting_system, camera, voxel_grid),
+            raster_scene_renderer(resource_manager, lighting_system, camera)
         {
             LoadResources();
 
@@ -64,6 +64,21 @@ namespace Game
                 .SetRotation(Angle(-1.5708f, 0.0f, 0.0f))
                 .SetColor(RGBColor(255, 255, 255));
         }
+
+        void DualGame::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+        {
+            this->frame_drawer = std::move(frame_drawer);
+
+            this->frame_drawer->SetupFrameDrawer();
+
+            camera = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
+            camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
+
+            voxel_scene_renderer  = VoxelSceneRenderer(lighting_system, camera, voxel_grid);
+            raster_scene_renderer = RasterSceneRenderer(resource_manager, lighting_system, camera);
+            voxel_scene_renderer.SetFrameDrawer(this->frame_drawer);
+            raster_scene_renderer.SetFrameDrawer(this->frame_drawer);
+        };
 
         void DualGame::LoadResources()
         {
@@ -268,7 +283,7 @@ namespace Game
 
         std::string DualGame::GetDesiredWindowTitle() const
         {
-            return "Selected: " + voxel_element_name_map.at(selected_voxel);
+            return voxel_element_name_map.at(selected_voxel);
         }
     }
 }

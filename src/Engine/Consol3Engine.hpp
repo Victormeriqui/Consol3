@@ -10,6 +10,7 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 namespace Engine
 {
@@ -23,13 +24,16 @@ namespace Engine
     class Consol3Engine
     {
     private:
-        std::shared_ptr<IFrameDrawer> frame_drawer;
+        std::vector<std::shared_ptr<IFrameDrawer>> frame_drawers;
+        uint8_t cur_frame_drawer_index = 0;
+
         std::shared_ptr<IInputManager> input_manager;
 
         std::unique_ptr<IGame> game;
 
         bool running;
         float delta;
+        bool changed_frame_drawer = false;
 
         high_resolution_clock::time_point start_time;
 
@@ -39,7 +43,11 @@ namespace Engine
         inline void DrawFrame(int64_t delta);
 
     public:
-        Consol3Engine(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager);
+        Consol3Engine(std::shared_ptr<IInputManager> input_manager);
+
+        void RegisterFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer);
+
+        void HandleFrameDrawerChangeInput();
 
         void Start();
         void Stop();

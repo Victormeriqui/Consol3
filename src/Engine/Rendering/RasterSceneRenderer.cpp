@@ -7,17 +7,25 @@ namespace Engine
 {
     namespace Rendering
     {
-        RasterSceneRenderer::RasterSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera) :
-            frame_drawer(std::move(frame_drawer)),
+        RasterSceneRenderer::RasterSceneRenderer(std::shared_ptr<ResourceManager> resource_manager, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera) :
             null_frame_drawer(std::make_shared<NullFrameDrawer>()),
-            rasterizer(this->frame_drawer),
-            shadowmap_rasterizer(null_frame_drawer),
+            rasterizer(),
+            shadowmap_rasterizer(),
             resource_manager(std::move(resource_manager)),
             lighting_system(std::move(lighting_system)),
             camera(std::move(camera))
         {
+            shadowmap_rasterizer.SetFrameDrawer(this->null_frame_drawer);
+
             shader_shaded.SetLightingSystem(this->lighting_system);
             rasterizer.SetProjectionMatrix(this->camera->GetProjectionMatrix());
+        }
+
+        void RasterSceneRenderer::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+        {
+            this->frame_drawer = std::move(frame_drawer);
+
+            rasterizer.SetFrameDrawer(this->frame_drawer);
         }
 
         void RasterSceneRenderer::DrawMesh(AbstractMesh& mesh)

@@ -1,8 +1,7 @@
 #ifndef TRIANGLE_HPP
 #define TRIANGLE_HPP
 
-#include "Math/Point2.hpp"
-#include "Math/Vector2.hpp"
+#include "Math/Vector2I.hpp"
 #include "Vertex.hpp"
 
 #include <cstdint>
@@ -24,7 +23,7 @@ namespace Engine
             int32_t edgefunction_res;
 
             // calculates the edge function for a specific point (starting point), and fills in the step deltas taken from the function's components
-            TriangleEdge(const Point2& v0, const Point2& v1, const Point2& start_point)
+            TriangleEdge(const Vector2I& v0, const Vector2I& v1, const Vector2I& start_point)
             {
                 // edge function: F(p) = (v0.y - v1.y)*start_point.x + (v1.x - v0.x)*start_point.y + (v0.x * v1.y - v0.y * v0.x)
                 // this will have one sign if the point is to the left of the edge (v0 -> v1), and another sign if it is to the right

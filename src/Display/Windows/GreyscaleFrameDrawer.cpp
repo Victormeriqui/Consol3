@@ -11,7 +11,12 @@ namespace Display
             terminal_manager(WindowsTerminalManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4, palette_greyscale))
         {
             // ensure that every char is a space, that way we can just control the color
-            this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
+            this->framebuffer->FillBuffer({{' '}, 0x00});
+        }
+
+        void GreyscaleFrameDrawer::SetupFrameDrawer()
+        {
+            terminal_manager.SetupTerminalManager();
         }
 
         void GreyscaleFrameDrawer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
@@ -23,7 +28,7 @@ namespace Display
             uint8_t background_index = index * 16;
 
             // in greyscale all pixels are a space and we control the color through the background
-            framebuffer->SetValue(x, y, { { ' ' }, background_index });
+            framebuffer->SetValue(x, y, {{' '}, background_index});
         }
 
         void GreyscaleFrameDrawer::DisplayFrame()
@@ -33,12 +38,12 @@ namespace Display
 
         void GreyscaleFrameDrawer::ReportInformation(const std::string& info)
         {
-            terminal_manager.SetTitle(info);
+            terminal_manager.SetTitle(info + " | Greyscale");
         }
 
         void GreyscaleFrameDrawer::ClearFrameBuffer()
         {
-            this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
+            this->framebuffer->FillBuffer({{' '}, 0x00});
         }
 
         const uint16_t GreyscaleFrameDrawer::GetFrameBufferWidth() const
