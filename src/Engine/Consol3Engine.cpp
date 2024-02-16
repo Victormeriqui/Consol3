@@ -16,13 +16,7 @@ namespace Engine
     using namespace Display;
     using namespace Rendering;
 
-    Consol3Engine::Consol3Engine(std::shared_ptr<IInputManager> input_manager) :
-        // game(std::make_unique<RasterGame>(this->frame_drawer, input_manager)),
-        //  game(std::make_unique<VoxelGame>(this->frame_drawer, input_manager)),
-        game(std::make_unique<DualGame>(input_manager)),
-        running(false),
-        delta(0),
-        input_manager(input_manager)
+    Consol3Engine::Consol3Engine(std::shared_ptr<IGame> game, std::shared_ptr<IInputManager> input_manager) : game(std::move(game)), running(false), delta(0), input_manager(input_manager)
     {
     }
 

@@ -25,26 +25,37 @@ endif()
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.hpp")
-
-
-add_executable(Consol3 ${SOURCES} ${HEADERS})
-
-target_include_directories(Consol3
-PRIVATE ${CMAKE_SOURCE_DIR}/src
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Display
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Linux
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Multiplatform
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Windows
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Input
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Rendering
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Lighting
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Shaders
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Resources
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Resources/Util
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Game
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Math
-PRIVATE ${CMAKE_SOURCE_DIR}/src/Math/Util
+set(source_folders 
+    PRIVATE ${CMAKE_SOURCE_DIR}/src
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Display
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Linux
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Multiplatform
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Windows
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Input
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Rendering
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Lighting
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Shaders
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Resources
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine/Resources/Util
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Game
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Math
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Math/Util
 )
+
+add_executable(Consol3_raster ${SOURCES} ${HEADERS})
+target_compile_definitions(Consol3_raster PUBLIC -DGAME_RASTER)
+add_executable(Consol3_voxel ${SOURCES} ${HEADERS})
+target_compile_definitions(Consol3_voxel PUBLIC -DGAME_VOXEL)
+add_executable(Consol3_dual ${SOURCES} ${HEADERS})
+target_compile_definitions(Consol3_dual PUBLIC -DGAME_DUAL)
+
+
+target_include_directories(Consol3_raster ${source_folders})
+
+target_include_directories(Consol3_voxel ${source_folders})
+
+
+target_include_directories(Consol3_dual ${source_folders})
 
 

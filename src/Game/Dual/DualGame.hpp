@@ -30,7 +30,7 @@
 
 namespace Game
 {
-    namespace Voxel
+    namespace Dual
     {
         using namespace Display;
         using namespace Engine;
@@ -39,6 +39,7 @@ namespace Game
         using namespace Lighting;
         using namespace Resources;
         using namespace Input;
+        using namespace Voxel;
 
         class DualGame : public IGame
         {

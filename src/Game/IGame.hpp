@@ -12,10 +12,6 @@ namespace Game
     class IGame
     {
     protected:
-        IGame()
-        {
-        }
-
         virtual void LoadResources() = 0;
 
     public:

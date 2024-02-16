@@ -14,7 +14,7 @@ using namespace Math::Util;
 
 namespace Game
 {
-    namespace Voxel
+    namespace Dual
     {
         using namespace Display;
         using namespace Engine;

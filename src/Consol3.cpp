@@ -1,12 +1,13 @@
-#include <cstdint>
-#include <cstdio>
-#include <filesystem>
-#include <iostream>
-#include <memory>
-#include <vector>
+#ifdef SYS_WINDOWS
+#define _HAS_STD_BYTE 0
+#endif
 
 #include "Display/FrameBuffer.hpp"
 #include "Engine/Consol3Engine.hpp"
+#include "Game/Dual/DualGame.hpp"
+#include "Game/IGame.hpp"
+#include "Game/Raster/RasterGame.hpp"
+#include "Game/Voxel/VoxelGame.hpp"
 
 #ifdef SYS_WINDOWS
 #include "Display/Windows/DitheredFrameDrawer.hpp"
@@ -27,6 +28,13 @@
 #include "Display/Multiplatform/VT24BitFrameDrawer.hpp"
 #include "Display/Multiplatform/VT8BitFrameDrawer.hpp"
 
+#include <cstdint>
+#include <cstdio>
+#include <filesystem>
+#include <iostream>
+#include <memory>
+#include <vector>
+
 using namespace Display;
 using namespace Engine;
 
@@ -46,7 +54,8 @@ int main(int argc, char* argv[])
     std::shared_ptr<FrameBuffer<CHAR_INFO>> char_info_framebuffer = std::make_shared<FrameBuffer<CHAR_INFO>>(width, height);
     std::shared_ptr<FrameBuffer<char>> char_framebuffer           = std::make_shared<FrameBuffer<char>>(width, height);
 
-    std::shared_ptr<IInputManager> input_manager;
+    std::shared_ptr<Engine::Input::IInputManager> input_manager;
+    std::shared_ptr<Game::IGame> game;
 
 #ifdef SYS_WINDOWS
     // multiplatform frame drawers need to be given a terminal manager
@@ -74,7 +83,15 @@ int main(int argc, char* argv[])
     input_manager = std::make_shared<Engine::Input::LinuxInputManager>();
 #endif
 
-    Consol3Engine engine = Consol3Engine(input_manager);
+#ifdef GAME_RASTER
+    game = std::make_shared<Game::Raster::RasterGame>(input_manager);
+#elif defined(GAME_VOXEL)
+    game = std::make_shared<Game::Voxel::VoxelGame>(input_manager);
+#else
+    game = std::make_shared<Game::Dual::DualGame>(input_manager);
+#endif
+
+    Consol3Engine engine = Consol3Engine(game, input_manager);
 
     for (const std::shared_ptr<IFrameDrawer>& frame_drawer : frame_drawers)
         engine.RegisterFrameDrawer(frame_drawer);

@@ -29,7 +29,7 @@ namespace Engine
 
         std::shared_ptr<IInputManager> input_manager;
 
-        std::unique_ptr<IGame> game;
+        std::shared_ptr<IGame> game;
 
         bool running;
         float delta;
@@ -43,7 +43,7 @@ namespace Engine
         inline void DrawFrame(int64_t delta);
 
     public:
-        Consol3Engine(std::shared_ptr<IInputManager> input_manager);
+        Consol3Engine(std::shared_ptr<IGame> game, std::shared_ptr<IInputManager> input_manager);
 
         void RegisterFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer);
 
