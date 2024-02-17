@@ -11,10 +11,22 @@ namespace Engine
         {
         }
 
+        void WindowsInputManager::UpdateInputEvents()
+        {
+        }
+
         DWORD WindowsInputManager::TranslateKey(Key key) const
         {
             switch (key)
             {
+            case Key::LEFT_ARROW:
+                return VK_LEFT;
+            case Key::RIGHT_ARROW:
+                return VK_RIGHT;
+            case Key::UP_ARROW:
+                return VK_UP;
+            case Key::DOWN_ARROW:
+                return VK_DOWN;
             case Key::CAPITAL:
                 return VK_CAPITAL;
             case Key::SPACE:

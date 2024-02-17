@@ -112,6 +112,7 @@ namespace Engine
 
             while (accumulator > 0)
             {
+                input_manager->UpdateInputEvents();
                 HandleFrameDrawerChangeInput();
                 game->HandleInput();
                 game->Update();

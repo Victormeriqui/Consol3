@@ -12,6 +12,10 @@ namespace Engine
 
         enum class Key
         {
+            LEFT_ARROW,
+            RIGHT_ARROW,
+            UP_ARROW,
+            DOWN_ARROW,
             CAPITAL,
             SPACE,
             LCONTROL,
@@ -52,6 +56,8 @@ namespace Engine
         {
         public:
             virtual ~IInputManager() = default;
+
+            virtual void UpdateInputEvents() = 0;
 
             [[nodiscard]] virtual Vector2I GetMousePosition() const = 0;
             virtual void SetMousePosition(const Vector2I& position) = 0;

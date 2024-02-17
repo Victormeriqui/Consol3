@@ -21,6 +21,8 @@ namespace Engine
         public:
             WindowsInputManager();
 
+            virtual void UpdateInputEvents() override;
+
             Vector2I GetMousePosition() const override;
             void SetMousePosition(const Vector2I& position) override;
 

@@ -135,21 +135,24 @@ namespace Game
             }
             if (input_manager->IsKeyHeld(Key::SPACE))
                 camera->MoveY(mov_speed);
-
             if (input_manager->IsKeyHeld(Key::LCONTROL))
                 camera->MoveY(-mov_speed);
-
             if (input_manager->IsKeyHeld(Key::A))
                 camera->MoveX(-mov_speed);
-
             if (input_manager->IsKeyHeld(Key::D))
                 camera->MoveX(mov_speed);
-
             if (input_manager->IsKeyHeld(Key::S))
                 camera->MoveZ(-mov_speed);
-
             if (input_manager->IsKeyHeld(Key::W))
                 camera->MoveZ(mov_speed);
+            if (input_manager->IsKeyHeld(Key::LEFT_ARROW))
+                camera->RotateYaw(-0.5f);
+            if (input_manager->IsKeyHeld(Key::RIGHT_ARROW))
+                camera->RotateYaw(0.5f);
+            if (input_manager->IsKeyHeld(Key::UP_ARROW))
+                camera->RotatePitch(-0.5f);
+            if (input_manager->IsKeyHeld(Key::DOWN_ARROW))
+                camera->RotatePitch(0.5f);
 
             if (input_manager->IsKeyHeld(Key::LSHIFT))
             {
