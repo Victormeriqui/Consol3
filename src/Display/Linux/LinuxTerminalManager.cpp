@@ -1,6 +1,7 @@
 #include "LinuxTerminalManager.hpp"
 
 #include <cstdint>
+#include <cstdio>
 #include <iostream>
 
 namespace Display
@@ -48,14 +49,14 @@ namespace Display
             // clear screen
             std::cout << "\033[0;0H";
 
-            std::cout << data;
+            printf("%s", data);
         }
 
         void LinuxTerminalManager::WriteSizedString(const std::string& string, uint64_t size)
         {
             // clear screen
             std::cout << "\033[0;0H";
-            std::cout << string;
+            printf("%s", string.c_str());
         }
     }
 
