@@ -9,8 +9,13 @@ namespace Engine
         using namespace Display;
         using namespace Math;
 
-        RayMarcher::RayMarcher(std::shared_ptr<IFrameDrawer> frame_drawer) : frame_drawer(std::move(frame_drawer))
+        RayMarcher::RayMarcher()
         {
+        }
+
+        void RayMarcher::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+        {
+            this->frame_drawer = std::move(frame_drawer);
         }
 
         Ray RayMarcher::SetupRayPerspective(uint16_t x, uint16_t y, const Vector3& origin) const

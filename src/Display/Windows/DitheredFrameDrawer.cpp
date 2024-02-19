@@ -15,7 +15,12 @@ namespace Display
             framebuffer(std::move(framebuffer)),
             terminal_manager(WindowsTerminalManager(this->framebuffer->GetWidth(), this->framebuffer->GetHeight(), L"Consolas", 4, 4))
         {
-            this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
+            this->framebuffer->FillBuffer({{' '}, 0x00});
+        }
+
+        void DitheredFrameDrawer::SetupFrameDrawer()
+        {
+            terminal_manager.SetupTerminalManager();
         }
 
         void DitheredFrameDrawer::SetPixel(uint16_t x, uint16_t y, RGBColor color)
@@ -32,12 +37,12 @@ namespace Display
 
         void DitheredFrameDrawer::ReportInformation(const std::string& info)
         {
-            terminal_manager.SetTitle(info);
+            terminal_manager.SetTitle(info + " | Dithered");
         }
 
         void DitheredFrameDrawer::ClearFrameBuffer()
         {
-            this->framebuffer->FillBuffer({ { ' ' }, 0x00 });
+            this->framebuffer->FillBuffer({{' '}, 0x00});
         }
 
         const uint16_t DitheredFrameDrawer::GetFrameBufferWidth() const

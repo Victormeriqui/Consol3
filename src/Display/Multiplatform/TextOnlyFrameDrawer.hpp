@@ -27,6 +27,8 @@ namespace Display
         public:
             TextOnlyFrameDrawer(std::shared_ptr<FrameBuffer<T>> framebuffer, std::shared_ptr<ITerminalManager<T>> terminal_manager);
 
+            virtual void SetupFrameDrawer() override;
+
             virtual void SetPixel(uint16_t x, uint16_t y, RGBColor color) override;
 
             virtual void DisplayFrame() override;

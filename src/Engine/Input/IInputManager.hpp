@@ -1,8 +1,7 @@
 #ifndef IINPUTMANAGER_HPP
 #define IINPUTMANAGER_HPP
 
-#include "Math/Point2.hpp"
-#include "Math/Vector2.hpp"
+#include "Math/Vector2I.hpp"
 
 using namespace Math;
 
@@ -13,6 +12,10 @@ namespace Engine
 
         enum class Key
         {
+            LEFT_ARROW,
+            RIGHT_ARROW,
+            UP_ARROW,
+            DOWN_ARROW,
             CAPITAL,
             SPACE,
             LCONTROL,
@@ -44,7 +47,9 @@ namespace Engine
             N7,
             N8,
             N9,
-            N0
+            N0,
+            PAGE_UP,
+            PAGE_DOWN,
         };
 
         class IInputManager
@@ -52,8 +57,10 @@ namespace Engine
         public:
             virtual ~IInputManager() = default;
 
-            [[nodiscard]] virtual Point2 GetMousePosition() const = 0;
-            virtual void SetMousePosition(const Point2& position) = 0;
+            virtual void UpdateInputEvents() = 0;
+
+            [[nodiscard]] virtual Vector2I GetMousePosition() const = 0;
+            virtual void SetMousePosition(const Vector2I& position) = 0;
 
             [[nodiscard]] virtual Vector2 GetMouseDistanceToCenter() const = 0;
             virtual void SetMousePositionToCenter()                        = 0;

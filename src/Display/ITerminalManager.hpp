@@ -19,6 +19,7 @@ namespace Display
         virtual ~ITerminalManager() = default;
 
     public:
+        virtual void SetupTerminalManager()               = 0;
         virtual void SetPalette(const uint32_t palette[]) = 0;
         virtual void SetTitle(const std::string& title)   = 0;
 
@@ -26,7 +27,9 @@ namespace Display
         virtual void EnableCursor()  = 0;
 
         virtual void WriteFrameBufferData(const T* data) = 0;
-        // should contain ansi escape sequences, growing larger than the framebuffer size
+        /**
+         * This call can contain ansi escape sequences, growing larger than the framebuffer size
+         */
         virtual void WriteSizedString(const std::string& string, uint64_t size) = 0;
     };
 }

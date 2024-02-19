@@ -1,9 +1,11 @@
+#ifdef SYS_LINUX
 #ifndef LINUXINPUTMANAGER_HPP
 #define LINUXINPUTMANAGER_HPP
 
 #include "IInputManager.hpp"
 
 #include <cstdint>
+#include <linux/input.h>
 
 namespace Engine
 {
@@ -13,13 +15,20 @@ namespace Engine
         class LinuxInputManager : public IInputManager
         {
         private:
+            int keyboard_device_file;
+
+            uint8_t keyboard_state[KEY_MAX / 8 + 1];
+
             uint32_t TranslateKey(Key key) const;
 
         public:
             LinuxInputManager();
+            ~LinuxInputManager();
 
-            Point2 GetMousePosition() const override;
-            void SetMousePosition(const Point2& position) override;
+            virtual void UpdateInputEvents() override;
+
+            Vector2I GetMousePosition() const override;
+            void SetMousePosition(const Vector2I& position) override;
 
             Vector2 GetMouseDistanceToCenter() const override;
             void SetMousePositionToCenter() override;
@@ -31,4 +40,5 @@ namespace Engine
     }
 }
 
+#endif
 #endif

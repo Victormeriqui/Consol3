@@ -30,7 +30,7 @@
 
 namespace Game
 {
-    namespace Voxel
+    namespace Dual
     {
         using namespace Display;
         using namespace Engine;
@@ -39,10 +39,12 @@ namespace Game
         using namespace Lighting;
         using namespace Resources;
         using namespace Input;
+        using namespace Voxel;
 
         class DualGame : public IGame
         {
         private:
+            std::shared_ptr<IFrameDrawer> frame_drawer;
             std::shared_ptr<IInputManager> input_manager;
 
             std::shared_ptr<ResourceManager> resource_manager;
@@ -78,7 +80,9 @@ namespace Game
             uint64_t update_tick = 0;
 
         public:
-            DualGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager);
+            DualGame(std::shared_ptr<IInputManager> input_manager);
+
+            virtual void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer) override;
 
             virtual void HandleInput() override;
             virtual void Update() override;

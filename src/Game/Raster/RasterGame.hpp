@@ -40,6 +40,7 @@ namespace Game
         class RasterGame : public IGame
         {
         private:
+            std::shared_ptr<IFrameDrawer> frame_drawer;
             std::shared_ptr<IInputManager> input_manager;
 
             ModelGenerator model_generator;
@@ -72,7 +73,9 @@ namespace Game
             bool shifting   = false;
 
         public:
-            RasterGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager);
+            RasterGame(std::shared_ptr<IInputManager> input_manager);
+
+            virtual void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer) override;
 
             virtual void HandleInput() override;
             virtual void Update() override;

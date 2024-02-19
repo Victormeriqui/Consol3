@@ -44,7 +44,9 @@ namespace Engine
             void RenderShadowMapPass();
 
         public:
-            VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid);
+            VoxelSceneRenderer(std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid);
+
+            void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer);
 
             void DrawPixel(uint16_t x, uint16_t y, const RGBColor& color);
 

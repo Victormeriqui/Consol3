@@ -37,6 +37,7 @@ namespace Game
         class VoxelGame : public IGame
         {
         private:
+            std::shared_ptr<IFrameDrawer> frame_drawer;
             std::shared_ptr<IInputManager> input_manager;
 
             std::shared_ptr<ResourceManager> resource_manager;
@@ -66,7 +67,9 @@ namespace Game
             uint64_t update_tick = 0;
 
         public:
-            VoxelGame(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager);
+            VoxelGame(std::shared_ptr<IInputManager> input_manager);
+
+            virtual void SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer) override;
 
             virtual void HandleInput() override;
             virtual void Update() override;

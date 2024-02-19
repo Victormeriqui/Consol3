@@ -11,10 +11,22 @@ namespace Engine
         {
         }
 
+        void WindowsInputManager::UpdateInputEvents()
+        {
+        }
+
         DWORD WindowsInputManager::TranslateKey(Key key) const
         {
             switch (key)
             {
+            case Key::LEFT_ARROW:
+                return VK_LEFT;
+            case Key::RIGHT_ARROW:
+                return VK_RIGHT;
+            case Key::UP_ARROW:
+                return VK_UP;
+            case Key::DOWN_ARROW:
+                return VK_DOWN;
             case Key::CAPITAL:
                 return VK_CAPITAL;
             case Key::SPACE:
@@ -79,41 +91,45 @@ namespace Engine
                 return 0x39;
             case Key::N0:
                 return 0x30;
+            case Key::PAGE_UP:
+                return VK_PRIOR;
+            case Key::PAGE_DOWN:
+                return VK_NEXT;
             }
             return 0;
         }
 
-        Point2 WindowsInputManager::GetMousePosition() const
+        Vector2I WindowsInputManager::GetMousePosition() const
         {
-            POINT coord = { 0, 0 };
+            POINT coord = {0, 0};
             GetCursorPos(&coord);
 
-            return Point2((uint16_t)coord.x, (uint16_t)coord.y);
+            return Vector2I((uint16_t)coord.x, (uint16_t)coord.y);
         }
 
-        void WindowsInputManager::SetMousePosition(const Point2& position)
+        void WindowsInputManager::SetMousePosition(const Vector2I& position)
         {
             SetCursorPos(position.x, position.y);
         }
 
         Vector2 WindowsInputManager::GetMouseDistanceToCenter() const
         {
-            RECT window = { 0, 0, 0, 0 };
+            RECT window = {0, 0, 0, 0};
             GetWindowRect(GetConsoleWindow(), &window);
 
-            Point2 center = Point2((uint16_t)(window.left + ((window.right - window.left) / 2)), (uint16_t)(window.top + ((window.bottom - window.top) / 2)));
+            Vector2I center = Vector2I((uint16_t)(window.left + ((window.right - window.left) / 2)), (uint16_t)(window.top + ((window.bottom - window.top) / 2)));
 
-            Point2 mouse_pos = GetMousePosition();
+            Vector2I mouse_pos = GetMousePosition();
 
             return Vector2((float)mouse_pos.x - center.x, (float)mouse_pos.y - center.y);
         }
 
         void WindowsInputManager::SetMousePositionToCenter()
         {
-            RECT window = { 0, 0, 0, 0 };
+            RECT window = {0, 0, 0, 0};
             GetWindowRect(GetConsoleWindow(), &window);
 
-            Point2 center = Point2((uint16_t)(window.left + ((window.right - window.left) / 2)), (uint16_t)(window.top + ((window.bottom - window.top) / 2)));
+            Vector2I center = Vector2I((uint16_t)(window.left + ((window.right - window.left) / 2)), (uint16_t)(window.top + ((window.bottom - window.top) / 2)));
 
             SetMousePosition(center);
         }

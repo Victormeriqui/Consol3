@@ -17,16 +17,24 @@ namespace Engine
 {
     namespace Rendering
     {
-        VoxelSceneRenderer::VoxelSceneRenderer(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid) :
-            frame_drawer(std::move(frame_drawer)),
+        VoxelSceneRenderer::VoxelSceneRenderer(std::shared_ptr<LightingSystem> lighting_system, std::shared_ptr<Camera> camera, std::shared_ptr<VoxelGrid> voxel_grid) :
             null_frame_drawer(std::make_shared<NullFrameDrawer>()),
-            ray_marcher(this->frame_drawer),
-            shadowmap_ray_marcher(null_frame_drawer),
+            ray_marcher(),
+            shadowmap_ray_marcher(),
             lighting_system(std::move((lighting_system))),
             camera(std::move(camera)),
             voxel_grid(std::move(voxel_grid))
         {
+            shadowmap_ray_marcher.SetFrameDrawer(this->null_frame_drawer);
+
             ray_marcher.SetProjectionMatrix(this->camera->GetProjectionMatrix());
+        }
+
+        void VoxelSceneRenderer::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+        {
+            this->frame_drawer = std::move(frame_drawer);
+
+            ray_marcher.SetFrameDrawer(this->frame_drawer);
         }
 
         void VoxelSceneRenderer::RenderShadowMapPass()

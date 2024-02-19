@@ -1,20 +1,22 @@
 #ifndef VECTOR3I_HPP
 #define VECTOR3I_HPP
 
+#include <cstdint>
+
 namespace Math
 {
     class Vector3I
     {
     public:
-        int x;
-        int y;
-        int z;
+        int32_t x;
+        int32_t y;
+        int32_t z;
 
         constexpr Vector3I() : x(0), y(0), z(0)
         {
         }
 
-        constexpr Vector3I(int x, int y, int z) : x(x), y(y), z(z)
+        constexpr Vector3I(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z)
         {
         }
 
@@ -59,7 +61,7 @@ namespace Math
             return *this;
         }
 
-        constexpr Vector3I& operator+=(int scalar) noexcept
+        constexpr Vector3I& operator+=(int32_t scalar) noexcept
         {
             x += scalar;
             y += scalar;
@@ -68,7 +70,7 @@ namespace Math
             return *this;
         }
 
-        constexpr Vector3I& operator-=(int scalar) noexcept
+        constexpr Vector3I& operator-=(int32_t scalar) noexcept
         {
             x -= scalar;
             y -= scalar;
@@ -77,7 +79,7 @@ namespace Math
             return *this;
         }
 
-        constexpr Vector3I& operator/=(int scalar) noexcept
+        constexpr Vector3I& operator/=(int32_t scalar) noexcept
         {
             x /= scalar;
             y /= scalar;
@@ -86,7 +88,7 @@ namespace Math
             return *this;
         }
 
-        constexpr Vector3I& operator*=(int scalar) noexcept
+        constexpr Vector3I& operator*=(int32_t scalar) noexcept
         {
             x *= scalar;
             y *= scalar;
@@ -115,22 +117,22 @@ namespace Math
             return Vector3I(*this) *= other;
         }
 
-        [[nodiscard]] constexpr Vector3I operator+(int scalar) const noexcept
+        [[nodiscard]] constexpr Vector3I operator+(int32_t scalar) const noexcept
         {
             return Vector3I(*this) += scalar;
         }
 
-        [[nodiscard]] constexpr Vector3I operator-(int scalar) const noexcept
+        [[nodiscard]] constexpr Vector3I operator-(int32_t scalar) const noexcept
         {
             return Vector3I(*this) -= scalar;
         }
 
-        [[nodiscard]] constexpr Vector3I operator/(int scalar) const noexcept
+        [[nodiscard]] constexpr Vector3I operator/(int32_t scalar) const noexcept
         {
             return Vector3I(*this) /= scalar;
         }
 
-        [[nodiscard]] constexpr Vector3I operator*(int scalar) const noexcept
+        [[nodiscard]] constexpr Vector3I operator*(int32_t scalar) const noexcept
         {
             return Vector3I(*this) *= scalar;
         }

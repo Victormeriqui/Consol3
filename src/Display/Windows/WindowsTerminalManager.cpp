@@ -8,7 +8,23 @@ namespace Display
 {
     namespace Windows
     {
-        WindowsTerminalManager::WindowsTerminalManager(short width, short height, std::wstring font_name, short font_width, short font_height, const uint32_t palette[]) : width(width), height(height)
+        WindowsTerminalManager::WindowsTerminalManager(short width, short height, std::wstring font_name, short font_width, short font_height, const uint32_t color_palette[]) : width(width), height(height), font_name(font_name)
+        {
+            font_size = {font_width, font_height};
+
+            for (uint8_t i = 0; i < 16; i++)
+                palette[i] = color_palette[i];
+        }
+
+        WindowsTerminalManager::~WindowsTerminalManager()
+        {
+            // restore the console to its original state
+
+            SetFontInfo(original_font_name, original_front_size, original_font_weight, original_font_family);
+            EnableCursor();
+        }
+
+        void WindowsTerminalManager::SetupTerminalManager()
         {
             consolescreenbuffer = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,          // access
                                                             FILE_SHARE_READ | FILE_SHARE_WRITE,    // share mode
@@ -16,25 +32,17 @@ namespace Display
                                                             CONSOLE_TEXTMODE_BUFFER,               // mode TODO: check if CONSOLE_GRAPHICS_BUFFER works
                                                             NULL);                                 // used by CONSOLE_GRAPHICS_BUFFER
 
-            SetConsoleScreenBufferInfo(consolescreenbuffer, width, height, font_width, font_height, palette);
+            SetConsoleScreenBufferInfo(consolescreenbuffer, width, height, font_size.X, font_size.Y, palette);
 
-            writeregion = { 0, 0, width, height };
+            writeregion = {0, 0, width, height};
 
             SetConsoleActiveScreenBuffer(consolescreenbuffer);
 
             StoreOriginalFontInfo();
-            SetFontInfo(font_name, font_width, font_height, 0, 0);
+            SetFontInfo(font_name, font_size, 0, 0);
 
             DisableCursor();
             // SetConsoleMode(consolescreenbuffer, ENABLE_WRAP_AT_EOL_OUTPUT);
-        }
-
-        WindowsTerminalManager::~WindowsTerminalManager()
-        {
-            // restore the console to its original state
-
-            SetFontInfo(original_font_name, original_front_size.X, original_front_size.Y, original_font_weight, original_font_family);
-            EnableCursor();
         }
 
         void WindowsTerminalManager::SetConsoleScreenBufferInfo(HANDLE consolescreenbuffer, short width, short height, short font_width, short font_height, const uint32_t palette[])
@@ -44,15 +52,15 @@ namespace Display
             // struct
             info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
             // resolution, how many chars there are
-            info.dwSize = { width, static_cast<SHORT>(height + 1) };    // the +1 avoids problems when resizing
+            info.dwSize = {width, static_cast<SHORT>(height + 1)};    // the +1 avoids problems when resizing
             // position of the cursor (irrelevant since we're going to hide it)
-            info.dwCursorPosition = { 0, 0 };
+            info.dwCursorPosition = {0, 0};
             // attributes used by preceding writes (irrelevant since we're not going to give input to the console)
             info.wAttributes = 0;
             // window size
-            info.srWindow = { 0, 0, static_cast<SHORT>(width + 1), static_cast<SHORT>(height + 1) };
+            info.srWindow = {0, 0, static_cast<SHORT>(width + 1), static_cast<SHORT>(height + 1)};
             // maximum window size in chars
-            info.dwMaximumWindowSize = { 1920, 1080 };
+            info.dwMaximumWindowSize = {1920, 1080};
             // attributes used by popups (irrelevant)
             info.wPopupAttributes = 0;
             // TODO: test this?
@@ -91,21 +99,17 @@ namespace Display
             original_font_family = font_info.FontFamily;
         }
 
-        void WindowsTerminalManager::SetFontInfo(std::wstring name, short width, short height, short weight, short family)
+        void WindowsTerminalManager::SetFontInfo(std::wstring name, COORD font_size, short weight, short family)
         {
             CONSOLE_FONT_INFOEX font_info;
-            COORD font_size = { (short)width, (short)height };
 
             font_info.cbSize = sizeof(font_info);
 
             font_info.dwFontSize = font_size;
-            this->font_size      = font_size;
 
             wcscpy_s(font_info.FaceName, name.c_str());
-            font_name = name;
 
             font_info.FontWeight = weight;
-            font_weight          = weight;
 
             font_info.FontFamily = family;
             font_family          = family;
@@ -149,8 +153,8 @@ namespace Display
         {
             WriteConsoleOutputA(consolescreenbuffer,    // screen buffer to write to
                                 data,                   // data to write
-                                { width, height },      // size of the data to write
-                                { 0, 0 },               // start of the data to write
+                                {width, height},        // size of the data to write
+                                {0, 0},                 // start of the data to write
                                 &writeregion);          // region to write to
         }
 
@@ -158,7 +162,7 @@ namespace Display
         {
             DWORD written_count;
 
-            SetConsoleCursorPosition(consolescreenbuffer, { 0, 0 });
+            SetConsoleCursorPosition(consolescreenbuffer, {0, 0});
 
             WriteFile(consolescreenbuffer, string.c_str(), (DWORD)size, &written_count, nullptr);
         }

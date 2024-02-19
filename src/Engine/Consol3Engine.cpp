@@ -16,16 +16,38 @@ namespace Engine
     using namespace Display;
     using namespace Rendering;
 
-    Consol3Engine::Consol3Engine(std::shared_ptr<IFrameDrawer> frame_drawer, std::shared_ptr<IInputManager> input_manager) :
-        frame_drawer(std::move(frame_drawer)),
-        // game(std::make_unique<RasterGame>(this->frame_drawer, input_manager)),
-        //  game(std::make_unique<VoxelGame>(this->frame_drawer, input_manager)),
-        game(std::make_unique<DualGame>(this->frame_drawer, input_manager)),
-
-        running(false),
-        delta(0),
-        input_manager(input_manager)
+    Consol3Engine::Consol3Engine(std::shared_ptr<IGame> game, std::shared_ptr<IInputManager> input_manager) : game(std::move(game)), running(false), delta(0), input_manager(input_manager)
     {
+    }
+
+    void Consol3Engine::HandleFrameDrawerChangeInput()
+    {
+        if (input_manager->IsKeyHeld(Key::PAGE_UP) && !changed_frame_drawer)
+        {
+            cur_frame_drawer_index = (cur_frame_drawer_index + 1) % frame_drawers.size();
+
+            game->SetFrameDrawer(frame_drawers[cur_frame_drawer_index]);
+            changed_frame_drawer = true;
+        }
+        if (input_manager->IsKeyHeld(Key::PAGE_DOWN) && !changed_frame_drawer)
+        {
+            cur_frame_drawer_index = (cur_frame_drawer_index - 1) % frame_drawers.size();
+
+            game->SetFrameDrawer(frame_drawers[cur_frame_drawer_index]);
+            changed_frame_drawer = true;
+        }
+
+        if (input_manager->IsKeyReleased(Key::PAGE_UP) && input_manager->IsKeyReleased(Key::PAGE_DOWN))
+            changed_frame_drawer = false;
+    }
+
+    void Consol3Engine::RegisterFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+    {
+        frame_drawers.push_back(std::move(frame_drawer));
+
+        // if its the first registered frame drawer, assing it to the game
+        if (frame_drawers.size() == 1)
+            game->SetFrameDrawer(frame_drawers[0]);
     }
 
     inline int64_t Consol3Engine::GetCurrentTime() const
@@ -80,7 +102,7 @@ namespace Engine
             if (accumulated_delta > 1000)
             {
                 // frame_drawer->ReportInformation(std::string("Consol3 - FPS: ") + std::to_string(frame_count));
-                frame_drawer->ReportInformation("Consol3 " + game->GetDesiredWindowTitle() + " FPS: " + std::to_string(frame_count));
+                frame_drawers[cur_frame_drawer_index]->ReportInformation("Consol3 | " + game->GetDesiredWindowTitle() + " | FPS: " + std::to_string(frame_count));
 
                 frame_count       = 0;
                 accumulated_delta = 0;
@@ -90,6 +112,8 @@ namespace Engine
 
             while (accumulator > 0)
             {
+                input_manager->UpdateInputEvents();
+                HandleFrameDrawerChangeInput();
                 game->HandleInput();
                 game->Update();
                 accumulator -= UPDATE_STEP;
@@ -104,8 +128,8 @@ namespace Engine
     inline void Consol3Engine::DrawFrame(int64_t delta)
     {
         // auto time = this->GetCurrentTime();
-        frame_drawer->ClearFrameBuffer();
+        frame_drawers[cur_frame_drawer_index]->ClearFrameBuffer();
         game->Render(delta);
-        frame_drawer->DisplayFrame();
+        frame_drawers[cur_frame_drawer_index]->DisplayFrame();
     }
 }

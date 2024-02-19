@@ -1,6 +1,6 @@
 #include "Rasterizer.hpp"
 
-#include "Math/Point2.hpp"
+#include "Math/Vector2I.hpp"
 
 #include <algorithm>
 
@@ -12,11 +12,14 @@ namespace Engine
         using namespace Math;
         using namespace Shaders;
 
-        Rasterizer::Rasterizer(std::shared_ptr<IFrameDrawer> frame_drawer) :
-            viewport_mat(Matrix4().SetViewportMatrix(frame_drawer->GetFrameBufferWidth(), frame_drawer->GetFrameBufferHeight())),
-            frame_drawer(std::move(frame_drawer)),
-            clipper(Clipper())
+        Rasterizer::Rasterizer() : viewport_mat(Matrix4().SetViewportMatrix(200, 200)), clipper(Clipper())
         {
+        }
+
+        void Rasterizer::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
+        {
+            this->frame_drawer = std::move(frame_drawer);
+            viewport_mat       = Matrix4().SetViewportMatrix(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight());
         }
 
         Vertex Rasterizer::GetTransformedVertexInverseViewProjection(const Vertex& vertex)
@@ -44,7 +47,7 @@ namespace Engine
                 Vertex v1 = vertex_buffer.GetVertex(i + 1);
                 Vertex v2 = vertex_buffer.GetVertex(i + 2);
 
-                MVPTransform vs_shader_mats = { model_mat, normal_mat, view_mat, projection_mat };
+                MVPTransform vs_shader_mats = {model_mat, normal_mat, view_mat, projection_mat};
 
                 bool should_draw_triangle = shader.VertexShader(v0, v1, v2, vs_shader_mats);
 
@@ -60,7 +63,12 @@ namespace Engine
 
                     Triangle triangle {
                         // store view projected W for perspective correct interpolation
-                        1.0f / v0.GetW(), 1.0f / v1.GetW(), 1.0f / v2.GetW(), v0.GetPosition(), v1.GetPosition(), v2.GetPosition(),
+                        1.0f / v0.GetW(),
+                        1.0f / v1.GetW(),
+                        1.0f / v2.GetW(),
+                        v0.GetPosition(),
+                        v1.GetPosition(),
+                        v2.GetPosition(),
                     };
 
                     RasterizeTriangle(depthbuffer, triangle, color, shader);
@@ -69,7 +77,7 @@ namespace Engine
                 }
 
                 // store the verts in a buffer to clip them
-                std::array<Vertex, 10> vertices_buffer = { v0, v1, v2 };
+                std::array<Vertex, 10> vertices_buffer = {v0, v1, v2};
                 uint8_t vertices_buffer_count          = 3;
 
                 bool clip_z_drawable = clipper.ClipVerticesAgainstAxis(vertices_buffer, &vertices_buffer_count, ClipAxis::AXIS_Z);
@@ -88,15 +96,14 @@ namespace Engine
                     TransformVertexScreenspace(clipped_v1);
                     TransformVertexScreenspace(clipped_v2);
 
-                    Triangle triangle { // store view projected W for perspective correct interpolation
-                                        1.0f / clipped_v0.GetW(),
-                                        1.0f / clipped_v1.GetW(),
-                                        1.0f / clipped_v2.GetW(),
-                                        // screen space vertices
-                                        clipped_v0.GetPosition(),
-                                        clipped_v1.GetPosition(),
-                                        clipped_v2.GetPosition()
-                    };
+                    Triangle triangle {// store view projected W for perspective correct interpolation
+                                       1.0f / clipped_v0.GetW(),
+                                       1.0f / clipped_v1.GetW(),
+                                       1.0f / clipped_v2.GetW(),
+                                       // screen space vertices
+                                       clipped_v0.GetPosition(),
+                                       clipped_v1.GetPosition(),
+                                       clipped_v2.GetPosition()};
 
                     RasterizeTriangle(depthbuffer, triangle, color, shader);
                 }
@@ -105,20 +112,20 @@ namespace Engine
 
         void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader)
         {
-            int32_t bbox_min_x = std::min({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
-            int32_t bbox_min_y = std::min({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
-            int32_t bbox_max_x = std::max({ (int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x });
-            int32_t bbox_max_y = std::max({ (int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y });
+            int32_t bbox_min_x = std::min({(int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x});
+            int32_t bbox_min_y = std::min({(int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y});
+            int32_t bbox_max_x = std::max({(int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x});
+            int32_t bbox_max_y = std::max({(int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y});
 
             // guaranteed to be outside the camera
             if (bbox_min_x >= frame_drawer->GetFrameBufferWidth() || bbox_max_x < 0 || bbox_min_y >= frame_drawer->GetFrameBufferHeight() || bbox_max_y < 0)
                 return;
 
-            Point2 bbox_min = Point2(std::max(0, bbox_min_x), std::max(0, bbox_min_y));
+            Vector2I bbox_min = Vector2I(std::max(0, bbox_min_x), std::max(0, bbox_min_y));
 
-            Point2 bbox_max = Point2(std::min(bbox_max_x, (int32_t)frame_drawer->GetFrameBufferWidth() - 1), std::min(bbox_max_y, (int32_t)frame_drawer->GetFrameBufferHeight() - 1));
+            Vector2I bbox_max = Vector2I(std::min(bbox_max_x, (int32_t)frame_drawer->GetFrameBufferWidth() - 1), std::min(bbox_max_y, (int32_t)frame_drawer->GetFrameBufferHeight() - 1));
 
-            Point2 point = Point2(bbox_min.x, bbox_min.y);
+            Vector2I point = Vector2I(bbox_min.x, bbox_min.y);
 
             TriangleEdge edge0 = TriangleEdge(triangle.v1_screen, triangle.v2_screen, point);
             TriangleEdge edge1 = TriangleEdge(triangle.v2_screen, triangle.v0_screen, point);

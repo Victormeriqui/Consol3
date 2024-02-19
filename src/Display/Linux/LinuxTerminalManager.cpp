@@ -1,6 +1,7 @@
 #include "LinuxTerminalManager.hpp"
 
 #include <cstdint>
+#include <cstdio>
 #include <iostream>
 
 namespace Display
@@ -9,16 +10,20 @@ namespace Display
     {
         LinuxTerminalManager::LinuxTerminalManager(short width, short height) : width(width), height(height)
         {
-            // set window width & height
-            std::cout << "\033[8;" << height + 1 << ";" << width << "t";
-
-            DisableCursor();
         }
 
         LinuxTerminalManager::~LinuxTerminalManager()
         {
             // restore the console to its original state
             EnableCursor();
+        }
+
+        void LinuxTerminalManager::SetupTerminalManager()
+        {
+            // set window width & height
+            std::cout << "\033[8;" << height + 1 << ";" << width << "t";
+
+            DisableCursor();
         }
 
         void LinuxTerminalManager::SetPalette(const uint32_t palette[])
@@ -44,14 +49,14 @@ namespace Display
             // clear screen
             std::cout << "\033[0;0H";
 
-            std::cout << data;
+            printf("%s", data);
         }
 
         void LinuxTerminalManager::WriteSizedString(const std::string& string, uint64_t size)
         {
             // clear screen
             std::cout << "\033[0;0H";
-            std::cout << string;
+            printf("%s", string.c_str());
         }
     }
 
