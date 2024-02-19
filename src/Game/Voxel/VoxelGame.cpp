@@ -1,9 +1,9 @@
 #include "VoxelGame.hpp"
 
+#include "../Voxel/VoxelSimulation.hpp"
+#include "../Voxel/VoxelUtil.hpp"
 #include "Display/RGBColor.hpp"
 #include "Math/Util/MathUtil.hpp"
-#include "VoxelSimulation.hpp"
-#include "VoxelUtil.hpp"
 
 #include <algorithm>
 #include <random>
@@ -28,16 +28,16 @@ namespace Game
             camera(std::make_shared<Camera>(200, 200, 0.001f, 100.0f, 90.0f)),
             voxel_grid(std::make_shared<VoxelGrid>()),
             voxel_sim(voxel_grid),
-            scene_renderer(lighting_system, camera, voxel_grid)
+            voxel_scene_renderer(lighting_system, camera, voxel_grid),
+            raster_scene_renderer(resource_manager, lighting_system, camera)
         {
             LoadResources();
 
-            camera->SetPosition(Vector3(-2, -48, 1));
-            camera->SetRotation(Angle(0, -200, 0));
+            camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
 
-            lighting_system->SetAmbientLightColor(RGBColor(100, 100, 100));
+            lighting_system->SetAmbientLightColor(RGBColor(150, 150, 150));
 
-            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -1));
+            dir_light = std::make_shared<DirectionalLight>(Vector3(-1, -1, -0.5f));
             dir_light->SetColor(RGBColor(255, 255, 255));
             lighting_system->AddLight(dir_light);
 
@@ -49,8 +49,20 @@ namespace Game
             spot_light = std::make_shared<SpotLight>(Vector3(0, -48, 4), Vector3(0, -0.5f, -1));
             spot_light->SetRange(300.0f);
             spot_light->SetAngle(20.0f);
-            spot_light->SetColor(RGBColor(255, 0, 0));
-            lighting_system->AddLight(spot_light);
+            spot_light->SetColor(RGBColor(255, 255, 255));
+
+            // lighting_system->AddLight(spot_light);
+
+            floor = StaticMesh();
+            floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -41.9f, -6));
+
+            penguin = AnimatedMesh();
+            penguin.SetModelResource("../res/penguin.md2")
+                .SetTextureResource("../res/bricks.bmp")
+                .SetPosition(Vector3(1.0f, -40.9f, 0.0f))
+                .SetScale(Vector3(0.05f, 0.05f, 0.05f))
+                .SetRotation(Angle(-1.5708f, 0.0f, 0.0f))
+                .SetColor(RGBColor(255, 255, 255));
         }
 
         void VoxelGame::SetFrameDrawer(std::shared_ptr<IFrameDrawer> frame_drawer)
@@ -60,43 +72,44 @@ namespace Game
             this->frame_drawer->SetupFrameDrawer();
 
             camera = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
-            camera->SetPosition(Vector3(-2, -48, 1));
-            camera->SetRotation(Angle(0, -200, 0));
+            camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
 
-            scene_renderer = VoxelSceneRenderer(lighting_system, camera, voxel_grid);
-            scene_renderer.SetFrameDrawer(this->frame_drawer);
+            voxel_scene_renderer  = VoxelSceneRenderer(lighting_system, camera, voxel_grid);
+            raster_scene_renderer = RasterSceneRenderer(resource_manager, lighting_system, camera);
+            voxel_scene_renderer.SetFrameDrawer(this->frame_drawer);
+            raster_scene_renderer.SetFrameDrawer(this->frame_drawer);
         };
 
         void VoxelGame::LoadResources()
         {
+            VoxelUtil::InitializeUtilPositions(10);
+
+            resource_manager->LoadModel("plane50", model_generator.GeneratePlane(50, 50, 0.0f));
+
+            ModelLoadingOptions model_options;
+            resource_manager->LoadModel("../res/penguin.md2", model_options);
+            resource_manager->LoadTexture("../res/tiles.bmp", TextureLoadingOptions::DEFAULT);
+            resource_manager->LoadTexture("../res/bricks.bmp", TextureLoadingOptions::FLIP_Y);
+            resource_manager->LoadTexture("../res/bricks_norm.bmp", TextureLoadingOptions::DEFAULT);
+
             for (int z = VOXEL_GRID_BACKWARDS; z < VOXEL_GRID_FORWARDS - 1; z++)
             {
                 for (int x = VOXEL_GRID_LEFT; x < VOXEL_GRID_RIGHT - 1; x++)
                 {
-                    voxel_grid->SetVoxelData(Vector3I(x, VOXEL_GRID_DOWN, z), {VoxelElement::STONE, 0});
+                    VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(x, VOXEL_GRID_DOWN, z), VoxelElement::STEEL);
                 }
             }
 
-            voxel_grid->SetVoxelData(Vector3I(0, VOXEL_GRID_DOWN + 1, 0), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 1, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 2, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 3, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 4, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 5, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 6, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 7, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 9, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 10, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 11, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 12, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 13, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 14, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 15, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 16, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 17, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 18, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 19, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
-            voxel_grid->SetVoxelData(Vector3I(VOXEL_GRID_LEFT + 30, VOXEL_GRID_DOWN + 20, VOXEL_GRID_BACKWARDS + 30), {VoxelElement::SAND, 0});
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -40, 30), 10, VoxelElement::STEEL);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(30, -10, 30), 5, VoxelElement::STEEL);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, -20), 20, VoxelElement::STEEL);
+            VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, -20), 19, VoxelElement::WATER);
+            VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
+            VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
+
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 3), VoxelElement::ICE);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
+            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 4), VoxelElement::ICE);
         }
 
         void VoxelGame::Update()
@@ -156,9 +169,12 @@ namespace Game
             // game
             if (input_manager->IsKeyHeld(Key::Q))
                 cursor_depth -= 0.2f;
-
             if (input_manager->IsKeyHeld(Key::E))
                 cursor_depth += 0.2f;
+            if (input_manager->IsKeyHeld(Key::R) && cursor_size > 1.2f)
+                cursor_size += -0.1f;
+            if (input_manager->IsKeyHeld(Key::T) && cursor_size < 10.0f)
+                cursor_size += 0.1f;
 
             if (input_manager->IsKeyHeld(Key::MOUSE3))
                 dir_light->SetDirection(camera->GetLookDirection());
@@ -171,47 +187,106 @@ namespace Game
             }
 
             if (input_manager->IsKeyHeld(Key::MOUSE2))
-                VoxelUtil::SpawnVoxel(voxel_grid, cursor_grid_pos, selected_voxel);
+            {
+                for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
+                {
+                    for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                    {
+                        Vector3I candidate_pos   = cursor_center_grid_pos + cursor_offset;
+                        VoxelElement cur_element = voxel_grid->GetVoxelElement(candidate_pos);
+
+                        // only allow replacing if we're placing air
+                        if (cur_element == VoxelElement::AIR || selected_voxel == VoxelElement::AIR)
+                            VoxelUtil::SpawnVoxel(voxel_grid, candidate_pos, selected_voxel);
+                    }
+                }
+            }
+            if (input_manager->IsKeyHeld(Key::N0))
+                selected_voxel = VoxelElement::AIR;
 
             if (input_manager->IsKeyHeld(Key::N1))
                 selected_voxel = VoxelElement::SAND;
 
             if (input_manager->IsKeyHeld(Key::N2))
-                selected_voxel = VoxelElement::WATER;
+                selected_voxel = VoxelElement::ICE;
 
             if (input_manager->IsKeyHeld(Key::N3))
-                selected_voxel = VoxelElement::STEEL;
+                selected_voxel = VoxelElement::WATER;
 
             if (input_manager->IsKeyHeld(Key::N4))
                 selected_voxel = VoxelElement::STEAM;
+
+            if (input_manager->IsKeyHeld(Key::N5))
+                selected_voxel = VoxelElement::LAVA;
+
+            if (input_manager->IsKeyHeld(Key::N6))
+                selected_voxel = VoxelElement::STEEL;
+
+            if (input_manager->IsKeyHeld(Key::P))
+                penguin.PlayAnimation("taunt", 1.0f);
         }
 
         std::chrono::milliseconds VoxelGame::Render(int64_t delta)
         {
             auto time = std::chrono::high_resolution_clock::now();
 
-            cursor_grid_pos     = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
-            bool cursor_was_set = false;
+            // we have to manually clear the depth buffers as the scene renderers share them and wont clear it themselves
+            camera->ClearDepthBuffer();
+            lighting_system->ClearDepthBuffers();
 
-            if (voxel_grid->IsPositionInsideGrid(cursor_grid_pos))
+            // render raster components
+            raster_scene_renderer.DrawShadedMesh(floor);
+            raster_scene_renderer.DrawShadedMesh(penguin);
+            raster_scene_renderer.RenderSceneShared(delta);
+
+            // mark cursor positions
+            cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
+            bool cursor_was_set    = false;
+
+            for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
             {
-                cursor_voxel_data = voxel_grid->GetVoxelData(cursor_grid_pos);
-                voxel_grid->SetVoxelData(cursor_grid_pos, {VoxelElement::CURSOR, 0});
-                cursor_was_set = true;
+                for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                {
+                    Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
+
+                    if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
+                        continue;
+
+                    // save the voxel data that was under this cursor position
+                    prev_cursor_data.push(voxel_grid->GetVoxelData(cursor_pos));
+
+                    voxel_grid->SetVoxelData(cursor_pos, {VoxelElement::CURSOR, 0});
+                    cursor_was_set = true;
+                }
             }
 
-            scene_renderer.RenderScene(delta);
+            // render voxels
+            voxel_scene_renderer.RenderSceneShared(delta);
 
-            // reset the cursor to it's previous voxel data so the simulation doesn't include the CURSOR type
+            // reset the cursor positions to their previous voxel data so the simulation doesn't include the CURSOR type
             if (cursor_was_set)
-                voxel_grid->SetVoxelData(cursor_grid_pos, cursor_voxel_data);
+            {
+                for (uint8_t i = 0; i < static_cast<uint8_t>(cursor_size); i++)
+                {
+                    for (const Vector3I& cursor_offset : VoxelUtil::sides_at_dist[i])
+                    {
+                        Vector3I cursor_pos = cursor_center_grid_pos + cursor_offset;
+
+                        if (!voxel_grid->IsPositionInsideGrid(cursor_pos))
+                            continue;
+
+                        voxel_grid->SetVoxelData(cursor_pos, prev_cursor_data.front());
+                        prev_cursor_data.pop();
+                    }
+                }
+            }
 
             return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - time);
         }
 
         std::string VoxelGame::GetDesiredWindowTitle() const
         {
-            return "Voxel game";
+            return voxel_element_name_map.at(selected_voxel);
         }
     }
 }

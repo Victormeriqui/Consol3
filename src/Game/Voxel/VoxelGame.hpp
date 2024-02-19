@@ -3,24 +3,30 @@
 
 #include "IGame.hpp"
 
+#include "../Raster/ModelGenerator.hpp"
+#include "../Voxel/VoxelSimulation.hpp"
+#include "../Voxel/VoxelUtil.hpp"
 #include "Engine/Input/IInputManager.hpp"
+#include "Engine/Rendering/AnimatedMesh.hpp"
 #include "Engine/Rendering/Camera.hpp"
 #include "Engine/Rendering/Lighting/DirectionalLight.hpp"
 #include "Engine/Rendering/Lighting/ILight.hpp"
 #include "Engine/Rendering/Lighting/LightingSystem.hpp"
 #include "Engine/Rendering/Lighting/PointLight.hpp"
 #include "Engine/Rendering/Lighting/SpotLight.hpp"
+#include "Engine/Rendering/RasterSceneRenderer.hpp"
+#include "Engine/Rendering/StaticMesh.hpp"
 #include "Engine/Rendering/VoxelSceneRenderer.hpp"
 #include "Engine/Resources/ResourceManager.hpp"
 #include "Engine/VoxelElements.hpp"
 #include "Engine/VoxelGrid.hpp"
 #include "Math/Vector3.hpp"
-#include "VoxelSimulation.hpp"
-#include "VoxelUtil.hpp"
 
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <queue>
+#include <vector>
 
 namespace Game
 {
@@ -33,6 +39,7 @@ namespace Game
         using namespace Lighting;
         using namespace Resources;
         using namespace Input;
+        using namespace Voxel;
 
         class VoxelGame : public IGame
         {
@@ -47,20 +54,26 @@ namespace Game
             std::shared_ptr<VoxelGrid> voxel_grid;
             VoxelSimulation voxel_sim;
 
-            VoxelSceneRenderer scene_renderer;
+            VoxelSceneRenderer voxel_scene_renderer;
+            RasterSceneRenderer raster_scene_renderer;
 
+            Raster::ModelGenerator model_generator;
             virtual void LoadResources() override;
 
             std::shared_ptr<DirectionalLight> dir_light;
             std::shared_ptr<PointLight> point_light;
             std::shared_ptr<SpotLight> spot_light;
 
+            AnimatedMesh penguin;
+            StaticMesh floor;
+
             float mov_speed = 0.05f;
             bool shifting   = false;
 
-            Vector3I cursor_grid_pos;
-            VoxelData cursor_voxel_data;
+            Vector3I cursor_center_grid_pos;
+            std::queue<VoxelData> prev_cursor_data;
             float cursor_depth = 5.0f;
+            float cursor_size  = 1.0f;
 
             VoxelElement selected_voxel = VoxelElement::SAND;
 

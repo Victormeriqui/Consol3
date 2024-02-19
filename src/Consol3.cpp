@@ -4,7 +4,6 @@
 
 #include "Display/FrameBuffer.hpp"
 #include "Engine/Consol3Engine.hpp"
-#include "Game/Dual/DualGame.hpp"
 #include "Game/IGame.hpp"
 #include "Game/Raster/RasterGame.hpp"
 #include "Game/Voxel/VoxelGame.hpp"
@@ -88,7 +87,7 @@ int main(int argc, char* argv[])
 #elif defined(GAME_VOXEL)
     game = std::make_shared<Game::Voxel::VoxelGame>(input_manager);
 #else
-    game = std::make_shared<Game::Dual::DualGame>(input_manager);
+    game = std::make_shared<Game::Raster::RasterGame>(input_manager);
 #endif
 
     Consol3Engine engine = Consol3Engine(game, input_manager);

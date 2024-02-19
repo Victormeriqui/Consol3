@@ -47,15 +47,9 @@ add_executable(Consol3_raster ${SOURCES} ${HEADERS})
 target_compile_definitions(Consol3_raster PUBLIC -DGAME_RASTER)
 add_executable(Consol3_voxel ${SOURCES} ${HEADERS})
 target_compile_definitions(Consol3_voxel PUBLIC -DGAME_VOXEL)
-add_executable(Consol3_dual ${SOURCES} ${HEADERS})
-target_compile_definitions(Consol3_dual PUBLIC -DGAME_DUAL)
-
 
 target_include_directories(Consol3_raster ${source_folders})
-
 target_include_directories(Consol3_voxel ${source_folders})
 
-
-target_include_directories(Consol3_dual ${source_folders})
 
 
