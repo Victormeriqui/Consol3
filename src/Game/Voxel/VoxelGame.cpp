@@ -54,7 +54,7 @@ namespace Game
             // lighting_system->AddLight(spot_light);
 
             floor = StaticMesh();
-            floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -42, -6));
+            floor.SetModelResource("plane50").SetTextureResource("../res/tiles.bmp").SetScale(Vector3(12, 12, 12)).SetPosition(Vector3(-6, -41.9f, -6));
 
             penguin = AnimatedMesh();
             penguin.SetModelResource("../res/penguin.md2")

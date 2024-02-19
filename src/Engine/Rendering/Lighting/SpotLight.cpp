@@ -18,7 +18,7 @@ namespace Engine
         {
             SpotLight::SpotLight(const Vector3& position, const Vector3& direction, float range, RGBColor color) :
                 angle(90),
-                attenuation({ 0.01f, 0.01f, 1.0f }),
+                attenuation({0.01f, 0.01f, 1.0f}),
                 range(range),
                 color(color),
                 // TODO: figure out the best value for this
@@ -129,7 +129,7 @@ namespace Engine
 
             bool SpotLight::IsShadowCaster() const
             {
-                return false;
+                return true;
             }
 
             std::optional<bool> SpotLight::IsLinearProjection() const
