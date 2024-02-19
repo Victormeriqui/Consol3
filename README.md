@@ -52,16 +52,16 @@ Arrow keys - Change camera direction
 
 ### Rasterization
 
-The engine has a flexible rasterization pipeline that can be controlled by using different "Shaders", these shaders are similar in concept to GPU shaders, in the sense that they can modify the data that is passed on to the next stage
+The engine has a flexible rasterization pipeline that can be controlled by using different "Shaders", these shaders are similar in concept to GPU shaders, in the sense that they can modify the data that is passed on to the next stage  
 
-The pipeline to render a mesh is as follows:
-    1. The first step of the pipeline is calling the vertex shader for each triangle, giving it the triangle vertices and the mesh transformations, the shader then applies the transformations and projection, and decides whether the triangle should be culled (backface culling)
-    2. Then the resulting triangle is clipped of any offscreen vertices, for this the triangles are clipped against different planes, 2 per each axis
-    3. The resulting vertices from clipping are transformed to screen space and then sent to the rasterizer
-    4. The rasterizer then calculates the coordinates that are inside the triangle and calls the fragment shader for each coordinate
-    5. The fragment shader then decides which color to output on each coordinate, using solid colors, textures, and shading techniques
+The pipeline to render a mesh is as follows:  
+    1. The first step of the pipeline is calling the vertex shader for each triangle, giving it the triangle vertices and the mesh transformations, the shader then applies the transformations and projection, and decides whether the triangle should be culled (backface culling)  
+    2. Then the resulting triangle is clipped of any offscreen vertices, for this the triangles are clipped against different planes, 2 per each axis  
+    3. The resulting vertices from clipping are transformed to screen space and then sent to the rasterizer  
+    4. The rasterizer then calculates the coordinates that are inside the triangle and calls the fragment shader for each coordinate  
+    5. The fragment shader then decides which color to output on each coordinate, using solid colors, textures, and shading techniques  
 
-The engine uses barycentric rasterization to determine which pixels are inside a triangle
+The engine uses barycentric rasterization to determine which pixels are inside a triangle  
 
 #### Rasterization Features
 
