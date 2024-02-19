@@ -108,7 +108,7 @@ The engine uses barycentric rasterization to determine which pixels are inside a
 
 The engine also has a different rendering technique based on ray marching instead of rasterization. For this a regular 3D grid is defined, where each cell represents a voxel, and can either be filled with a specific particle type, or empty (Air)
 
-Each frame rays are marched from the camera origin towards the looking direction, and are stopped in case they hit one of the non-air voxels
+When rendering a frame, rays are marched from the camera origin towards the looking direction, and are stopped in case they hit one of the non-air voxels
 
 For this ray marching experiment, a simple physics simulation was also implemented, where different elements can be spawned and played around with, the currently supported elements are:
     - Sand
