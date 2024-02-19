@@ -23,8 +23,8 @@ executables should be generated inside the build folder:
     - Consol3_raster  
     - Consol3_voxel  
 
-Consol3_raster will have a scene with only rasterized meshes, lights & other experiments
-Consol3_voxel will have a scene with ray marched voxels, along with a particle-like simulation for sand, water, lava, steam and ice using the voxels
+Consol3_raster will have a scene with only rasterized meshes, lights & other experiments  
+Consol3_voxel will have a scene with ray marched voxels, along with a particle-like simulation for sand, water, lava, steam and ice using the voxels  
 
 The project can be built for either Windows or Linux, on Linux no mouse input is supported yet (use the arrow keys to control the look direction), and only a few frame drawers are supported
 
