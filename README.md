@@ -146,7 +146,7 @@ For this ray marching experiment, a simple physics simulation was also implement
 
 ## Frame Drawers  
 
-After rendering a full frame, in order to actually draw to the console output the engine has a flexible system where different "frame drawers" can be used
+After rendering a full frame, in order to actually draw to the console output the engine has a flexible system where different "frame drawers" can be used  
 These are the components in charge of making a specific RGB color pixel be represented in the console
 
 For this, different techniques are employed for different effects/quality, some techniques allow more colors, some allow more performance
