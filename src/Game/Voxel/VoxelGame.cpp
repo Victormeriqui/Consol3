@@ -71,8 +71,11 @@ namespace Game
 
             this->frame_drawer->SetupFrameDrawer();
 
-            camera = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
-            camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
+            Vector3 old_pos     = camera->GetPosition();
+            Quaternion old_look = camera->GetRotation();
+            camera              = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
+            camera->SetPosition(old_pos);
+            camera->SetRotation(old_look);
 
             voxel_scene_renderer  = VoxelSceneRenderer(lighting_system, camera, voxel_grid);
             raster_scene_renderer = RasterSceneRenderer(resource_manager, lighting_system, camera);
