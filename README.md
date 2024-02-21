@@ -32,7 +32,9 @@ The project can be built for either Windows or Linux, on Linux no mouse input is
 
 ### Raster
 
-Mouse2 and 3 - Control lights
+Mouse 2,3,4,5 - Control lights  
+Numbers 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 - Enable different floor showcases  
+P - play animations  
 
 ### Voxel
 
@@ -47,6 +49,7 @@ WASD - Move
 Capslock - Toggle mouse camera  
 Page Up and Down - Change frame drawer  
 Arrow keys - Change camera direction  
+Shift - Slow down movement  
 
 ## Rendering
 

@@ -105,6 +105,12 @@ namespace Engine
             transform.SetRotation(rotation.GetConjugate());
         }
 
+        void Camera::SetRotation(const Quaternion& rotation_quat)
+        {
+            rotation = rotation_quat;
+            transform.SetRotation(rotation.GetConjugate());
+        }
+
         Quaternion Camera::GetRotation() const
         {
             return rotation;
