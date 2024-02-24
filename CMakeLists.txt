@@ -11,6 +11,11 @@ if(WIN32)
 
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")  # Compiler optimization level
     set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /INCREMENTAL:NO /LTCG")  # Linker optimizations
+elseif(APPLE)
+    add_definitions(-DSYS_MAC)
+    message(STATUS "Building for Mac")
+
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")  # Compiler optimization level
 elseif(UNIX)
     add_definitions(-DSYS_LINUX)
     message(STATUS "Building for Linux")
@@ -29,6 +34,7 @@ set(source_folders
     PRIVATE ${CMAKE_SOURCE_DIR}/src
     PRIVATE ${CMAKE_SOURCE_DIR}/src/Display
     PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Linux
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Mac
     PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Multiplatform
     PRIVATE ${CMAKE_SOURCE_DIR}/src/Display/Windows
     PRIVATE ${CMAKE_SOURCE_DIR}/src/Engine
@@ -51,5 +57,8 @@ target_compile_definitions(Consol3_voxel PUBLIC -DGAME_VOXEL)
 target_include_directories(Consol3_raster ${source_folders})
 target_include_directories(Consol3_voxel ${source_folders})
 
-
+if(APPLE)
+    target_link_libraries(Consol3_raster "-framework CoreGraphics -framework CoreFoundation")
+    target_link_libraries(Consol3_voxel "-framework CoreGraphics -framework CoreFoundation")
+endif()
 

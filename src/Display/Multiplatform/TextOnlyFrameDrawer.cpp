@@ -6,7 +6,7 @@
 // Windows.h overrides std::min
 #define NOMINMAX
 #include <Windows.h>
-#elif defined(SYS_LINUX)
+#elif defined(SYS_LINUX) || defined(SYS_MAC)
 #include "Display/Windows/WindowsStructsForLinux.hpp"
 #endif
 
