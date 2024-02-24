@@ -15,4 +15,11 @@ typedef struct _CHAR_INFO
 
 using WCHAR = char;
 
+typedef struct tagRECT {
+  int32_t left;
+  int32_t top;
+  int32_t right;
+  int32_t bottom;
+} RECT, *PRECT, *NPRECT, *LPRECT;
+
 #endif

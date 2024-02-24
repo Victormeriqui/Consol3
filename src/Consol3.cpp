@@ -21,6 +21,10 @@
 #include "Display/Linux/LinuxTerminalManager.hpp"
 #include "Display/Windows/WindowsStructsForLinux.hpp"
 #include "Engine/Input/LinuxInputManager.hpp"
+#elif defined(SYS_MAC)
+#include "Display/Mac/MacTerminalManager.hpp"
+#include "Display/Windows/WindowsStructsForLinux.hpp"
+#include "Engine/Input/MacInputManager.hpp"
 #endif
 
 #include "Display/Multiplatform/TextOnlyFrameDrawer.hpp"
@@ -82,6 +86,17 @@ int main(int argc, char* argv[])
     frame_drawers.emplace_back(std::make_shared<Multiplatform::TextOnlyFrameDrawer<char>>(char_framebuffer, linux_terminal_manager));
 
     input_manager = std::make_shared<Engine::Input::LinuxInputManager>();
+
+#elif defined(SYS_MAC)
+    // multiplatform frame drawers need to be given a terminal manager
+    std::shared_ptr<ITerminalManager<char>> mac_terminal_manager = std::make_shared<Mac::MacTerminalManager>(width, height);
+
+    frame_drawers.emplace_back(std::make_shared<Multiplatform::VT24BitFrameDrawer<char>>(uint32_t_framebuffer, mac_terminal_manager));
+    frame_drawers.emplace_back(std::make_shared<Multiplatform::VT8BitFrameDrawer<char>>(uint8_t_framebuffer, mac_terminal_manager));
+    frame_drawers.emplace_back(std::make_shared<Multiplatform::TextOnlyFrameDrawer<char>>(char_framebuffer, mac_terminal_manager));
+
+    input_manager = std::make_shared<Engine::Input::MacInputManager>();
+
 #endif
 
 #ifdef GAME_RASTER
