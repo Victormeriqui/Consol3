@@ -70,7 +70,7 @@ namespace Engine
             bool ShadedShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats, void* context)
             {
                 auto ctx = static_cast<ShadedShaderContext*>(context);
-                
+
                 TransformVertexModel(v0, mvp_mats);
                 TransformVertexModel(v1, mvp_mats);
                 TransformVertexModel(v2, mvp_mats);
@@ -90,7 +90,7 @@ namespace Engine
                     const Matrix4& light_view_mat       = light->GetViewMatrix().value().get();
                     const Matrix4& light_projection_mat = light->GetProjectionMatrix().value().get();
 
-                    MVPTransform light_mvp_mats = { light_unused_mat, light_unused_mat, light_view_mat, light_projection_mat };
+                    MVPTransform light_mvp_mats = {light_unused_mat, light_unused_mat, light_view_mat, light_projection_mat};
 
                     ctx->vert_v0_light[ctx->vert_lights_count] = v0;
                     ctx->vert_v1_light[ctx->vert_lights_count] = v1;
@@ -120,7 +120,8 @@ namespace Engine
 
                 Vector3 frag_position = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetPosition(), ctx->vert_v1_model.GetPosition(), ctx->vert_v2_model.GetPosition(), triangle, barcoord0, barcoord1, barcoord2);
 
-                Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(ctx->vert_v0_model.GetTextureCoords(), ctx->vert_v1_model.GetTextureCoords(), ctx->vert_v2_model.GetTextureCoords(), triangle, barcoord0, barcoord1, barcoord2);
+                Vector2 frag_texture_coord =
+                    PerspectiveCorrectInterpolate<Vector2>(ctx->vert_v0_model.GetTextureCoords(), ctx->vert_v1_model.GetTextureCoords(), ctx->vert_v2_model.GetTextureCoords(), triangle, barcoord0, barcoord1, barcoord2);
 
                 Vector3 frag_normal = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetNormal(), ctx->vert_v1_model.GetNormal(), ctx->vert_v2_model.GetNormal(), triangle, barcoord0, barcoord1, barcoord2);
 
@@ -128,7 +129,8 @@ namespace Engine
                 {
                     Vector3 frag_tangent = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetTangent(), ctx->vert_v1_model.GetTangent(), ctx->vert_v2_model.GetTangent(), triangle, barcoord0, barcoord1, barcoord2);
 
-                    Vector3 frag_bitangent = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetBitangent(), ctx->vert_v1_model.GetBitangent(), ctx->vert_v2_model.GetBitangent(), triangle, barcoord0, barcoord1, barcoord2);
+                    Vector3 frag_bitangent =
+                        PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetBitangent(), ctx->vert_v1_model.GetBitangent(), ctx->vert_v2_model.GetBitangent(), triangle, barcoord0, barcoord1, barcoord2);
 
                     RGBColor frag_normal_color = normal_map->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 
