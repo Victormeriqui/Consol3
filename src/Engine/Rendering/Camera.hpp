@@ -53,6 +53,7 @@ namespace Engine
             [[nodiscard]] Vector3 GetLookDirection() const;
 
             void SetRotation(const Angle& rotation_ang);
+            void SetRotation(const Quaternion& rotation_quat);
             [[nodiscard]] Quaternion GetRotation() const;
 
             void Move(const Vector3& direction, float amount);

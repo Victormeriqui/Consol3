@@ -50,14 +50,33 @@ namespace Game
 
             RasterSceneRenderer scene_renderer;
 
-            StaticMesh mesh;
-            StaticMesh mesh2;
-            StaticMesh mesh3;
+            bool first_floor_enabled = true;
+            StaticMesh first_floor;
+            AnimatedMesh marvin;
+            AnimatedMesh buggy;
 
-            AnimatedMesh anim_mesh;
-            AnimatedMesh anim_mesh2;
-            AnimatedMesh anim_mesh3;
-            StaticMesh floor;
+            bool second_floor_enabled = false;
+            StaticMesh second_floor;
+            StaticMesh earth;
+            StaticMesh wall;
+
+            bool third_floor_enabled = false;
+            StaticMesh third_floor;
+            StaticMesh regular_bunny;
+            StaticMesh metal_bunny;
+            StaticMesh shiny_bunny;
+            StaticMesh rough_bunny;
+
+            bool fourth_floor_enabled = false;
+            StaticMesh fourth_floor;
+            StaticMesh regular_wall;
+            StaticMesh normal_map_wall;
+            StaticMesh brick_wall;
+            StaticMesh normal_map_brick_wall;
+
+            bool fifth_floor_enabled = false;
+            StaticMesh thanks_for_watching;
+            StaticMesh github_desc;
 
             std::shared_ptr<DirectionalLight> dir_light;
             std::shared_ptr<PointLight> point_light;

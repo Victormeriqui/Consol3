@@ -39,8 +39,8 @@ using namespace Engine;
 
 int main(int argc, char* argv[])
 {
-    uint16_t width  = 100;
-    uint16_t height = 100;
+    uint16_t width  = 150;
+    uint16_t height = 150;
 
     // set current dir to executable dir so resource loading works as intended
     std::filesystem::path executable_path = std::filesystem::canonical(std::filesystem::path(argv[0])).parent_path();
@@ -57,17 +57,19 @@ int main(int argc, char* argv[])
     std::shared_ptr<Game::IGame> game;
 
 #ifdef SYS_WINDOWS
-    // multiplatform frame drawers need to be given a terminal manager
-    std::shared_ptr<ITerminalManager<CHAR_INFO>> windows_terminal = std::make_shared<Windows::WindowsTerminalManager>(width, height, L"Consolas", 4, 4);
-    frame_drawers.emplace_back(std::make_shared<Multiplatform::VT24BitFrameDrawer<CHAR_INFO>>(uint32_t_framebuffer, windows_terminal));
-    frame_drawers.emplace_back(std::make_shared<Multiplatform::VT8BitFrameDrawer<CHAR_INFO>>(uint8_t_framebuffer, windows_terminal));
 
+    // multiplatform frame drawers need to be given a terminal manager
+    std::shared_ptr<ITerminalManager<CHAR_INFO>> windows_terminal               = std::make_shared<Windows::WindowsTerminalManager>(width, height, L"Consolas", 4, 4);
     std::shared_ptr<ITerminalManager<CHAR_INFO>> windows_terminal_terminal_font = std::make_shared<Windows::WindowsTerminalManager>(width, height, L"Terminal", 4, 4);
+
     frame_drawers.emplace_back(std::make_shared<Multiplatform::TextOnlyFrameDrawer<CHAR_INFO>>(char_info_framebuffer, windows_terminal_terminal_font));
 
-    frame_drawers.emplace_back(std::make_shared<Windows::DitheredFrameDrawer>(char_info_framebuffer));
     frame_drawers.emplace_back(std::make_shared<Windows::GreyscaleFrameDrawer>(char_info_framebuffer));
     frame_drawers.emplace_back(std::make_shared<Windows::DitheredGreyscaleFrameDrawer>(char_info_framebuffer));
+    frame_drawers.emplace_back(std::make_shared<Windows::DitheredFrameDrawer>(char_info_framebuffer));
+
+    frame_drawers.emplace_back(std::make_shared<Multiplatform::VT8BitFrameDrawer<CHAR_INFO>>(uint8_t_framebuffer, windows_terminal));
+    frame_drawers.emplace_back(std::make_shared<Multiplatform::VT24BitFrameDrawer<CHAR_INFO>>(uint32_t_framebuffer, windows_terminal));
 
     input_manager = std::make_shared<Engine::Input::WindowsInputManager>();
 

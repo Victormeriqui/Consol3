@@ -25,7 +25,7 @@ namespace Engine
     {
     private:
         std::vector<std::shared_ptr<IFrameDrawer>> frame_drawers;
-        uint8_t cur_frame_drawer_index = 0;
+        int8_t cur_frame_drawer_index = 0;
 
         std::shared_ptr<IInputManager> input_manager;
 

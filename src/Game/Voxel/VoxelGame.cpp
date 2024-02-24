@@ -59,7 +59,7 @@ namespace Game
             penguin = AnimatedMesh();
             penguin.SetModelResource("../res/penguin.md2")
                 .SetTextureResource("../res/bricks.bmp")
-                .SetPosition(Vector3(1.0f, -40.9f, 0.0f))
+                .SetPosition(Vector3(1.0f, -40.8f, 0.0f))
                 .SetScale(Vector3(0.05f, 0.05f, 0.05f))
                 .SetRotation(Angle(-1.5708f, 0.0f, 0.0f))
                 .SetColor(RGBColor(255, 255, 255));
@@ -71,8 +71,11 @@ namespace Game
 
             this->frame_drawer->SetupFrameDrawer();
 
-            camera = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
-            camera->SetPosition(Vector3(1.0f, -45.9f, -3.0f));
+            Vector3 old_pos     = camera->GetPosition();
+            Quaternion old_look = camera->GetRotation();
+            camera              = std::make_shared<Camera>(this->frame_drawer->GetFrameBufferWidth(), this->frame_drawer->GetFrameBufferHeight(), 0.001f, 100.0f, 90.0f);
+            camera->SetPosition(old_pos);
+            camera->SetRotation(old_look);
 
             voxel_scene_renderer  = VoxelSceneRenderer(lighting_system, camera, voxel_grid);
             raster_scene_renderer = RasterSceneRenderer(resource_manager, lighting_system, camera);
@@ -106,10 +109,6 @@ namespace Game
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, -20), 19, VoxelElement::WATER);
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 3), VoxelElement::ICE);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 4), VoxelElement::ICE);
         }
 
         void VoxelGame::Update()
@@ -235,9 +234,9 @@ namespace Game
             lighting_system->ClearDepthBuffers();
 
             // render raster components
-            raster_scene_renderer.DrawShadedMesh(floor);
-            raster_scene_renderer.DrawShadedMesh(penguin);
-            raster_scene_renderer.RenderSceneShared(delta);
+            // raster_scene_renderer.DrawShadedMesh(floor);
+            // raster_scene_renderer.DrawShadedMesh(penguin);
+            // raster_scene_renderer.RenderSceneShared(delta);
 
             // mark cursor positions
             cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));
