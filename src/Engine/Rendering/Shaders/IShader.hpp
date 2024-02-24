@@ -89,8 +89,9 @@ namespace Engine
                 }
 
             public:
-                virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)                                  = 0;
-                virtual RGBColor FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) = 0;
+                virtual size_t GetFragmentContextSize() const                                                                                                     = 0;
+                virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats, void* context)                                        = 0;
+                virtual RGBColor FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2, const void* context) = 0;
             };
         }
     }

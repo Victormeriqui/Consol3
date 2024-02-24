@@ -43,7 +43,7 @@ namespace Engine
             inline Vertex& TransformVertexScreenspace(Vertex& vertex);
 
             void ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader);
-            void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader);
+            void RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader, const void* context);
 
         public:
             Rasterizer();

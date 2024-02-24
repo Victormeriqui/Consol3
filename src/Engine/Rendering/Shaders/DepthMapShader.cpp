@@ -6,7 +6,12 @@ namespace Engine
     {
         namespace Shaders
         {
-            bool DepthMapShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
+            size_t DepthMapShader::GetFragmentContextSize() const
+            {
+                return 0;
+            }
+
+            bool DepthMapShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats, void* context)
             {
                 TransformVertexMVP(v0, mvp_mats);
                 TransformVertexMVP(v1, mvp_mats);
@@ -15,7 +20,7 @@ namespace Engine
                 return true;    // IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
             }
 
-            RGBColor DepthMapShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+            RGBColor DepthMapShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2, const void* context)
             {
                 return RGBColor();
             }
