@@ -59,7 +59,7 @@ namespace Game
             penguin = AnimatedMesh();
             penguin.SetModelResource("../res/penguin.md2")
                 .SetTextureResource("../res/bricks.bmp")
-                .SetPosition(Vector3(1.0f, -40.9f, 0.0f))
+                .SetPosition(Vector3(1.0f, -40.8f, 0.0f))
                 .SetScale(Vector3(0.05f, 0.05f, 0.05f))
                 .SetRotation(Angle(-1.5708f, 0.0f, 0.0f))
                 .SetColor(RGBColor(255, 255, 255));
@@ -109,10 +109,6 @@ namespace Game
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, -20), 19, VoxelElement::WATER);
             VoxelUtil::SpawnBox(voxel_grid, Vector3I(-10, 0, 10), 20, VoxelElement::STEEL);
             VoxelUtil::SpawnCube(voxel_grid, Vector3I(-10, 0, 10), 19, VoxelElement::LAVA);
-
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 3), VoxelElement::ICE);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 5), VoxelElement::LAVA);
-            VoxelUtil::SpawnVoxel(voxel_grid, Vector3I(0, -49, 4), VoxelElement::ICE);
         }
 
         void VoxelGame::Update()
@@ -238,9 +234,9 @@ namespace Game
             lighting_system->ClearDepthBuffers();
 
             // render raster components
-            raster_scene_renderer.DrawShadedMesh(floor);
-            raster_scene_renderer.DrawShadedMesh(penguin);
-            raster_scene_renderer.RenderSceneShared(delta);
+            // raster_scene_renderer.DrawShadedMesh(floor);
+            // raster_scene_renderer.DrawShadedMesh(penguin);
+            // raster_scene_renderer.RenderSceneShared(delta);
 
             // mark cursor positions
             cursor_center_grid_pos = voxel_grid->GetGridPosition(camera->GetPosition() + (camera->GetLookDirection() * cursor_depth));

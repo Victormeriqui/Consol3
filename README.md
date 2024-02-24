@@ -3,6 +3,10 @@ A graphics engine that executes entirely on the CPU and uses the console as the 
 
 ## Intro
 
+## Videos
+[![Rasterization](https://img.youtube.com/vi/khu1oPdL6ww/0.jpg)](https://www.youtube.com/watch?v=khu1oPdL6ww)  
+[![Ray Marching](https://img.youtube.com/vi/IXVWcb05Z5U/0.jpg)](https://www.youtube.com/watch?v=IXVWcb05Z5U)  
+
 ### Software Rendering
 Consol3 is a 3D graphics engine that doesn't use the graphics card to render any frame, instead the same calculations that would typically be made by the GPU hardware is done in software, every single vertex transformation, matrix calculation, etc is calculated on the CPU
 
@@ -27,6 +31,7 @@ Consol3_raster will have a scene with only rasterized meshes, lights & other exp
 Consol3_voxel will have a scene with ray marched voxels, along with a particle-like simulation for sand, water, lava, steam and ice using the voxels  
 
 The project can be built for either Windows or Linux, on Linux no mouse input is supported yet (use the arrow keys to control the look direction), and only a few frame drawers are supported
+
 
 ## Controls
 
