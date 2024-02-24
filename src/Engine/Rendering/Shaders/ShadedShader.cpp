@@ -4,6 +4,24 @@
 
 #include <algorithm>
 
+namespace
+{
+    using Engine::Rendering::Vertex;
+
+    struct ShadedShaderContext
+    {
+        Vertex vert_v0_model;
+        Vertex vert_v1_model;
+        Vertex vert_v2_model;
+
+        int vert_lights_count = 0;
+        // the same vertices but in light space, in multiple lights
+        Vertex vert_v0_light[10];
+        Vertex vert_v1_light[10];
+        Vertex vert_v2_light[10];
+    };
+}
+
 namespace Engine
 {
     namespace Rendering
@@ -12,6 +30,11 @@ namespace Engine
         {
             using namespace Lighting;
             using namespace Math;
+
+            size_t ShadedShader::GetFragmentContextSize() const
+            {
+                return sizeof(ShadedShaderContext);
+            }
 
             void ShadedShader::SetLightingSystem(std::shared_ptr<LightingSystem> lighting_system)
             {
@@ -44,17 +67,19 @@ namespace Engine
                 this->material_properties = material_properties;
             }
 
-            bool ShadedShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
+            bool ShadedShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats, void* context)
             {
+                auto ctx = static_cast<ShadedShaderContext*>(context);
+                
                 TransformVertexModel(v0, mvp_mats);
                 TransformVertexModel(v1, mvp_mats);
                 TransformVertexModel(v2, mvp_mats);
 
-                vert_v0_model = v0;
-                vert_v1_model = v1;
-                vert_v2_model = v2;
+                ctx->vert_v0_model = v0;
+                ctx->vert_v1_model = v1;
+                ctx->vert_v2_model = v2;
 
-                vert_lights_count = 0;
+                ctx->vert_lights_count = 0;
 
                 for (const std::shared_ptr<ILight>& light : lighting_system->GetLights())
                 {
@@ -67,22 +92,19 @@ namespace Engine
 
                     MVPTransform light_mvp_mats = { light_unused_mat, light_unused_mat, light_view_mat, light_projection_mat };
 
-                    vert_v0_light[vert_lights_count] = v0;
-                    vert_v1_light[vert_lights_count] = v1;
-                    vert_v2_light[vert_lights_count] = v2;
+                    ctx->vert_v0_light[ctx->vert_lights_count] = v0;
+                    ctx->vert_v1_light[ctx->vert_lights_count] = v1;
+                    ctx->vert_v2_light[ctx->vert_lights_count] = v2;
 
-                    TransformVertexViewProjection(vert_v0_light[vert_lights_count], light_mvp_mats);
-                    TransformVertexViewProjection(vert_v1_light[vert_lights_count], light_mvp_mats);
-                    TransformVertexViewProjection(vert_v2_light[vert_lights_count], light_mvp_mats);
+                    TransformVertexViewProjection(ctx->vert_v0_light[ctx->vert_lights_count], light_mvp_mats);
+                    TransformVertexViewProjection(ctx->vert_v1_light[ctx->vert_lights_count], light_mvp_mats);
+                    TransformVertexViewProjection(ctx->vert_v2_light[ctx->vert_lights_count], light_mvp_mats);
 
-                    vert_v0_light[vert_lights_count].PerspectiveDivide();
-                    vert_v1_light[vert_lights_count].PerspectiveDivide();
-                    vert_v2_light[vert_lights_count].PerspectiveDivide();
+                    ctx->vert_v0_light[ctx->vert_lights_count].PerspectiveDivide();
+                    ctx->vert_v1_light[ctx->vert_lights_count].PerspectiveDivide();
+                    ctx->vert_v2_light[ctx->vert_lights_count].PerspectiveDivide();
 
-                    vert_light_depthbuffer[vert_lights_count]        = &(light->GetLightDepthBuffer().value().get());
-                    vert_light_islinearprojection[vert_lights_count] = light->IsLinearProjection().value();
-
-                    vert_lights_count++;
+                    ctx->vert_lights_count++;
                 }
 
                 TransformVertexViewProjection(v0, mvp_mats);
@@ -92,19 +114,21 @@ namespace Engine
                 return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
             }
 
-            RGBColor ShadedShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+            RGBColor ShadedShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2, const void* context)
             {
-                Vector3 frag_position = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetPosition(), vert_v1_model.GetPosition(), vert_v2_model.GetPosition(), triangle, barcoord0, barcoord1, barcoord2);
+                auto ctx = static_cast<const ShadedShaderContext*>(context);
 
-                Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_model.GetTextureCoords(), vert_v1_model.GetTextureCoords(), vert_v2_model.GetTextureCoords(), triangle, barcoord0, barcoord1, barcoord2);
+                Vector3 frag_position = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetPosition(), ctx->vert_v1_model.GetPosition(), ctx->vert_v2_model.GetPosition(), triangle, barcoord0, barcoord1, barcoord2);
 
-                Vector3 frag_normal = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetNormal(), vert_v1_model.GetNormal(), vert_v2_model.GetNormal(), triangle, barcoord0, barcoord1, barcoord2);
+                Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(ctx->vert_v0_model.GetTextureCoords(), ctx->vert_v1_model.GetTextureCoords(), ctx->vert_v2_model.GetTextureCoords(), triangle, barcoord0, barcoord1, barcoord2);
+
+                Vector3 frag_normal = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetNormal(), ctx->vert_v1_model.GetNormal(), ctx->vert_v2_model.GetNormal(), triangle, barcoord0, barcoord1, barcoord2);
 
                 if (has_normal_map)
                 {
-                    Vector3 frag_tangent = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetTangent(), vert_v1_model.GetTangent(), vert_v2_model.GetTangent(), triangle, barcoord0, barcoord1, barcoord2);
+                    Vector3 frag_tangent = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetTangent(), ctx->vert_v1_model.GetTangent(), ctx->vert_v2_model.GetTangent(), triangle, barcoord0, barcoord1, barcoord2);
 
-                    Vector3 frag_bitangent = PerspectiveCorrectInterpolate<Vector3>(vert_v0_model.GetBitangent(), vert_v1_model.GetBitangent(), vert_v2_model.GetBitangent(), triangle, barcoord0, barcoord1, barcoord2);
+                    Vector3 frag_bitangent = PerspectiveCorrectInterpolate<Vector3>(ctx->vert_v0_model.GetBitangent(), ctx->vert_v1_model.GetBitangent(), ctx->vert_v2_model.GetBitangent(), triangle, barcoord0, barcoord1, barcoord2);
 
                     RGBColor frag_normal_color = normal_map->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 
@@ -120,11 +144,11 @@ namespace Engine
                     frag_normal.Normalize();
                 }
 
-                for (int i = 0; i < vert_lights_count; i++)
+                for (int i = 0; i < ctx->vert_lights_count; i++)
                 {
-                    const Vector3& v0_position_light = vert_v0_light[i].GetPosition();
-                    const Vector3& v1_position_light = vert_v1_light[i].GetPosition();
-                    const Vector3& v2_position_light = vert_v2_light[i].GetPosition();
+                    const Vector3& v0_position_light = ctx->vert_v0_light[i].GetPosition();
+                    const Vector3& v1_position_light = ctx->vert_v1_light[i].GetPosition();
+                    const Vector3& v2_position_light = ctx->vert_v2_light[i].GetPosition();
 
                     if (vert_light_islinearprojection[i])
                         frag_position_lights[i] = (v0_position_light * barcoord0) + (v1_position_light * barcoord1) + (v2_position_light * barcoord2);

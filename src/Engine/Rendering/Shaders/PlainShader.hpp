@@ -21,14 +21,10 @@ namespace Engine
             private:
                 std::shared_ptr<Texture> texture;
 
-                // set by the vertex shader for the fragment shader
-                Vector2 vert_v0_texture_coord;
-                Vector2 vert_v1_texture_coord;
-                Vector2 vert_v2_texture_coord;
-
             public:
-                virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats) override;
-                virtual RGBColor FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2) override;
+                virtual size_t GetFragmentContextSize() const override;
+                virtual bool VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats, void* context) override;
+                virtual RGBColor FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2, const void* context) override;
 
                 void SetTexture(std::shared_ptr<Texture> texture);
             };

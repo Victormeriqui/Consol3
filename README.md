@@ -182,32 +182,44 @@ The current characters used are: " ·;%░≡¥▒▓█"
 
 
 ### Shaders
-Vertex and Fragment shaders can be created, they are basically classes that implement a vertex and fragment stage in the rasterization pipeline, and can pass data around via the class members
+Vertex and Fragment shaders can be created, they are basically classes that implement a vertex and fragment stage in the rasterization pipeline, and can pass data via a type erased context
 
 A simple shader:
 ```cpp
-bool PlainShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats)
+struct PlainShaderContext
 {
+	Vector2 vert_v0_texture_coord;
+	Vector2 vert_v1_texture_coord;
+	Vector2 vert_v2_texture_coord;
+};
+
+bool PlainShader::VertexShader(Vertex& v0, Vertex& v1, Vertex& v2, const MVPTransform& mvp_mats, void* context)
+{
+	auto ctx = static_cast<PlainShaderContext*>(context);
+
 	TransformVertexMVP(v0, mvp_mats);
 	TransformVertexMVP(v1, mvp_mats);
 	TransformVertexMVP(v2, mvp_mats);
 
-	vert_v0_texture_coord = v0.GetTextureCoords();
-	vert_v1_texture_coord = v1.GetTextureCoords();
-	vert_v2_texture_coord = v2.GetTextureCoords();
+	ctx->vert_v0_texture_coord = v0.GetTextureCoords();
+	ctx->vert_v1_texture_coord = v1.GetTextureCoords();
+	ctx->vert_v2_texture_coord = v2.GetTextureCoords();
 
 	return !IsBackface(v0.GetPosition(), v1.GetPosition(), v2.GetPosition());
 }
 
-RGBColor PlainShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2)
+RGBColor PlainShader::FragmentShader(RGBColor color, const Triangle& triangle, float barcoord0, float barcoord1, float barcoord2, const void* context)
 {
-	Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(vert_v0_texture_coord,
-									    vert_v1_texture_coord,
-									    vert_v2_texture_coord,
-									    triangle,
-									    barcoord0,
-									    barcoord1,
-									    barcoord2);
+	auto ctx = static_cast<PlainShaderContext*>(context);
+
+	Vector2 frag_texture_coord = PerspectiveCorrectInterpolate<Vector2>(
+		ctx->vert_v0_texture_coord,
+		ctx->vert_v1_texture_coord,
+		ctx->vert_v2_texture_coord,
+		triangle,
+		barcoord0,
+		barcoord1,
+		barcoord2);
 
 	RGBColor final_color = texture->GetColorFromTextureCoords(frag_texture_coord.x, frag_texture_coord.y);
 	final_color.BlendMultiply(color);

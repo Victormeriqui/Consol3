@@ -41,6 +41,7 @@ namespace Engine
 
         void Rasterizer::ClipAndRasterize(DepthBuffer& depthbuffer, const VertexBuffer& vertex_buffer, const RGBColor& color, IShader& shader)
         {
+            void* context = _alloca(shader.GetFragmentContextSize());
             for (uint32_t i = 0; i < vertex_buffer.GetIndices().size(); i += 3)
             {
                 Vertex v0 = vertex_buffer.GetVertex(i);
@@ -49,7 +50,7 @@ namespace Engine
 
                 MVPTransform vs_shader_mats = {model_mat, normal_mat, view_mat, projection_mat};
 
-                bool should_draw_triangle = shader.VertexShader(v0, v1, v2, vs_shader_mats);
+                bool should_draw_triangle = shader.VertexShader(v0, v1, v2, vs_shader_mats, context);
 
                 if (!should_draw_triangle)
                     continue;
@@ -71,7 +72,7 @@ namespace Engine
                         v2.GetPosition(),
                     };
 
-                    RasterizeTriangle(depthbuffer, triangle, color, shader);
+                    RasterizeTriangle(depthbuffer, triangle, color, shader, context);
 
                     continue;
                 }
@@ -105,12 +106,12 @@ namespace Engine
                                        clipped_v1.GetPosition(),
                                        clipped_v2.GetPosition()};
 
-                    RasterizeTriangle(depthbuffer, triangle, color, shader);
+                    RasterizeTriangle(depthbuffer, triangle, color, shader, context);
                 }
             }
         }
 
-        void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader)
+        void Rasterizer::RasterizeTriangle(DepthBuffer& depthbuffer, const Triangle& triangle, const RGBColor& color, IShader& shader, const void* context)
         {
             int32_t bbox_min_x = std::min({(int32_t)triangle.v0_screen.x, (int32_t)triangle.v1_screen.x, (int32_t)triangle.v2_screen.x});
             int32_t bbox_min_y = std::min({(int32_t)triangle.v0_screen.y, (int32_t)triangle.v1_screen.y, (int32_t)triangle.v2_screen.y});
@@ -155,7 +156,7 @@ namespace Engine
 
                         if (depthbuffer.GetValue(x, y) > z)
                         {
-                            RGBColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2);
+                            RGBColor out_color = shader.FragmentShader(color, triangle, barcoord0, barcoord1, barcoord2, context);
 
                             depthbuffer.SetValue(x, y, z);
                             frame_drawer->SetPixel(x, y, out_color);
