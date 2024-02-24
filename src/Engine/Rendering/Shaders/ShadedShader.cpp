@@ -56,7 +56,7 @@ namespace Engine
 
                 vert_lights_count = 0;
 
-                for (std::shared_ptr<ILight> light : lighting_system->GetLights())
+                for (const std::shared_ptr<ILight>& light : lighting_system->GetLights())
                 {
                     if (!light->IsShadowCaster())
                         continue;
